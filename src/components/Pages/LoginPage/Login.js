@@ -40,7 +40,7 @@ const Login = () => {
 
     return (
         <div className="bg-white flex justify-center items-center">
-            <div className="bg-slate-300 w-1/3 my-12 py-10 px-12" >
+            <div className="shadow-lg w-1/3 my-12 py-10 px-12" >
                 <h2 className="text-2xl font-semibold my-4">Sign In</h2>
 
                 <div className="text-2xl" >
@@ -58,21 +58,21 @@ const Login = () => {
                 <div className="my-3">or</div>
                 <form onSubmit={handleSubmit}>
                     {/* <label htmlFor="email">Email:</label> */}
-                    <input className="bg-slate-300 w-full pl-2" placeholder="UserName or Email" type="email" id="email" value={email} onChange={handleEmailChange} />
-                    <hr className=" border-slate-950 mb-5" ></hr>
+                    <input className=" w-full pl-2" placeholder="username or email" type="email" id="email" value={email} onChange={handleEmailChange} />
+                    <hr className=" border-slate-300 mb-5" ></hr>
                     {/* <label htmlFor="password">Password:</label> */}
                     <div className='relative'>
                         <div className='flex items-center'>
-                         <input className="bg-slate-300 w-full pl-2" placeholder="Password" type={show? "text":"password"} id="password" value={password} onChange={handlePasswordChange} />
+                         <input className=" w-full pl-2" placeholder="password" type={show? "text":"password"} id="password" value={password} onChange={handlePasswordChange} />
                         <button className="absolute right-0 pr-2" onClick={handleToShow}>
                             {
-                                show?  <BsEyeFill></BsEyeFill> :<RiEyeCloseLine></RiEyeCloseLine>
+                                show?  <BsEyeFill className="text-slate-400"></BsEyeFill> :<RiEyeCloseLine className="text-slate-400"></RiEyeCloseLine>
                             }
                             
                         </button> 
                         </div>
                         
-                        <hr className=" border-slate-950" ></hr>
+                        <hr className=" border-slate-300" ></hr>
                         {/* <button>digit to start</button>
                         <button>start to digit</button> */}
                     </div>
@@ -83,7 +83,7 @@ const Login = () => {
                        
                     </div>
                     <div className="my-2 ">
-                         <button  className="bg-amber-200 px-20 py-1 text-xl font-semibold" type="submit">Sign In</button>
+                         <button  className="bg-amber-200 px-20 py-2 text-xl font-semibold " type="submit">Sign In</button>
                     </div>
                 </form>
                 <div className="text-sm my-3">
