@@ -4,8 +4,12 @@ const Footer = () => {
     return (
         <footer aria-label="Site Footer" class="bg-white dark:bg-gray-900">
   <div class="mx-auto max-w-screen-xl px-4 pt-16 pb-6 sm:px-6 lg:px-8 lg:pt-24">
-    <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
-      <div>
+   
+
+      <div
+        class="grid grid-cols-1 gap-8  md:grid-cols-3"
+      >
+         <div>
         <div
           class="flex justify-center text-teal-600 dark:text-teal-300 sm:justify-start"
         >
@@ -61,11 +65,11 @@ const Footer = () => {
         <p
           class="mt-6 max-w-md text-center leading-relaxed text-gray-500 dark:text-gray-400 sm:max-w-xs sm:text-left"
         >
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Incidunt
-          consequuntur amet culpa cum itaque neque.
+          123 Chaowai St, Chaoyang District, Beijing, 
+China, 100020
         </p>
 
-        <ul class="mt-8 flex justify-center gap-6 sm:justify-start md:gap-8">
+        {/* <ul class="mt-8 flex justify-center gap-6 sm:justify-start md:gap-8">
           <li>
             <a
               href="/"
@@ -178,25 +182,21 @@ const Footer = () => {
               </svg>
             </a>
           </li>
-        </ul>
+        </ul> */}
       </div>
-
-      <div
-        class="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-4 lg:col-span-2"
-      >
         <div class="text-center sm:text-left">
-          <p class="text-lg font-medium text-gray-900 dark:text-white">
+          {/* <p class="text-lg font-medium text-gray-900 dark:text-white">
             About Us
-          </p>
+          </p> */}
 
           <nav aria-label="Footer About Nav" class="mt-8">
-            <ul class="space-y-4 text-sm">
+            <ul class="space-y-4 text-sm text-center">
               <li>
                 <a
                   class="text-gray-700 transition hover:text-gray-700/75 dark:text-white dark:hover:text-white/75"
                   href="/"
                 >
-                  Company History
+                  Home
                 </a>
               </li>
 
@@ -205,7 +205,7 @@ const Footer = () => {
                   class="text-gray-700 transition hover:text-gray-700/75 dark:text-white dark:hover:text-white/75"
                   href="/"
                 >
-                  Meet the Team
+                  customer Service
                 </a>
               </li>
 
@@ -214,7 +214,7 @@ const Footer = () => {
                   class="text-gray-700 transition hover:text-gray-700/75 dark:text-white dark:hover:text-white/75"
                   href="/"
                 >
-                  Employee Handbook
+                 Admin
                 </a>
               </li>
 
@@ -223,115 +223,31 @@ const Footer = () => {
                   class="text-gray-700 transition hover:text-gray-700/75 dark:text-white dark:hover:text-white/75"
                   href="/"
                 >
-                  Careers
+                 Account
                 </a>
               </li>
             </ul>
           </nav>
         </div>
-
         <div class="text-center sm:text-left">
-          <p class="text-lg font-medium text-gray-900 dark:text-white">
-            Our Services
-          </p>
+          {/* <p class="text-lg font-medium text-gray-900 dark:text-white">
+            About Us
+          </p> */}
 
-          <nav aria-label="Footer Services Nav" class="mt-8">
-            <ul class="space-y-4 text-sm">
-              <li>
-                <a
-                  class="text-gray-700 transition hover:text-gray-700/75 dark:text-white dark:hover:text-white/75"
-                  href="/"
-                >
-                  Web Development
-                </a>
-              </li>
+          <nav aria-label="Footer About Nav" class="mt-8">
+            <ul class="space-y-4 text-sm text-center">
+            <li>
+              <a
+                class="flex  text-sm items-center justify-center gap-1.5 sm:justify-start"
+                href="/"
+              >
+              
 
-              <li>
-                <a
-                  class="text-gray-700 transition hover:text-gray-700/75 dark:text-white dark:hover:text-white/75"
-                  href="/"
-                >
-                  Web Design
-                </a>
-              </li>
-
-              <li>
-                <a
-                  class="text-gray-700 transition hover:text-gray-700/75 dark:text-white dark:hover:text-white/75"
-                  href="/"
-                >
-                  Marketing
-                </a>
-              </li>
-
-              <li>
-                <a
-                  class="text-gray-700 transition hover:text-gray-700/75 dark:text-white dark:hover:text-white/75"
-                  href="/"
-                >
-                  Google Ads
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
-
-        <div class="text-center sm:text-left">
-          <p class="text-lg font-medium text-gray-900 dark:text-white">
-            Helpful Links
-          </p>
-
-          <nav aria-label="Footer Helpful Nav" class="mt-8">
-            <ul class="space-y-4 text-sm">
-              <li>
-                <a
-                  class="text-gray-700 transition hover:text-gray-700/75 dark:text-white dark:hover:text-white/75"
-                  href="/"
-                >
-                  FAQs
-                </a>
-              </li>
-
-              <li>
-                <a
-                  class="text-gray-700 transition hover:text-gray-700/75 dark:text-white dark:hover:text-white/75"
-                  href="/"
-                >
-                  Support
-                </a>
-              </li>
-
-              <li>
-                <a
-                  class="group flex justify-center gap-1.5 sm:justify-start"
-                  href="/"
-                >
-                  <span
-                    class="text-gray-700 transition group-hover:text-gray-700/75 dark:text-white dark:hover:text-white/75"
-                  >
-                    Live Chat
-                  </span>
-
-                  <span class="relative flex h-2 w-2">
-                    <span
-                      class="absolute inline-flex h-full w-full animate-ping rounded-full bg-teal-400 opacity-75"
-                    ></span>
-                    <span
-                      class="relative inline-flex h-2 w-2 rounded-full bg-teal-500"
-                    ></span>
-                  </span>
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
-
-        <div class="text-center sm:text-left">
-          <p class="text-lg font-medium text-gray-900 dark:text-white">
-            Contact Us
-          </p>
-
-          <ul class="mt-8 space-y-4 text-sm">
+                <span class="text-gray-700 dark:text-gray-300">
+                  Contact
+                </span>
+              </a>
+            </li>
             <li>
               <a
                 class="flex items-center justify-center gap-1.5 sm:justify-start"
@@ -411,10 +327,16 @@ const Footer = () => {
                 213 Lane, London, United Kingdom
               </address>
             </li>
-          </ul>
+            </ul>
+          </nav>
         </div>
+
+       
+
+      
+
+       
       </div>
-    </div>
 
     <div class="mt-12 border-t border-gray-100 pt-6 dark:border-gray-800">
       <div class="text-center sm:flex sm:justify-between sm:text-left">
@@ -439,9 +361,9 @@ const Footer = () => {
         </p>
 
         <p
-          class="mt-4 text-sm text-gray-500 dark:text-gray-400 sm:order-first sm:mt-0"
+          class="mt-4 text-xs text-gray-500 dark:text-gray-400 sm:order-first sm:mt-0"
         >
-          &copy; 2022 Company Name
+          &copy; 2022 Noble Paragon Pte. Ltd A11 Rights Reserve
         </p>
       </div>
     </div>
