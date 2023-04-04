@@ -2,19 +2,19 @@ import React from 'react';
 
 const Footer = () => {
     return (
-        <footer aria-label="Site Footer" class="bg-white dark:bg-gray-900">
-  <div class="mx-auto max-w-screen-xl px-4 pt-16 pb-6 sm:px-6 lg:px-8 lg:pt-24">
+        <footer aria-label="Site Footer" className="bg-white dark:bg-gray-900">
+  <div className="mx-auto max-w-screen-xl px-4 pt-16 pb-6 sm:px-6 lg:px-8 lg:pt-24">
    
 
       <div
-        class="grid grid-cols-1 gap-8  md:grid-cols-3"
+        className="grid grid-cols-1 gap-8  md:grid-cols-3"
       >
          <div>
         <div
-          class="flex justify-center text-teal-600 dark:text-teal-300 sm:justify-start"
+          className="flex justify-center text-teal-600 dark:text-teal-300 sm:justify-start"
         >
           <svg
-            class="h-8"
+            className="h-8"
             viewBox="0 0 118 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -63,23 +63,23 @@ const Footer = () => {
         </div>
 
         <p
-          class="mt-6 max-w-md text-center leading-relaxed text-gray-500 dark:text-gray-400 sm:max-w-xs sm:text-left"
+          className="mt-6 max-w-md text-center leading-relaxed text-gray-500 dark:text-gray-400 sm:max-w-xs sm:text-left"
         >
           123 Chaowai St, Chaoyang District, Beijing, 
 China, 100020
         </p>
 
-        {/* <ul class="mt-8 flex justify-center gap-6 sm:justify-start md:gap-8">
+        {/* <ul className="mt-8 flex justify-center gap-6 sm:justify-start md:gap-8">
           <li>
             <a
               href="/"
               rel="noreferrer"
               target="_blank"
-              class="text-teal-700 transition hover:text-teal-700/75 dark:text-teal-500 dark:hover:text-teal-500/75"
+              className="text-teal-700 transition hover:text-teal-700/75 dark:text-teal-500 dark:hover:text-teal-500/75"
             >
-              <span class="sr-only">Facebook</span>
+              <span className="sr-only">Facebook</span>
               <svg
-                class="h-6 w-6"
+                className="h-6 w-6"
                 fill="currentColor"
                 viewBox="0 0 24 24"
                 aria-hidden="true"
@@ -98,11 +98,11 @@ China, 100020
               href="/"
               rel="noreferrer"
               target="_blank"
-              class="text-teal-700 transition hover:text-teal-700/75 dark:text-teal-500 dark:hover:text-teal-500/75"
+              className="text-teal-700 transition hover:text-teal-700/75 dark:text-teal-500 dark:hover:text-teal-500/75"
             >
-              <span class="sr-only">Instagram</span>
+              <span className="sr-only">Instagram</span>
               <svg
-                class="h-6 w-6"
+                className="h-6 w-6"
                 fill="currentColor"
                 viewBox="0 0 24 24"
                 aria-hidden="true"
@@ -121,11 +121,11 @@ China, 100020
               href="/"
               rel="noreferrer"
               target="_blank"
-              class="text-teal-700 transition hover:text-teal-700/75 dark:text-teal-500 dark:hover:text-teal-500/75"
+              className="text-teal-700 transition hover:text-teal-700/75 dark:text-teal-500 dark:hover:text-teal-500/75"
             >
-              <span class="sr-only">Twitter</span>
+              <span className="sr-only">Twitter</span>
               <svg
-                class="h-6 w-6"
+                className="h-6 w-6"
                 fill="currentColor"
                 viewBox="0 0 24 24"
                 aria-hidden="true"
@@ -142,11 +142,11 @@ China, 100020
               href="/"
               rel="noreferrer"
               target="_blank"
-              class="text-teal-700 transition hover:text-teal-700/75 dark:text-teal-500 dark:hover:text-teal-500/75"
+              className="text-teal-700 transition hover:text-teal-700/75 dark:text-teal-500 dark:hover:text-teal-500/75"
             >
-              <span class="sr-only">GitHub</span>
+              <span className="sr-only">GitHub</span>
               <svg
-                class="h-6 w-6"
+                className="h-6 w-6"
                 fill="currentColor"
                 viewBox="0 0 24 24"
                 aria-hidden="true"
@@ -165,11 +165,11 @@ China, 100020
               href="/"
               rel="noreferrer"
               target="_blank"
-              class="text-teal-700 transition hover:text-teal-700/75 dark:text-teal-500 dark:hover:text-teal-500/75"
+              className="text-teal-700 transition hover:text-teal-700/75 dark:text-teal-500 dark:hover:text-teal-500/75"
             >
-              <span class="sr-only">Dribbble</span>
+              <span className="sr-only">Dribbble</span>
               <svg
-                class="h-6 w-6"
+                className="h-6 w-6"
                 fill="currentColor"
                 viewBox="0 0 24 24"
                 aria-hidden="true"
@@ -184,16 +184,16 @@ China, 100020
           </li>
         </ul> */}
       </div>
-        <div class="text-center sm:text-left">
-          {/* <p class="text-lg font-medium text-gray-900 dark:text-white">
+        <div className="text-center sm:text-left">
+          {/* <p className="text-lg font-medium text-gray-900 dark:text-white">
             About Us
           </p> */}
 
-          <nav aria-label="Footer About Nav" class="mt-8">
-            <ul class="space-y-4 text-sm text-center">
+          <nav aria-label="Footer About Nav" className="mt-8">
+            <ul className="space-y-4 text-sm text-center">
               <li>
                 <a
-                  class="text-gray-700 transition hover:text-gray-700/75 dark:text-white dark:hover:text-white/75"
+                  className="text-gray-700 transition hover:text-gray-700/75 dark:text-white dark:hover:text-white/75"
                   href="/"
                 >
                   Home
@@ -202,7 +202,7 @@ China, 100020
 
               <li>
                 <a
-                  class="text-gray-700 transition hover:text-gray-700/75 dark:text-white dark:hover:text-white/75"
+                  className="text-gray-700 transition hover:text-gray-700/75 dark:text-white dark:hover:text-white/75"
                   href="/"
                 >
                   customer Service
@@ -211,7 +211,7 @@ China, 100020
 
               <li>
                 <a
-                  class="text-gray-700 transition hover:text-gray-700/75 dark:text-white dark:hover:text-white/75"
+                  className="text-gray-700 transition hover:text-gray-700/75 dark:text-white dark:hover:text-white/75"
                   href="/"
                 >
                  Admin
@@ -220,7 +220,7 @@ China, 100020
 
               <li>
                 <a
-                  class="text-gray-700 transition hover:text-gray-700/75 dark:text-white dark:hover:text-white/75"
+                  className="text-gray-700 transition hover:text-gray-700/75 dark:text-white dark:hover:text-white/75"
                   href="/"
                 >
                  Account
@@ -229,46 +229,46 @@ China, 100020
             </ul>
           </nav>
         </div>
-        <div class="text-center sm:text-left">
-          {/* <p class="text-lg font-medium text-gray-900 dark:text-white">
+        <div className="text-center sm:text-left">
+          {/* <p className="text-lg font-medium text-gray-900 dark:text-white">
             About Us
           </p> */}
 
-          <nav aria-label="Footer About Nav" class="mt-8">
-            <ul class="space-y-4 text-sm text-center">
+          <nav aria-label="Footer About Nav" className="mt-8">
+            <ul className="space-y-4 text-sm text-center">
             <li>
               <a
-                class="flex  text-sm items-center justify-center gap-1.5 sm:justify-start"
+                className="flex  text-sm items-center justify-center gap-1.5 sm:justify-start"
                 href="/"
               >
               
 
-                <span class="text-gray-700 dark:text-gray-300">
+                <span className="text-gray-700 dark:text-gray-300">
                   Contact
                 </span>
               </a>
             </li>
             <li>
               <a
-                class="flex items-center justify-center gap-1.5 sm:justify-start"
+                className="flex items-center justify-center gap-1.5 sm:justify-start"
                 href="/"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5 shrink-0 text-gray-900 dark:text-white"
+                  className="h-5 w-5 shrink-0 text-gray-900 dark:text-white"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
-                  stroke-width="2"
+                  strokeWidth="2"
                 >
                   <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                     d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                   />
                 </svg>
 
-                <span class="text-gray-700 dark:text-gray-300">
+                <span className="text-gray-700 dark:text-gray-300">
                   john@doe.com
                 </span>
               </a>
@@ -276,53 +276,53 @@ China, 100020
 
             <li>
               <a
-                class="flex items-center justify-center gap-1.5 sm:justify-start"
+                className="flex items-center justify-center gap-1.5 sm:justify-start"
                 href="/"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5 shrink-0 text-gray-900 dark:text-white"
+                  className="h-5 w-5 shrink-0 text-gray-900 dark:text-white"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
-                  stroke-width="2"
+                  strokeWidth="2"
                 >
                   <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                     d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
                   />
                 </svg>
 
-                <span class="text-gray-700 dark:text-gray-300">0123456789</span>
+                <span className="text-gray-700 dark:text-gray-300">0123456789</span>
               </a>
             </li>
 
             <li
-              class="flex items-start justify-center gap-1.5 sm:justify-start"
+              className="flex items-start justify-center gap-1.5 sm:justify-start"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5 shrink-0 text-gray-900 dark:text-white"
+                className="h-5 w-5 shrink-0 text-gray-900 dark:text-white"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
-                stroke-width="2"
+                strokeWidth="2"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
                 />
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                 />
               </svg>
 
               <address
-                class="-mt-0.5 not-italic text-gray-700 dark:text-gray-300"
+                className="-mt-0.5 not-italic text-gray-700 dark:text-gray-300"
               >
                 213 Lane, London, United Kingdom
               </address>
@@ -338,13 +338,13 @@ China, 100020
        
       </div>
 
-    <div class="mt-12 border-t border-gray-100 pt-6 dark:border-gray-800">
-      <div class="text-center sm:flex sm:justify-between sm:text-left">
-        <p class="text-sm text-gray-500 dark:text-gray-400">
-          <span class="block sm:inline">All rights reserved.</span>
+    <div className="mt-12 border-t border-gray-100 pt-6 dark:border-gray-800">
+      <div className="text-center sm:flex sm:justify-between sm:text-left">
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          <span className="block sm:inline">All rights reserved.</span>
 
           <a
-            class="inline-block text-teal-600 underline transition hover:text-teal-600/75 dark:text-teal-500 dark:hover:text-teal-500/75"
+            className="inline-block text-teal-600 underline transition hover:text-teal-600/75 dark:text-teal-500 dark:hover:text-teal-500/75"
             href="/"
           >
             Terms & Conditions
@@ -353,7 +353,7 @@ China, 100020
           <span>&middot;</span>
 
           <a
-            class="inline-block text-teal-600 underline transition hover:text-teal-600/75 dark:text-teal-500 dark:hover:text-teal-500/75"
+            className="inline-block text-teal-600 underline transition hover:text-teal-600/75 dark:text-teal-500 dark:hover:text-teal-500/75"
             href="/"
           >
             Privacy Policy
@@ -361,7 +361,7 @@ China, 100020
         </p>
 
         <p
-          class="mt-4 text-xs text-gray-500 dark:text-gray-400 sm:order-first sm:mt-0"
+          className="mt-4 text-xs text-gray-500 dark:text-gray-400 sm:order-first sm:mt-0"
         >
           &copy; 2022 Noble Paragon Pte. Ltd A11 Rights Reserve
         </p>

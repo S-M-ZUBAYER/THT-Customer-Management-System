@@ -8,14 +8,14 @@ const Navbar = () => {
   const toggleMenu = () => setIsOpen(!isOpen);
 
   return (
-    <header aria-label="Site Header" class="bg-white dark:bg-gray-900">
-      <div class="mx-auto px-4 sm:px-6 lg:px-20">
-        <div class="flex h-16 items-center justify-between">
-          <div class="md:flex md:items-center md:gap-12">
-            <Link class="block text-teal-600 dark:text-teal-600" to="/home">
-              <span class="sr-only">Home</span>
+    <header aria-label="Site Header" className="bg-white dark:bg-gray-900">
+      <div className="mx-auto px-4 sm:px-6 lg:px-20">
+        <div className="flex h-16 items-center justify-between">
+          <div className="md:flex md:items-center md:gap-12">
+            <Link className="block text-teal-600 dark:text-teal-600" to="/home">
+              <span className="sr-only">Home</span>
               <svg
-                class="h-8"
+                className="h-8"
                 viewBox="0 0 28 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -28,12 +28,12 @@ const Navbar = () => {
             </Link>
           </div>
 
-          <div class="hidden md:block">
+          <div className="hidden md:block">
             <nav aria-label="Site Nav">
-              <ul class="flex items-center gap-6 text-sm">
+              <ul className="flex items-center gap-6 text-sm">
                 <li>
                   <Link
-                    class="text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75"
+                    className="text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75"
                     to="/home"
                   >
                     Home
@@ -43,7 +43,7 @@ const Navbar = () => {
                 <li>
                   <div className="relative">
                     <button
-                      class="flex justify-between items-center  text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75"
+                      className="flex justify-between items-center  text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75"
                       onClick={toggleMenu}
                     >
                       Customer Service  
@@ -84,7 +84,7 @@ const Navbar = () => {
 
                 <li>
                   <Link
-                    class="text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75"
+                    className="text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75"
                     to="/admin"
                   >
                     Admin
@@ -93,7 +93,7 @@ const Navbar = () => {
 
                 <li>
                   <Link
-                    class="text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75"
+                    className="text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75"
                     to="/account"
                   >
                     Account
@@ -102,7 +102,7 @@ const Navbar = () => {
 
                 <li>
                   <Link
-                    class="text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75"
+                    className="text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75"
                     to="/contact"
                   >
                     Contact
@@ -112,18 +112,18 @@ const Navbar = () => {
             </nav>
           </div>
 
-          <div class="flex items-center gap-4">
-            <div class="sm:flex sm:gap-4">
+          <div className="flex items-center gap-4">
+            <div className="sm:flex sm:gap-4">
               <Link
-                class="rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white shadow dark:hover:bg-teal-500"
+                className="rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white shadow dark:hover:bg-teal-500"
                 to="/login"
               >
                 Login
               </Link>
 
-              <div class="hidden sm:flex">
+              <div className="hidden sm:flex">
                 <Link
-                  class="rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-teal-600 dark:bg-gray-800 dark:text-white dark:hover:text-white/75"
+                  className="rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-teal-600 dark:bg-gray-800 dark:text-white dark:hover:text-white/75"
                   to="/register"
                 >
                   Register
@@ -135,7 +135,7 @@ const Navbar = () => {
             <div className="relative sm:visible lg:hidden">
               <button
 
-                class="rounded bg-gray-100 p-2 text-gray-600 transition hover:text-gray-600/75 dark:bg-gray-800 dark:text-white dark:hover:text-white/75"
+                className="rounded bg-gray-100 p-2 text-gray-600 transition hover:text-gray-600/75 dark:bg-gray-800 dark:text-white dark:hover:text-white/75"
 
                 id="options-menu"
                 aria-haspopup="true"
@@ -145,15 +145,15 @@ const Navbar = () => {
 
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5"
+                  className="h-5 w-5"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
-                  stroke-width="2"
+                  strokeWidth="2"
                 >
                   <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                     d="M4 6h16M4 12h16M4 18h16"
                   />
                 </svg>
