@@ -51,7 +51,7 @@ const Navbar = () => {
 
                     </button>
                     {isOpen && (
-                      <div className="absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                      <div className="absolute left-0 z-40 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                         <div
                           className="py-1"
                           role="menu"

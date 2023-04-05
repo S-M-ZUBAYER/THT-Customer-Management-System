@@ -83,7 +83,7 @@ const Login = () => {
                        
                     </div>
                     <div className="my-2 ">
-                         <button  className="bg-amber-200 px-20 py-2 text-xl font-semibold " type="submit">Sign In</button>
+                         <button  className="bg-amber-200 rounded-md px-20 py-2 text-xl font-semibold " type="submit">Sign In</button>
                     </div>
                 </form>
                 <div className="text-sm my-3">

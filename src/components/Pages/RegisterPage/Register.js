@@ -62,7 +62,7 @@ const Register = () => {
 
     return (
         <div className="md:flex shadow-lg justify-around items-center mx-20 sm:px-5 md:px-0  lg:mx-48 my-20">
-            <div className="bg-white flex justify-center items-center">
+            <div className="bg-white flex justify-center items-center w-2/5">
                 <div className=" w-full my-12 py-10" >
                     <h2 className="text-2xl font-semibold my-4">Create an account</h2>
 
@@ -128,7 +128,7 @@ const Register = () => {
                         <hr className=" border-slate-300 mb-8" ></hr>
 
                         <div className="my-2 ">
-                            <button className="bg-amber-200 w-full py-2 text-xl font-semibold " type="submit">Register</button>
+                            <button className="bg-amber-200 w-full py-2 text-xl font-semibold rounded-md" type="submit">Register</button>
                         </div>
                     </form>
                     <div className="text-sm my-3">
