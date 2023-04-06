@@ -51,6 +51,13 @@ const AddMallProducts = () => {
     const handleToDelete=()=>{
     console.log("Delete CLick")
     }
+
+
+    const handleSubmit=()=>{
+    console.log("submit")
+    }
+
+
     
 
     return (
@@ -81,7 +88,12 @@ const AddMallProducts = () => {
             })
         }
 
-
+<button
+        className="bg-gray-400 hover:bg-gray-700 text-white font-bold py-2 my-10 px-20 rounded-lg"
+        onClick={handleSubmit}
+      >
+        Add
+      </button>
 
     </div>
     );

@@ -53,6 +53,23 @@ const Admin = () => {
                     </ul>
                 </div>
                 <div className="col-span-4 shadow-lg rounded-lg">
+                    
+                <div className="text-white pt-12 pb-5">
+                        <img data-aos="fade-down" data-aos-duration="2000" className="h-40 w-40 rounded-full border-8 border-x-fuchsia-500 border-yellow-300 mx-auto" 
+                        //  src={user?.photoURL} 
+                         alt="" />
+                        <div data-aos="fade-up" data-aos-duration="2000">
+                            <h1 className="text-2xl font-bold" >
+                                Hi <span className="text-lime-400">
+                                    {/* {user?.displayName} */}
+                                    </span>
+                            </h1>
+                            <p className="text-xl text-green-300">
+                                Welcome to your dashboard
+                            </p>
+                        </div>
+
+                    </div>
                     <Outlet></Outlet>
                 </div>
             </div>
