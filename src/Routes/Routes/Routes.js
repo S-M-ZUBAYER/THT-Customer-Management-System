@@ -9,6 +9,11 @@ import Login from "../../components/Pages/LoginPage/Login";
 import Register from "../../components/Pages/RegisterPage/Register";
 import CustomerService_1 from "../../components/Pages/CustomerServicePage/CustomerService_1";
 import CustomerService_2 from "../../components/Pages/CustomerServicePage/CustomerService_2";
+import AllUsers from "../../components/Pages/AdminPage/AdminDashboard/AllUsers";
+import QandA from "../../components/Pages/AdminPage/AdminDashboard/QandA";
+import AddIcon from "../../components/Pages/AdminPage/AdminDashboard/AddIcon";
+import AddMallProducts from "../../components/Pages/AdminPage/AdminDashboard/MallProducts";
+import EventProducts from "../../components/Pages/AdminPage/AdminDashboard/EventProducts";
 
 export const routes=createBrowserRouter([
     {
@@ -16,6 +21,10 @@ export const routes=createBrowserRouter([
         element:<Main></Main>,
         errorElement:<ErrorPage></ErrorPage>,
         children:[
+            {
+                path:"/",
+                element:<Home></Home>
+            },
             {
                 path:"/home",
                 element:<Home></Home>
@@ -28,10 +37,10 @@ export const routes=createBrowserRouter([
                 path:"/customer-2",
                 element:<CustomerService_2></CustomerService_2>
             },
-            {
-                path:"/admin",
-                element:<Admin></Admin>
-            },
+            // {
+            //     path:"/admin",
+            //     element:<Admin></Admin>
+            // },
             {
                 path:"account",
                 element:<Account></Account>
@@ -48,6 +57,32 @@ export const routes=createBrowserRouter([
                 path:"register",
                 element:<Register></Register>
             }
+        ]
+    },
+    {
+        path:"/admin",
+        element:<Admin></Admin>,
+        children:[
+            {
+                path:"/admin/users",
+                element:<AllUsers></AllUsers>
+            },
+            {
+                path:"/admin/questionAnswer",
+                element:<QandA></QandA>
+            },
+            {
+                path:"/admin/icon",
+                element:<AddIcon></AddIcon>
+            },
+            {
+                path:"/admin/mallProduct",
+                element:<AddMallProducts></AddMallProducts>
+            },
+            {
+                path:"/admin/eventProduct",
+                element:<EventProducts></EventProducts>
+            },
         ]
     }
 ])
