@@ -1,16 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useState } from 'react';
 import { GrFacebook, GrGoogle } from "react-icons/gr";
 import { BsEyeFill, BsWechat } from "react-icons/bs";
 import { RiEyeCloseLine } from "react-icons/ri";
 // import { BsEyeFill } from "react-icons/bs";
-import { Link } from 'react-router-dom';
+import { Form, Link } from 'react-router-dom';
+import { AuthContext } from '../../../context/UserContext';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const [show, setShow]=useState(false)
+
+    const {signIn}=useContext(AuthContext);
+
 
     const handleEmailChange = (event) => {
         setEmail(event.target.value);
@@ -22,8 +26,16 @@ const Login = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(email,password)
         // handle form submission logic here
+        signIn(email,password)
+        .then(result=>{
+            const user=result.user;
+            console.log(user);
+            Form.reset()
+        })
+        .catch(err=>{
+            console.log(err)
+        })
     };
 
 

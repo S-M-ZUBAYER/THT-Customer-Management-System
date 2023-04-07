@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import { Form, Link } from 'react-router-dom';
 import { GrFacebook, GrGoogle } from "react-icons/gr";
 import { BsEyeFill, BsWechat } from "react-icons/bs";
 import { RiEyeCloseLine } from 'react-icons/ri';
+import { AuthContext } from '../../../context/UserContext';
 
 const Register = () => {
 
@@ -42,8 +43,16 @@ const Register = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(email, password, confirmPassword, phone, designation, language, country)
         // handle form submission logic here
+createUser(email,password)
+.then(result=>{
+    const user=result.user;
+    Form.reset();
+})
+.catch(err=>{
+    console.log(err)
+})
+
     };
 
 
@@ -58,6 +67,8 @@ const Register = () => {
         // handle form submission logic here
     };
 
+//Registration part with firebase
+const {createUser}=useContext(AuthContext)
 
 
     return (

@@ -2,7 +2,7 @@ import React from 'react';
 
 const Footer = () => {
     return (
-        <footer aria-label="Site Footer" className="bg-white dark:bg-gray-900">
+        <footer aria-label="Site Footer" className=" bg-blue-950 text-white dark:bg-gray-900">
   <div className="mx-auto max-w-screen-xl px-4 pt-16 pb-6 sm:px-6 lg:px-8 lg:pt-24">
    
 
@@ -63,7 +63,7 @@ const Footer = () => {
         </div>
 
         <p
-          className="mt-6 max-w-md text-center leading-relaxed text-gray-500 dark:text-gray-400 sm:max-w-xs sm:text-left"
+          className="mt-6 max-w-md text-center leading-relaxed text-white dark:text-gray-400 sm:max-w-xs sm:text-left"
         >
           123 Chaowai St, Chaoyang District, Beijing, 
 China, 100020
@@ -193,7 +193,7 @@ China, 100020
             <ul className="space-y-4 text-sm text-center">
               <li>
                 <a
-                  className="text-gray-700 transition hover:text-gray-700/75 dark:text-white dark:hover:text-white/75"
+                  className="text-white transition hover:text-white/75 dark:text-white dark:hover:text-white/75"
                   href="/"
                 >
                   Home
@@ -202,7 +202,7 @@ China, 100020
 
               <li>
                 <a
-                  className="text-gray-700 transition hover:text-gray-700/75 dark:text-white dark:hover:text-white/75"
+                  className="text-white transition hover:text-white/75 dark:text-white dark:hover:text-white/75"
                   href="/"
                 >
                   customer Service
@@ -211,7 +211,7 @@ China, 100020
 
               <li>
                 <a
-                  className="text-gray-700 transition hover:text-gray-700/75 dark:text-white dark:hover:text-white/75"
+                  className="text-white transition hover:text-white/75 dark:text-white dark:hover:text-white/75"
                   href="/"
                 >
                  Admin
@@ -220,7 +220,7 @@ China, 100020
 
               <li>
                 <a
-                  className="text-gray-700 transition hover:text-gray-700/75 dark:text-white dark:hover:text-white/75"
+                  className="text-white transition hover:text-white/75 dark:text-white dark:hover:text-white/75"
                   href="/"
                 >
                  Account
@@ -243,7 +243,7 @@ China, 100020
               >
               
 
-                <span className="text-gray-700 dark:text-gray-300">
+                <span className="text-white dark:text-gray-300">
                   Contact
                 </span>
               </a>
@@ -255,7 +255,7 @@ China, 100020
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 shrink-0 text-gray-900 dark:text-white"
+                  className="h-5 w-5 shrink-0 text-white dark:text-white"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -268,7 +268,7 @@ China, 100020
                   />
                 </svg>
 
-                <span className="text-gray-700 dark:text-gray-300">
+                <span className="text-white dark:text-white">
                   john@doe.com
                 </span>
               </a>
@@ -281,7 +281,7 @@ China, 100020
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 shrink-0 text-gray-900 dark:text-white"
+                  className="h-5 w-5 shrink-0 text-white dark:text-white"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -294,7 +294,7 @@ China, 100020
                   />
                 </svg>
 
-                <span className="text-gray-700 dark:text-gray-300">0123456789</span>
+                <span className="text-white dark:text-gray-300">0123456789</span>
               </a>
             </li>
 
@@ -303,7 +303,7 @@ China, 100020
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 shrink-0 text-gray-900 dark:text-white"
+                className="h-5 w-5 shrink-0 text-white dark:text-white"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -322,7 +322,7 @@ China, 100020
               </svg>
 
               <address
-                className="-mt-0.5 not-italic text-gray-700 dark:text-gray-300"
+                className="-mt-0.5 not-italic text-white dark:text-gray-300"
               >
                 213 Lane, London, United Kingdom
               </address>
@@ -340,7 +340,7 @@ China, 100020
 
     <div className="mt-12 border-t border-gray-100 pt-6 dark:border-gray-800">
       <div className="text-center sm:flex sm:justify-between sm:text-left">
-        <p className="text-sm text-gray-500 dark:text-gray-400">
+        <p className="text-sm text-white dark:text-gray-400">
           <span className="block sm:inline">All rights reserved.</span>
 
           <a
@@ -361,7 +361,7 @@ China, 100020
         </p>
 
         <p
-          className="mt-4 text-xs text-gray-500 dark:text-gray-400 sm:order-first sm:mt-0"
+          className="mt-4 text-xs text-white dark:text-gray-400 sm:order-first sm:mt-0"
         >
           &copy; 2022 Noble Paragon Pte. Ltd A11 Rights Reserve
         </p>

@@ -20,10 +20,10 @@ const Home = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 mt-20 w-full bg-slate-100 py-12">
-                <div className="flex items-center justify-self-center">
+                <div className="order-2 sm:order-1 flex items-center justify-self-center">
                     <img className="h-96 w-80 rounded-2xl shadow-slate-900" src={img} alt="" />
                 </div>
-                <div className="px-20 text-center">
+                <div className=" order-1 sm:order-2px-20 text-center">
                     <h1 className="pt-20 text-2xl font-bold my-2 ">Our Service </h1>
                     <p className="text-start">Welcome to , your one-stop-shop for all your printing needs! We are dedicated to providing high-quality printing products and services that will exceed your expectations.Our state-of-the-art printers are designed to produce crisp, clear, and vibrant prints for both personal and professional use.  </p>
                 </div>

@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {MdArrowDropDown } from "react-icons/md";
+import UserContext, { AuthContext } from '../../../context/UserContext';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const {user}=useContext(AuthContext);
+  
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
