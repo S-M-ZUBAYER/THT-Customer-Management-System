@@ -4,16 +4,17 @@ import { GrFacebook, GrGoogle } from "react-icons/gr";
 import { BsEyeFill, BsWechat } from "react-icons/bs";
 import { RiEyeCloseLine } from "react-icons/ri";
 // import { BsEyeFill } from "react-icons/bs";
-import { Form, Link } from 'react-router-dom';
+import { Form, Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../context/UserContext';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const navigate=useNavigate()
 
     const [show, setShow]=useState(false)
 
-    const {signIn}=useContext(AuthContext);
+    const {signIn,signInWithGoogle}=useContext(AuthContext);
 
 
     const handleEmailChange = (event) => {
@@ -26,12 +27,14 @@ const Login = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        const form=event.target;
         // handle form submission logic here
         signIn(email,password)
         .then(result=>{
             const user=result.user;
-            console.log(user);
-            Form.reset()
+            navigate("/")
+            form.reset();
+           
         })
         .catch(err=>{
             console.log(err)
@@ -45,6 +48,19 @@ const Login = () => {
         // handle form submission logic here
     };
 
+    const handleToGoogleLogIn=()=>{
+        signInWithGoogle()
+        .then(result=>{
+            const user=result.user;
+            navigate("/")
+            console.log(user);
+        })
+        .catch(err=>{
+            console.log(err)
+        })
+    }
+    
+
 
     const handleForgotPasswordClick = () => {
         // handle forgot password click logic here
@@ -56,7 +72,7 @@ const Login = () => {
                 <h2 className="text-2xl font-semibold my-4">Sign In</h2>
 
                 <div className="text-2xl" >
-                    <button className="mr-8">
+                    <button onClick={handleToGoogleLogIn} className="mr-8">
                         <GrGoogle></GrGoogle>
                     </button>
                     <button className="mr-8">

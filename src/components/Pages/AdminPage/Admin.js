@@ -3,11 +3,15 @@ import React, { useContext } from 'react';
 import { Link, Outlet } from 'react-router-dom';
 import Navbar from '../../Shared/NavbarSection/Navbar';
 import Footer from '../../Shared/FooterSection/Footer';
+import { AuthContext } from '../../../context/UserContext';
 // import useAdmin from '../../../Api/Hooks/UseAdmin';
 // import { AuthContext } from '../../../Context/AuthProvider/AuthProvider';
 // import useAdmin from '../Hooks/UseAdmin';
 
 const Admin = () => {
+
+const {user}=useContext(AuthContext)
+
     // const { user } = useContext(AuthContext);
     // const [isAdmin] = useAdmin(user?.email)
     // const [isBuyer] = useBuyer(user?.email)
@@ -59,9 +63,9 @@ const Admin = () => {
                         //  src={user?.photoURL} 
                          alt="" />
                         <div data-aos="fade-up" data-aos-duration="2000">
-                            <h1 className="text-2xl font-bold" >
+                            <h1 className="text-2xl text-red-300 font-bold" >
                                 Hi <span className="text-lime-400">
-                                    {/* {user?.displayName} */}
+                                    {user?.email}
                                     </span>
                             </h1>
                             <p className="text-xl text-green-300">

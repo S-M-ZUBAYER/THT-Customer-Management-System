@@ -14,6 +14,7 @@ import QandA from "../../components/Pages/AdminPage/AdminDashboard/QandA";
 import AddIcon from "../../components/Pages/AdminPage/AdminDashboard/AddIcon";
 import AddMallProducts from "../../components/Pages/AdminPage/AdminDashboard/MallProducts";
 import EventProducts from "../../components/Pages/AdminPage/AdminDashboard/EventProducts";
+import PrivateRoute from "./PrivateRoute/PrivateRoute";
 
 export const routes=createBrowserRouter([
     {
@@ -43,7 +44,7 @@ export const routes=createBrowserRouter([
             // },
             {
                 path:"account",
-                element:<Account></Account>
+                element:<PrivateRoute><Account></Account></PrivateRoute>
             },
             {
                 path:"contact",
@@ -61,7 +62,8 @@ export const routes=createBrowserRouter([
     },
     {
         path:"/admin",
-        element:<Admin></Admin>,
+        element:<PrivateRoute><Admin></Admin></PrivateRoute>
+        ,
         children:[
             {
                 path:"/admin/users",

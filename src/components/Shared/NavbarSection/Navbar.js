@@ -7,7 +7,6 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const {user}=useContext(AuthContext);
-  
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -111,6 +110,9 @@ const Navbar = () => {
                   >
                     Contact
                   </Link>
+                </li>
+                <li>
+                  {user?.email}
                 </li>
               </ul>
             </nav>

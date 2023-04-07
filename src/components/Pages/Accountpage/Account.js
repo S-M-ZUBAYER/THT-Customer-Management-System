@@ -1,12 +1,24 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import img from "../../../Assets/Images/messi.jpg"
+import { AuthContext } from '../../../context/UserContext';
 const Account = () => {
+const {logOut,user}=useContext(AuthContext)
+
+const handleToLogOut=()=>{
+    logOut()
+    .then(()=>{})
+    .catch(err=>{
+        console.log(err)
+    })
+}
+
+
     return (
         <div className="mt-32 md:mx-36">
         
         <div className="grid grid-cols-1 md:grid-cols-2 text-center">
             <div className="flex justify-around">
-                <img className="rounded-full h-48 w-48" src={img}></img>
+                <img className="rounded-full h-48 w-48" src={user?.photoURL}></img>
             </div>
             <div className="text-start sm:mt-10 md:mt-0 "> 
                 <div className= "sm:mx-10 md:mx-0">
@@ -51,7 +63,7 @@ const Account = () => {
         </div>
 
         <div className="my-20">
-            <button className="bg-zinc-400 px-12 rounded-md py-1 text-white font-semibold hover:bg-slate-800" >
+            <button onClick={handleToLogOut} className="bg-zinc-400 px-12 rounded-md py-1 text-white font-semibold hover:bg-slate-800" >
                 Log out
             </button>
         </div>

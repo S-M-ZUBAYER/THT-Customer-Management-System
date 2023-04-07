@@ -18,6 +18,9 @@ const Register = () => {
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
+    const [matchError,setMatchError]=useState(null);
+    const [lengthError,setLengthError]=useState(null);
+
     const handleEmailChange = (event) => {
         setEmail(event.target.value);
     };
@@ -27,6 +30,7 @@ const Register = () => {
 
     const handleConfirmPasswordChange = (event) => {
         setConfirmPassword(event.target.value);
+        
     };
     const handlePhoneChange = (event) => {
         setPhone(event.target.value);
@@ -41,19 +45,7 @@ const Register = () => {
         setCountry(event.target.value);
     };
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        // handle form submission logic here
-createUser(email,password)
-.then(result=>{
-    const user=result.user;
-    Form.reset();
-})
-.catch(err=>{
-    console.log(err)
-})
 
-    };
 
 
     const handleToShowPassword = (event) => {
@@ -67,8 +59,44 @@ createUser(email,password)
         // handle form submission logic here
     };
 
-//Registration part with firebase
-const {createUser}=useContext(AuthContext)
+   
+
+    //Registration part with firebase
+    const { createUser, signInWithGoogle } = useContext(AuthContext)
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const form=event.target;
+        if(password.length<6){
+            setLengthError("Your Password have to minimum 6 characters");
+            return;
+        }
+
+        if(password!==confirmPassword){
+            setMatchError("Your Password did not match");
+            return;
+        }
+        // handle form submission logic here
+        createUser(email, password)
+            .then(result => {
+                const user = result.user;
+                form.reset();
+
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    };
+const handleToGoogleLogIn=()=>{
+    signInWithGoogle()
+    .then(result=>{
+        const user=result.user;
+        console.log(user);
+    })
+    .catch(err=>{
+        console.log(err)
+    })
+}
 
 
     return (
@@ -78,7 +106,7 @@ const {createUser}=useContext(AuthContext)
                     <h2 className="text-2xl font-semibold my-4">Create an account</h2>
 
                     <div className="text-2xl" >
-                        <button className="mr-8">
+                        <button onClick={handleToGoogleLogIn} className="mr-8">
                             <GrGoogle></GrGoogle>
                         </button>
                         <button className="mr-8">
@@ -108,7 +136,7 @@ const {createUser}=useContext(AuthContext)
                             </div>
 
                             <hr className=" border-slate-300 mb-5" ></hr>
-
+<p className="text-xs text-red-600 ml-2 text-start">{lengthError}</p>
                         </div>
 
                         <div className='relative my-2'>
@@ -123,7 +151,7 @@ const {createUser}=useContext(AuthContext)
                             </div>
 
                             <hr className=" border-slate-300 mb-5" ></hr>
-
+                            <p className="text-xs text-red-600 ml-2 text-start">{matchError}</p>
                         </div>
 
                         <input className=" w-full pl-2" placeholder="phone number" type="digit" id="phone" value={phone} onChange={handlePhoneChange} />
@@ -155,6 +183,6 @@ const {createUser}=useContext(AuthContext)
             </div>
         </div>
     );
-}; 
+};
 
 export default Register;
