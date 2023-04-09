@@ -14,7 +14,7 @@ const Login = () => {
 
     const [show, setShow]=useState(false)
 
-    const {signIn,signInWithGoogle}=useContext(AuthContext);
+    const {signIn,signInWithGoogle,signInWithFacebook}=useContext(AuthContext);
 
 
     const handleEmailChange = (event) => {
@@ -59,6 +59,17 @@ const Login = () => {
             console.log(err)
         })
     }
+    const handleToFaceBookLogIn=()=>{
+        signInWithFacebook()
+        .then(result=>{
+            const user=result.user;
+            navigate("/")
+            console.log(user);
+        })
+        .catch(err=>{
+            console.log(err)
+        })
+    }
     
 
 
@@ -75,7 +86,7 @@ const Login = () => {
                     <button onClick={handleToGoogleLogIn} className="mr-8">
                         <GrGoogle></GrGoogle>
                     </button>
-                    <button className="mr-8">
+                    <button onClick={handleToFaceBookLogIn} className="mr-8">
                         <GrFacebook></GrFacebook>
                     </button>
                     <button>
