@@ -89,7 +89,7 @@ const EventProducts = () => {
         }
 
 <button
-        className="bg-gray-400 hover:bg-gray-700 text-white font-bold py-2 my-10 px-20 rounded-lg"
+        className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-10 px-20 rounded-lg"
         onClick={handleSubmit}
       >
         Add

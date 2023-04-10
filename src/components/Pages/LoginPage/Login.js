@@ -6,6 +6,9 @@ import { RiEyeCloseLine } from "react-icons/ri";
 // import { BsEyeFill } from "react-icons/bs";
 import { Form, Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../context/UserContext';
+import googleLogo from "../../../Assets/Images/Icons/gmailLogo.jpg"
+import facebookLogo from "../../../Assets/Images/Icons/facebookLogo.png"
+import wechatLogo from "../../../Assets/Images/Icons/wechatLogo.png"
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -80,17 +83,17 @@ const Login = () => {
     return (
         <div className="bg-white flex justify-center items-center">
             <div className="shadow-lg w-1/3 my-12 py-10 px-12" >
-                <h2 className="text-2xl font-semibold my-4">Sign In</h2>
+                <h2 className="text-2xl text-[#004368] mb-8 font-semibold my-4">Sign In</h2>
 
                 <div className="text-2xl" >
                     <button onClick={handleToGoogleLogIn} className="mr-8">
-                        <GrGoogle></GrGoogle>
+                    <img className="h-9 w-9" src={googleLogo} alt='google'></img>
                     </button>
                     <button onClick={handleToFaceBookLogIn} className="mr-8">
-                        <GrFacebook></GrFacebook>
+                    <img className="h-9 w-9" src={facebookLogo} alt='facebook'></img>
                     </button>
                     <button>
-                        <BsWechat></BsWechat>
+                    <img className="h-9 w-9" src={wechatLogo} alt='wechat'></img>
                     </button>
                 </div>
 
@@ -98,35 +101,35 @@ const Login = () => {
                 <form onSubmit={handleSubmit}>
                     {/* <label htmlFor="email">Email:</label> */}
                     <input className=" w-full pl-2" placeholder="username or email" type="email" id="email" value={email} onChange={handleEmailChange} />
-                    <hr className=" border-slate-300 mb-5" ></hr>
+                    <hr className=" border-slate-400 mb-10" ></hr>
                     {/* <label htmlFor="password">Password:</label> */}
                     <div className='relative'>
                         <div className='flex items-center'>
                          <input className=" w-full pl-2" placeholder="password" type={show? "text":"password"} id="password" value={password} onChange={handlePasswordChange} />
                         <button className="absolute right-0 pr-2" onClick={handleToShow}>
                             {
-                                show?  <BsEyeFill className="text-slate-400"></BsEyeFill> :<RiEyeCloseLine className="text-slate-400"></RiEyeCloseLine>
+                                show?  <BsEyeFill className="text-slate-500"></BsEyeFill> :<RiEyeCloseLine className="text-slate-500"></RiEyeCloseLine>
                             }
                             
                         </button> 
                         </div>
                         
-                        <hr className=" border-slate-300" ></hr>
+                        <hr className=" border-slate-400" ></hr>
                         {/* <button>digit to start</button>
                         <button>start to digit</button> */}
                     </div>
                     <div className="text-end text-sm mb-8">
-                        <button type="button" onClick={handleForgotPasswordClick}>
+                        <button type="button" className="text-[#65ABFF] font-semibold" onClick={handleForgotPasswordClick}>
                             Forgot password?
                         </button>
                        
                     </div>
                     <div className="my-2 ">
-                         <button  className="bg-amber-200 rounded-md px-20 py-2 text-xl font-semibold " type="submit">Sign In</button>
+                         <button  className="bg-[#004368]  text-white rounded-md px-32 py-1 text-xl font-semibold " type="submit">Sign In</button>
                     </div>
                 </form>
                 <div className="text-sm my-3">
-                    Don't have an account? <Link className="font-semibold" to="/register">Create an account</Link>
+                    Don't have an account? <Link className="font-semibold text-[#65ABFF]" to="/register">Create an account</Link>
                 </div>
             </div>
         </div>

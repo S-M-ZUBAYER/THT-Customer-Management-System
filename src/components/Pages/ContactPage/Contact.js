@@ -45,10 +45,10 @@ const Contact = () => {
 
 
                 <div className="grid grid-cols-1 md:grid-cols-2 pt-20">
-                    <div className="flex justify-end mr-10">
-                        <img className="h-4/5 rounded-lg" src={customerServiceImg} alt='customer img'></img>
+                    <div className="flex justify-end mx-10 md:mx-5  mr-10">
+                        <img className="h-full w-full rounded-lg" src={customerServiceImg} alt='customer img'></img>
                     </div>
-                    <div className=" md:text-start ml-5">
+                    <div className=" md:text-start  md:ml-28 md:mt-32">
                         <div className="my-5">
                             <h1 className="text-lg font-semibold">
                                 Head Office Address
@@ -93,7 +93,7 @@ const Contact = () => {
 
 
             <div>
-            <div className="w-5/6 md:w-4/6 lg:w-3/5 mx-auto">
+            <div className="w-5/6 md:w-4/6 lg:w-full mx-auto">
                             <h1 className="text-3xl font-semibold text-gray-400 capitalize dark:text-white lg:text-5xl">Let’s get in touch</h1>
 
                             <p className="mt-4 text-gray-300 dark:text-gray-400">
@@ -118,7 +118,7 @@ const Contact = () => {
                                     <textarea className="block w-full h-32 px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md md:h-56 dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40" placeholder="Your Message"></textarea>
                                 </div>
 
-                                <button className=" px-16 py-1 my-10 text-lg font-bold tracking-wide text-white capitalize transition-colors duration-300 transform  bg-gray-300 rounded-md hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+                                <button className=" px-16 py-1 my-10 text-lg font-bold tracking-wide text-white capitalize transition-colors duration-300 transform  bg-[#004368]  rounded-md hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
                                     Submit
                                 </button>
                             </form>

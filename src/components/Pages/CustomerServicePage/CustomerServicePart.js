@@ -60,7 +60,7 @@ const CustomerServicePart = () => {
                             </div>
                             <div className="flex items-center justify-center">
                                 <button
-                                    className=" te hover:bg-lime-700 bg-lime-300 rounded-tl-xl rounded-br-xl text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                    className="bg-[#004368] hover:bg-blue-700   rounded-tl-xl rounded-br-xl text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                                     type="submit"
                                 >
                                     Send

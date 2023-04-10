@@ -94,7 +94,7 @@ const CustomerService_1 = () => {
 
                 <div className=" absolute bottom-0 my-4">
                     <div className="mx-3">
-                        <button className="bg-amber-100 px-2 py-1 rounded-md mr-3">
+                        <button className="bg-[#004368] text-white hover:bg-blue-700 px-2 py-1 rounded-md mr-3">
                             Auto Reply
                         </button>
                         <button className="mr-3 ">

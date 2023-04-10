@@ -50,7 +50,7 @@ const {user}=useContext(AuthContext)
 } */}
 
                         <Link className="text-left" to='/'>
-                            <button className='px-4 py-2 mt-8 ml-0 font-semibold text-black lg:text-lg rounded bg-green-300 mb-5'>
+                            <button className='px-4 py-2 mt-8 ml-0 font-semibold bg-[#004368] text-white lg:text-lg rounded  mb-5'>
                                 Back to homepage
                             </button>
                         </Link>

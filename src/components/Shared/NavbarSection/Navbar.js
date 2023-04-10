@@ -120,10 +120,10 @@ const Navbar = () => {
           <div className="flex items-center gap-4">
             <div className="sm:flex sm:gap-4">
               <Link
-                className="rounded-md bg-sky-900 px-5 py-2 text-sm font-medium text-white shadow dark:hover:bg-teal-500"
+                className="rounded-md bg-sky-900 px-5 py-2 text-sm font-semibold text-white shadow dark:hover:bg-teal-500"
                 to="/login"
               >
-                Login
+                Sign In
               </Link>
 
           
