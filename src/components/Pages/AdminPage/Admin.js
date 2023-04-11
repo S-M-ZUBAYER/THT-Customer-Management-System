@@ -35,7 +35,7 @@ const {user}=useContext(AuthContext)
         <div>
             
 <Navbar></Navbar>
-            <div className="grid grid-cols-5 gap-3 lg:mx-20">
+            <div className="grid grid-cols-5 gap-3">
                 <div className="col-span-1 shadow-lg rounded-lg">
                     <ul data-aos="fade-up-right" data-aos-duration="2000" className="menu w-full text-start">
 
@@ -49,7 +49,7 @@ const {user}=useContext(AuthContext)
                         {/* </>
 } */}
 
-                        <Link className="text-left" to='/'>
+                        <Link className="text-left ml-2" to='/'>
                             <button className='px-4 py-2 mt-8 ml-0 font-semibold bg-[#004368] text-white lg:text-lg rounded  mb-5'>
                                 Back to homepage
                             </button>

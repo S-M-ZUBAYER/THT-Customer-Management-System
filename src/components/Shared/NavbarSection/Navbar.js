@@ -13,7 +13,7 @@ const Navbar = () => {
 
   return (
     <header aria-label="Site Header" className="bg-white dark:bg-gray-900">
-      <div className="mx-auto px-4 sm:px-6 lg:px-20">
+      <div className="mx-auto px-6 md:px-0">
         <div className="flex h-16 items-center justify-between">
           <div className="md:flex md:items-center md:gap-12">
             <Link className="block text-teal-600 dark:text-teal-600" to="/home">
@@ -120,7 +120,7 @@ const Navbar = () => {
           <div className="flex items-center gap-4">
             <div className="sm:flex sm:gap-4">
               <Link
-                className="rounded-md bg-sky-900 px-5 py-2 text-sm font-semibold text-white shadow dark:hover:bg-teal-500"
+                className="rounded-md bg-[#004368] px-5 py-2 text-sm font-semibold text-white shadow dark:hover:bg-teal-500"
                 to="/login"
               >
                 Sign In

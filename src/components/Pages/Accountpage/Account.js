@@ -12,7 +12,6 @@ const handleToLogOut=()=>{
     })
 }
 
-console.log(user.photoURL)
 
     return (
         <div className="mt-32 md:mx-36">
@@ -60,7 +59,7 @@ console.log(user.photoURL)
                 </div>
 
                 <div className="my-20">
-            <button onClick={handleToLogOut} className="bg-[#004368]  px-20 rounded-md py-1 ml-2 text-white font-semibold hover:bg-slate-800" >
+            <button onClick={handleToLogOut} className="bg-[#004368]  px-20 rounded-md py-2 ml-2 text-white font-semibold hover:bg-slate-800" >
                 Log out
             </button>
         </div>
