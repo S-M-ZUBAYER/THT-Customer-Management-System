@@ -15,6 +15,8 @@ import AddIcon from "../../components/Pages/AdminPage/AdminDashboard/AddIcon";
 import AddMallProducts from "../../components/Pages/AdminPage/AdminDashboard/MallProducts";
 import EventProducts from "../../components/Pages/AdminPage/AdminDashboard/EventProducts";
 import PrivateRoute from "./PrivateRoute/PrivateRoute";
+import ProductDetails from "../../components/Pages/AdminPage/AdminDashboard/ProductDetails";
+import AddProduct from "../../components/Pages/AdminPage/AdminDashboard/AddProduct";
 
 export const routes=createBrowserRouter([
     {
@@ -84,6 +86,22 @@ export const routes=createBrowserRouter([
             {
                 path:"/admin/eventProduct",
                 element:<EventProducts></EventProducts>
+            },
+            {
+                path:"/admin/mallProduct/details/:model",
+                element:<ProductDetails></ProductDetails>
+            },
+            {
+                path:"/admin/eventProduct/details/:model",
+                element:<ProductDetails></ProductDetails>
+            },
+            {
+                path:"/admin/mallProduct/add",
+                element:<AddProduct></AddProduct>
+            },
+            {
+                path:"/admin/eventProduct/add",
+                element:<AddProduct></AddProduct>
             },
         ]
     }

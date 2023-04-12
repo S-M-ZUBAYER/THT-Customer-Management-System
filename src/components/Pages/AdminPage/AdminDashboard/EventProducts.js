@@ -1,102 +1,137 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FiEdit } from 'react-icons/fi';
 import { RiDeleteBin7Line } from 'react-icons/ri';
+import { Link } from 'react-router-dom';
 
-const EventProducts = () => {
+const AddMallProducts = () => {
+    const [searchTerm, setSearchTerm] = useState('');
+    const [products, setProducts] = useState([
+        {
+            productName: "Dot Printer",
+            Model: "vz474gh",
+            id: 1
 
-    const mallProducts = [
-        {
-            ProductName: "Dot Printer",
-            Model: "vz474gh",
-           
-    
         },
         {
-            ProductName: "Dot Printer",
+            productName: "Dot Printer",
             Model: "vz474gh",
-           
-    
+            id: 2
+
         },
         {
-            ProductName: "Thermal Printer",
+            productName: "Thermal Printer",
             Model: "vz474gh",
-           
-    
+            id: 3
+
         },
         {
-            ProductName: "Dot Matrix Printer",
+            productName: "Dot Matrix Printer",
             Model: "vz474gh",
-           
-    
+            id: 4
+
         },
         {
-            ProductName: "Dot Printer",
+            productName: "Dot Printer",
             Model: "vz474gh",
-           
-    
+            id: 5
+
         },
         {
-            ProductName: "Dot Printer",
+            productName: "Dot Printer",
             Model: "vz474gh",
-           
-    
+            id: 6
+
         },
+
+    ]);
+
+
+    const handleChange = (event) => {
+        setSearchTerm(event.target.value);
+    };
+
+    const handleToSearch = (event) => {
+        event.preventDefault();
+        // filter products array based on search term
+        const filteredProducts = products.filter((product) =>
+            product?.productName.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        // update products state with filtered products
+        setProducts(filteredProducts);
+    };
+
+    const handleToEdit = () => {
        
-    ];
-    
-    const handleToEdit=()=>{
-    console.log("Edit CLick")
     }
-    
-    const handleToDelete=()=>{
-    console.log("Delete CLick")
+
+    const handleToDelete = () => {
+        
     }
 
 
-    const handleSubmit=()=>{
-    console.log("submit")
+    const handleSubmit = () => {
+        
     }
 
 
-    
+
 
     return (
         <div>
-        <h1 className="my-5 text-lg font-semibold">
-            User Information
-        </h1>
-        {
-            mallProducts.map((Element, index) => {
-                return <div className="mx-2 my-2 grid grid-cols-3  text-start bg-slate-200 rounded-lg px-2 py-1">
-                    <div className=" col-span-2 grid grid-cols-2">
-                        <p>
-                            {Element?.ProductName}
-                        </p>
-                        <p className="md:col-span-2 lg:col-span-1">
-                            {Element?.Model}
-                        </p> 
+            <h1 className="my-5 text-lg font-semibold">
+                Event product list
+            </h1>
+            <div className="p-4">
+                <form className="flex justify-center" onSubmit={handleToSearch}>
+                    <div className="flex flex-col md:flex-row md:items-center mb-4">
+                        <input
+                            type="text"
+                            placeholder="Search products"
+                            className="border border-gray-300 rounded-lg py-1 px-4 mb-2 md:mr-1 md:mb-0"
+                            value={searchTerm}
+                            onChange={handleChange}
+                        />
+                        <button
+                            type="submit"
+                            className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-1 px-8 rounded-md"
+                        >
+                            Search
+                        </button>
                     </div>
-                       
+                </form>
+                {products.map((product) => (
+                     <Link to={`/admin/eventProduct/details/${product?.Model}`}>
+                    <div className="mx-2 my-3 grid grid-cols-7  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">
+                        <div className=" col-span-6 grid grid-cols-2">
+                            <p>
+                                {product?.productName}
+                            </p>
+                            <p className="">
+                                {product?.Model}
+                            </p>
+                        </div>
+
                         <div className="flex items-center justify-around">
-                          <FiEdit onClick={handleToEdit} className="hover:cursor-pointer"></FiEdit>
-                        <RiDeleteBin7Line onClick={handleToDelete}  className="hover:cursor-pointer"></RiDeleteBin7Line>  
-                            </div>
-                        
-                    
+                            <FiEdit onClick={handleToEdit} className="hover:cursor-pointer"></FiEdit>
+                            <RiDeleteBin7Line onClick={handleToDelete} className="hover:cursor-pointer"></RiDeleteBin7Line>
+                        </div>
 
-                </div>
-            })
-        }
+                    </div>
+                    </Link>
+                ))}
+            </div>
 
-<button
-        className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-10 px-20 rounded-lg"
-        onClick={handleSubmit}
-      >
-        Add
-      </button>
-
-    </div>
+        
+            <Link to="/admin/eventProduct/add">
+                <button
+                    className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-10 px-20 rounded-lg"
+                    onClick={handleSubmit}
+                >
+                    Add new event product
+                </button>
+            </Link>
+        </div>
     );
 };
 
-export default EventProducts;
+export default AddMallProducts;

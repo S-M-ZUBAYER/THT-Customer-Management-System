@@ -6,15 +6,71 @@ import UserContext, { AuthContext } from '../../../context/UserContext';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isAdminOpen, setIsAdminOpen] = useState(false);
 
   const {user}=useContext(AuthContext);
 
   const toggleMenu = () => setIsOpen(!isOpen);
+  const adminToggleMenu = () => setIsAdminOpen(!isAdminOpen);
 
   return (
     <header aria-label="Site Header" className="bg-white dark:bg-gray-900">
       <div className="mx-auto px-6 md:px-0">
         <div className="flex h-16 items-center justify-between">
+
+        <div className="relative visible lg:hidden">
+              <button
+
+                className="rounded bg-gray-100 p-2 text-gray-600 transition hover:text-gray-600/75 dark:bg-gray-800 dark:text-white dark:hover:text-white/75"
+
+                id="options-menu"
+                aria-haspopup="true"
+                aria-expanded="true"
+                onClick={adminToggleMenu}
+              >
+
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                </svg>
+              </button>
+              {isAdminOpen && (
+                <div className="origin-top-right absolute z-40 left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                  <div className="col-span-1 shadow-lg rounded-lg">
+                    <ul data-aos="fade-up-right" data-aos-duration="2000" className="menu w-full text-start">
+
+                        {/* {
+    isAdmin && <> */}
+                        <li><Link to='/admin/users' className="sm:text-xs md:text-base">All Users</Link></li>
+                        <li><Link to='/admin/questionAnswer' className="sm:text-xs md:text-base">Add Q & A</Link></li>
+                        <li><Link to='/admin/icon' className="sm:text-xs md:text-base">Add Icons</Link></li>
+                        <li><Link to='/admin/mallProduct' className="sm:text-xs md:text-base">Add Mall Products</Link></li>
+                        <li><Link to='/admin/eventProduct' className="sm:text-xs md:text-base">Add Event Products</Link></li>
+                        {/* </>
+} */}
+
+                        <Link className="text-left ml-2" to='/'>
+                            <button className='px-4 py-2 mt-8 ml-0 font-semibold bg-[#004368] text-white lg:text-lg rounded  mb-5'>
+                                Back to homepage
+                            </button>
+                        </Link>
+                    </ul>
+                </div>
+                </div>
+              )}
+            </div>
+
+
           <div className="md:flex md:items-center md:gap-12">
             <Link className="block text-teal-600 dark:text-teal-600" to="/home">
               <span className="sr-only">Home</span>
