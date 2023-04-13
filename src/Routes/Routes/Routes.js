@@ -17,6 +17,7 @@ import EventProducts from "../../components/Pages/AdminPage/AdminDashboard/Event
 import PrivateRoute from "./PrivateRoute/PrivateRoute";
 import ProductDetails from "../../components/Pages/AdminPage/AdminDashboard/ProductDetails";
 import AddProduct from "../../components/Pages/AdminPage/AdminDashboard/AddProduct";
+import AfterSales from "../../components/Pages/AdminPage/AdminDashboard/ProductDetailsOutlet/AfterSales";
 
 export const routes=createBrowserRouter([
     {
@@ -93,7 +94,13 @@ export const routes=createBrowserRouter([
             },
             {
                 path:"/admin/eventProduct/details/:model",
-                element:<ProductDetails></ProductDetails>
+                element:<ProductDetails></ProductDetails>,
+                children:[
+                    {
+                        path:"admin/eventProduct/details/:model/afterSales",
+                        element:<AfterSales></AfterSales>
+                    }
+                ]
             },
             {
                 path:"/admin/mallProduct/add",
@@ -102,7 +109,7 @@ export const routes=createBrowserRouter([
             {
                 path:"/admin/eventProduct/add",
                 element:<AddProduct></AddProduct>
-            },
+            }
         ]
     }
 ])

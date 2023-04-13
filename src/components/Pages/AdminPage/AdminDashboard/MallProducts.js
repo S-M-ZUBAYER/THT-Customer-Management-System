@@ -1,9 +1,15 @@
-import React, { useState } from 'react';
+import React, { createContext, useState } from 'react';
 import { FiEdit } from 'react-icons/fi';
 import { RiDeleteBin7Line } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
+import ProductDetailsLayout from './ProductDetailsLayout/ProductDetailsLayout';
+import ProductContext from '../../../../context/ProductContext';
+
+
+export const MyContext = createContext();
 
 const AddMallProducts = () => {
+
     const [searchTerm, setSearchTerm] = useState('');
     const [products, setProducts] = useState([
         {
@@ -61,76 +67,81 @@ const AddMallProducts = () => {
     };
 
     const handleToEdit = () => {
-        
+
     }
 
     const handleToDelete = () => {
-        
+
     }
 
 
     const handleSubmit = () => {
-        
+
     }
 
 
 
 
     return (
-        <div>
-            <h1 className="my-5 text-lg font-semibold">
-                Mall product list
-            </h1>
-            <div className="p-4">
-            <form className="flex justify-center" onSubmit={handleToSearch}>
-                    <div className="flex flex-col md:flex-row md:items-center mb-4">
-                        <input
-                            type="text"
-                            placeholder="Search products"
-                            className="border border-gray-300 rounded-lg py-1 px-4 mb-2 md:mr-1 md:mb-0"
-                            value={searchTerm}
-                            onChange={handleChange}
-                        />
-                        <button
-                            type="submit"
-                            className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-1 px-8 rounded-md"
-                        >
-                            Search
-                        </button>
-                    </div>
-                </form>
-                {products.map((product) => (
-                    <Link to={`/admin/mallProduct/details/${product?.Model}`}>
-                    <div className="mx-2 my-3 grid grid-cols-7  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">
-                    <div className=" col-span-6 grid grid-cols-2">
-                        <p>
-                            {product?.productName}
-                        </p>
-                        <p className="">
-                            {product?.Model}
-                        </p>
-                    </div>
+        <ProductContext>
+            <div>
+                <h1 className="my-5 text-lg font-semibold">
+                    Mall product list
+                </h1>
+                <div className="p-4">
+                    <form className="flex justify-center" onSubmit={handleToSearch}>
+                        <div className="flex flex-col md:flex-row md:items-center mb-4">
+                            <input
+                                type="text"
+                                placeholder="Search products"
+                                className="border border-gray-300 rounded-lg py-1 px-4 mb-2 md:mr-1 md:mb-0"
+                                value={searchTerm}
+                                onChange={handleChange}
+                            />
+                            <button
+                                type="submit"
+                                className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-1 px-8 rounded-md"
+                            >
+                                Search
+                            </button>
+                        </div>
+                    </form>
+                    {products.map((product) => (
+                        // <Link to={`/admin/mallProduct/details/${product?.Model},`}>
+                        <Link to={`/admin/mallProduct/details/${product?.Model},state:{value:${product}}`}>
+                            <div className="mx-2 my-3 grid grid-cols-7  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">
+                                <div className=" col-span-6 grid grid-cols-2">
+                                    <p>
+                                        {product?.productName}
+                                    </p>
+                                    <p className="">
+                                        {product?.Model}
+                                    </p>
+                                </div>
 
-                    <div className="flex items-center justify-around">
-                        <FiEdit onClick={handleToEdit} className="hover:cursor-pointer"></FiEdit>
-                        <RiDeleteBin7Line onClick={handleToDelete} className="hover:cursor-pointer"></RiDeleteBin7Line>
-                    </div>
+                                <div className="flex items-center justify-around">
+                                    <FiEdit onClick={handleToEdit} className="hover:cursor-pointer"></FiEdit>
+                                    <RiDeleteBin7Line onClick={handleToDelete} className="hover:cursor-pointer"></RiDeleteBin7Line>
+                                </div>
+                            </div>
+                        </Link>
+                    ))}
                 </div>
+
+                <Link to="/admin/mallProduct/add">
+                    <button
+                        className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-10 px-20 rounded-lg"
+                        onClick={handleSubmit}
+                    >
+                        Add new mall product
+                    </button>
                 </Link>
-                ))}
+
+                <ProductDetailsLayout
+
+                ></ProductDetailsLayout>
             </div>
-
-            <Link to="/admin/mallProduct/add">
-            <button
-                className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-10 px-20 rounded-lg"
-                onClick={handleSubmit}
-            >
-                Add new mall product
-            </button>
-            </Link>
-            
-
-        </div>
+        </ProductContext>
     );
 };
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FiEdit } from 'react-icons/fi';
 import { RiDeleteBin7Line } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
+import ProductContext from '../../../../context/ProductContext';
 
 const AddMallProducts = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -77,6 +78,7 @@ const AddMallProducts = () => {
 
 
     return (
+        <ProductContext>
         <div>
             <h1 className="my-5 text-lg font-semibold">
                 Event product list
@@ -131,6 +133,7 @@ const AddMallProducts = () => {
                 </button>
             </Link>
         </div>
+        </ProductContext>
     );
 };
 
