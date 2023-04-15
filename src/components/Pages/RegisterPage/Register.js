@@ -160,8 +160,8 @@ const Register = () => {
 
 
     return (
-        <div className="md:flex shadow-lg justify-around items-center mx-20 sm:px-5 md:px-0  lg:mx-48 my-20 rounded-lg">
-            <div className="bg-white flex justify-center items-center w-2/5 ">
+        <div className="md:flex shadow-lg justify-around items-center  md:mx-20 sm:px-5 px-3  lg:mx-48 my-20 rounded-lg">
+            <div className="bg-white flex justify-center items-center w-full md:w-5/6 lg:w-2/5  ">
                 <div className=" w-full my-12" >
                     <h2 className="text-2xl mb-6 text-[#004368] font-semibold my-4">Create an account</h2>
 
@@ -259,7 +259,7 @@ const Register = () => {
                     </div>
                 </div>
             </div>
-            <div className=" flex items-center justify-center">
+            <div className=" sm:hidden lg:block flex items-center justify-center">
                 <img className="h-3/4 w-2/3" src={registerLogo} alt='RegisterLogo' ></img>
 
             </div>

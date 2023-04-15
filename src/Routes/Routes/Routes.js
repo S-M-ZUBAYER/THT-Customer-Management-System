@@ -18,6 +18,10 @@ import PrivateRoute from "./PrivateRoute/PrivateRoute";
 import ProductDetails from "../../components/Pages/AdminPage/AdminDashboard/ProductDetails";
 import AddProduct from "../../components/Pages/AdminPage/AdminDashboard/AddProduct";
 import AfterSales from "../../components/Pages/AdminPage/AdminDashboard/ProductDetailsOutlet/AfterSales";
+import AfterSalesInstruction from "../../components/Pages/AdminPage/AdminDashboard/ProductDetailsOutlet/AfterSalesInstruction";
+import Inventory from "../../components/Pages/AdminPage/AdminDashboard/ProductDetailsOutlet/Inventory";
+import Invoice from "../../components/Pages/AdminPage/AdminDashboard/ProductDetailsOutlet/Invoice";
+
 
 export const routes=createBrowserRouter([
     {
@@ -90,16 +94,46 @@ export const routes=createBrowserRouter([
             },
             {
                 path:"/admin/mallProduct/details/:model",
-                element:<ProductDetails></ProductDetails>
+                element:<ProductDetails></ProductDetails>,
+                children:[
+                    {
+                        path:"/admin/mallProduct/details/:model/afterSales",
+                        element:<AfterSales></AfterSales>
+                    },
+                    {
+                        path:"/admin/mallProduct/details/:model/inventory",
+                        element:<Inventory></Inventory>
+                    },
+                    {
+                        path:"/admin/mallProduct/details/:model/invoice",
+                        element:<Invoice></Invoice>
+                    },
+                    {
+                        path:"/admin/mallProduct/details/:model/instruction",
+                        element:<AfterSalesInstruction></AfterSalesInstruction>
+                    },
+                ]
             },
             {
                 path:"/admin/eventProduct/details/:model",
                 element:<ProductDetails></ProductDetails>,
                 children:[
                     {
-                        path:"admin/eventProduct/details/:model/afterSales",
+                        path:"/admin/eventProduct/details/:model/afterSales",
                         element:<AfterSales></AfterSales>
-                    }
+                    },
+                    {
+                        path:"/admin/eventProduct/details/:model/inventory",
+                        element:<Inventory></Inventory>
+                    },
+                    {
+                        path:"/admin/eventProduct/details/:model/invoice",
+                        element:<Invoice></Invoice>
+                    },
+                    {
+                        path:"/admin/eventProduct/details/:model/instruction",
+                        element:<AfterSalesInstruction></AfterSalesInstruction>
+                    },
                 ]
             },
             {

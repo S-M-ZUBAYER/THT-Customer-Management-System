@@ -1,50 +1,54 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { FiEdit } from 'react-icons/fi';
 import { RiDeleteBin7Line } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
-import ProductContext from '../../../../context/ProductContext';
+import ProductContext, { AllProductContext } from '../../../../context/ProductContext';
 
-const AddMallProducts = () => {
-    const [searchTerm, setSearchTerm] = useState('');
-    const [products, setProducts] = useState([
+const products=[
         {
             productName: "Dot Printer",
-            Model: "vz474gh",
+            Model: "vz474gh1",
             id: 1
 
         },
         {
             productName: "Dot Printer",
-            Model: "vz474gh",
+            Model: "vz474gh2",
             id: 2
 
         },
         {
             productName: "Thermal Printer",
-            Model: "vz474gh",
+            Model: "vz474gh3",
             id: 3
 
         },
         {
             productName: "Dot Matrix Printer",
-            Model: "vz474gh",
+            Model: "vz474gh4",
             id: 4
 
         },
         {
             productName: "Dot Printer",
-            Model: "vz474gh",
+            Model: "vz474gh5",
             id: 5
 
         },
         {
             productName: "Dot Printer",
-            Model: "vz474gh",
+            Model: "vz474gh6",
             id: 6
 
         },
 
-    ]);
+    ];
+
+
+const AddMallProducts = () => {
+    const [searchTerm, setSearchTerm] = useState('');
+    const {allEventProduct,setAllEventProduct,setProduct}=useContext(AllProductContext)
+    setAllEventProduct(products);
 
 
     const handleChange = (event) => {
@@ -54,11 +58,11 @@ const AddMallProducts = () => {
     const handleToSearch = (event) => {
         event.preventDefault();
         // filter products array based on search term
-        const filteredProducts = products.filter((product) =>
+        const filteredProducts = allEventProduct.filter((product) =>
             product?.productName.toLowerCase().includes(searchTerm.toLowerCase())
         );
         // update products state with filtered products
-        setProducts(filteredProducts);
+        setAllEventProduct(filteredProducts);
     };
 
     const handleToEdit = () => {
@@ -78,7 +82,6 @@ const AddMallProducts = () => {
 
 
     return (
-        <ProductContext>
         <div>
             <h1 className="my-5 text-lg font-semibold">
                 Event product list
@@ -101,8 +104,8 @@ const AddMallProducts = () => {
                         </button>
                     </div>
                 </form>
-                {products.map((product) => (
-                     <Link to={`/admin/eventProduct/details/${product?.Model}`}>
+                {allEventProduct?.map((product) => (
+                     <Link to={`/admin/eventProduct/details/${product?.Model}`} onClick={()=>setProduct(product)} >
                     <div className="mx-2 my-3 grid grid-cols-7  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">
                         <div className=" col-span-6 grid grid-cols-2">
                             <p>
@@ -133,7 +136,6 @@ const AddMallProducts = () => {
                 </button>
             </Link>
         </div>
-        </ProductContext>
     );
 };
 

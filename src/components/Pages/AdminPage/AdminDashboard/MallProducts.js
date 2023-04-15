@@ -1,55 +1,57 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { FiEdit } from 'react-icons/fi';
 import { RiDeleteBin7Line } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
 import ProductDetailsLayout from './ProductDetailsLayout/ProductDetailsLayout';
-import ProductContext from '../../../../context/ProductContext';
+import { AllProductContext } from '../../../../context/ProductContext';
 
 
 export const MyContext = createContext();
+const products=[
+    {
+        productName: "Dot Printer",
+        Model: "vz474gh1",
+        id: 1
+
+    },
+    {
+        productName: "Dot Printer",
+        Model: "vz474gh2",
+        id: 2
+
+    },
+    {
+        productName: "Thermal Printer",
+        Model: "vz474gh3",
+        id: 3
+
+    },
+    {
+        productName: "Dot Matrix Printer",
+        Model: "vz474gh4",
+        id: 4
+
+    },
+    {
+        productName: "Dot Printer",
+        Model: "vz474gh5",
+        id: 5
+
+    },
+    {
+        productName: "Dot Printer",
+        Model: "vz474gh6",
+        id: 6
+
+    },
+
+];  
 
 const AddMallProducts = () => {
-
+const {allMallProduct,setAllMallProduct,setProduct}=useContext(AllProductContext)
     const [searchTerm, setSearchTerm] = useState('');
-    const [products, setProducts] = useState([
-        {
-            productName: "Dot Printer",
-            Model: "vz474gh",
-            id: 1
-
-        },
-        {
-            productName: "Dot Printer",
-            Model: "vz474gh",
-            id: 2
-
-        },
-        {
-            productName: "Thermal Printer",
-            Model: "vz474gh",
-            id: 3
-
-        },
-        {
-            productName: "Dot Matrix Printer",
-            Model: "vz474gh",
-            id: 4
-
-        },
-        {
-            productName: "Dot Printer",
-            Model: "vz474gh",
-            id: 5
-
-        },
-        {
-            productName: "Dot Printer",
-            Model: "vz474gh",
-            id: 6
-
-        },
-
-    ]);
+     
+    setAllMallProduct(products)
 
 
     const handleChange = (event) => {
@@ -63,7 +65,7 @@ const AddMallProducts = () => {
             product?.productName.toLowerCase().includes(searchTerm.toLowerCase())
         );
         // update products state with filtered products
-        setProducts(filteredProducts);
+        setAllMallProduct(filteredProducts);
     };
 
     const handleToEdit = () => {
@@ -83,7 +85,7 @@ const AddMallProducts = () => {
 
 
     return (
-        <ProductContext>
+        
             <div>
                 <h1 className="my-5 text-lg font-semibold">
                     Mall product list
@@ -106,9 +108,9 @@ const AddMallProducts = () => {
                             </button>
                         </div>
                     </form>
-                    {products.map((product) => (
+                    {allMallProduct?.map((product) => (
                         // <Link to={`/admin/mallProduct/details/${product?.Model},`}>
-                        <Link to={`/admin/mallProduct/details/${product?.Model},state:{value:${product}}`}>
+                        <Link to={`/admin/mallProduct/details/${product?.Model},state:{value:${product}}`} onClick={()=>setProduct(product)}>
                             <div className="mx-2 my-3 grid grid-cols-7  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">
                                 <div className=" col-span-6 grid grid-cols-2">
                                     <p>
@@ -129,6 +131,9 @@ const AddMallProducts = () => {
                 </div>
 
                 <Link to="/admin/mallProduct/add">
+                    {
+                    
+                    }
                     <button
                         className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-10 px-20 rounded-lg"
                         onClick={handleSubmit}
@@ -141,7 +146,6 @@ const AddMallProducts = () => {
 
                 ></ProductDetailsLayout>
             </div>
-        </ProductContext>
     );
 };
 

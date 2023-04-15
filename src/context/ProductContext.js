@@ -1,21 +1,19 @@
 import React, { createContext, useState } from 'react';
 
 
-export  const AllProductContext = createContext(null)
 
 
-
-const ProductContext = ({ children }) => {
-
-// const [product,setProduct]=useState({});
-// // const [allProduct,setAllProduct]=useState(true);
+export  const AllProductContext = createContext();
 
 
 
 
+const ProductContextProvider = ({ children }) => {
+const [Product,setProduct]=useState();
+const [allMallProduct,setAllMallProduct]=useState();
+const [allEventProduct ,setAllEventProduct]=useState();
 
-    const productInfo = "First info "
-
+const productInfo = {Product,setProduct,allMallProduct,setAllMallProduct,allEventProduct ,setAllEventProduct}
     return (
         <AllProductContext.Provider value={productInfo}>
             {children}
@@ -23,4 +21,4 @@ const ProductContext = ({ children }) => {
     );
 };
 
-export default ProductContext;
+export default ProductContextProvider;

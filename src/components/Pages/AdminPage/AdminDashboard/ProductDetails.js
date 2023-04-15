@@ -5,8 +5,7 @@ import { AllProductContext } from '../../../../context/ProductContext';
 
 
 function ProductDetails() {
-const productInfo=useContext(AllProductContext)
-console.log(productInfo)
+const {Product}=useContext(AllProductContext);
     
     return (
     <div>
@@ -18,14 +17,14 @@ console.log(productInfo)
                     </div>
                     <div className="md:w-1/2 text-start pl-5">
                         <div className=" mb-5">
-                            <h2 className="text-lg font-semibold">Product Price</h2>
+                            <h2 className="text-lg font-semibold">Product Name</h2>
                             <p className="text-sm text-gray-500">
-                                Dot Matrix printer
+                                {Product?.productName}
                             </p>
                         </div>
 
                         <div className=" mb-5">
-                            <h2 className="text-lg font-semibold">Product Name</h2>
+                            <h2 className="text-lg font-semibold">Product Price </h2>
                             <p className="text-sm text-gray-500">
                                 34893894
                             </p>
@@ -42,11 +41,11 @@ console.log(productInfo)
                         <div className=" mb-5 grid grid-cols-3 text-gray-500">
                             <div className=" text-base font-semibold">
                                 <p className="my-1">Model Number</p>
-                                <p  className="my-1">Model Number</p>
-                                <p  className="my-1">Model Number</p>
+                                <p  className="my-1">Printer Color</p>
+                                <p  className="my-1">Connector type</p>
                             </div>
                             <div className="text-base">
-                                <p  className="my-1">he9837473</p>
+                                <p  className="my-1">{Product?.Model}</p>
                                 <p  className="my-1">color</p>
                                 <p  className="my-1">Bluetooth</p>
                             </div>

@@ -90,7 +90,7 @@ const {user}=useContext(AuthContext)
             {/* chatting customer field for customer and customer service ************************************       */}
 
 
-            <div className="shadow-lg rounded-lg relative h-screen">
+            <div className="shadow-lg rounded-lg relative  mt-10 md:mt-0  h-screen">
 
 
                 <div className="flex justify-around ">
@@ -141,7 +141,7 @@ const {user}=useContext(AuthContext)
             {/* Manually chatting for online shopping application for customer service ************************************       */}
 
 
-            <div className="shadow-lg rounded-lg">
+            <div className="shadow-lg rounded-lg  mt-10 md:mt-0 ">
 
                 <div className="flex justify-around ">
                     <p>Text from app</p>

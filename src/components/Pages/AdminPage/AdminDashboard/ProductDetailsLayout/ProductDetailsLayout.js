@@ -4,8 +4,7 @@ import { AllProductContext } from '../../../../../context/ProductContext';
 
 
 const ProductDetailsLayout = () => {
-const productInfo=useContext(AllProductContext)
-console.log(productInfo)
+  const {Product}=useContext(AllProductContext);
 
     return (
         <div>
@@ -19,37 +18,37 @@ console.log(productInfo)
             <li>
               <Link
                 class="text-gray-500 transition hover:text-gray-500/75"
-                // to={`/admin/mallProduct/details/${product?.model}/afterSales`}
+                to={`/admin/mallProduct/details/${Product?.Model}/afterSales`}
               >
                 After-sales
               </Link>
             </li>
 
             <li>
-              <a
+              <Link
                 class="text-gray-500 transition hover:text-gray-500/75"
-                href="/"
+                to={`/admin/mallProduct/details/${Product?.Model}/instruction`}
               >
                 After-sales Instructions
-              </a>
+              </Link>
             </li>
 
             <li>
-              <a
+              <Link
                 class="text-gray-500 transition hover:text-gray-500/75"
-                href="/"
+                to={`/admin/mallProduct/details/${Product?.Model}/inventory`}
               >
                 Inventory
-              </a>
+              </Link>
             </li>
 
             <li>
-              <a
+              <Link
                 class="text-gray-500 transition hover:text-gray-500/75"
-                href="/"
+                to={`/admin/mallProduct/details/${Product?.Model}/invoice`}
               >
                 Invoice
-              </a>
+              </Link>
             </li>
           </ul>
         </nav>

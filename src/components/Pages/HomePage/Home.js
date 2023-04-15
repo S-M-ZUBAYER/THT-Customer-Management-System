@@ -4,6 +4,7 @@ import img2 from "../../../Assets/Images/THT/THT_Service.jpg"
 import { SiShopee } from "react-icons/si";
 import lazadaImg from "../../../Assets/Images/Lazada/lagada_pic.jpg"
 import Carousel from './Carousel';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
     return (
@@ -42,18 +43,19 @@ const Home = () => {
 
             <div className="mt-14">
                 <h1 className="text-xl font-semibold">
-                    Buy product from
+                    Buy product from   
+                    {/* https://shopee.com.my/search?keyword=grozzie */}
                 </h1>
                 <div className="my-12 flex justify-around">
-                    <div className="flex">
+                    <Link to="https://shopee.com.my/grozziie_printer?categoryId=100644&itemId=18702252991" target="_blank" className="flex">
                         <SiShopee className="text-3xl mr-2 text-orange-500"></SiShopee>
                         <h2 className="font-semibold text-2xl text-orange-500">Shopee</h2>
-                    </div>
-                    <div  className="flex items-center">
+                    </Link>
+                    <Link to="https://www.lazada.com.my/shop/shinprinter" target="_blank"  className="flex items-center">
                         {/* <BsFillSuitHeartFill className="text-2xl mr-2"></BsFillSuitHeartFill>
                         <h2 className="font-semibold text-xl text-blue-900">Lazada</h2> */}
                         <img className='h-8' src={lazadaImg}></img>
-                    </div>
+                    </Link>
                     
                 </div>
             </div>

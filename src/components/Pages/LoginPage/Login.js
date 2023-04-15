@@ -82,7 +82,7 @@ const Login = () => {
 
     return (
         <div className="bg-white flex justify-center items-center">
-            <div className="shadow-lg w-1/3 my-12 py-10 px-12" >
+            <div className="shadow-lg lg:w-1/3 my-12 py-10 px-12" >
                 <h2 className="text-2xl text-[#004368] mb-8 font-semibold my-4">Sign In</h2>
 
                 <div className="text-2xl" >

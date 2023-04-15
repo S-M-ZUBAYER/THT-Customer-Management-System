@@ -1,16 +1,19 @@
 import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {MdArrowDropDown } from "react-icons/md";
+import {RiMenu3Line } from "react-icons/ri";
 import GrozzieeLogo from "../../../Assets/Images/Grozziie/Grozziie_logo.jpg"
 import UserContext, { AuthContext } from '../../../context/UserContext';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isCustomerOpen, setIsCustomerOpen] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
 
   const {user}=useContext(AuthContext);
 
   const toggleMenu = () => setIsOpen(!isOpen);
+  const customerToggleMenu = () => setIsCustomerOpen(!isCustomerOpen);
   const adminToggleMenu = () => setIsAdminOpen(!isAdminOpen);
 
   return (
@@ -28,21 +31,7 @@ const Navbar = () => {
                 aria-expanded="true"
                 onClick={adminToggleMenu}
               >
-
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                </svg>
+                <RiMenu3Line></RiMenu3Line>
               </button>
               {isAdminOpen && (
                 <div className="origin-top-right absolute z-40 left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
@@ -213,7 +202,7 @@ const Navbar = () => {
                 </svg>
               </button>
               {isOpen && (
-                <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                <div className="z-40 origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                   <div
                     className="py-1"
                     role="menu"
@@ -227,13 +216,44 @@ const Navbar = () => {
                     >
                       Home
                     </Link>
-                    <Link
-                      to="/customerService"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                      role="menuitem"
+                    <div className="relative px-4">
+                    <button
+                      className="mx-auto flex justify-between items-center  text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75 hover:font-semibold hover:text-zinc-900"
+                      onClick={customerToggleMenu}
                     >
-                      Customer Service
-                    </Link>
+                      Customer Service  
+                      <MdArrowDropDown className="text-2xl pt-1"></MdArrowDropDown>
+
+                    </button>
+                    {isCustomerOpen && (
+                      <div className="absolute left-[-180px] top-3 z-40 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                        <div
+                          className="py-1"
+                          role="menu"
+                          aria-orientation="vertical"
+                          aria-labelledby="options-menu"
+                        >
+                          <Link
+                            to="/customer-1"
+                            onClick={customerToggleMenu}
+                            className="block py-2 text-sm text-gray-700 hover:bg-gray-100  hover:font-semibold hover:text-zinc-900"
+                            role="menuitem"
+                          >
+                            Customer Service 1
+                          </Link>
+                          <Link
+                            to="/customer-2"
+                            onClick={customerToggleMenu}
+                            className="block py-2 text-sm text-gray-700 hover:bg-gray-100 hover:font-semibold hover:text-zinc-900"
+                            role="menuitem"
+                          >
+                            Customer Service 2
+                          </Link>
+
+                        </div>
+                      </div>
+                    )}
+                  </div>
                     <Link
                       to="/admin"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
