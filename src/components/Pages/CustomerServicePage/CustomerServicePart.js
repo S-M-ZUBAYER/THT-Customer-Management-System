@@ -1,20 +1,70 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { AllProductContext } from '../../../context/ProductContext';
 
 const CustomerServicePart = () => {
-
-    const [input1, setInput1] = useState("");
-    const [input2, setInput2] = useState("");
-    const [input3, setInput3] = useState("");
+    
+const [language,setLanguage]=useState("")
+const [engText,setEngText]=useState("")
+const [text,setText]=useState("")
+    // const [input2, setInput2] = useState("");
+    // const [input3, setInput3] = useState("");
+    const [engTranslation, setEngTranslation] = useState("");
+    const [customerTranslation, setCustomerTranslation] = useState("");
+    const inputField1=document.getElementById("input1");
+    const inputField2=document.getElementById("input2");
+    const inputField3=document.getElementById("input3");
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(`Level Name: ${input1} - Input Field 1: ${input2} - Input Field 2: ${input3}`);
-        // You can replace the console.log statement with your own function to handle the form submission
+        setLanguage(localStorage.getItem('language'));
+        inputField2.value="Typing..."
+        inputField3.value="Typing..."
+        setText(inputField1.value);
+    
+    const engInput = {
+        target: "English",
+        text: text
+      }
+      let apiUrl = `https://zuss-chat-translator-server-site.vercel.app/translate`;
+      fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json"
+        },
+        body: JSON.stringify(engInput)
+      })
+        .then((res) => res.json())
+        .then((data) => {
+            setEngTranslation(data?.data);
+             inputField3.value=data?.data;
+            setEngText(data?.data)
+        });
+  
+    
+    const customerInput = {
+        target: language,
+        text: engText
+      }
+      console.log(engInput)
+      fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json"
+        },
+        body: JSON.stringify(customerInput)
+      })
+        .then((res) => res.json())
+        .then((data) => {
+            setCustomerTranslation(data?.data);
+            inputField2.value=data?.data;
+        });
+  
     };
+
+
 
     return (
         <div>
-            {/* input field */}
             <div className="">
                 <div className=" my-6 flex justify-start">
 
@@ -26,10 +76,11 @@ const CustomerServicePart = () => {
                                 <input
                                     className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-200 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                     id="input1"
+                                    name='inputField'
                                     type="text"
                                     placeholder="Enter Question from app"
-                                    value={input1}
-                                    onChange={(e) => setInput1(e.target.value)}
+                                    value={text}
+                                    onChange={(e) => setText(e.target.value)}
                                 />
                             </div>
                             <div className="mb-4">
@@ -41,8 +92,8 @@ const CustomerServicePart = () => {
                                     id="input2"
                                     type="text"
                                     placeholder="Show in Customer Service"
-                                    value={input2}
-                                    onChange={(e) => setInput2(e.target.value)}
+                                    // value={input2}
+                                    // onChange={(e) => setInput2(e.target.value)}
                                 />
                             </div>
                             <div className="mb-4">
@@ -54,8 +105,8 @@ const CustomerServicePart = () => {
                                     id="input3"
                                     type="text"
                                     placeholder="Show in English"
-                                    value={input3}
-                                    onChange={(e) => setInput3(e.target.value)}
+                                    // value={input3}
+                                    // onChange={(e) => setInput3(e.target.value)}
                                 />
                             </div>
                             <div className="flex items-center justify-center">

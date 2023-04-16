@@ -8,16 +8,16 @@ const ProductDetailsLayout = () => {
 
     return (
         <div>
-            <header aria-label="Site Header" class="bg-white">
-  <div class="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8 my-10">
-    <div class="flex h-16 items-center justify-center">
+            <header aria-label="Site Header" className="bg-white">
+  <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8 my-5 md:my-10">
+    <div className="flex h-16 items-center justify-center">
   
-      <div class="hidden md:block">
+      <div className="">
         <nav aria-label="Site Nav">
-          <ul class="flex items-center gap-6 text-base">
+          <ul className=" text-sm md:text-base flex items-center gap-3 md:gap-6">
             <li>
               <Link
-                class="text-gray-500 transition hover:text-gray-500/75"
+              className="text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75 hover:font-semibold hover:text-zinc-900"
                 to={`/admin/mallProduct/details/${Product?.Model}/afterSales`}
               >
                 After-sales
@@ -26,7 +26,7 @@ const ProductDetailsLayout = () => {
 
             <li>
               <Link
-                class="text-gray-500 transition hover:text-gray-500/75"
+                className="text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75 hover:font-semibold hover:text-zinc-900"
                 to={`/admin/mallProduct/details/${Product?.Model}/instruction`}
               >
                 After-sales Instructions
@@ -35,7 +35,7 @@ const ProductDetailsLayout = () => {
 
             <li>
               <Link
-                class="text-gray-500 transition hover:text-gray-500/75"
+                className="text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75 hover:font-semibold hover:text-zinc-900"
                 to={`/admin/mallProduct/details/${Product?.Model}/inventory`}
               >
                 Inventory
@@ -44,8 +44,8 @@ const ProductDetailsLayout = () => {
 
             <li>
               <Link
-                class="text-gray-500 transition hover:text-gray-500/75"
-                to={`/admin/mallProduct/details/${Product?.Model}/invoice`}
+              className="text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75 hover:font-semibold hover:text-zinc-900"
+              to={`/admin/mallProduct/details/${Product?.Model}/invoice`}
               >
                 Invoice
               </Link>

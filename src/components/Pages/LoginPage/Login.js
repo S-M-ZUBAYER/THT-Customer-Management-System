@@ -9,11 +9,14 @@ import { AuthContext } from '../../../context/UserContext';
 import googleLogo from "../../../Assets/Images/Icons/gmailLogo.jpg"
 import facebookLogo from "../../../Assets/Images/Icons/facebookLogo.png"
 import wechatLogo from "../../../Assets/Images/Icons/wechatLogo.png"
+import { AllProductContext } from '../../../context/ProductContext';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const navigate=useNavigate()
+    const navigate=useNavigate();
+    const {setLanguage}=useContext(AllProductContext);
+   
 
     const [show, setShow]=useState(false)
 
@@ -36,6 +39,8 @@ const Login = () => {
         .then(result=>{
             const user=result.user;
             navigate("/")
+            console.log(setLanguage)
+            setLanguage(localStorage.getItem('language'));
             form.reset();
            
         })

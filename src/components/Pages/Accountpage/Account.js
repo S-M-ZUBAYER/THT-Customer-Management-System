@@ -18,7 +18,7 @@ const Account = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 text-center">
                 <div className="flex justify-around">
-                    <img className="rounded-full h-56 w-56" src={user?.photoURL}></img>
+                    <img className="rounded-full h-56 w-56" src={img}></img>
                 </div>
                 <div className="text-start mt-10 md:mt-0 ">
                     <div className="ml-20 md:ml-0 mx-auto md:mx-0">

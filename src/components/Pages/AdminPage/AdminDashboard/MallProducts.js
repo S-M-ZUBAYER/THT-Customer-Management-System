@@ -51,7 +51,7 @@ const AddMallProducts = () => {
 const {allMallProduct,setAllMallProduct,setProduct}=useContext(AllProductContext)
     const [searchTerm, setSearchTerm] = useState('');
      
-    setAllMallProduct(products)
+    setAllMallProduct(products);
 
 
     const handleChange = (event) => {
@@ -59,13 +59,15 @@ const {allMallProduct,setAllMallProduct,setProduct}=useContext(AllProductContext
     };
 
     const handleToSearch = (event) => {
+        console.log(allMallProduct)
         event.preventDefault();
         // filter products array based on search term
-        const filteredProducts = products.filter((product) =>
-            product?.productName.toLowerCase().includes(searchTerm.toLowerCase())
+        const filteredProducts = allMallProduct.filter((product) =>
+             product?.productName.toLowerCase().includes(searchTerm.toLowerCase())
         );
         // update products state with filtered products
         setAllMallProduct(filteredProducts);
+        console.log(allMallProduct,filteredProducts)
     };
 
     const handleToEdit = () => {
@@ -108,9 +110,9 @@ const {allMallProduct,setAllMallProduct,setProduct}=useContext(AllProductContext
                             </button>
                         </div>
                     </form>
-                    {allMallProduct?.map((product) => (
+                    {allMallProduct?.map((product,index) => (
                         // <Link to={`/admin/mallProduct/details/${product?.Model},`}>
-                        <Link to={`/admin/mallProduct/details/${product?.Model},state:{value:${product}}`} onClick={()=>setProduct(product)}>
+                        <Link key={index} to={`/admin/mallProduct/details/${product?.Model}}`} onClick={()=>setProduct(product)}>
                             <div className="mx-2 my-3 grid grid-cols-7  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">
                                 <div className=" col-span-6 grid grid-cols-2">
                                     <p>

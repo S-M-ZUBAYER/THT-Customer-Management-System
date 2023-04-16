@@ -69,7 +69,7 @@ const AllUsers = () => {
             </h1>
             {
                 users.map((Element, index) => {
-                    return <button className=" w-11/12 mx-auto py-2 my-2 grid lg:grid-cols-12 text-start bg-slate-100 hover:bg-cyan-50 cursor-pointer rounded-lg px-2 ">
+                    return <button key={index} className=" w-11/12 mx-auto py-2 my-2 grid lg:grid-cols-12 text-start bg-slate-100 hover:bg-cyan-50 cursor-pointer rounded-lg px-2 ">
                         <div className=" col-span-12 lg:col-span-7 grid grid-cols-3 my-2 lg:my-0">
                             <p>
                                 {Element?.name}

@@ -63,6 +63,7 @@ const AddMallProducts = () => {
         );
         // update products state with filtered products
         setAllEventProduct(filteredProducts);
+        console.log(allEventProduct,filteredProducts)
     };
 
     const handleToEdit = () => {
@@ -104,8 +105,8 @@ const AddMallProducts = () => {
                         </button>
                     </div>
                 </form>
-                {allEventProduct?.map((product) => (
-                     <Link to={`/admin/eventProduct/details/${product?.Model}`} onClick={()=>setProduct(product)} >
+                {allEventProduct?.map((product,index) => (
+                     <Link key={index} to={`/admin/eventProduct/details/${product?.Model}`} onClick={()=>setProduct(product)} >
                     <div className="mx-2 my-3 grid grid-cols-7  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">
                         <div className=" col-span-6 grid grid-cols-2">
                             <p>

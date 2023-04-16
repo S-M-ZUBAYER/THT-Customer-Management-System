@@ -10,10 +10,11 @@ export  const AllProductContext = createContext();
 
 const ProductContextProvider = ({ children }) => {
 const [Product,setProduct]=useState();
+const [language,setLanguage]=useState();
 const [allMallProduct,setAllMallProduct]=useState();
 const [allEventProduct ,setAllEventProduct]=useState();
 
-const productInfo = {Product,setProduct,allMallProduct,setAllMallProduct,allEventProduct ,setAllEventProduct}
+const productInfo = {Product,setProduct,allMallProduct,setAllMallProduct,allEventProduct ,setAllEventProduct,language,setLanguage}
     return (
         <AllProductContext.Provider value={productInfo}>
             {children}

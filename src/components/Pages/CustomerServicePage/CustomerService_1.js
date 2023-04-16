@@ -51,7 +51,7 @@ const {user}=useContext(AuthContext)
                 <div>
                     {
                         customerName.map((element,index)=>{
-                            return  <div className="text-sm mx-2">
+                            return  <div key={index} className="text-sm mx-2">
                         <div className="flex justify-between items-center mx-1 my-1">
                             <p>{element?.name}</p>
                             <p>{element?.time}</p>

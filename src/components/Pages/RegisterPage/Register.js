@@ -128,6 +128,7 @@ const Register = () => {
         createUser(email, password)
             .then(result => {
                 const user = result.user;
+                localStorage.setItem("language", language);
                 form.reset();
 
             })

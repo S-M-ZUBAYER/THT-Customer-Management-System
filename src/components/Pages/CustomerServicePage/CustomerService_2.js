@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import CustomerServicePart from './CustomerServicePart';
+import { AllProductContext } from '../../../context/ProductContext';
 
 const CustomerService_2 = () => {
-
+    const {language}=useContext(AllProductContext);
    
 
     return (
