@@ -1,8 +1,9 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import img from "../../../Assets/Images/messi.jpg"
 import { AuthContext } from '../../../context/UserContext';
 const Account = () => {
-    const { logOut, user } = useContext(AuthContext)
+    const { logOut, user } = useContext(AuthContext);
+  
 
     const handleToLogOut = () => {
         logOut()

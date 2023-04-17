@@ -22,6 +22,7 @@ const Register = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [phone, setPhone] = useState('');
+    const [name, setName] = useState('');
     const [designation, setDesignation] = useState('');
     const [country, setCountry] = useState('');
     const [language, setLanguage] = useState('');
@@ -46,6 +47,9 @@ const Register = () => {
     const handleConfirmPasswordChange = (event) => {
         setConfirmPassword(event.target.value);
 
+    };
+    const handleNameChange = (event) => {
+        setName(event.target.value);
     };
     const handlePhoneChange = (event) => {
         setPhone(event.target.value);
@@ -114,6 +118,8 @@ const Register = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+console.log(name)
+
         const form = event.target;
         if (password.length < 6) {
             setLengthError("Your Password have to minimum 6 characters");
@@ -129,6 +135,7 @@ const Register = () => {
             .then(result => {
                 const user = result.user;
                 localStorage.setItem("language", language);
+                localStorage.setItem("name", name);
                 form.reset();
 
             })
@@ -215,8 +222,13 @@ const Register = () => {
                             <p className="text-xs text-red-600 ml-2 text-start">{matchError}</p>
                         </div>
 
+                        <input className=" w-full pl-2" placeholder="your name" type="text" id="name" value={name} onChange={handleNameChange} />
+                        <hr className=" border-slate-400 mb-6 my-1" ></hr>
+
+                    
                         <input className=" w-full pl-2" placeholder="phone number" type="digit" id="phone" value={phone} onChange={handlePhoneChange} />
                         <hr className=" border-slate-400 mb-6 my-1" ></hr>
+
 
                         <input className=" w-full pl-2" placeholder="Designation" type="text" id="designation" value={designation} onChange={handleDesignationChange} />
                         <hr className=" border-slate-400 mb-6 my-1" ></hr>

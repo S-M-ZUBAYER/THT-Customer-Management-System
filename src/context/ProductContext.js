@@ -10,6 +10,7 @@ export  const AllProductContext = createContext();
 
 const ProductContextProvider = ({ children }) => {
 const [Product,setProduct]=useState();
+const [name,setName]=useState();
 const [language,setLanguage]=useState();
 const [allMallProduct,setAllMallProduct]=useState();
 const [allEventProduct ,setAllEventProduct]=useState();

@@ -1,7 +1,11 @@
 import React, { useContext } from 'react';
 import img from "../../../Assets/Images/messi.jpg"
+import { FaFileImage } from "react-icons/fa";
+import { AiOutlineSend } from "react-icons/ai";
+
 import CustomerServicePart from './CustomerServicePart';
 import { AuthContext } from '../../../context/UserContext';
+import Messages from './Messages';
 
 const CustomerService_1 = () => {
 
@@ -15,6 +19,14 @@ const {user}=useContext(AuthContext)
         {
             name:"S M SABIT",
             time: "3:54 pm"
+        },
+        {
+            name:"ABU SAYED",
+            time: "3:33 pm"
+        },
+        {
+            name:"ABU SAYED",
+            time: "3:33 pm"
         },
         {
             name:"ABU SAYED",
@@ -51,9 +63,13 @@ const {user}=useContext(AuthContext)
                 <div>
                     {
                         customerName.map((element,index)=>{
-                            return  <div key={index} className="text-sm mx-2">
-                        <div className="flex justify-between items-center mx-1 my-1">
-                            <p>{element?.name}</p>
+                            return  <div key={index} className="text-sm ml-2">
+                        <div className="flex justify-between  mx-1 my-1">
+                            <div className="text-start">
+                             <p>{element?.name}</p> 
+                             <p className="">This is message</p> 
+                            </div>
+                            
                             <p>{element?.time}</p>
                         </div>
                         <hr></hr>
@@ -90,7 +106,7 @@ const {user}=useContext(AuthContext)
             {/* chatting customer field for customer and customer service ************************************       */}
 
 
-            <div className="shadow-lg rounded-lg relative  mt-10 md:mt-0  h-screen">
+            <div className="shadow-lg rounded-lg relative  mt-10 md:mt-0  h-11/12">
 
 
                 <div className="flex justify-around ">
@@ -104,32 +120,28 @@ const {user}=useContext(AuthContext)
                     </h1>
                     <hr className="text-black font-bold my-1 mx-1"></hr>
                 </div>
-                <div>
-                    <p className="inline-block px-2 py-1 mr-auto rounded-md bg-stone-300">
-                        Question from shopping platform..
-                    </p>
-                    <p>
-                        Auto reply for question
-                    </p>
+                <div className="text-start h-screen">
+                    <Messages></Messages>
                 </div>
 
 
-                <div className=" absolute bottom-0 my-4">
-                    <div className="mx-3 text-sm">
-                        <button className="bg-[#004368] text-white hover:bg-blue-700                                                          px-2 py-1 rounded-md mr-3">
+                <div className=" absolute z-40 bg-white pt-1 mb-2 w-full bottom-0 my-4">
+                    <div className="flex justify-around text-sm">
+                        <button className="bg-[#004368] text-white ml-8 hover:bg-blue-700                                                          px-2 py-1 rounded-md mr-3">
                             Auto Reply
                         </button>
-                        <button className="mr-3 ">
+                        <button className="">
                             Select & Reply
                         </button>
-                        <button>
+                        <button className="mr-10">
                             Typically
                         </button>
                     </div>
 
-                    <div className="flex">
-                        <p className="mx-2">logo</p>
-                        <input className="w-full bg-zinc-300 rounded-md"></input>
+                    <div className="flex mx-2 w-full items-center my-2 bg-white z-40">
+                       <FaFileImage className="mr-2 text-gray-400"></FaFileImage>
+                        <input className="w-10/12 py-1 rounded-md relative bg-cyan-200"></input>
+                        <AiOutlineSend className=" absolute right-[50px]"></AiOutlineSend>
                     </div>
 
 
