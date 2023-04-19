@@ -63,7 +63,6 @@ const AddMallProducts = () => {
         );
         // update products state with filtered products
         setAllEventProduct(filteredProducts);
-        console.log(allEventProduct,filteredProducts)
     };
 
     const handleToEdit = () => {

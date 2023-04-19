@@ -4,7 +4,7 @@ import { GrFacebook, GrGoogle } from "react-icons/gr";
 import { BsEyeFill, BsWechat } from "react-icons/bs";
 import { RiEyeCloseLine } from "react-icons/ri";
 // import { BsEyeFill } from "react-icons/bs";
-import { Form, Link, useNavigate } from 'react-router-dom';
+import { Form, Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../context/UserContext';
 import googleLogo from "../../../Assets/Images/Icons/gmailLogo.jpg"
 import facebookLogo from "../../../Assets/Images/Icons/facebookLogo.png"
@@ -16,7 +16,9 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const navigate=useNavigate();
     const {setLanguage}=useContext(AllProductContext);
+    const location=useLocation();
    
+const from=location.state?.from?.pathname || "/";
 
     const [show, setShow]=useState(false)
 
@@ -38,8 +40,8 @@ const Login = () => {
         signIn(email,password)
         .then(result=>{
             const user=result.user;
-            navigate("/")
-            console.log(setLanguage)
+            console.log(user)
+            navigate(from,{replace:true})
             setLanguage(localStorage.getItem('language'));
             form.reset();
            
@@ -60,8 +62,7 @@ const Login = () => {
         signInWithGoogle()
         .then(result=>{
             const user=result.user;
-            navigate("/")
-            console.log(user);
+            navigate(from,{replace:true})
         })
         .catch(err=>{
             console.log(err)
@@ -71,8 +72,7 @@ const Login = () => {
         signInWithFacebook()
         .then(result=>{
             const user=result.user;
-            navigate("/")
-            console.log(user);
+            navigate(from,{replace:true})
         })
         .catch(err=>{
             console.log(err)

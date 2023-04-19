@@ -106,7 +106,7 @@ const {user}=useContext(AuthContext)
             {/* chatting customer field for customer and customer service ************************************       */}
 
 
-            <div className="shadow-lg rounded-lg relative  mt-10 md:mt-0  h-11/12">
+            <div className="shadow-lg rounded-lg relative  mt-10 md:mt-0">
 
 
                 <div className="flex justify-around ">
@@ -125,7 +125,7 @@ const {user}=useContext(AuthContext)
                 </div>
 
 
-                <div className=" absolute z-40 bg-white pt-1 mb-2 w-full bottom-0 my-4">
+                <div className=" absolute rounded-b-lg z-40 bg-white pt-1 w-full bottom-0 ">
                     <div className="flex justify-around text-sm">
                         <button className="bg-[#004368] text-white ml-8 hover:bg-blue-700                                                          px-2 py-1 rounded-md mr-3">
                             Auto Reply
@@ -138,10 +138,10 @@ const {user}=useContext(AuthContext)
                         </button>
                     </div>
 
-                    <div className="flex mx-2 w-full items-center my-2 bg-white z-40">
+                    <div className="flex w-full items-center px-3 my-2 bg-white z-40">
                        <FaFileImage className="mr-2 text-gray-400"></FaFileImage>
                         <input className="w-10/12 py-1 rounded-md relative bg-cyan-200"></input>
-                        <AiOutlineSend className=" absolute right-[50px]"></AiOutlineSend>
+                        <AiOutlineSend className=" absolute right-[55px] lg:right-[70px]"></AiOutlineSend>
                     </div>
 
 

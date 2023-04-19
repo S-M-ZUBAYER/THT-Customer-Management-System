@@ -103,7 +103,7 @@ function  AddProduct() {
   };
 
   return (
-    <div className="flex flex-row">
+    <div className="md:flex md:flex-row">
       <div className="w-1/2 p-8 ">
         <img src={previewImage} alt="" className="mb-4 mx-auto h-1/4 w-2/3" />
         
@@ -112,7 +112,7 @@ function  AddProduct() {
         type="file"
         onChange={handleImageUpload}
         placeholder=""
-        className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-10 px-20 ml-5 rounded-lg"
+        className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-10 px-3 lg:px-10 lg:ml-5 rounded-lg"
         />
        
       </div>

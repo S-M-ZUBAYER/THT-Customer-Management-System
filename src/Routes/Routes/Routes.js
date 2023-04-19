@@ -39,11 +39,11 @@ export const routes=createBrowserRouter([
             },
             {
                 path:"/customer-1",
-                element:<CustomerService_1></CustomerService_1>
+                element:<PrivateRoute><CustomerService_1></CustomerService_1></PrivateRoute>
             },
             {
                 path:"/customer-2",
-                element:<CustomerService_2></CustomerService_2>
+                element:<PrivateRoute><CustomerService_2></CustomerService_2></PrivateRoute>
             },
             // {
             //     path:"/admin",

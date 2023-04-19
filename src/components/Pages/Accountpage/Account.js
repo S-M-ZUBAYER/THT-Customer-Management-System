@@ -4,7 +4,7 @@ import { AuthContext } from '../../../context/UserContext';
 const Account = () => {
     const { logOut, user } = useContext(AuthContext);
   
-
+console.log(user)
     const handleToLogOut = () => {
         logOut()
             .then(() => { })
@@ -25,7 +25,7 @@ const Account = () => {
                     <div className="ml-20 md:ml-0 mx-auto md:mx-0">
                         <div className="test-center">
                             <h2 className="text-lg font-semibold mb-0 pb-0">
-                                User name
+                                User Name
                             </h2>
                             <p className="mb-4 ml-1">
                                 Designation
