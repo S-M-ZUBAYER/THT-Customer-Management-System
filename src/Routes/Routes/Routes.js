@@ -51,7 +51,7 @@ export const routes=createBrowserRouter([
             // },
             {
                 path:"account",
-                element:<PrivateRoute><Account></Account></PrivateRoute>
+                element:<Account></Account>
             },
             {
                 path:"contact",
@@ -69,7 +69,7 @@ export const routes=createBrowserRouter([
     },
     {
         path:"/admin",
-        element:<PrivateRoute><Admin></Admin></PrivateRoute>
+        element:<Admin></Admin>
         ,
         children:[
             {
