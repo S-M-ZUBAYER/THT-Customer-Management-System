@@ -1,28 +1,28 @@
 import React, { useContext, useState } from 'react';
 import { AllProductContext } from '../../../context/ProductContext';
 import { AuthContext } from '../../../context/UserContext';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 const CustomerServicePart = () => {
 
     const formData = new FormData();
-    const [answer, setAnswer]=useState([])
 
-formData.append('message', 'What is 732');
+
+
 
     const [language, setLanguage] = useState("")
     const [name, setName] = useState("")
     const [engText, setEngText] = useState("")
     const [text, setText] = useState("")
-
+    formData.append('message', text);
+    const [answer, setAnswer] = useState([])
     const [customerTranslation, setCustomerTranslation] = useState("");
     const inputField1 = document.getElementById("input1");
     const inputField2 = document.getElementById("input2");
     const inputField3 = document.getElementById("input3");
 
-    const {user}=useContext(AuthContext)
-    
-   
+    const { user } = useContext(AuthContext)
+
+console.log(answer)
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -52,15 +52,15 @@ formData.append('message', 'What is 732');
 
 
         const customerInput = {
-            target: language,
+            target: "Bengali",
             text: text
         }
-       
+
         fetch(apiUrl, {
             method: "POST",
             headers: {
                 "content-type": "application/json"
-            }, 
+            },
             body: JSON.stringify(customerInput)
         })
             .then((res) => res.json())
@@ -70,47 +70,48 @@ formData.append('message', 'What is 732');
             });
 
 
-            fetch('http://43.154.22.219/get_response', {
-                method: 'POST',
-                body: formData,
-                // headers: {
-                //   'Content-Type': 'application/json',
+        // fetch('http://43.154.22.219/get_response', {
+        fetch('https://support-csey.onrender.com/get_response', {
+            method: 'POST',
+            body: formData,
+            // headers: {
+            //   'Content-Type': 'application/json',
 
-                // },
-              })
-                .then(response => response.json())
-                .then(data => {
-                  // Handle the data returned by the Python backend
-                  console.log(data?.answers);
-                  setAnswer(data?.answers);
+            // },
+        })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the data returned by the Python backend
+                console.log(data);
+                setAnswer(data?.answers);
 
 
-                  console.log(answer)
-                })
-                .catch(error => {
-                  // Handle any errors that occurred during the request
-                  console.error('There was an error!', error);
-                });
-              
+                // console.log(text,answer)
+            })
+            .catch(error => {
+                // Handle any errors that occurred during the request
+                console.error('There was an error!', error);
+            });
+
 
     };
 
-    
-    
-      const handleToCopy=(e,element)=>{
+
+
+    const handleToCopy = (e, element) => {
 
         setTimeout(() => {
-          
-          e.target.classList.remove("bg-orange-200")
-          e.target.classList.add("bg-yellow-200")
-          
+
+            e.target.classList.remove("bg-orange-200")
+            e.target.classList.add("bg-yellow-200")
+
         }, 20);
-        
-       
+
+
         e.target.classList.remove("bg-orange-200")
         // let copyValue=v.split("：")[1]
-    navigator.clipboard.writeText(element)
-      }
+        navigator.clipboard.writeText(element)
+    }
     return (
         <div>
             <div className=" my-6 flex justify-start">
@@ -170,24 +171,24 @@ formData.append('message', 'What is 732');
             </div>
 
             <div className=" flex items-center justify-end">
-            <div className="text-base font-semibold text-black ">
-{
-    answer?.map((element)=><div   className="common my-2 ml-10 bg-orange-200 p-3 rounded-tl-xl rounded-br-xl">
-    
-    <p onClick={(e)=>handleToCopy(e,element)} className="bg-slate-300 common rounded-md pl-1 pr-2 " id="text-to-copy">
-        {element? `Customer":- ${element}`: "Customer:- Probable Ans 1" } 
-    </p>
-    
-    <p className="common">
-        Customer Service:- probable Ans 1
-    </p>
-    <p className="common">
-        English:- probable Ans 1
-    </p>
-</div>)
-}
-</div>
-</div>
+                <div className="text-base font-semibold text-black ">
+                    {
+                        answer?.map((element) => <div className="common my-2 ml-10 bg-orange-200 p-3 rounded-tl-xl rounded-br-xl">
+
+                            <p onClick={(e) => handleToCopy(e, element)} className="bg-slate-300 common rounded-md pl-1 pr-2 " id="text-to-copy">
+                                {element ? `Customer":- ${element}` : "Customer:- Probable Ans 1"}
+                            </p>
+
+                            <p className="common">
+                                Customer Service:- probable Ans 1
+                            </p>
+                            <p className="common">
+                                English:- probable Ans 1
+                            </p>
+                        </div>)
+                    }
+                </div>
+            </div>
             {/* <div className=" flex items-center justify-end">
                 <div className="text-base font-semibold text-black ">
                     <div className="my-2 bg-orange-200 p-3 rounded-tl-xl rounded-br-xl">
