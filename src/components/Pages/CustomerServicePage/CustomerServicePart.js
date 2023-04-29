@@ -22,7 +22,7 @@ const CustomerServicePart = () => {
 
     const { user } = useContext(AuthContext)
 
-console.log(answer)
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -71,7 +71,7 @@ console.log(answer)
 
 
         // fetch('http://43.154.22.219/get_response', {
-        fetch('https://support-csey.onrender.com/get_response', {
+        fetch('https://grozziie.zjweiting.com:8032/get_response', {
             method: 'POST',
             body: formData,
             // headers: {
@@ -82,11 +82,11 @@ console.log(answer)
             .then(response => response.json())
             .then(data => {
                 // Handle the data returned by the Python backend
-                console.log(data);
+              
                 setAnswer(data?.answers);
 
 
-                // console.log(text,answer)
+               
             })
             .catch(error => {
                 // Handle any errors that occurred during the request
@@ -121,8 +121,8 @@ console.log(answer)
                         <label className="block font-semibold text-gray-700 mb-2 pl-2" htmlFor="input1">
                             Question from app
                         </label>
-                        <input
-                            className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-200 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        <textarea
+                            className="shadow overflow-y-scroll resize-none appearance-none border rounded w-full py-2 px-3 bg-gray-200 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             id="input1"
                             name='inputField'
                             type="text"
@@ -135,8 +135,8 @@ console.log(answer)
                         <label className="block  font-semibold text-gray-700 mb-2  pl-2" htmlFor="input2">
                             Customer Service Formate
                         </label>
-                        <input
-                            className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-200 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        <textarea
+                            className="shadow overflow-y-scroll resize-none appearance-none border rounded w-full py-2 px-3 bg-gray-200 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             id="input2"
                             type="text"
                             name='outputField1'
@@ -149,8 +149,8 @@ console.log(answer)
                         <label className="block font-semibold text-gray-700 mb-2  pl-2" htmlFor="input3">
                             English Formate
                         </label>
-                        <input
-                            className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-200 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        <textarea
+                            className="shadow overflow-y-scroll resize-none appearance-none border rounded w-full py-2 px-3 bg-gray-200 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             id="input3"
                             type="text"
                             placeholder="Show in English"
