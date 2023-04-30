@@ -14,7 +14,10 @@ const CustomerServicePart = () => {
     const [engText, setEngText] = useState("")
     const [text, setText] = useState("")
     formData.append('message', text);
-    const [answer, setAnswer] = useState([])
+    const [chineseAnswer, setChineseAnswer] = useState([]);
+    const [bengaliAnswer, setBengaliAnswer] = useState([]);
+    const [englishAnswer, setEnglishAnswer] = useState([]);
+    const [answer,setAnswer]=useState([])
     const [customerTranslation, setCustomerTranslation] = useState("");
     const inputField1 = document.getElementById("input1");
     const inputField2 = document.getElementById("input2");
@@ -83,7 +86,9 @@ const CustomerServicePart = () => {
             .then(data => {
                 // Handle the data returned by the Python backend
               
-                setAnswer(data?.answers);
+                setChineseAnswer(data?.answers_CN);
+                setEnglishAnswer(data?.answers_EN);
+                setBengaliAnswer(data?.answers_BN);
 
 
                
@@ -102,13 +107,13 @@ const CustomerServicePart = () => {
 
         setTimeout(() => {
 
-            e.target.classList.remove("bg-orange-200")
-            e.target.classList.add("bg-yellow-200")
+            e.target.classList.remove("bg-orange-100")
+            e.target.classList.add("bg-yellow-100")
 
         }, 20);
 
 
-        e.target.classList.remove("bg-orange-200")
+        e.target.classList.remove("bg-orange-100")
         // let copyValue=v.split("：")[1]
         navigator.clipboard.writeText(element)
     }
@@ -169,21 +174,23 @@ const CustomerServicePart = () => {
 
                 </form>
             </div>
+            
 
             <div className=" flex items-center justify-end">
                 <div className="text-base font-semibold text-black ">
+                   
                     {
-                        answer?.map((element) => <div className="common my-2 ml-10 bg-orange-200 p-3 rounded-tl-xl rounded-br-xl">
+                        chineseAnswer.map((element,index) => <div key={index} className="common my-5 ml-10 bg-orange-100 p-3 rounded-tl-xl rounded-br-xl">
 
-                            <p onClick={(e) => handleToCopy(e, element)} className="bg-slate-300 common rounded-md pl-1 pr-2 " id="text-to-copy">
+                            <p onClick={(e) => handleToCopy(e, element)} className="bg-slate-300 common rounded-md px-2 mb-2 py-2" id="text-to-copy">
                                 {element ? `Customer":- ${element}` : "Customer:- Probable Ans 1"}
                             </p>
 
-                            <p className="common">
-                                Customer Service:- probable Ans 1
+                            <p onClick={(e) => handleToCopy(e, bengaliAnswer[index])} id="text-to-copy" className="common bg-slate-200 rounded-md mb-2 p-2">
+                                Customer Service:- {bengaliAnswer[index]}
                             </p>
-                            <p className="common">
-                                English:- probable Ans 1
+                            <p onClick={(e) => handleToCopy(e, englishAnswer[index])} id="text-to-copy" className="common bg-white rounded-md p-2">
+                                English:- {englishAnswer[index]}
                             </p>
                         </div>)
                     }
