@@ -29,6 +29,9 @@ const CustomerServicePart = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setChineseAnswer([]);
+                setEnglishAnswer([]);
+                setBengaliAnswer([]);
         setText(e.target.inputField.value);
         setLanguage(localStorage.getItem('language'));
         setName(localStorage.getItem('name'));
@@ -177,20 +180,20 @@ const CustomerServicePart = () => {
             
 
             <div className=" flex items-center justify-end">
-                <div className="text-base font-semibold text-black ">
+                <div className="text-base font-semibold text-black " id="answerPart">
                    
                     {
-                        chineseAnswer.map((element,index) => <div key={index} className="common my-5 ml-10 bg-orange-100 p-3 rounded-tl-xl rounded-br-xl">
+                        chineseAnswer.map((element,index) => <div key={index} className="common border-2 bg-lime-200 my-5 ml-10  p-3 rounded-tl-xl rounded-br-xl">
 
-                            <p onClick={(e) => handleToCopy(e, element)} className="bg-slate-300 common rounded-md px-2 mb-2 py-2" id="text-to-copy">
-                                {element ? `Customer":- ${element}` : "Customer:- Probable Ans 1"}
+                            <p onClick={(e) => handleToCopy(e, element)} className=" shadow-2xl common text-base rounded-md px-2 mb-2 py-2" id="text-to-copy">
+                            <span className="text-lg font-bold text-indigo-700">Customer</span>:- {element}
                             </p>
 
-                            <p onClick={(e) => handleToCopy(e, bengaliAnswer[index])} id="text-to-copy" className="common bg-slate-200 rounded-md mb-2 p-2">
-                                Customer Service:- {bengaliAnswer[index]}
+                            <p onClick={(e) => handleToCopy(e, element)} id="text-to-copy" className="common text-base  shadow-2xl rounded-md mb-2 p-2">
+                            <span className="text-lg font-bold text-amber-800">Customer Service</span>:- {bengaliAnswer[index]}
                             </p>
-                            <p onClick={(e) => handleToCopy(e, englishAnswer[index])} id="text-to-copy" className="common bg-white rounded-md p-2">
-                                English:- {englishAnswer[index]}
+                            <p onClick={(e) => handleToCopy(e, element)} id="text-to-copy" className="common text-base  shadow-2xl  rounded-md p-2">
+                            <span className="text-lg font-bold text-fuchsia-700">Customer Service</span>:- {englishAnswer[index]}
                             </p>
                         </div>)
                     }

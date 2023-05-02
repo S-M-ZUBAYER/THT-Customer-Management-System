@@ -104,6 +104,23 @@ const AddMallProducts = () => {
                         </button>
                     </div>
                 </form>
+
+                <div className="mx-2 my-3 grid grid-cols-7  text-start text-lg font-semibold bg-slate-300 px-2 py-2">
+                    <div className=" col-span-6 grid grid-cols-2">
+                        <p>
+                            product Name
+                        </p>
+                        <p className="">
+                            Model No
+                        </p>
+                    </div>
+
+                    <div className="flex items-center justify-around">
+                        <FiEdit onClick={handleToEdit} className="hover:cursor-pointer"></FiEdit>
+                        <RiDeleteBin7Line onClick={handleToDelete} className="hover:cursor-pointer"></RiDeleteBin7Line>
+                    </div>
+                </div>
+                
                 {allEventProduct?.map((product,index) => (
                      <Link key={index} to={`/admin/eventProduct/details/${product?.Model}`} onClick={()=>setProduct(product)} >
                     <div className="mx-2 my-3 grid grid-cols-7  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">

@@ -236,7 +236,7 @@ console.log(name)
                         <input className=" w-full pl-2" placeholder="country" type="text" id="country" value={country} onChange={handleCountryChange} />
                         <hr className=" border-slate-400 mb-6 my-1" ></hr>
 
-                        <input className=" w-full pl-2" placeholder="language" type="text" id="language" value={language} onChange={handleLanguageChange} />
+                        <input className=" w-full pl-2" placeholder="native language" type="text" id="language" value={language} onChange={handleLanguageChange} />
                         <hr className=" border-slate-400 mb-8" ></hr>
 
 
