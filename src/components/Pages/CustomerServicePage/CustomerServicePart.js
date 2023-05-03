@@ -185,69 +185,20 @@ const CustomerServicePart = () => {
                     {
                         chineseAnswer.map((element,index) => <div key={index} className="common border-2 bg-lime-200 my-5 ml-10  p-3 rounded-tl-xl rounded-br-xl">
 
-                            <p onClick={(e) => handleToCopy(e, element)} className=" shadow-2xl common text-base rounded-md px-2 mb-2 py-2" id="text-to-copy">
-                            <span className="text-lg font-bold text-indigo-700">Customer</span>:- {element}
+                            <p onClick={(e) => handleToCopy(e, element[1])} className=" shadow-2xl common text-base rounded-md px-2 mb-2 py-2" id="text-to-copy">
+                            <span className="text-lg font-bold text-indigo-700">Customer</span>:- {element[1]}
                             </p>
 
-                            <p onClick={(e) => handleToCopy(e, element)} id="text-to-copy" className="common text-base  shadow-2xl rounded-md mb-2 p-2">
-                            <span className="text-lg font-bold text-amber-800">Customer Service</span>:- {bengaliAnswer[index]}
+                            <p onClick={(e) => handleToCopy(e, element[1])} id="text-to-copy" className="common text-base  shadow-2xl rounded-md mb-2 p-2">
+                            <span className="text-lg font-bold text-amber-800">Customer Service</span>:- {bengaliAnswer[index][1]}
                             </p>
-                            <p onClick={(e) => handleToCopy(e, element)} id="text-to-copy" className="common text-base  shadow-2xl  rounded-md p-2">
-                            <span className="text-lg font-bold text-fuchsia-700">Customer Service</span>:- {englishAnswer[index]}
+                            <p onClick={(e) => handleToCopy(e, element[1])} id="text-to-copy" className="common text-base  shadow-2xl  rounded-md p-2">
+                            <span className="text-lg font-bold text-fuchsia-700">Customer Service</span>:- {englishAnswer[index][1]}
                             </p>
                         </div>)
                     }
                 </div>
             </div>
-            {/* <div className=" flex items-center justify-end">
-                <div className="text-base font-semibold text-black ">
-                    <div className="my-2 bg-orange-200 p-3 rounded-tl-xl rounded-br-xl">
-                        <p className="bg-slate-300 rounded-md pl-1 pr-2">
-                            {answer? `English":- ${answer}`: "English:- Probable Ans 1" } 
-                        </p>
-                        <p>
-                            Customer Service:- probable Ans 1
-                        </p>
-                        <p>
-                            Customer:- probable Ans 1
-                        </p>
-                    </div>
-                    <div className="my-2 bg-orange-200 p-3 rounded-tl-xl rounded-br-xl">
-                        <p className="bg-slate-300 rounded-md pl-1 pr-2">
-                            English:- probable Ans 2
-                        </p>
-                        <p>
-                            Customer Service:- probable Ans 2
-                        </p>
-                        <p>
-                            Customer:- probable Ans 2
-                        </p>
-                    </div>
-                    <div className="my-2 bg-orange-200 p-3 rounded-tl-xl rounded-br-xl">
-                        <p className="bg-slate-300 rounded-md pl-1 pr-2">
-                            English:- probable Ans 3
-                        </p>
-                        <p>
-                            Customer Service:- probable Ans 3
-                        </p>
-                        <p>
-                            Customer:- probable Ans 3
-                        </p>
-                    </div>
-                    <div className="my-2 bg-orange-200 p-3 rounded-tl-xl rounded-br-xl">
-                        <p className="bg-slate-300 rounded-md pl-1 pr-2">
-                            English:- probable Ans 4
-                        </p>
-                        <p>
-                            Customer Service:- probable Ans 4
-                        </p>
-                        <p>
-                            Customer:- probable Ans 4
-                        </p>
-                    </div>
-                </div>
-
-            </div> */}
         </div>
     );
 };

@@ -3,6 +3,7 @@ import { FiEdit } from 'react-icons/fi';
 import { RiDeleteBin7Line } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
 import ProductContext, { AllProductContext } from '../../../../context/ProductContext';
+import axios from 'axios';
 
 const products=[
         {
@@ -54,6 +55,16 @@ const AddMallProducts = () => {
     const handleChange = (event) => {
         setSearchTerm(event.target.value);
     };
+    
+    const [eventProduct, setEventProduct] = useState([]);
+
+    axios.get('http://localhost:5000/event')
+  .then(response => {
+    setEventProduct(response.data);
+  })
+  .catch(error => {
+    console.log(error);
+  });
 
     const handleToSearch = (event) => {
         event.preventDefault();
@@ -121,15 +132,15 @@ const AddMallProducts = () => {
                     </div>
                 </div>
                 
-                {allEventProduct?.map((product,index) => (
+                {eventProduct?.map((product,index) => (
                      <Link key={index} to={`/admin/eventProduct/details/${product?.Model}`} onClick={()=>setProduct(product)} >
                     <div className="mx-2 my-3 grid grid-cols-7  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">
                         <div className=" col-span-6 grid grid-cols-2">
                             <p>
-                                {product?.productName}
+                                {product?.name}
                             </p>
                             <p className="">
-                                {product?.Model}
+                                {product?.modelNo}
                             </p>
                         </div>
 

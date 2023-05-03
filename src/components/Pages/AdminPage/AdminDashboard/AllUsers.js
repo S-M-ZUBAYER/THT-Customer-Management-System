@@ -4,60 +4,6 @@ import { FiEdit } from 'react-icons/fi';
 import { RiDeleteBin7Line } from 'react-icons/ri';
 
 
-const users = [
-    {
-        name: "s m zubayer",
-        email: "smzubayer9004@gmail.com",
-        phone: "+8801304979278",
-        designation: "Web Developer",
-        country: "Bangladesh",
-
-        language: "Bengali"
-
-    },
-    {
-        name: "s m sabit",
-        email: "smzubayer9004@gmail.com",
-        phone: "+8801304979278",
-        designation: "Web Developer",
-        country: "Bangladesh",
-        language: "Bengali"
-
-    },
-    {
-        name: "md pias",
-        email: "smzubayer9004@gmail.com",
-        phone: "+8801304979278",
-        designation: "Web Developer",
-        country: "Bangladesh",
-        language: "Bengali"
-
-    },
-    {
-        name: "Mir sultan",
-        email: "smzubayer9004@gmail.com",
-        phone: "+8801304979278",
-        designation: "Web Developer",
-        country: "Bangladesh",
-        language: "Bengali"
-
-    },
-    {
-        name: "arif khan",
-        email: "smzubayer9004@gmail.com",
-        phone: "+8801304979278",
-        designation: "Web Developer",
-        country: "Bangladesh",
-        language: "Bengali"
-
-    },
-];
-
-
-
-
-
-
 
 const handleToEdit = () => {
     console.log("Edit CLick")
@@ -70,26 +16,18 @@ const handleToDelete = () => {
 
 
 const AllUsers = () => {
-    const [data, setData] = useState([]);
+    const [users, setUsers] = useState([]);
 
-//     axios.get('http://localhost:5000/users')
-//   .then(response => {
-//     console.log(response.data);
-//   })
-//   .catch(error => {
-//     console.log(error);
-//   });
+    axios.get('http://localhost:5000/users')
+  .then(response => {
+    setUsers(response.data);
+  })
+  .catch(error => {
+    console.log(error);
+  });
 
 
-    useEffect(() => {
-      axios.get('http://localhost:5000/users')
-        .then(response => {
-          setData(response.data);
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    }, []);
+   
 
 
     return (
@@ -98,16 +36,6 @@ const AllUsers = () => {
                 User Information
             </h1>
             <div>
-      {data.map(item => (
-        <div key={item.id}>
-          <p>{item.name}</p>
-          <p>{item.email}</p>
-          <p>{item.phone}</p>
-          <p>{item.designation}</p>
-          <p>{item.country}</p>
-          <p>{item.language}</p>
-        </div>
-      ))}
     </div>
 
             <div className=" w-11/12 mx-auto py-2 my-2 grid lg:grid-cols-12 text-start text-lg font-semibold bg-slate-300  px-2">
