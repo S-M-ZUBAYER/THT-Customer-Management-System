@@ -1,11 +1,6 @@
 import React, { createContext, useState } from 'react';
 
-
-
-
 export  const AllProductContext = createContext();
-
-
 
 
 const ProductContextProvider = ({ children }) => {
