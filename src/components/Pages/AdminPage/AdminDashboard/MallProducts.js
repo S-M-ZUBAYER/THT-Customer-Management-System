@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { FiEdit } from 'react-icons/fi';
 import { RiDeleteBin7Line } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
@@ -7,62 +7,25 @@ import { AllProductContext } from '../../../../context/ProductContext';
 import axios from 'axios';
 
 
-export const MyContext = createContext();
-const products = [
-    {
-        productName: "Dot Printer",
-        Model: "vz474gh1",
-        id: 1
-
-    },
-    {
-        productName: "Dot Printer",
-        Model: "vz474gh2",
-        id: 2
-
-    },
-    {
-        productName: "Thermal Printer",
-        Model: "vz474gh3",
-        id: 3
-
-    },
-    {
-        productName: "Dot Matrix Printer",
-        Model: "vz474gh4",
-        id: 4
-
-    },
-    {
-        productName: "Dot Printer",
-        Model: "vz474gh5",
-        id: 5
-
-    },
-    {
-        productName: "Dot Printer",
-        Model: "vz474gh6",
-        id: 6
-
-    },
-
-];
-
 const AddMallProducts = () => {
     const { allMallProduct, setAllMallProduct, setProduct } = useContext(AllProductContext)
     const [searchTerm, setSearchTerm] = useState('');
 
     const [mallProduct, setMallProduct] = useState([]);
 
-    axios.get('http://localhost:5000/mall')
-  .then(response => {
-    setMallProduct(response.data);
-  })
-  .catch(error => {
-    console.log(error);
-  });
+    // axios.get('http://localhost:5000/mall')
+    //     .then(response => {
+    //         setMallProduct(response.data);
+    //     })
+    //     .catch(error => {
+    //         console.log(error);
+    //     });
 
-   
+        useEffect(() => {
+            fetch('http://localhost:5000/event')
+              .then(response => response.json())
+              .then(data => setMallProduct(data));
+          }, []);
 
 
     const handleChange = (event) => {
@@ -81,15 +44,19 @@ const AddMallProducts = () => {
     };
 
     const handleToEdit = () => {
+        console.log("edit")
 
     }
 
-    const handleToDelete = () => {
+    const handleToDelete = (model) => {
+       const restProduct=mallProduct.filter(product=>(product.modelNo!==model));
+       setMallProduct(restProduct)
 
     }
 
 
     const handleSubmit = () => {
+        console.log("Submit")
 
     }
 
@@ -132,30 +99,28 @@ const AddMallProducts = () => {
                     </div>
 
                     <div className="flex items-center justify-around">
-                        <FiEdit onClick={handleToEdit} className="hover:cursor-pointer"></FiEdit>
-                        <RiDeleteBin7Line onClick={handleToDelete} className="hover:cursor-pointer"></RiDeleteBin7Line>
+                        <FiEdit></FiEdit>
+                        <RiDeleteBin7Line></RiDeleteBin7Line>
                     </div>
                 </div>
 
                 {mallProduct?.map((product, index) => (
                     // <Link to={`/admin/mallProduct/details/${product?.Model},`}>
-                    <Link key={index} to={`/admin/mallProduct/details/${product?.Model}}`} onClick={() => setProduct(product)}>
-                        <div className="mx-2 my-3 grid grid-cols-7  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">
-                            <div className=" col-span-6 grid grid-cols-2">
+                    <div className="mx-2 my-3 grid grid-cols-7  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">
+                        <Link key={index} to={`/admin/mallProduct/details/${product?.Model}}`} onClick={() => setProduct(product)} className=" col-span-6 grid grid-cols-2">
                             <p>
                                 {product?.name}
                             </p>
                             <p className="">
                                 {product?.modelNo}
                             </p>
-                            </div>
+                        </Link>
 
-                            <div className="flex items-center justify-around">
-                                <FiEdit onClick={handleToEdit} className="hover:cursor-pointer"></FiEdit>
-                                <RiDeleteBin7Line onClick={handleToDelete} className="hover:cursor-pointer"></RiDeleteBin7Line>
-                            </div>
+                        <div className="flex items-center justify-around">
+                            <FiEdit onClick={handleToEdit} className="hover:cursor-pointer hover:text-2xl"></FiEdit>
+                            <RiDeleteBin7Line onClick={()=>handleToDelete(product?.modelNo)} className="hover:cursor-pointer hover:text-2xl"></RiDeleteBin7Line>
                         </div>
-                    </Link>
+                    </div>
                 ))}
             </div>
 
