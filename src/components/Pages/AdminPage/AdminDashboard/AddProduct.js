@@ -80,7 +80,7 @@ function  AddProduct() {
     setPreviewImage(res.data.data.url);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e) => {   
     e.preventDefault();
     const product = {
       productName,

@@ -8,8 +8,8 @@ const CustomerServicePart = () => {
     const formData = new FormData();
 
 
-const [questions,setQuestions]=useState([])
-const [allQuestion,setAllQuestion]=useState([])
+    const [questions, setQuestions] = useState([])
+    const [allQuestion, setAllQuestion] = useState([])
 
     const [language, setLanguage] = useState("")
     const [name, setName] = useState("")
@@ -20,10 +20,12 @@ const [allQuestion,setAllQuestion]=useState([])
     const [bengaliAnswer, setBengaliAnswer] = useState([]);
     const [englishAnswer, setEnglishAnswer] = useState([]);
     const [answer, setAnswer] = useState([])
-    const [customerTranslation, setCustomerTranslation] = useState("");  
+    const [customerTranslation, setCustomerTranslation] = useState("");
     const inputField1 = document.getElementById("input1");
     const inputField2 = document.getElementById("input2");
     const inputField3 = document.getElementById("input3");
+
+
 
     const { user } = useContext(AuthContext)
 
@@ -123,35 +125,84 @@ const [allQuestion,setAllQuestion]=useState([])
         navigator.clipboard.writeText(element)
     }
 
-//     const handleToStore = () => {
-//         console.log("Store");
-//         const newQuestions=[text,...questions];
-// THis is the part for the pending data store partWS
+    //     const handleToStore = () => {
+    //         console.log("Store");
+    //         const newQuestions=[text,...questions];
+    // THis is the part for the pending data store partWS
 
-// set questions first of all to add all parts.
-//         setQuestions(newQuestions);
-//         localStorage.setItem('allQuestions', JSON.stringify(questions));
-//         const myArrayString = localStorage.getItem('allQuestions');
-//   const allQuestion = JSON.parse(myArrayString);
-//   setAllQuestion(allQuestion)
-//     }
+    // set questions first of all to add all parts.
+    //         setQuestions(newQuestions);
+    //         localStorage.setItem('allQuestions', JSON.stringify(questions));
+    //         const myArrayString = localStorage.getItem('allQuestions');
+    //   const allQuestion = JSON.parse(myArrayString);
+    //   setAllQuestion(allQuestion)
+    //     }
+
 
     async function handleToStore() {
+
+        // create a new Date object
+        const now = new Date();
+
+        // extract the current date and time components
+        const date = now.toLocaleDateString();
+        const time = now.toLocaleTimeString();
+      
+
         try {
-          const response = await fetch('https://grozziie.zjweiting.com:8032/p_question_add', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ question:text })
-          });
-          const data = await response.json();
-          toast.success("Question added successfully")
+            const response = await fetch('https://grozziie.zjweiting.com:8032/p_question_add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    question: text,
+                    time,
+                    date
+                })
+            });
+            const data = await response.json();
+            toast.success("Question added successfully")
         } catch (error) {
             toast.error(error)
-          console.error(error);
+            console.error(error);
         }
-      }
+    }
+    async function handleToStoreTranslate() {
+
+
+        // create a new Date object
+        const now = new Date();
+
+        // extract the current date and time components
+        const date = now.toLocaleDateString();
+        const time = now.toLocaleTimeString();
+        console.log({
+            question: text,
+            englishLan: engText,
+            bengaliLan: inputField2.value,
+            time,
+            date
+        })
+
+
+        const response = await fetch('https://grozziie.zjweiting.com:8032/t_question_add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                question: text,
+                englishLan: engText,
+                bengaliLan: inputField2.value,
+                time,
+                date
+            })
+        });
+        const data = await response.json();
+        toast.success("Question and translation part added successfully")
+
+    }
 
     return (
 
@@ -214,13 +265,23 @@ const [allQuestion,setAllQuestion]=useState([])
                     </form>
 
                 </div>
-                <div className="w-full flex justify-end">
-                    <button onClick={handleToStore}
-                        className=" bg-yellow-400 hover:bg-blue-200   px-10 text-black font-bold py-1 rounded focus:outline-none focus:shadow-outline"
-                    >
-                        Store
-                    </button>
+                <div className="w-5/12 flex ml-auto">
+                    <div className="w-full flex justify-end">
+                        <button onClick={handleToStore}
+                            className=" bg-yellow-400 hover:bg-blue-200   px-10 text-black font-bold py-1 rounded focus:outline-none focus:shadow-outline"
+                        >
+                            Store
+                        </button>
+                    </div>
+                    <div className="w-full flex justify-end">
+                        <button onClick={handleToStoreTranslate}
+                            className=" bg-green-400 hover:bg-blue-200   px-10 text-black font-bold py-1 rounded focus:outline-none focus:shadow-outline"
+                        >
+                            Store Translate
+                        </button>
+                    </div>
                 </div>
+
 
 
 
@@ -247,7 +308,7 @@ const [allQuestion,setAllQuestion]=useState([])
                 </div>
 
             </div>
-        
+
 
         </div>
     );
