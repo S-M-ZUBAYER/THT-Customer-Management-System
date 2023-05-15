@@ -51,11 +51,11 @@ export const routes=createBrowserRouter([
             // },
             {
                 path:"account",
-                element:<Account></Account>
+                element:<PrivateRoute><Account></Account></PrivateRoute> 
             },
             {
                 path:"contact",
-                element:<Contact></Contact>
+                element: <PrivateRoute><Contact></Contact></PrivateRoute> 
             },
             {
                 path:"login",

@@ -7,9 +7,18 @@ const CustomerServicePart = () => {
 
     const formData = new FormData();
 
+    const Questions={
+        smzubayer9004gmail:[],
+        smzubayer18gmail:[]
+    }
+   
+    
 
-    const [questions, setQuestions] = useState([])
-    const [allQuestion, setAllQuestion] = useState([])
+
+    const [questions, setQuestions] = useState(Questions)
+    const [newQuestion, setNewQuestion] = useState(Questions)
+    // const [allQuestion, setAllQuestion] = useState({})
+    const [nickName,setNickName]=useState("")
 
     const [language, setLanguage] = useState("")
     const [name, setName] = useState("")
@@ -28,11 +37,16 @@ const CustomerServicePart = () => {
 
 
     const { user } = useContext(AuthContext)
+    
 
 
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if(!text){
+            toast.error("please input correct value");
+            return;
+        }
         setChineseAnswer([]);
         setEnglishAnswer([]);
         setBengaliAnswer([]);
@@ -109,7 +123,7 @@ const CustomerServicePart = () => {
     };
 
 
-
+//create function to copy the answer
     const handleToCopy = (e, element) => {
 
         setTimeout(() => {
@@ -139,15 +153,21 @@ const CustomerServicePart = () => {
     //     }
 
 
-    async function handleToStore() {
 
+//create a function to store the unknown questions
+
+    async function handleToUnknownStore() {
+        if(!text){
+            toast.error("please input correct value");
+            return;
+        }
         // create a new Date object
         const now = new Date();
 
         // extract the current date and time components
         const date = now.toLocaleDateString();
         const time = now.toLocaleTimeString();
-      
+
 
         try {
             const response = await fetch('https://grozziie.zjweiting.com:8032/p_question_add', {
@@ -162,14 +182,36 @@ const CustomerServicePart = () => {
                 })
             });
             const data = await response.json();
-            toast.success("Question added successfully")
+            if(data?.status==="success"){
+                setText("");
+                inputField2.value = ""
+                inputField3.value = ""
+                toast.success("Question added successfully");
+                return;
+            }
+            console.log(data)
+           
+            if(data?.status==="error"){
+                setText("");
+                inputField2.value = ""
+                inputField3.value = ""
+                toast.error(data?.message)
+                return;
+            }
+            
         } catch (error) {
             toast.error(error)
             console.error(error);
         }
     }
-    async function handleToStoreTranslate() {
 
+    //create a function to store the translation sentences part
+
+    async function handleToStoreTranslate() {
+        if(!text){
+            toast.error("please input correct value");
+            return;
+        }
 
         // create a new Date object
         const now = new Date();
@@ -200,9 +242,55 @@ const CustomerServicePart = () => {
             })
         });
         const data = await response.json();
-        toast.success("Question and translation part added successfully")
+            if(data?.status==="success"){
+                setText("");
+                inputField2.value = ""
+                inputField3.value = ""
+                toast.success("Question added successfully");
+                return;
+            }
+           
+            if(data?.status==="error"){
+                setText("");
+                inputField2.value = ""
+                inputField3.value = ""
+                toast.error(data?.message)
+                return;
+            }
 
     }
+
+const handleToStoreAllQuestions=(questions, nickName, newQuestion)=>{
+    setNickName(user?.email.split(".")[0]);
+    setNewQuestion(text);
+    // console.log(nickName)
+
+    // console.log(questions?.(user?.email.split(".")[0]))
+    
+    // console.log(questions)
+
+    // const allQuestions={...Questions,newQuestion}
+    // 
+// Find the index of the array element
+
+console.log(questions.arrayProperty)
+const index = questions.arrayProperty.findIndex(element => element.id === nickName);
+
+// Clone the object
+const clonedObj = { ...questions };
+
+// Create a new array with the modified element
+const newArray = [...clonedObj.arrayProperty];
+newArray[index] = { ...newArray[index], ...newQuestion };
+
+// Update the cloned object with the new array
+clonedObj.arrayProperty = newArray;
+
+// Return the updated object
+return clonedObj;
+
+}
+
 
     return (
 
@@ -254,6 +342,7 @@ const CustomerServicePart = () => {
                         </div>
                         <div className="flex items-center justify-center">
                             <button
+                            onClick={()=>handleToStoreAllQuestions(questions, nickName, newQuestion)}
                                 className="bg-[#004368] hover:bg-blue-700   px-10 text-white font-bold py-1 rounded focus:outline-none focus:shadow-outline"
                                 type="submit"
                             >
@@ -267,7 +356,7 @@ const CustomerServicePart = () => {
                 </div>
                 <div className="w-5/12 flex ml-auto">
                     <div className="w-full flex justify-end">
-                        <button onClick={handleToStore}
+                        <button onClick={handleToUnknownStore}
                             className=" bg-yellow-400 hover:bg-blue-200   px-10 text-black font-bold py-1 rounded focus:outline-none focus:shadow-outline"
                         >
                             Store
@@ -281,8 +370,6 @@ const CustomerServicePart = () => {
                         </button>
                     </div>
                 </div>
-
-
 
 
                 <div className=" flex items-center justify-end">

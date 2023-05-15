@@ -10,6 +10,7 @@ import googleLogo from "../../../Assets/Images/Icons/gmailLogo.jpg"
 import facebookLogo from "../../../Assets/Images/Icons/facebookLogo.png"
 import wechatLogo from "../../../Assets/Images/Icons/wechatLogo.png"
 import { AllProductContext } from '../../../context/ProductContext';
+import { toast } from 'react-hot-toast';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -20,7 +21,7 @@ const Login = () => {
 
     const [show, setShow]=useState(false)
 
-    const {signIn,signInWithGoogle,signInWithFacebook}=useContext(AuthContext);
+    const {signIn,signInWithGoogle,signInWithFacebook,resetPassword}=useContext(AuthContext);
 
 
     const handleEmailChange = (event) => {
@@ -60,6 +61,9 @@ const Login = () => {
         signInWithGoogle()
         .then(result=>{
             const user=result.user;
+            if(user){
+                toast.success("Welcome to THT-Space Electrical Company Ltd Customer service site")
+            }
             navigate("/")
             console.log(user);
         })
@@ -81,9 +85,19 @@ const Login = () => {
     
 
 
-    const handleForgotPasswordClick = () => {
-        // handle forgot password click logic here
-    };
+    const handleToResetPassword = () => {
+        resetPassword(email)
+            .then(() => {
+                console.log(email)
+                toast.success('Please check your email to reset')
+                // setLoading(false);
+            })
+            .catch(err => {
+                toast.error(err.message);
+                console.log(err);
+                // setLoading(false);
+            })
+    }
 
     return (
         <div className="bg-white flex justify-center items-center">
@@ -124,7 +138,7 @@ const Login = () => {
                         <button>start to digit</button> */}
                     </div>
                     <div className="text-end text-sm mb-8">
-                        <button type="button" className="text-[#65ABFF] font-semibold" onClick={handleForgotPasswordClick}>
+                        <button type="button" className="text-[#65ABFF] font-semibold" onClick={handleToResetPassword}>
                             Forgot password?
                         </button>
                        

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Form, Link, Navigate } from 'react-router-dom';
+import { Form, Link, Navigate, useNavigate } from 'react-router-dom';
 import { GrFacebook, GrGoogle } from "react-icons/gr";
 import { BsEyeFill, BsWechat } from "react-icons/bs";
 import { RiEyeCloseLine } from 'react-icons/ri';
@@ -14,6 +14,7 @@ import AddFile from "../../../Assets/Images/Icons/AddFile.jpg"
 import { useCallback } from 'react';
 import axios from 'axios';
 import { useDropzone } from 'react-dropzone';
+import { toast } from 'react-hot-toast';
 
 
 const Register = () => {
@@ -34,6 +35,8 @@ const Register = () => {
     const [lengthError, setLengthError] = useState(null);
 
     const [fileError, setFileError] = useState(null);
+
+    const navigate=useNavigate();
 
 
 
@@ -134,9 +137,13 @@ console.log(name)
         createUser(email, password)
             .then(result => {
                 const user = result.user;
+                if(user){
+                    toast.success("Registration complete Successfully")  
+                  }
                 localStorage.setItem("language", language);
                 localStorage.setItem("name", name);
                 form.reset();
+                navigate("/")
 
             })
             .catch(err => {
@@ -148,6 +155,9 @@ console.log(name)
             .then(result => {
                 const user = result.user;
                 console.log(user);
+                if(user){
+                    toast.success("Log In Successfully")  
+                  }
             })
             .catch(err => {
                 console.log(err)
@@ -158,8 +168,13 @@ console.log(name)
         signInWithFacebook()
             .then(result => {
                 const user = result.user;
+                if(user){
+                  toast.success("Log In Successfully")  
+                }
+                
                 Navigate("/")
                 console.log(user);
+
             })
             .catch(err => {
                 console.log(err)
