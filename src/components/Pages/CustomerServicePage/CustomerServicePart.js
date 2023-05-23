@@ -1,24 +1,13 @@
-import React, { useContext, useState } from 'react';
-import { AllProductContext } from '../../../context/ProductContext';
+import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../../context/UserContext';
 import { toast } from 'react-hot-toast';
+import axios from 'axios';
 
 const CustomerServicePart = () => {
 
+    //create this part to send data to the backend to got data
     const formData = new FormData();
 
-    const Questions={
-        smzubayer9004gmail:[],
-        smzubayer18gmail:[]
-    }
-   
-    
-
-
-    const [questions, setQuestions] = useState(Questions)
-    const [newQuestion, setNewQuestion] = useState(Questions)
-    // const [allQuestion, setAllQuestion] = useState({})
-    const [nickName,setNickName]=useState("")
 
     const [language, setLanguage] = useState("")
     const [name, setName] = useState("")
@@ -28,25 +17,27 @@ const CustomerServicePart = () => {
     const [chineseAnswer, setChineseAnswer] = useState([]);
     const [bengaliAnswer, setBengaliAnswer] = useState([]);
     const [englishAnswer, setEnglishAnswer] = useState([]);
-    const [answer, setAnswer] = useState([])
     const [customerTranslation, setCustomerTranslation] = useState("");
     const inputField1 = document.getElementById("input1");
     const inputField2 = document.getElementById("input2");
     const inputField3 = document.getElementById("input3");
 
 
-
-    const { user } = useContext(AuthContext)
-    
-
+    //use useContext to got data from any component
+    const { user, totalQuestions, setTotalQuestions,setTotalQuestionLan, unknownQuestions,totalQuestionsLan, unknownQuestionsLan, setUnknownQuestions,setUnknownQuestionsLan, translationQuestions, setTranslationQuestions,setTranslationQuestionsLan, handleToStoreAllData, handleToDeleteAllData,setTranslationPercent,translateCalculatePercentage,unknownCalculatePercentage,setUnknownPercent} = useContext(AuthContext)
 
 
+    // create this function to send the data to the backend for translation and get the possible answers according to the customer questions.
     const handleSubmit = (e) => {
         e.preventDefault();
-        if(!text){
+
+        //create this part so that any one cannot send the data without input anythings
+        if (!text) {
             toast.error("please input correct value");
             return;
         }
+
+        // start the part for translations
         setChineseAnswer([]);
         setEnglishAnswer([]);
         setBengaliAnswer([]);
@@ -56,6 +47,17 @@ const CustomerServicePart = () => {
         inputField2.value = "Typing..."
         inputField3.value = "Typing..."
 
+
+
+        //This part for got the date and time according to the any event 
+        // create a new Date object
+        const now = new Date();
+
+        // extract the current date and time components
+        const date = now.toLocaleDateString();
+        const time = now.toLocaleTimeString();
+
+        //create an object to send backend for English translations
         const engInput = {
             target: "English",
             text: text
@@ -75,6 +77,8 @@ const CustomerServicePart = () => {
             });
 
 
+        //create an object to send backend and start the process for Bengali translations
+
         const customerInput = {
             target: "Bengali",
             text: text
@@ -93,15 +97,10 @@ const CustomerServicePart = () => {
                 inputField2.value = data?.data;
             });
 
-
-        // fetch('http://43.154.22.219/get_response', {
         fetch('https://grozziie.zjweiting.com:8032/get_response', {
             method: 'POST',
             body: formData,
-            // headers: {
-            //   'Content-Type': 'application/json',
 
-            // },
         })
             .then(response => response.json())
             .then(data => {
@@ -111,7 +110,86 @@ const CustomerServicePart = () => {
                 setEnglishAnswer(data?.answers_EN);
                 setBengaliAnswer(data?.answers_BN);
 
+                
+                    //call the function to get the percentage of unknown question compare with total questions
+                    
+                    
+                    // const percentage2 = calculatePercentage(totalQuestions, translationQuestions);
+                    // setTranslationPercent(percentage2)
 
+
+
+
+
+//store all the questions in Sql database
+if(user){
+
+    //load current user data from database
+    fetch('http://localhost:5000/tht/questions/add', {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify({email:user?.email,question:text,date,time})
+    })
+        .then(res => res.json())
+        .then(data => {
+            if (data.acknowledged) {
+                toast.success('stored Successfully');
+                setTotalQuestions([...totalQuestions,{email:user?.email,question:text,date,time}]);
+                setTotalQuestionLan(totalQuestions?.length);
+                console.log(totalQuestionsLan,unknownQuestionsLan);
+                   setUnknownPercent(unknownCalculatePercentage(totalQuestions, unknownQuestions))
+                   setTranslationPercent(translateCalculatePercentage(totalQuestions, translationQuestions))
+
+            }
+            else {
+                toast.error(data.message);
+            }
+
+        })
+
+  }
+
+
+
+
+   //got the current user data from database  
+//    useEffect(() => {
+//     if (user?.email) {
+//       fetchUserByEmail();
+//     }
+//   }, [user?.email]);
+
+
+
+
+
+                    // // start the part to store the value to the local storage
+                    // // Retrieve the array from local storage
+                    // const storedArrayQuestions = localStorage.getItem('totalQuestions');
+                    // let storedArray = [];
+
+                    // // Check if the stored array exists
+                    // if (storedArrayQuestions) {
+                    //     storedArray = JSON.parse(storedArrayQuestions);
+                    // }
+
+                    // // Add a new element to the array
+                    // const newElement = { text, date, time };
+                    // storedArray.push(newElement);
+
+                    // setTotalQuestions(storedArray)
+
+                    // // Convert the modified array back to a string
+                    // const updatedArrayString = JSON.stringify(storedArray);
+
+                    // // Store the updated array in local storage
+                    // localStorage.setItem('totalQuestions', updatedArrayString);
+
+                    // // const localTotalQuestions= localStorage.getItem('totalQuestions');
+                    // // setTotalQuestions(localTotalQuestions)
+                
 
             })
             .catch(error => {
@@ -123,7 +201,7 @@ const CustomerServicePart = () => {
     };
 
 
-//create function to copy the answer
+    //create function to copy the answer
     const handleToCopy = (e, element) => {
 
         setTimeout(() => {
@@ -139,34 +217,53 @@ const CustomerServicePart = () => {
         navigator.clipboard.writeText(element)
     }
 
-    //     const handleToStore = () => {
-    //         console.log("Store");
-    //         const newQuestions=[text,...questions];
-    // THis is the part for the pending data store partWS
-
-    // set questions first of all to add all parts.
-    //         setQuestions(newQuestions);
-    //         localStorage.setItem('allQuestions', JSON.stringify(questions));
-    //         const myArrayString = localStorage.getItem('allQuestions');
-    //   const allQuestion = JSON.parse(myArrayString);
-    //   setAllQuestion(allQuestion)
-    //     }
 
 
 
-//create a function to store the unknown questions
+    //create a function to store the unknown questions
 
     async function handleToUnknownStore() {
-        if(!text){
+        //create this part so that any one cannot send the data without input anythings
+        if (!text) {
             toast.error("please input correct value");
             return;
         }
+
         // create a new Date object
         const now = new Date();
 
         // extract the current date and time components
         const date = now.toLocaleDateString();
         const time = now.toLocaleTimeString();
+
+
+
+        //store all the questions in Sql database
+if(user){
+
+    //load current user data from database
+    fetch('http://localhost:5000/tht/unknownQuestions/add', {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify({email:user?.email,question:text,date,time})
+    })
+        .then(res => res.json())
+        .then(data => {
+            if (data.acknowledged) {
+                toast.success('stored Successfully');
+                setUnknownQuestions([...unknownQuestions,{email:user?.email,question:text,date,time}]);
+                setUnknownQuestionsLan(unknownQuestions?.length)
+
+            }
+            else {
+                toast.error(data.message);
+            }
+
+        })
+
+  }
 
 
         try {
@@ -182,33 +279,61 @@ const CustomerServicePart = () => {
                 })
             });
             const data = await response.json();
-            if(data?.status==="success"){
+            if (data?.status === "success") {
                 setText("");
                 inputField2.value = ""
                 inputField3.value = ""
                 toast.success("Question added successfully");
+
+
+                // //start the part to store data in localStorage
+
+                //     // Retrieve the array from local storage
+                //     const storedArrayUnknownQuestions = localStorage.getItem('unknownQuestions');
+                //     let storedArray = [];
+
+                //     // Check if the stored array exists
+                //     if (storedArrayUnknownQuestions) {
+                //         storedArray = JSON.parse(storedArrayUnknownQuestions);
+                //     }
+
+                //     // Add a new element to the array
+                //     const newElement = { text, date, time };
+                //     storedArray.push(newElement);
+
+                //     setUnknownQuestions(storedArray)
+
+                //     // Convert the modified array back to a string
+                //     const updatedArrayString = JSON.stringify(storedArray);
+
+                //     // Store the updated array in local storage
+                //     localStorage.setItem('unknownQuestions', updatedArrayString);
+
+
                 return;
             }
             console.log(data)
-           
-            if(data?.status==="error"){
+
+            if (data?.status === "error") {
                 setText("");
                 inputField2.value = ""
                 inputField3.value = ""
                 toast.error(data?.message)
                 return;
             }
-            
+
         } catch (error) {
             toast.error(error)
             console.error(error);
         }
+
+
     }
 
     //create a function to store the translation sentences part
 
     async function handleToStoreTranslate() {
-        if(!text){
+        if (!text) {
             toast.error("please input correct value");
             return;
         }
@@ -219,13 +344,37 @@ const CustomerServicePart = () => {
         // extract the current date and time components
         const date = now.toLocaleDateString();
         const time = now.toLocaleTimeString();
-        console.log({
-            question: text,
-            englishLan: engText,
-            bengaliLan: inputField2.value,
-            time,
-            date
-        })
+
+
+        //store data in sql database
+
+        if(user){
+
+            //load current user data from database
+            fetch('http://localhost:5000/tht/translationsQuestions/add', {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify({ email:user?.email,question: text, english: engText, bangla: inputField2?.value, date, time })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.acknowledged) {
+                        toast.success('translation questions sstored Successfully');
+                        setTranslationQuestions([...translationQuestions,{ question: text, english: engText, bangla: inputField2?.value, date, time }]);
+                        setTranslationQuestionsLan(translationQuestions?.length)
+        
+                    }
+                    else {
+                        toast.error(data.message);
+                    }
+        
+                })
+        
+          }
+
+
 
 
         const response = await fetch('https://grozziie.zjweiting.com:8032/t_question_add', {
@@ -242,62 +391,62 @@ const CustomerServicePart = () => {
             })
         });
         const data = await response.json();
-            if(data?.status==="success"){
-                setText("");
-                inputField2.value = ""
-                inputField3.value = ""
-                toast.success("Question added successfully");
-                return;
-            }
-           
-            if(data?.status==="error"){
-                setText("");
-                inputField2.value = ""
-                inputField3.value = ""
-                toast.error(data?.message)
-                return;
-            }
+        if (data?.status === "success") {
+
+            //start the part to store data in localStorage
+
+                // Retrieve the array from local storage
+                // const storedArrayTranslationQuestions = localStorage.getItem('translationQuestions');
+                // let storedArray = [];
+
+                // // Check if the stored array exists
+                // if (storedArrayTranslationQuestions) {
+                //     storedArray = JSON.parse(storedArrayTranslationQuestions);
+                // }
+
+                // // Add a new element to the array
+                // const newElement = { question: text, english: engText, bangla: inputField2?.value, date, time };
+                // storedArray.push(newElement);
+                // console.log(newElement)
+
+                // setTranslationQuestions(storedArray)
+
+                // // Convert the modified array back to a string
+                // const updatedArrayString = JSON.stringify(storedArray);
+
+                // // Store the updated array in local storage
+                // localStorage.setItem('translationQuestions', updatedArrayString);
+
+
+            
+
+            setText("");
+            inputField2.value = ""
+            inputField3.value = ""
+            toast.success("Question added successfully");
+
+            return;
+        }
+
+        if (data?.status === "error") {
+            setText("");
+            inputField2.value = ""
+            inputField3.value = ""
+            toast.error(data?.message)
+            return;
+        }
+
+
 
     }
 
-const handleToStoreAllQuestions=(questions, nickName, newQuestion)=>{
-    setNickName(user?.email.split(".")[0]);
-    setNewQuestion(text);
-    // console.log(nickName)
-
-    // console.log(questions?.(user?.email.split(".")[0]))
-    
-    // console.log(questions)
-
-    // const allQuestions={...Questions,newQuestion}
-    // 
-// Find the index of the array element
-
-console.log(questions.arrayProperty)
-const index = questions.arrayProperty.findIndex(element => element.id === nickName);
-
-// Clone the object
-const clonedObj = { ...questions };
-
-// Create a new array with the modified element
-const newArray = [...clonedObj.arrayProperty];
-newArray[index] = { ...newArray[index], ...newQuestion };
-
-// Update the cloned object with the new array
-clonedObj.arrayProperty = newArray;
-
-// Return the updated object
-return clonedObj;
-
-}
-
 
     return (
-
         <div>
             <div>
                 <div className=" my-6 flex justify-start">
 
+                    {/* create a from to send the question to the backend to translation and get all the possible ans */}
                     <form onSubmit={handleSubmit} className="rounded w-2/3 pb-8 mb-4 ">
                         <div className="mb-4">
                             <label className="block font-semibold text-gray-700 mb-2 pl-2" htmlFor="input1">
@@ -323,8 +472,6 @@ return clonedObj;
                                 type="text"
                                 name='outputField1'
                                 placeholder="Show in Customer Service"
-                            // value={input2}
-                            // onChange={(e) => setInput2(e.target.value)}
                             />
                         </div>
                         <div className="mb-4">
@@ -342,7 +489,6 @@ return clonedObj;
                         </div>
                         <div className="flex items-center justify-center">
                             <button
-                            onClick={()=>handleToStoreAllQuestions(questions, nickName, newQuestion)}
                                 className="bg-[#004368] hover:bg-blue-700   px-10 text-white font-bold py-1 rounded focus:outline-none focus:shadow-outline"
                                 type="submit"
                             >
@@ -354,6 +500,9 @@ return clonedObj;
                     </form>
 
                 </div>
+
+
+                {/* create store button to call the function store the unknown questions to the database */}
                 <div className="w-5/12 flex ml-auto">
                     <div className="w-full flex justify-end">
                         <button onClick={handleToUnknownStore}
@@ -362,6 +511,9 @@ return clonedObj;
                             Store
                         </button>
                     </div>
+
+
+                    {/* create store Translate button to call the function store miss translation part to the database */}
                     <div className="w-full flex justify-end">
                         <button onClick={handleToStoreTranslate}
                             className=" bg-green-400 hover:bg-blue-200   px-10 text-black font-bold py-1 rounded focus:outline-none focus:shadow-outline"
@@ -372,6 +524,7 @@ return clonedObj;
                 </div>
 
 
+                {/* create this part to show all the possible answers */}
                 <div className=" flex items-center justify-end">
                     <div className="text-base font-semibold text-black " id="answerPart">
 
@@ -392,7 +545,9 @@ return clonedObj;
                         }
                     </div>
 
+
                 </div>
+
 
             </div>
 

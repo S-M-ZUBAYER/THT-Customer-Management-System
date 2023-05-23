@@ -10,6 +10,7 @@ import facebookLogo from "../../../Assets/Images/Icons/facebookLogo.png"
 import wechatLogo from "../../../Assets/Images/Icons/wechatLogo.png"
 import AddFile from "../../../Assets/Images/Icons/AddFile.jpg"
 
+
 // upload image
 import { useCallback } from 'react';
 import axios from 'axios';
@@ -19,8 +20,10 @@ import { toast } from 'react-hot-toast';
 
 const Register = () => {
 
+    //create different kind of state to get the current value
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [image, setImage] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [phone, setPhone] = useState('');
     const [name, setName] = useState('');
@@ -36,10 +39,12 @@ const Register = () => {
 
     const [fileError, setFileError] = useState(null);
 
+
+//use this function to navigate the route after registration
     const navigate=useNavigate();
 
 
-
+//create these functions to get the input value
     const handleEmailChange = (event) => {
         setEmail(event.target.value);
     };
@@ -69,7 +74,7 @@ const Register = () => {
 
 
 
-    // image upload
+    // create this function to upload image
     const handleFileUpload = useCallback(async (acceptedFiles) => {
         const apiKey = process.env.REACT_APP_IMG_BB_API_KEY;
         const formData = new FormData();
@@ -80,13 +85,16 @@ const Register = () => {
                 formData
             );
             console.log(response.data.data.display_url); // Do something with the image URL
+            setImage(response.data.data.display_url)
+            toast.success("Image prepare for use successfully")
         } catch (error) {
             console.log(error);
+            toast.error(error)
         }
     }, []);
 
 
-
+//create this function to select and drop any image to host
     const onDrop = useCallback((acceptedFiles) => {
         if (acceptedFiles.length === 0) {
             setFileError('Please select a file.');
@@ -103,27 +111,36 @@ const Register = () => {
         accept: 'image/jpeg, image/png',
     });
 
+
+    //create this function to show the password toggle
     const handleToShowPassword = (event) => {
         event.preventDefault();
         setShowPassword(!showPassword)
-        // handle form submission logic here
     };
     const handleToShowConfirmPassword = (event) => {
         event.preventDefault();
         setShowConfirmPassword(!showConfirmPassword)
-        // handle form submission logic here
     };
 
 
 
-    //Registration part with firebase
+    //Registration part with firebase start here------------------------
+
+    //get this value by useContext from AuthContext
     const { createUser, signInWithGoogle, signInWithFacebook } = useContext(AuthContext)
 
+    //create a submit function to create user and store user information in Sql database
     const handleSubmit = (event) => {
         event.preventDefault();
-console.log(name)
+
+       const user={name:name,image:image,phone:phone,country:country,language:language,email:email,designation:designation}
+       console.log(user)
 
         const form = event.target;
+
+
+
+        //create condition check for error handling
         if (password.length < 6) {
             setLengthError("Your Password have to minimum 6 characters");
             return;
@@ -133,15 +150,44 @@ console.log(name)
             setMatchError("Your Password did not match");
             return;
         }
-        // handle form submission logic here
-        createUser(email, password)
+
+
+      
+
+
+
+        // handle form submission to create new user by email password authentication system
+        createUser (email, password)
             .then(result => {
                 const user = result.user;
                 if(user){
-                    toast.success("Registration complete Successfully")  
+                    toast.success('Registration Completed Successfully');
+
+                    //load current user data from database
+                    fetch('http://localhost:5000/tht/users/add', {
+                        method: 'POST',
+                        headers: {
+                            'content-type': 'application/json'
+                        },
+                        body: JSON.stringify({name:name,image:image,phone:phone,country:country,language:language,email:email,designation:designation})
+                    })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.acknowledged) {
+                                toast.success('stored Successfully');
+            
+                            }
+                            else {
+                                toast.error(data.message);
+                            }
+            
+                        })
+                        toast.success("Registration complete Successfully")  
+
                   }
                 localStorage.setItem("language", language);
                 localStorage.setItem("name", name);
+
                 form.reset();
                 navigate("/")
 
@@ -150,6 +196,8 @@ console.log(name)
                 console.log(err)
             })
     };
+
+    // create a function to google authentication system
     const handleToGoogleLogIn = () => {
         signInWithGoogle()
             .then(result => {
@@ -164,6 +212,7 @@ console.log(name)
             })
     }
 
+    // create a function to facebook authentication system
     const handleToFaceBookLogIn = () => {
         signInWithFacebook()
             .then(result => {
@@ -222,6 +271,7 @@ console.log(name)
                             <p className="text-xs text-red-600 ml-2 text-start">{lengthError}</p>
                         </div>
 
+
                         <div className='relative my-2'>
                             <div className='flex items-center'>
                                 <input className=" w-full pl-2" placeholder="confirm password" type={showConfirmPassword ? "text" : "password"} id="confirmPassword" value={confirmPassword} onChange={handleConfirmPasswordChange} />
@@ -236,6 +286,8 @@ console.log(name)
                             <hr className=" border-slate-400 mb-6 my-1" ></hr>
                             <p className="text-xs text-red-600 ml-2 text-start">{matchError}</p>
                         </div>
+
+
 
                         <input className=" w-full pl-2" placeholder="your name" type="text" id="name" value={name} onChange={handleNameChange} />
                         <hr className=" border-slate-400 mb-6 my-1" ></hr>
@@ -253,6 +305,8 @@ console.log(name)
 
                         <input className=" w-full pl-2" placeholder="native language" type="text" id="language" value={language} onChange={handleLanguageChange} />
                         <hr className=" border-slate-400 mb-8" ></hr>
+
+
 
 
                         <div
@@ -278,19 +332,27 @@ console.log(name)
                         {fileError && <p className="mt-2 text-sm text-red-500">{fileError}</p>}
 
 
+
                         <div className="my-2 ">
                             <button className="bg-[#004368] text-white w-full py-2 text-xl font-semibold rounded-md" type="submit">Register</button>
                         </div>
+
+
                     </form>
                     <div className="text-sm my-3">
                         Already have an account? <Link className="font-semibold text-[#65ABFF]" to="/login">Sign In</Link>
                     </div>
+
+
                 </div>
+            
             </div>
+
             <div className=" sm:hidden lg:block flex items-center justify-center">
                 <img className="h-3/4 w-2/3" src={registerLogo} alt='RegisterLogo' ></img>
 
             </div>
+            
         </div>
     );
 };

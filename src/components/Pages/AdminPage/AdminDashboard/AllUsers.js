@@ -13,15 +13,15 @@ const handleToDelete = () => {
     console.log("Delete CLick")
 }
 
-
+ 
 
 const AllUsers = () => {
     const [users, setUsers] = useState([]);
 
-    axios.get('http://localhost:5000/users')
+    axios.get('http://localhost:5000/tht/allUsers')
   .then(response => {
     setUsers(response.data);
-  })
+  })                 
   .catch(error => {
     console.log(error);
   });
