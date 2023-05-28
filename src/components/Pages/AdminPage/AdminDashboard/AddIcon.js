@@ -1,5 +1,6 @@
 import { useState } from "react";
 import addIcon from "../../../../Assets/Images/Admin/AddIcon.jpg"
+import { toast } from "react-hot-toast";
 
 function AddIcon() {
   const [image, setImage] = useState(null);
@@ -7,6 +8,7 @@ function AddIcon() {
   function handleImageChange(event) {
     const file = event.target.files[0];
     setImage(file);
+    toast.success("Icon has already prepare to store")
   }
 
   function handleUpload(event) {

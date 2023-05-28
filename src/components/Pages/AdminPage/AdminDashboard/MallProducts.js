@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import ProductDetailsLayout from './ProductDetailsLayout/ProductDetailsLayout';
 import { AllProductContext } from '../../../../context/ProductContext';
 import axios from 'axios';
+import ModalForEdit from './ModalForEdit';
 
 
 const AddMallProducts = () => {
@@ -12,6 +13,9 @@ const AddMallProducts = () => {
     const [searchTerm, setSearchTerm] = useState('');
 
     const [mallProduct, setMallProduct] = useState([]);
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
     // axios.get('http://localhost:5000/mall')
     //     .then(response => {
@@ -22,7 +26,7 @@ const AddMallProducts = () => {
     //     });
 
         useEffect(() => {
-            fetch('http://localhost:5000/event')
+            fetch('http://localhost:5000/tht/mallProducts')
               .then(response => response.json())
               .then(data => setMallProduct(data));
           }, []);
@@ -43,16 +47,32 @@ const AddMallProducts = () => {
         console.log(mallProduct, filteredProducts)
     };
 
-    const handleToEdit = () => {
-        console.log("edit")
+    const handleToEdit = (product) => {
+        setSelectedProduct(product);
+        setIsModalOpen(true);
+      };
 
-    }
+      const handleSave = (editedProduct) => {
+        // Update the product with the edited values
+        setMallProduct((prevProducts) =>
+          prevProducts.map((product) => (product.productId === editedProduct.productId ? editedProduct : product))
+        );
+      };
+    
+      const handleCloseModal = () => {
+        setSelectedProduct(null);
+        setIsModalOpen(false);
+      };
 
-    const handleToDelete = (model) => {
-       const restProduct=mallProduct.filter(product=>(product.modelNo!==model));
-       setMallProduct(restProduct)
+    // const handleToDelete = (model) => {
+    //    const restProduct=mallProduct.filter(product=>(product.modelNo!==model));
+    //    setMallProduct(restProduct)
 
-    }
+    // }
+
+    const handleToDelete = (productId) => {
+        setMallProduct((prevProducts) => prevProducts.filter((product) => product.productId !== productId));
+      };
 
 
     const handleSubmit = () => {
@@ -107,17 +127,22 @@ const AddMallProducts = () => {
                 {mallProduct?.map((product, index) => (
                     // <Link to={`/admin/mallProduct/details/${product?.Model},`}>
                     <div className="mx-2 my-3 grid grid-cols-7  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">
-                        <Link key={index} to={`/admin/mallProduct/details/${product?.Model}}`} onClick={() => setProduct(product)} className=" col-span-6 grid grid-cols-2">
+                        <Link key={index} to={`/admin/mallProduct/details/${product?.modelNumber}}`} onClick={() => setProduct(product)} className=" col-span-6 grid grid-cols-2">
+                        <img className=" h-5/6 w-5/6 rounded-lg" src={`${product.productImg}`} alt={product.productName} ></img>
+
                             <p>
-                                {product?.name}
+                                {product?.productName}
                             </p>
                             <p className="">
-                                {product?.modelNo}
+                                {product?.modelNumber}
                             </p>
                         </Link>
 
                         <div className="flex items-center justify-around">
                             <FiEdit onClick={handleToEdit} className="hover:cursor-pointer hover:text-2xl"></FiEdit>
+                            {isModalOpen && (
+        <ModalForEdit product={selectedProduct} onSave={handleSave} onClose={handleCloseModal} />
+      )}
                             <RiDeleteBin7Line onClick={()=>handleToDelete(product?.modelNo)} className="hover:cursor-pointer hover:text-2xl"></RiDeleteBin7Line>
                         </div>
                     </div>

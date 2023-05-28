@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import axios from 'axios';
 import addImg from "../../../../Assets/Images/Admin/Vector.jpg"
+import { toast } from 'react-hot-toast';
 
-function  AddProduct() {
+function  AddProduct({product}) {
   const [productName, setProductName] = useState('');
   const [productPrice, setProductPrice] = useState('');
   const [productDescription, setProductDescription] = useState('');
@@ -15,9 +16,12 @@ function  AddProduct() {
   const [afterSalesText, setAfterSalesText] = useState('');
   const [afterSalesInstruction, setAfterSalesInstruction] = useState('');
   const [inventoryText, setInventoryText] = useState('');
-  const [invoiceFile, setInvoiceFile] = useState(null);
+  // const [invoiceFile, setInvoiceFile] = useState(null);
   const [previewImage, setPreviewImage] = useState(addImg);
   const [fileName, setFileName] = useState("Add Image");
+  const [productImg, setProductImg] = useState(null);
+  const [invoiceFile, setInvoiceFile] = useState(null);
+
 
   const handleProductNameChange = (e) => {
     setProductName(e.target.value);
@@ -67,39 +71,99 @@ function  AddProduct() {
     setInventoryText(e.target.value);
   };
 
-  const handleInvoiceFileChange = (e) => {
-    setInvoiceFile(e.target.files[0]);
+
+
+  // const handleInvoiceFileChange = (e) => {
+  //   setInvoiceFile(e.target.files[0]);
+  // };
+
+  // const handleImageUpload = async (e) => {
+  //   e.preventDefault();
+  //   const formData = new FormData();
+  //   formData.append('image', e.target.files[0]);
+  //   formData.append('key', process.env.REACT_APP_IMG_BB_API_KEY);
+  //   const res = await axios.post('https://api.imgbb.com/1/upload', formData);
+  //   setPreviewImage(res.data.data.url);
+  // };
+
+  // const handleSubmit = (e) => {   
+  //   e.preventDefault();
+  //   const product = {
+  //     productName,
+  //     productPrice,
+  //     productDescription,
+  //     modelNumber,
+  //     printerColor,
+  //     connectorType,
+  //     stockQuantity,
+  //     shelfStartTime,
+  //     shelfEndTime,
+  //     afterSalesText,
+  //     afterSalesInstruction,
+  //     inventoryText,
+  //     invoiceFile,
+  //     previewImage,
+  //   };
+  //   // Add your code to save the product object into an array or a database
+  //   console.log(product)
+  // };
+
+
+  const handleProductImgUpload = (event) => {
+    const file = event.target.files[0];
+    setProductImg(file);
   };
 
-  const handleImageUpload = async (e) => {
-    e.preventDefault();
+  const handleInvoiceFileUpload = (event) => {
+    const file = event.target.files[0];
+    setInvoiceFile(file);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
     const formData = new FormData();
-    formData.append('image', e.target.files[0]);
-    formData.append('key', process.env.REACT_APP_IMG_BB_API_KEY);
-    const res = await axios.post('https://api.imgbb.com/1/upload', formData);
-    setPreviewImage(res.data.data.url);
-  };
+    formData.append('productImg', productImg);
+    formData.append('invoiceFile', invoiceFile);
+    formData.append('productName', productName);
+    formData.append('productPrice', productPrice);
+    formData.append('productDescription', productDescription);
+    formData.append('modelNumber', modelNumber);
+    formData.append('printerColor', printerColor);
+    formData.append('connectorType', connectorType);
+    formData.append('stockQuantity', stockQuantity);
+    formData.append('shelfStartTime', shelfStartTime);
+    formData.append('shelfEndTime', shelfEndTime);
+    formData.append('afterSalesText', afterSalesText);
+    formData.append('afterSalesInstruction', afterSalesInstruction);
+    formData.append('inventoryText', inventoryText);
 
-  const handleSubmit = (e) => {   
-    e.preventDefault();
-    const product = {
-      productName,
-      productPrice,
-      productDescription,
-      modelNumber,
-      printerColor,
-      connectorType,
-      stockQuantity,
-      shelfStartTime,
-      shelfEndTime,
-      afterSalesText,
-      afterSalesInstruction,
-      inventoryText,
-      invoiceFile,
-      previewImage,
-    };
-    // Add your code to save the product object into an array or a database
-    console.log(product)
+    try {
+      await axios.post('http://localhost:5000/tht/mallProducts/add', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      console.log('Product created successfully!');
+      toast.success('Product created successfully!');
+      // Reset form fields
+      setProductName('');
+      setProductPrice('');
+      setProductDescription('');
+      setModelNumber('');
+      setPrinterColor('');
+      setConnectorType('');
+      setStockQuantity('');
+      setShelfStartTime('');
+      setShelfEndTime('');
+      setAfterSalesText('');
+      setAfterSalesInstruction('');
+      setInventoryText('');
+      setProductImg(null);
+      setInvoiceFile(null);
+    } catch (error) {
+      console.error('Error creating product:', error);
+    }
   };
 
   return (
@@ -107,13 +171,17 @@ function  AddProduct() {
       <div className="w-1/2 p-8 ">
         <img src={previewImage} alt="" className="mb-4 mx-auto h-1/4 w-2/3" />
         
-        
-        <input 
+        {/* <label>Product Image:</label> */}
+      <input type="file"
+       onChange={handleProductImgUpload}
+       className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-10 px-3 lg:px-10 lg:ml-5 rounded-lg"
+        accept="image/*" />
+        {/* <input 
         type="file"
         onChange={handleImageUpload}
         placeholder=""
         className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-10 px-3 lg:px-10 lg:ml-5 rounded-lg"
-        />
+        /> */}
        
       </div>
       <div className="w-1/2 p-8">
@@ -282,14 +350,19 @@ function  AddProduct() {
             <label htmlFor="invoice" className="block text-start text-gray-700 font-bold mb-2">
               Invoice
             </label>
-            <input
+            <input type="file"
+             onChange={handleInvoiceFileUpload} 
+             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+             accept=".csv, .pdf, .xls, .xlsx" />
+      
+            {/* <input
               type="file"
               id="invoice"
               accept="application/pdf"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               onChange={handleInvoiceFileChange}
               required
-            />
+            /> */}
           </div>
           <button
                         className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-10 px-20 rounded-lg"

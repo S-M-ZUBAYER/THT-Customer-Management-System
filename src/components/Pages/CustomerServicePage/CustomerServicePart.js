@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../../context/UserContext';
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
+import { handleToCopy } from './FunctionsForCustomerService/FunctionsForCustomerService';
 
 const CustomerServicePart = () => {
 
@@ -24,7 +25,7 @@ const CustomerServicePart = () => {
 
 
     //use useContext to got data from any component
-    const { user, totalQuestions, setTotalQuestions,setTotalQuestionLan, unknownQuestions,totalQuestionsLan, unknownQuestionsLan, setUnknownQuestions,setUnknownQuestionsLan, translationQuestions, setTranslationQuestions,setTranslationQuestionsLan, handleToStoreAllData, handleToDeleteAllData,setTranslationPercent,translateCalculatePercentage,unknownCalculatePercentage,setUnknownPercent} = useContext(AuthContext)
+    const { user, totalQuestions, setTotalQuestions, setTotalQuestionLan, unknownQuestions, totalQuestionsLan, unknownQuestionsLan, setUnknownQuestions, setUnknownQuestionsLan, translationQuestions, setTranslationQuestions, setTranslationQuestionsLan, handleToStoreAllData, handleToDeleteAllData, setTranslationPercent, translateCalculatePercentage, unknownCalculatePercentage, setUnknownPercent } = useContext(AuthContext)
 
 
     // create this function to send the data to the backend for translation and get the possible answers according to the customer questions.
@@ -110,86 +111,43 @@ const CustomerServicePart = () => {
                 setEnglishAnswer(data?.answers_EN);
                 setBengaliAnswer(data?.answers_BN);
 
-                
-                    //call the function to get the percentage of unknown question compare with total questions
-                    
-                    
-                    // const percentage2 = calculatePercentage(totalQuestions, translationQuestions);
-                    // setTranslationPercent(percentage2)
 
 
 
 
 
-//store all the questions in Sql database
-if(user){
+                //store all the questions in Sql database
+                if (user) {
 
-    //load current user data from database
-    fetch('http://localhost:5000/tht/questions/add', {
-        method: 'POST',
-        headers: {
-            'content-type': 'application/json'
-        },
-        body: JSON.stringify({email:user?.email,question:text,date,time})
-    })
-        .then(res => res.json())
-        .then(data => {
-            if (data.acknowledged) {
-                toast.success('stored Successfully');
-                setTotalQuestions([...totalQuestions,{email:user?.email,question:text,date,time}]);
-                setTotalQuestionLan(totalQuestions?.length);
-                console.log(totalQuestionsLan,unknownQuestionsLan);
-                   setUnknownPercent(unknownCalculatePercentage(totalQuestions, unknownQuestions))
-                   setTranslationPercent(translateCalculatePercentage(totalQuestions, translationQuestions))
+                    //load current user data from database
+                    fetch('http://localhost:5000/tht/questions/add', {
+                        method: 'POST',
+                        headers: {
+                            'content-type': 'application/json'
+                        },
+                        body: JSON.stringify({ email: user?.email, question: text, date, time })
+                    })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.acknowledged) {
+                                toast.success('stored Successfully');
+                                setTotalQuestions([...totalQuestions, { email: user?.email, question: text, date, time }]);
+                                setTotalQuestionLan(totalQuestions?.length);
+                                console.log(totalQuestionsLan, unknownQuestionsLan);
+                                setUnknownPercent(unknownCalculatePercentage(totalQuestions, unknownQuestions))
+                                setTranslationPercent(translateCalculatePercentage(totalQuestions, translationQuestions))
 
-            }
-            else {
-                toast.error(data.message);
-            }
+                            }
+                            else {
+                                toast.error(data.message);
+                            }
 
-        })
+                        })
 
-  }
-
-
-
-
-   //got the current user data from database  
-//    useEffect(() => {
-//     if (user?.email) {
-//       fetchUserByEmail();
-//     }
-//   }, [user?.email]);
+                }
 
 
 
-
-
-                    // // start the part to store the value to the local storage
-                    // // Retrieve the array from local storage
-                    // const storedArrayQuestions = localStorage.getItem('totalQuestions');
-                    // let storedArray = [];
-
-                    // // Check if the stored array exists
-                    // if (storedArrayQuestions) {
-                    //     storedArray = JSON.parse(storedArrayQuestions);
-                    // }
-
-                    // // Add a new element to the array
-                    // const newElement = { text, date, time };
-                    // storedArray.push(newElement);
-
-                    // setTotalQuestions(storedArray)
-
-                    // // Convert the modified array back to a string
-                    // const updatedArrayString = JSON.stringify(storedArray);
-
-                    // // Store the updated array in local storage
-                    // localStorage.setItem('totalQuestions', updatedArrayString);
-
-                    // // const localTotalQuestions= localStorage.getItem('totalQuestions');
-                    // // setTotalQuestions(localTotalQuestions)
-                
 
             })
             .catch(error => {
@@ -200,22 +158,6 @@ if(user){
 
     };
 
-
-    //create function to copy the answer
-    const handleToCopy = (e, element) => {
-
-        setTimeout(() => {
-
-            e.target.classList.remove("bg-orange-100")
-            e.target.classList.add("bg-yellow-100")
-
-        }, 20);
-
-
-        e.target.classList.remove("bg-orange-100")
-        // let copyValue=v.split("：")[1]
-        navigator.clipboard.writeText(element)
-    }
 
 
 
@@ -239,31 +181,31 @@ if(user){
 
 
         //store all the questions in Sql database
-if(user){
+        if (user) {
 
-    //load current user data from database
-    fetch('http://localhost:5000/tht/unknownQuestions/add', {
-        method: 'POST',
-        headers: {
-            'content-type': 'application/json'
-        },
-        body: JSON.stringify({email:user?.email,question:text,date,time})
-    })
-        .then(res => res.json())
-        .then(data => {
-            if (data.acknowledged) {
-                toast.success('stored Successfully');
-                setUnknownQuestions([...unknownQuestions,{email:user?.email,question:text,date,time}]);
-                setUnknownQuestionsLan(unknownQuestions?.length)
+            //load current user data from database
+            fetch('http://localhost:5000/tht/unknownQuestions/add', {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify({ email: user?.email, question: text, date, time })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.acknowledged) {
+                        toast.success('stored Successfully');
+                        setUnknownQuestions([...unknownQuestions, { email: user?.email, question: text, date, time }]);
+                        setUnknownQuestionsLan(unknownQuestions?.length)
 
-            }
-            else {
-                toast.error(data.message);
-            }
+                    }
+                    else {
+                        toast.error(data.message);
+                    }
 
-        })
+                })
 
-  }
+        }
 
 
         try {
@@ -348,7 +290,7 @@ if(user){
 
         //store data in sql database
 
-        if(user){
+        if (user) {
 
             //load current user data from database
             fetch('http://localhost:5000/tht/translationsQuestions/add', {
@@ -356,23 +298,23 @@ if(user){
                 headers: {
                     'content-type': 'application/json'
                 },
-                body: JSON.stringify({ email:user?.email,question: text, english: engText, bangla: inputField2?.value, date, time })
+                body: JSON.stringify({ email: user?.email, question: text, english: engText, bangla: inputField2?.value, date, time })
             })
                 .then(res => res.json())
                 .then(data => {
                     if (data.acknowledged) {
                         toast.success('translation questions sstored Successfully');
-                        setTranslationQuestions([...translationQuestions,{ question: text, english: engText, bangla: inputField2?.value, date, time }]);
+                        setTranslationQuestions([...translationQuestions, { question: text, english: engText, bangla: inputField2?.value, date, time }]);
                         setTranslationQuestionsLan(translationQuestions?.length)
-        
+
                     }
                     else {
                         toast.error(data.message);
                     }
-        
+
                 })
-        
-          }
+
+        }
 
 
 
@@ -395,30 +337,30 @@ if(user){
 
             //start the part to store data in localStorage
 
-                // Retrieve the array from local storage
-                // const storedArrayTranslationQuestions = localStorage.getItem('translationQuestions');
-                // let storedArray = [];
+            // Retrieve the array from local storage
+            // const storedArrayTranslationQuestions = localStorage.getItem('translationQuestions');
+            // let storedArray = [];
 
-                // // Check if the stored array exists
-                // if (storedArrayTranslationQuestions) {
-                //     storedArray = JSON.parse(storedArrayTranslationQuestions);
-                // }
+            // // Check if the stored array exists
+            // if (storedArrayTranslationQuestions) {
+            //     storedArray = JSON.parse(storedArrayTranslationQuestions);
+            // }
 
-                // // Add a new element to the array
-                // const newElement = { question: text, english: engText, bangla: inputField2?.value, date, time };
-                // storedArray.push(newElement);
-                // console.log(newElement)
+            // // Add a new element to the array
+            // const newElement = { question: text, english: engText, bangla: inputField2?.value, date, time };
+            // storedArray.push(newElement);
+            // console.log(newElement)
 
-                // setTranslationQuestions(storedArray)
+            // setTranslationQuestions(storedArray)
 
-                // // Convert the modified array back to a string
-                // const updatedArrayString = JSON.stringify(storedArray);
+            // // Convert the modified array back to a string
+            // const updatedArrayString = JSON.stringify(storedArray);
 
-                // // Store the updated array in local storage
-                // localStorage.setItem('translationQuestions', updatedArrayString);
+            // // Store the updated array in local storage
+            // localStorage.setItem('translationQuestions', updatedArrayString);
 
 
-            
+
 
             setText("");
             inputField2.value = ""
@@ -439,6 +381,14 @@ if(user){
 
 
     }
+
+    // ***** select printer section ************************
+
+    const [selectedPrinter, setSelectedPrinter] = useState('');
+
+    const handlePrinterChange = (e) => {
+        setSelectedPrinter(e.target.value);
+    };
 
 
     return (
@@ -522,6 +472,55 @@ if(user){
                         </button>
                     </div>
                 </div>
+
+
+                {/* section to select the specific printer to get the proper ans for this particular printer */}
+              
+
+                <div className="flex justify-around w-8/12">
+                    <div>
+                    <label>
+                        <input
+                            type="radio"
+                            value="Dot Printer"
+                            checked={selectedPrinter === 'Dot Printer'}
+                            onChange={handlePrinterChange}
+                        />
+                        Dot Printer
+                    </label>
+                    </div>
+
+                   <div>
+                   <label>
+                        <input
+                            type="radio"
+                            value="Thermal Printer"
+                            checked={selectedPrinter === 'Thermal Printer'}
+                            onChange={handlePrinterChange}
+                        />
+                        Thermal Printer
+                    </label>
+                   </div>
+
+                  <div>
+                  <label>
+                        <input
+                            type="radio"
+                            value="Attendance"
+                            checked={selectedPrinter === 'Attendance'}
+                            onChange={handlePrinterChange}
+                        />
+                        Attendance
+                    </label>
+                  </div>
+
+
+                </div>
+
+
+                <p>Selected Printer: {selectedPrinter}</p>
+
+
 
 
                 {/* create this part to show all the possible answers */}

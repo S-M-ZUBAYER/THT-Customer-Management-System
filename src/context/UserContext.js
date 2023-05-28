@@ -29,8 +29,6 @@ const UserContext = ({ children }) => {
     const [unknownQuestionsLan,setUnknownQuestionsLan]=useState(Number);
     const [translationQuestionsLan,setTranslationQuestionsLan]=useState(Number);
 
-console.log(translationQuestions);
-console.log("userContext")
 
 
 //############ Get the value from local storage  ###################

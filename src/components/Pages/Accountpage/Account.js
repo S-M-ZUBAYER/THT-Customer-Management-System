@@ -45,12 +45,10 @@ const Account = () => {
             },
           });
           setTotalQuestions(response.data);
-          console.log(response.data)
           if(totalQuestions){
              setTotalQuestionsLan(totalQuestions.length);
              setUnknownPercent( unknownCalculatePercentage(totalQuestions,unknownQuestions));
              setTranslationPercent( translateCalculatePercentage(totalQuestions,translationQuestions));
-             console.log(totalQuestions)
           }
          
          
@@ -71,9 +69,7 @@ const Account = () => {
           setUnknownQuestions(response.data);
           if(unknownQuestions){
             setUnknownQuestionsLan(unknownQuestions.length);
-          console.log(totalQuestionsLan,unknownQuestionsLan);
          setUnknownPercent( unknownCalculatePercentage(totalQuestions,unknownQuestions));
-         console.log(unknownPercent)
 
           }
           
@@ -93,11 +89,8 @@ const Account = () => {
           });
           setTranslationQuestions(response.data);
           if(translationQuestions){
-              console.log(translationQuestions)
             setTranslationQuestionsLan(translationQuestions.length);
-          console.log("this is the part for translations questions",totalQuestionsLan,translationQuestionsLan);
          setTranslationPercent( translateCalculatePercentage(totalQuestions,translationQuestions));
-         console.log(translationPercent)
 
           }
           
@@ -140,8 +133,7 @@ const Account = () => {
     }
 
 
-   
-console.log(translationQuestions)
+
 
     return (
         <div className="mt-32 md:mx-36">
@@ -159,7 +151,7 @@ console.log(translationQuestions)
                 </div>
 
                 {/* create this part to show the user information */}
-                <div className="text-start mt-10 md:mt-0 ">
+                <div className="text-start mt-20 md:mt-0 ">
                     <div className="ml-20 md:ml-0 mx-auto md:mx-0">
 
                         <div className="test-center">
@@ -210,7 +202,7 @@ console.log(translationQuestions)
 
             {/* create this part to show all of the data try to get according to the customer questions */}
             <div className="mb-10 text-base">
-                <div className="flex justify-between text-3xl bg-red-200 py-1 font-bold mt-5 px-4">
+                <div className="flex justify-between text-3xl bg-red-200 py-1 font-bold mt-32 px-4">
                     <h2 className="">total Questions</h2>
                     <MdDeleteOutline onClick={handleToDeleteAllData} className='text-2xl cursor-pointer'></MdDeleteOutline>
                 </div>
@@ -249,7 +241,7 @@ console.log(translationQuestions)
 
 
 {/* create this part to show all of the store data which question didn't get properly*/}
-                <div className="flex justify-between text-3xl bg-red-200 py-1 font-bold mt-5 px-4">
+                <div className="flex justify-between text-3xl bg-red-200 py-1 font-bold mt-20 px-4">
                     <h2 className="">Unknown Questions</h2>
                     <div className="flex items-center">
                         <p>{unknownPercent}% </p>
@@ -294,7 +286,7 @@ console.log(translationQuestions)
 
 {/* create this part to show all of the store translation data which translation didn't get properly*/}
 
-                <div className="flex justify-between text-3xl bg-red-200 py-1 font-bold mt-5 px-4">
+                <div className="flex justify-between text-3xl bg-red-200 py-1 font-bold mt-20 px-4">
                     <h2 className="">Translation Questions</h2>
                     <div className="flex items-center">
                         <p >{translationPercent}% </p>
@@ -322,8 +314,8 @@ console.log(translationQuestions)
                                     <tr key={item.id}>
                                         <td>{index+1}</td>
                                         <td className="text-start">{item?.question}</td>
-                                        <td>{item?.english}</td>
-                                        <td>{item?.bangla}</td>
+                                        <td className="text-start">{item?.english}</td>
+                                        <td className="text-start">{item?.bangla}</td>
                                         <td>{item?.time}</td>
                                         <td>{item?.date}</td>
                                         <td>

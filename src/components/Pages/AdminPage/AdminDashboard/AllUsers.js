@@ -1,23 +1,18 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FiEdit } from 'react-icons/fi';
 import { RiDeleteBin7Line } from 'react-icons/ri';
+import { toast } from 'react-hot-toast';
 
-
-
-const handleToEdit = () => {
-    console.log("Edit CLick")
-}
-
-const handleToDelete = () => {
-    console.log("Delete CLick")
-}
-
- 
 
 const AllUsers = () => {
-    const [users, setUsers] = useState([]);
 
+  //create useState for the user and update 
+  const [users, setUsers] = useState([]);
+  const [editingUser, setEditingUser] = useState(null);
+
+
+//start the part to get all the users from database
     axios.get('http://localhost:5000/tht/allUsers')
   .then(response => {
     setUsers(response.data);
@@ -27,88 +22,142 @@ const AllUsers = () => {
   });
 
 
-   
-
-
-    return (
-        <div className="w-full pb-20">
-            <h1 className="my-5 text-lg font-semibold">
-                User Information
-            </h1>
-            <div>
-    </div>
-
-            <div className=" w-11/12 mx-auto py-2 my-2 grid lg:grid-cols-12 text-start text-lg font-semibold bg-slate-300  px-2">
-                <div className=" col-span-12 lg:col-span-7 grid grid-cols-3 my-2 lg:my-0">
-                    <p>
-                        Name
-                    </p>
-                    <p className="">
-                        Email
-                    </p>
-                    <p>
-                        Phone No
-                    </p>
-                </div>
-                <div className=" col-span-12 lg:col-span-5 grid grid-cols-5">
-                    <p className="col-span-2">
-                        Designation
-                    </p>
-                    <p>
-                        Country
-                    </p>
-                    <p>
-                        Language
-                    </p>
-
-                    <div className="grid grid-cols-2 pt-1">
-                        <FiEdit onClick={handleToEdit} className="hover:cursor-pointer"></FiEdit>
-                        <RiDeleteBin7Line onClick={handleToDelete} className="hover:cursor-pointer"></RiDeleteBin7Line>
-                    </div>
-
-                </div>
-
-            </div>
-            {
-                users.map((Element, index) => {
-                    return <button key={index} className=" w-11/12 mx-auto py-2 my-2 grid lg:grid-cols-12 text-start bg-slate-100 hover:bg-cyan-50 cursor-pointer rounded-lg px-2 ">
-                        <div className=" col-span-12 lg:col-span-7 grid grid-cols-3 my-2 lg:my-0">
-                            <p>
-                                {Element?.name}
-                            </p>
-                            <p className="">
-                                {Element?.email}
-                            </p>
-                            <p>
-                                {Element?.phone}
-                            </p>
-                        </div>
-                        <div className=" col-span-12 lg:col-span-5 grid grid-cols-5">
-                            <p className="col-span-2">
-                                {Element?.designation}
-                            </p>
-                            <p>
-                                {Element?.country}
-                            </p>
-                            <p>
-                                {Element?.language}
-                            </p>
-
-                            <div className="grid grid-cols-2">
-                                <FiEdit onClick={handleToEdit} className="hover:cursor-pointer"></FiEdit>
-                                <RiDeleteBin7Line onClick={handleToDelete} className="hover:cursor-pointer"></RiDeleteBin7Line>
-                            </div>
-
-                        </div>
-
-                    </button>
-                })
-            }
+//create a function to delete a user from the frontend and database both side 
+  const deleteUser = async (userId) => {
+    try {
+      await axios.delete(`http://localhost:5000/tht/users/delete/${userId}`);
+      toast.success('User deleted successfully');
+      setUsers(users.filter((user) => user.id !== userId));
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      toast.error('Failed to delete user');
+    }
+  };
+  const openEditModal = (user) => {
+    setEditingUser(user);
+  };
 
 
 
+  //create a function to update a user from the frontend and database both side 
+  const updateUser = async (userId, editingUser) => {
+    try {
+      const response = await axios.put(`http://localhost:5000/tht/users/update/${userId}`, editingUser);
+      toast.success("user information updated successfully");
+      // Optionally, you can show a success message to the user using a toast or other UI notification.
+    } catch (error) {
+      toast.error('Error updating user:', error);
+      // Optionally, you can show an error message to the user using a toast or other UI notification.
+    }
+  };
+  const saveUser = (userId,updatedUser) => {
+    updateUser(userId, updatedUser);
+    setUsers(users.map((user) => (user.id === updatedUser.id ? updatedUser : user)));
+    setEditingUser(null);
+  };
+
+
+
+  return (
+    <div>
+      <table className="w-full">
+        <thead className="bg-orange-200">
+          <tr className="py-2">
+            <th className="text-start pl-2 py-2">Name</th>
+            <th className="text-start">Email</th>
+            <th className="text-start">Phone</th>
+            <th className="text-start">Designation</th>
+            <th className="text-start">Language</th>
+            <th className="text-start">Country</th>
+            <th>Edit</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map((user) => (
+            <tr key={user.id} className="my-5">
+              <td className="text-start pl-2 py-2" >{user.name}</td>
+              <td className="text-start">{user.email}</td>
+              <td className="text-start">{user.phone}</td>
+              <td className="text-start">{user.designation}</td>
+              <td className="text-start">{user.language}</td>
+              <td className="text-start">{user.country}</td>
+              <td>
+                <button className="text-blue-500" onClick={() => openEditModal(user)}>
+                  <FiEdit></FiEdit>
+                </button>
+                </td>
+                <td>
+                <button className="text-red-500" onClick={() => deleteUser(user.id)}>
+                  <RiDeleteBin7Line></RiDeleteBin7Line>
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+
+
+{/* modal part start from here to update a user information */}
+      {editingUser && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+          <div className="bg-white p-8">
+            <h2 className="text-lg font-bold mb-4">Edit User</h2>
+            <input
+              type="text"
+              placeholder="Name"
+              value={editingUser.name}
+              onChange={(e) => setEditingUser({ ...editingUser, name: e.target.value })}
+              className="mb-2 px-4 py-2 border border-gray-300 rounded-md w-full"
+            />
+            <input
+              type="email"
+              placeholder="Email"
+              readOnly
+              value={editingUser.email}
+              onChange={(e) => setEditingUser({ ...editingUser, email: e.target.value })}
+              className="mb-2 px-4 py-2 border border-gray-300 rounded-md w-full"
+            />
+            <input
+              type="text"
+              placeholder="Phone"
+              value={editingUser.phone}
+              onChange={(e) => setEditingUser({ ...editingUser, phone: e.target.value })}
+              className="mb-2 px-4 py-2 border border-gray-300 rounded-md w-full"
+            />
+            <input
+              type="text"
+              placeholder="Designation"
+              value={editingUser.designation}
+              onChange={(e) => setEditingUser({ ...editingUser, designation: e.target.value })}
+              className="mb-2 px-4 py-2 border border-gray-300 rounded-md w-full"
+            />
+            <input
+              type="text"
+              placeholder="Language"
+              value={editingUser.language}
+              onChange={(e) => setEditingUser({ ...editingUser, language: e.target.value })}
+              className="mb-2 px-4 py-2 border border-gray-300 rounded-md w-full"
+            />
+            <input
+              type="text"
+              placeholder="Country"
+              value={editingUser.country}
+              onChange={(e) => setEditingUser({ ...editingUser, country: e.target.value })}
+              className="mb-2 px-4 py-2 border border-gray-300 rounded-md w-full"
+            />
+            <button
+              className="bg-blue-500 text-white px-4 py-2 rounded-md"
+              onClick={() => saveUser(editingUser.id,editingUser)}
+            >
+              Save
+            </button>
+          </div>
         </div>
-    );
+      )}
+    </div>
+  );
 };
 
 export default AllUsers;
