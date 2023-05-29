@@ -22,6 +22,7 @@ const CustomerServicePart = () => {
     const inputField1 = document.getElementById("input1");
     const inputField2 = document.getElementById("input2");
     const inputField3 = document.getElementById("input3");
+    const [filterAns, setFilterAns] = useState([])
 
 
     //use useContext to got data from any component
@@ -31,6 +32,7 @@ const CustomerServicePart = () => {
     // create this function to send the data to the backend for translation and get the possible answers according to the customer questions.
     const handleSubmit = (e) => {
         e.preventDefault();
+        setSelectedPrinter("")
 
         //create this part so that any one cannot send the data without input anythings
         if (!text) {
@@ -106,6 +108,7 @@ const CustomerServicePart = () => {
             .then(response => response.json())
             .then(data => {
                 // Handle the data returned by the Python backend
+               
 
                 setChineseAnswer(data?.answers_CN);
                 setEnglishAnswer(data?.answers_EN);
@@ -157,6 +160,83 @@ const CustomerServicePart = () => {
 
 
     };
+
+
+
+
+    //create 3 function to divided the answer in 3 categories
+
+    const handleToDotPrinterAns = () => {
+       
+
+        fetch('https://grozziie.zjweiting.com:8032/get_response', {
+            method: 'POST',
+            body: formData,
+
+        })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the data returned by the Python backend
+              
+
+                setChineseAnswer(data?.answers_CN.filter((product) => product[2].includes("Dot")));
+                setEnglishAnswer(data?.answers_EN.filter((product) => product[2].includes("Dot")));
+                setBengaliAnswer(data?.answers_BN.filter((product) => product[2].includes("Dot")));
+              }  )
+
+        console.log(chineseAnswer)
+            
+    }
+
+
+    const handleToThermalPrinterAns = () => {
+        // setChineseAnswer(chineseAnswer.filter((product) => product[2].includes("Thermal")));
+        // setEnglishAnswer(englishAnswer.filter((product) => product[2].includes("Thermal")));
+        // setBengaliAnswer(bengaliAnswer.filter((product) => product[2].includes("Thermal")));
+        // console.log(chineseAnswer)
+        
+        fetch('https://grozziie.zjweiting.com:8032/get_response', {
+            method: 'POST',
+            body: formData,
+
+        })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the data returned by the Python backend
+                
+
+                setChineseAnswer(data?.answers_CN.filter((product) => product[2].includes("Thermal")));
+                setEnglishAnswer(data?.answers_EN.filter((product) => product[2].includes("Thermal")));
+                setBengaliAnswer(data?.answers_BN.filter((product) => product[2].includes("Thermal")));
+              }  )
+
+        console.log(chineseAnswer)
+    }
+
+    const handleToAttendanceMachineAns = () => {
+        // setChineseAnswer(chineseAnswer.filter((product) => product[2].includes("Attendance")));
+        // setEnglishAnswer(englishAnswer.filter((product) => product[2].includes("Attendance")));
+        // setBengaliAnswer(bengaliAnswer.filter((product) => product[2].includes("Attendance")));
+        // console.log(chineseAnswer)
+
+        fetch('https://grozziie.zjweiting.com:8032/get_response', {
+            method: 'POST',
+            body: formData,
+
+        })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the data returned by the Python backend
+               
+
+                setChineseAnswer(data?.answers_CN.filter((product) => product[2].includes("Attendance")));
+                setEnglishAnswer(data?.answers_EN.filter((product) => product[2].includes("Attendance")));
+                setBengaliAnswer(data?.answers_BN.filter((product) => product[2].includes("Attendance")));
+              }  )
+
+        console.log(chineseAnswer)
+    
+    }
 
 
 
@@ -475,50 +555,53 @@ const CustomerServicePart = () => {
 
 
                 {/* section to select the specific printer to get the proper ans for this particular printer */}
-              
+
 
                 <div className="flex justify-around w-8/12">
                     <div>
-                    <label>
-                        <input
-                            type="radio"
-                            value="Dot Printer"
-                            checked={selectedPrinter === 'Dot Printer'}
-                            onChange={handlePrinterChange}
-                        />
-                        Dot Printer
-                    </label>
+                        <label>
+                            <input
+                                type="radio"
+                                value="Dot Printer"
+                                checked={selectedPrinter === 'Dot Printer'}
+                                onChange={handlePrinterChange}
+                                onClick={handleToDotPrinterAns}
+                            />
+                            Dot Printer
+                        </label>
                     </div>
 
-                   <div>
-                   <label>
-                        <input
-                            type="radio"
-                            value="Thermal Printer"
-                            checked={selectedPrinter === 'Thermal Printer'}
-                            onChange={handlePrinterChange}
-                        />
-                        Thermal Printer
-                    </label>
-                   </div>
+                    <div>
+                        <label>
+                            <input
+                                type="radio"
+                                value="Thermal Printer"
+                                checked={selectedPrinter === 'Thermal Printer'}
+                                onChange={handlePrinterChange}
+                                onClick={handleToThermalPrinterAns}
+                            />
+                            Thermal Printer
+                        </label>
+                    </div>
 
-                  <div>
-                  <label>
-                        <input
-                            type="radio"
-                            value="Attendance"
-                            checked={selectedPrinter === 'Attendance'}
-                            onChange={handlePrinterChange}
-                        />
-                        Attendance
-                    </label>
-                  </div>
+                    <div>
+                        <label>
+                            <input
+                                type="radio"
+                                value="Attendance"
+                                checked={selectedPrinter === 'Attendance'}
+                                onChange={handlePrinterChange}
+                                onClick={handleToAttendanceMachineAns}
+                            />
+                            Attendance
+                        </label>
+                    </div>
 
 
                 </div>
 
 
-                <p>Selected Printer: {selectedPrinter}</p>
+               
 
 
 

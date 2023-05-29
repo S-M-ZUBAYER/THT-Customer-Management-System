@@ -56,17 +56,25 @@ const QuestionAnswerTable = ({ questionAnswers, onDelete, onEdit }) => {
             <td className="border px-4 py-2">{index+1}</td>
             <td className="border px-4 py-2">{questionAnswer.question}</td>
             <td className="border px-4 py-2">{questionAnswer.answer}</td>
-            <td className="border px-4 py-2">{(questionAnswer.date.split("T"))[0]}</td>
-            <td className="border px-4 py-2">{questionAnswer.time}</td>
+            <td className="border px-4 py-2">
+            {
+              questionAnswer.date?(questionAnswer?.date?.split("T"))[0] :"Date"    
+            }
+            </td>
+            <td className="border px-4 py-2">
+            {
+              questionAnswer.time?questionAnswer.time :"Time"    
+            }
+            </td>
             <td className="border px-4 py-2">
               <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mr-2"
+                className="bg-green-500 hover:bg-blue-700 text-white font-bold py-1 px-4 mr-2 rounded-tl-lg rounded-br-lg"
                 onClick={() => handleEdit(questionAnswer)}
               >
                 Edit
               </button>
               <button
-                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4"
+                className="bg-yellow-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded-tl-lg rounded-br-lg"
                 onClick={() => handleDelete(questionAnswer.id)}
               >
                 Delete
