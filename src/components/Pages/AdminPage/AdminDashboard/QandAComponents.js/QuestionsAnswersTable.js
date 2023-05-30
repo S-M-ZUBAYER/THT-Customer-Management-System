@@ -7,6 +7,7 @@ const QuestionAnswerTable = ({ questionAnswers, onDelete, onEdit }) => {
   const [editedDate, setEditedDate] = useState('');
   const [editedTime, setEditedTime] = useState('');
 
+
   const handleDelete = (id) => {
     onDelete(id);
   };
@@ -102,10 +103,11 @@ const QuestionAnswerTable = ({ questionAnswers, onDelete, onEdit }) => {
               onChange={(e) => setEditedAnswer(e.target.value)}
             />
             <input
-              type="date"
+              type="text"
               className="border w-full p-2 mb-4"
-              placeholder="Date"
-              value={editedDate}
+              placeholder="date"
+              value={editedDate.split("T")[0]}
+              readOnly
               onChange={(e) => setEditedDate(e.target.value)}
             />
             <input
@@ -113,6 +115,7 @@ const QuestionAnswerTable = ({ questionAnswers, onDelete, onEdit }) => {
               className="border w-full p-2 mb-4"
               placeholder="Time"
               value={editedTime}
+              readOnly
               onChange={(e) => setEditedTime(e.target.value)}
             />
             <div className="flex justify-end">

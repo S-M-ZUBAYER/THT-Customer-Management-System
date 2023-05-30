@@ -33,7 +33,6 @@ function QandA() {
     }
   };
 
-  console.log(questionAnswer)
 
   
 
