@@ -109,7 +109,10 @@ const AddMallProducts = () => {
                 </form>
 
                 <div className="mx-2 my-3 grid grid-cols-7  text-start text-lg font-semibold bg-slate-300 px-2 py-2">
-                    <div className=" col-span-6 grid grid-cols-2">
+                    <div className=" col-span-6 grid grid-cols-3">
+                        <p>
+                            Image
+                        </p>
                         <p>
                             product Name
                         </p>
@@ -127,9 +130,8 @@ const AddMallProducts = () => {
                 {mallProduct?.map((product, index) => (
                     // <Link to={`/admin/mallProduct/details/${product?.Model},`}>
                     <div className="mx-2 my-3 grid grid-cols-7  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">
-                        <Link key={index} to={`/admin/mallProduct/details/${product?.modelNumber}}`} onClick={() => setProduct(product)} className=" col-span-6 grid grid-cols-2">
-                            <img className=" h-5/6 w-5/6 rounded-lg" src={`${product.productImg}`} alt={product.productName} ></img>
-                            {/* <img className=" h-5/6 w-5/6 rounded-lg" src="projects\Try customer service\customer server\uploads" alt={product.productName} ></img> */}
+                        <Link key={index} to={`/admin/mallProduct/details/${product?.modelNumber}}`} onClick={() => setProduct(product)} className=" col-span-6 grid grid-cols-3">
+                            <img className=" h-10 w-10 rounded-full" src={`http://localhost:5000/tht/mallProductImages/${product.productImg}`} alt={product.productName} ></img>
 
                             <p>
                                 {product?.productName}

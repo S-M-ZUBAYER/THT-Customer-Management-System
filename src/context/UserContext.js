@@ -28,6 +28,8 @@ const UserContext = ({ children }) => {
     const [totalQuestionsLan,setTotalQuestionsLan]=useState(Number);
     const [unknownQuestionsLan,setUnknownQuestionsLan]=useState(Number);
     const [translationQuestionsLan,setTranslationQuestionsLan]=useState(Number);
+    const [category, setCategory] = useState('');
+    const [categories, setCategories] = useState([]);
 
 
 
@@ -146,7 +148,7 @@ const UserContext = ({ children }) => {
 
 
     //store data in authInfo to send the data in useContext so that we can got this data from any component
-    const authInfo = { user, loading, createUser, signIn, logOut, signInWithGoogle, signInWithFacebook, resetPassword,translationQuestions,setTranslationQuestions, totalQuestions, setTotalQuestions,setTotalQuestionsLan,setUnknownQuestionsLan, translationQuestions, setTranslationQuestions, unknownQuestions, setUnknownQuestions,unknownCalculatePercentage,translateCalculatePercentage,unknownPercent, setUnknownPercent,translationPercent, setTranslationPercent,totalQuestionsLan,unknownQuestionsLan,translationQuestionsLan,setTranslationQuestionsLan };
+    const authInfo = { user, loading, createUser, signIn, logOut, signInWithGoogle, signInWithFacebook, resetPassword,translationQuestions,setTranslationQuestions, totalQuestions, setTotalQuestions,setTotalQuestionsLan,setUnknownQuestionsLan, translationQuestions, setTranslationQuestions, unknownQuestions, setUnknownQuestions,unknownCalculatePercentage,translateCalculatePercentage,unknownPercent, setUnknownPercent,translationPercent, setTranslationPercent,totalQuestionsLan,unknownQuestionsLan,translationQuestionsLan,setTranslationQuestionsLan,category, setCategory,categories, setCategories };
 
 
     return (

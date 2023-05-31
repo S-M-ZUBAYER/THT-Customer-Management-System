@@ -21,6 +21,7 @@ import AfterSales from "../../components/Pages/AdminPage/AdminDashboard/ProductD
 import AfterSalesInstruction from "../../components/Pages/AdminPage/AdminDashboard/ProductDetailsOutlet/AfterSalesInstruction";
 import Inventory from "../../components/Pages/AdminPage/AdminDashboard/ProductDetailsOutlet/Inventory";
 import Invoice from "../../components/Pages/AdminPage/AdminDashboard/ProductDetailsOutlet/Invoice";
+import ShowIcons from "../../components/Pages/AdminPage/AdminDashboard/IconsCategory/ShowIcons";
 
 
 export const routes=createBrowserRouter([
@@ -82,8 +83,12 @@ export const routes=createBrowserRouter([
             },
             {
                 path:"/admin/icon",
-                element:<AddIcon></AddIcon>
+                element:<AddIcon></AddIcon>, 
             },
+                {
+                    path:"/admin/icon/:name",
+                    element:<ShowIcons></ShowIcons>
+                    },
             {
                 path:"/admin/mallProduct",
                 element:<AddMallProducts></AddMallProducts>

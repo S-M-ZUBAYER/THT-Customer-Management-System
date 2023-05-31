@@ -1,12 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import addIcon from "../../../../Assets/Images/Admin/AddIcon.jpg"
 import { toast } from "react-hot-toast";
-import { MdDelete } from 'react-icons/md';
-import { AiOutlineDownload } from 'react-icons/ai';
+
 import axios from "axios";
 import html2canvas from 'html2canvas';
 import CategoryList from "./IconsComponent/Category";
 import { AuthContext } from "../../../../context/UserContext";
+import IconsCategoryList from "./IconsCategory/IconsCategoryList";
 
 function AddIcon() {
   const [image, setImage] = useState(null);
@@ -32,6 +32,17 @@ function AddIcon() {
     toast.success("Icon has already prepare to store")
   }
 
+
+  useEffect(()=>{
+    axios.get("http://localhost:5000/tht/categories")
+    .then(res=>{
+      setCategories(JSON.parse(res.data[0]?.allcategories));
+    })
+    .catch(err=>console.log(err))
+  })
+
+  
+
   function handleUpload(event) {
     event.preventDefault();
     const formData = new FormData();
@@ -54,35 +65,10 @@ function AddIcon() {
     })
   }
 
-//create a function to delete icon from the frontend and database both side 
-const handleToDelete = async (id) => {
-  try {
-    await axios.delete(`http://localhost:5000/tht/icons/delete/${id}`);
-    toast.success('Icon deleted successfully');
-    setIcons(icons.filter((icon) => icon.id !== id));
-  } catch (error) {
-    console.error('Error deleting user:', error);
-    toast.error('Failed to delete Icon');
-  }
+
+const handleSelectChange = (e) => {
+  setSelectedCategory(e.target.value);
 };
-
-const  handleToDownload=(icon)=>{
-  const imageURL = `http://localhost:5000/tht/images/${icon}`; // Replace with your image URL
-
-  fetch(imageURL)
-    .then((response) => response.blob())
-    .then((blob) => {
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'image.jpg'; // Specify the desired filename
-      a.click();
-      URL.revokeObjectURL(url);
-    })
-    .catch((error) => {
-      console.error('Error downloading image:', error);
-    });
-}
 
 
   return (
@@ -104,6 +90,15 @@ const  handleToDownload=(icon)=>{
         <img className="h-4/5 w-4/5" src={addIcon}></img>
         <input type="file" className="hidden" accept="image/*" onChange={handleImageChange} />
       </label>
+
+      <select value={selectedCategory} onChange={handleSelectChange}>
+        <option value="">Select a category</option>
+        {categories.map((cat, index) => (
+          <option key={index} value={cat}>{cat}</option>
+        ))}
+      </select>
+
+
       <button
         className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-10 px-20 ml-5 rounded-lg"
         onClick={handleUpload}
@@ -111,20 +106,14 @@ const  handleToDownload=(icon)=>{
       >
         Add Icon
       </button>
-      <div className="grid sm:grid-cols-4 md:grid-cols-8 gap-4">
-      {
-        icons.map((element,index)=>{
-          return <div  className=" relative">
-            <AiOutlineDownload onClick={()=>handleToDownload(element?.icon)} className=" absolute top-0 hover:cursor-pointer text-green-500"></AiOutlineDownload>
-            <MdDelete onClick={()=>handleToDelete(element?.id)} className=" absolute right-0 hover:cursor-pointer text-red-500"></MdDelete>
-            <img key={index} id="myDiv" className=" inline-block w-28 h-28" src={`http://localhost:5000/tht/images/${element.icon}`} alt="Icon"></img>
-            </div>
-        })
-      }
-      </div>
+      
       
     </form> 
     </div>
+<IconsCategoryList
+categories={categories}
+></IconsCategoryList>
+
     </div>
 
     

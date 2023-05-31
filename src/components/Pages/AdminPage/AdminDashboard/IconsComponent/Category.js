@@ -1,60 +1,33 @@
-// import React, { useState } from 'react';
 
-// const CategoryList = ({category, setCategory,categories, setCategories,selectedCategory, setSelectedCategory }) => {
 
-//   const handleCategoryChange = (e) => {
-//     setCategory(e.target.value);
-//   };
-
-//   const handleAddCategory = () => {
-//     if (category.trim() !== '') {
-//       setCategories((prevCategories) => [...prevCategories, category]);
-//       setCategory('');
-//     }
-//   };
-
-//   return (
-//     <div>
-//       <h1>Category List</h1>
-//       <input type="text" value={category} onChange={handleCategoryChange} placeholder="Enter category name" />
-//       <button onClick={handleAddCategory}>Add</button>
-
-//       <ul>
-//         {categories.map((cat, index) => (
-//           <li key={index}>{cat}</li>
-//         ))}
-//       </ul>
-//     </div>
-//   );
-// };
-
-// export default CategoryList;
-
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { toast } from 'react-hot-toast';
+import { AuthContext } from '../../../../../context/UserContext';
 
-const CategoryList = ({category, setCategory,categories, setCategories,selectedCategory, setSelectedCategory }) => {
-
+const CategoryList = () => {
+  const {category, setCategory,categories, setCategories}=useContext(AuthContext);
 
   const handleCategoryChange = (e) => {
     setCategory(e.target.value);
+    console.log(category)
   };
 
   const handleAddCategory = () => {
     if (category.trim() !== '') {
-      setCategories((prevCategories) => [...prevCategories, category]);
+      const newCategories=[...categories,category]
+      setCategories(newCategories);
       //load current user data from database
-      console.log(categories)
+      console.log(categories,"set All categories")
       fetch('http://localhost:5000/tht/categories/add', {
-          method: 'POST',
+          method: 'PUT',
           headers: {
               'content-type': 'application/json'
           },
-          body: JSON.stringify({categories })
+          body: JSON.stringify(categories)
       })
           .then(res => res.json())
           .then(data => {
-              if (data?.insertId) {
+              if (data) {
                   toast.success('New Category stored Successfully');
                  
               }
@@ -70,24 +43,30 @@ const CategoryList = ({category, setCategory,categories, setCategories,selectedC
 
   };
 
-  const handleSelectChange = (e) => {
-    setSelectedCategory(e.target.value);
-  };
+
+  // //create a function to update a user from the frontend and database both side 
+  // const updateUser = async (userId, editingUser) => {
+  //   try {
+  //     const response = await axios.put(`http://localhost:5000/tht/users/update/${userId}`, editingUser);
+  //     toast.success("user information updated successfully");
+  //     // Optionally, you can show a success message to the user using a toast or other UI notification.
+  //   } catch (error) {
+  //     toast.error('Error updating user:', error);
+  //     // Optionally, you can show an error message to the user using a toast or other UI notification.
+  //   }
+  // };
+
+
+
 
   return (
     <div>
-      <h1>Category List</h1>
-      <input type="text" value={category} onChange={handleCategoryChange} placeholder="Enter category name" />
-      <button onClick={handleAddCategory}>Add</button>
+      <h1 className="text-2xl font-bold text-yellow-900 my-5">Add Category</h1>
+      <input type="text" value={category} onChange={(e)=>handleCategoryChange(e)} placeholder="Enter category name" className="pl-2" />
+      <div>
 
-      <select value={selectedCategory} onChange={handleSelectChange}>
-        <option value="">Select a category</option>
-        {categories.map((cat, index) => (
-          <option key={index} value={cat}>{cat}</option>
-        ))}
-      </select>
-
-      {selectedCategory && <p>Selected category: {selectedCategory}</p>}
+      <button className="px-4 py-1 mt-5 bg-lime-200 font-semibold rounded-lg" onClick={handleAddCategory}>Add</button>
+      </div>
     </div>
   );
 };
