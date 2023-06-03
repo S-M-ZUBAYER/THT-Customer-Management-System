@@ -22,6 +22,45 @@ function  AddProduct({product}) {
   const [productImg, setProductImg] = useState(null);
   const [invoiceFile, setInvoiceFile] = useState(null);
 
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [selectedVideos, setSelectedVideos] = useState([]);
+  // const handleUpload = async () => {
+  //   const formData = new FormData();
+
+  //   // Append selected images to the form data
+  //   for (let i = 0; i < selectedImages.length; i++) {
+  //     formData.append('images', selectedImages[i]);
+  //   }
+
+  //   // Append selected videos to the form data
+  //   for (let i = 0; i < selectedVideos.length; i++) {
+  //     formData.append('videos', selectedVideos[i]);
+  //   }
+
+  //   console.log(selectedImages)
+
+  //   // try {
+  //   //   const response = await axios.post('/upload', formData, {
+  //   //     headers: {
+  //   //       'Content-Type': 'multipart/form-data'
+  //   //     }
+  //   //   });
+  //   //   console.log(response.data); // Response from the server
+  //   // } catch (error) {
+  //   //   console.error('Error uploading files:', error);
+  //   // }
+  // };
+
+
+
+  const handleImageChange = (e) => {
+    setSelectedImages(e.target.files);
+  };
+
+  const handleVideoChange = (e) => {
+    setSelectedVideos(e.target.files);
+  };
+
 
   const handleProductNameChange = (e) => {
     setProductName(e.target.value);
@@ -73,42 +112,6 @@ function  AddProduct({product}) {
 
 
 
-  // const handleInvoiceFileChange = (e) => {
-  //   setInvoiceFile(e.target.files[0]);
-  // };
-
-  // const handleImageUpload = async (e) => {
-  //   e.preventDefault();
-  //   const formData = new FormData();
-  //   formData.append('image', e.target.files[0]);
-  //   formData.append('key', process.env.REACT_APP_IMG_BB_API_KEY);
-  //   const res = await axios.post('https://api.imgbb.com/1/upload', formData);
-  //   setPreviewImage(res.data.data.url);
-  // };
-
-  // const handleSubmit = (e) => {   
-  //   e.preventDefault();
-  //   const product = {
-  //     productName,
-  //     productPrice,
-  //     productDescription,
-  //     modelNumber,
-  //     printerColor,
-  //     connectorType,
-  //     stockQuantity,
-  //     shelfStartTime,
-  //     shelfEndTime,
-  //     afterSalesText,
-  //     afterSalesInstruction,
-  //     inventoryText,
-  //     invoiceFile,
-  //     previewImage,
-  //   };
-  //   // Add your code to save the product object into an array or a database
-  //   console.log(product)
-  // };
-
-
   const handleProductImgUpload = (event) => {
     const file = event.target.files[0];
     setProductImg(file);
@@ -137,7 +140,16 @@ function  AddProduct({product}) {
     formData.append('afterSalesText', afterSalesText);
     formData.append('afterSalesInstruction', afterSalesInstruction);
     formData.append('inventoryText', inventoryText);
+    // Append selected images to the form data
+    for (let i = 0; i < selectedImages.length; i++) {
+      formData.append('images', selectedImages[i]);
+    }
 
+    // Append selected videos to the form data
+    for (let i = 0; i < selectedVideos.length; i++) {
+      formData.append('videos', selectedVideos[i]);
+    }
+console.log(formData);
     try {
       await axios.post('http://localhost:5000/tht/mallProducts/add', formData, {
         headers: {
@@ -154,6 +166,8 @@ function  AddProduct({product}) {
       setPrinterColor('');
       setConnectorType('');
       setStockQuantity('');
+      setSelectedImages([]);
+      setSelectedVideos([]);
       setShelfStartTime('');
       setShelfEndTime('');
       setAfterSalesText('');
@@ -283,6 +297,16 @@ function  AddProduct({product}) {
               required
             />
           </div>
+
+
+      <input className='mt-5' type="file" multiple onChange={handleImageChange} accept="image/*" />
+      <input className='mb-5' type="file" multiple onChange={handleVideoChange} accept="video/*" />
+      
+
+      
+
+
+
           <div className="mb-4">
             <label htmlFor="shelfTimeStart" className="block text-start text-gray-700 font-bold mb-2">
               Shelf Time 

@@ -1,51 +1,54 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { RiDeleteBin7Line } from 'react-icons/ri';
-import { BsFiletypePdf } from 'react-icons/bs';
+import { AiFillFileText } from 'react-icons/ai';
 import pdfLogo from "../../../../../Assets/Images/Icons/pdfLogo.jpg"
+import { AllProductContext } from '../../../../../context/ProductContext';
 
 const Invoice = () => {
 const handleToDelete=()=>{
 console.log("delete")
 }
 
-const inv=[
-    {
-        name: "Product name",
-        date: "12-02-23",
-        time: "12:23"
-    },
-    {
-        name: "Product name",
-        date: "14-12-22",
-        time: "11:23"
-    },
-    {
-        name: "Product name",
-        date: "17-02-19",
-        time: "12:00"
-    },
-    {
-        name: "Product name",
-        date: "18-02-18",
-        time: "04:23"
-    },
-]
+
+const {Product}=useContext(AllProductContext);
+const handleToDownload=()=>{
+    const fileUrl = `http://localhost:5000/tht/mallProductImages/${Product?.invoiceFile}`;
+
+    fetch(fileUrl)
+      .then((response) => response.blob())
+      .then((blob) => {
+        const url = window.URL.createObjectURL(new Blob([blob]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `${Product?.invoiceFile}`);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      })
+      .catch((error) => {
+        console.error('Error downloading file:', error);
+      });
+}
+
+
 
     return (
         <div>
-            {inv?.map((product,index)=>{
-return <div key={index} className="mx-2 my-3 grid grid-cols-9  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">
-<div className=" col-span-8 grid grid-cols-4">
-   <img className="h-6 w-6" src={pdfLogo}></img>
+            <h1>Available Invoice Documents</h1>
+            {/* {inv?.map((product,index)=>{ */}
+ <div  className="mx-2 my-3 grid grid-cols-9  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">
+<div className=" col-span-8 grid grid-cols-4" onClick={handleToDownload} >
+   {/* <img className="h-6 w-6" src={pdfLogo}></img> */}
+   <AiFillFileText className=" text-amber-400 h-6 w-6" ></AiFillFileText>
 
     <p>
-        {product?.name}
+        {Product?.invoiceFile}
     </p>
     <p className="">
-        {product?.date}
+        {Product?.date}
     </p>
     <p className="">
-        {product?.time}
+        {Product?.time}
     </p>
 </div>
 
@@ -53,7 +56,7 @@ return <div key={index} className="mx-2 my-3 grid grid-cols-9  text-start bg-sla
     <RiDeleteBin7Line onClick={handleToDelete} className="hover:cursor-pointer"></RiDeleteBin7Line>
 </div>
 </div>
-            })}
+            {/* })} */}
         </div>
     );
 };
