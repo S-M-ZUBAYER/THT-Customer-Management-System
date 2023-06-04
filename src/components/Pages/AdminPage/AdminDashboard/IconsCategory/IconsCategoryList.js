@@ -9,7 +9,7 @@ const IconsCategoryList = ({categories}) => {
   return (
     <div>
       <h1 className="text-3xl my-5 font-bold text-green-400">All Available Categories</h1>
-    <div className="grid grid-cols-5">
+    <div className="grid grid-cols-3 md:grid-cols-5">
         {categories.map((category, index) => (
           
             <Link  to={`/admin/icon/${category}`} className="my-5 mx-auto">

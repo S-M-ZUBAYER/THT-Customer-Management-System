@@ -114,7 +114,7 @@ const Navbar = () => {
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100  hover:font-semibold hover:text-zinc-900"
                             role="menuitem"
                           >
-                            Customer Service 1
+                            Automatic Service
                           </Link>
                           <Link
                             to="/customer-2"
@@ -122,7 +122,7 @@ const Navbar = () => {
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:font-semibold hover:text-zinc-900"
                             role="menuitem"
                           >
-                            Customer Service 2
+                            Manual Service
                           </Link>
 
                         </div>

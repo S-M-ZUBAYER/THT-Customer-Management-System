@@ -139,7 +139,7 @@ const updateUser = async (userId, editingUser) => {
 
 
   return (
-    <div className="mx-20 my-32">
+    <div className="mx-2 md:mx-20 my-5 md:my-32">
     <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
       <div className="mb-4">
         <label className="block text-gray-400 mb-2 pl-2 text-start" htmlFor="name">

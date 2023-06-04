@@ -533,10 +533,10 @@ const CustomerServicePart = () => {
 
 
                 {/* create store button to call the function store the unknown questions to the database */}
-                <div className="w-5/12 flex ml-auto">
+                <div className="w-7/12 md:w-5/12 flex ml-auto">
                     <div className="w-full flex justify-end">
                         <button onClick={handleToUnknownStore}
-                            className=" bg-yellow-400 hover:bg-blue-200   px-10 text-black font-bold py-1 rounded focus:outline-none focus:shadow-outline"
+                            className=" bg-yellow-400 hover:bg-blue-200  px-1 md:px-10 text-black font-semibold md:font-bold py-1 rounded focus:outline-none focus:shadow-outline"
                         >
                             Store
                         </button>
@@ -546,7 +546,7 @@ const CustomerServicePart = () => {
                     {/* create store Translate button to call the function store miss translation part to the database */}
                     <div className="w-full flex justify-end">
                         <button onClick={handleToStoreTranslate}
-                            className=" bg-green-400 hover:bg-blue-200   px-10 text-black font-bold py-1 rounded focus:outline-none focus:shadow-outline"
+                            className=" bg-green-400 hover:bg-blue-200   px-1 md:px-10 text-black font-semibold md:font-bold py-1 rounded focus:outline-none focus:shadow-outline"
                         >
                             Store Translate
                         </button>
@@ -567,7 +567,7 @@ const CustomerServicePart = () => {
                                 onChange={handlePrinterChange}
                                 onClick={handleToDotPrinterAns}
                             />
-                            Dot Printer
+                                Dot Printer
                         </label>
                     </div>
 
@@ -580,7 +580,7 @@ const CustomerServicePart = () => {
                                 onChange={handlePrinterChange}
                                 onClick={handleToThermalPrinterAns}
                             />
-                            Thermal Printer
+                                Thermal Printer
                         </label>
                     </div>
 
@@ -593,7 +593,7 @@ const CustomerServicePart = () => {
                                 onChange={handlePrinterChange}
                                 onClick={handleToAttendanceMachineAns}
                             />
-                            Attendance
+                                Attendance
                         </label>
                     </div>
 

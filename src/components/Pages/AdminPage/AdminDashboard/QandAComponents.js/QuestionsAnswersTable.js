@@ -43,39 +43,39 @@ const QuestionAnswerTable = ({ questionAnswers, onDelete, onEdit }) => {
     <table className="table-auto w-full border-4">
       <thead>
         <tr>
-          <th className="px-4 py-2">No</th>
-          <th className="px-4 py-2">Question</th>
-          <th className="px-4 py-2">Answer</th>
-          <th className="px-4 py-2">Date</th>
-          <th className="px-4 py-2">Time</th>
-          <th className="px-4 py-2">Actions</th>
+          <th className="md:px-4 py-2">No</th>
+          <th className="md:px-4 py-2">Question</th>
+          <th className="md:px-4 py-2">Answer</th>
+          <th className="md:px-4 py-2">Date</th>
+          <th className="md:px-4 py-2">Time</th>
+          <th className="md:px-4 py-2">Actions</th>
         </tr>
       </thead>
       <tbody>
         {questionAnswers.map((questionAnswer,index) => (
           <tr key={questionAnswer.id}>
-            <td className="border px-4 py-2">{index+1}</td>
-            <td className="border px-4 py-2">{questionAnswer.question}</td>
-            <td className="border px-4 py-2">{questionAnswer.answer}</td>
-            <td className="border px-4 py-2">
+            <td className="border md:px-4 py-2">{index+1}</td>
+            <td className="border md:px-4 py-2">{questionAnswer.question}</td>
+            <td className="border md:px-4 py-2">{questionAnswer.answer}</td>
+            <td className="border md:px-4 py-2">
             {
               questionAnswer.date?(questionAnswer?.date?.split("T"))[0] :"Date"    
             }
             </td>
-            <td className="border px-4 py-2">
+            <td className="border md:px-4 py-2">
             {
               questionAnswer.time?questionAnswer.time :"Time"    
             }
             </td>
-            <td className="border px-4 py-2">
+            <td className="border md:px-4 py-2">
               <button
-                className="bg-green-500 hover:bg-blue-700 text-white font-bold py-1 px-4 mr-2 rounded-tl-lg rounded-br-lg"
+                className="bg-green-500 hover:bg-blue-700 text-white font-semibold md:font-bold py-1 mb-1 md:mb:0 px-2 md:px-4 mr-2 rounded-tl-lg rounded-br-lg"
                 onClick={() => handleEdit(questionAnswer)}
               >
                 Edit
               </button>
               <button
-                className="bg-yellow-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded-tl-lg rounded-br-lg"
+                className="bg-yellow-500 hover:bg-red-700 text-white font-semibold md:font-bold py-1 px-2 md:px-4 rounded-tl-lg rounded-br-lg"
                 onClick={() => handleDelete(questionAnswer.id)}
               >
                 Delete

@@ -3,7 +3,7 @@ import axios from 'axios';
 import addImg from "../../../../Assets/Images/Admin/Vector.jpg"
 import { toast } from 'react-hot-toast';
 
-function  AddProduct({product}) {
+function AddProduct({ product }) {
   const [productName, setProductName] = useState('');
   const [productPrice, setProductPrice] = useState('');
   const [productDescription, setProductDescription] = useState('');
@@ -149,7 +149,7 @@ function  AddProduct({product}) {
     for (let i = 0; i < selectedVideos.length; i++) {
       formData.append('videos', selectedVideos[i]);
     }
-console.log(formData);
+    console.log(formData);
     try {
       await axios.post('http://localhost:5000/tht/mallProducts/add', formData, {
         headers: {
@@ -177,31 +177,35 @@ console.log(formData);
       setInvoiceFile(null);
     } catch (error) {
       console.error('Error creating product:', error);
+      toast.error("Failed to upload, Please input every data properly")
     }
   };
+
+
+
 
   return (
     <div className="md:flex md:flex-row">
       <div className="w-1/2 p-8 ">
         <img src={previewImage} alt="" className="mb-4 mx-auto h-1/4 w-2/3" />
-        
+
         {/* <label>Product Image:</label> */}
-      <input type="file"
-       onChange={handleProductImgUpload}
-       className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-10 px-3 lg:px-10 lg:ml-5 rounded-lg"
-        accept="image/*" />
+        <input type="file"
+          onChange={handleProductImgUpload}
+          className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-10 px-3 lg:px-10 lg:ml-5 rounded-lg required"
+          accept="image/*" />
         {/* <input 
         type="file"
         onChange={handleImageUpload}
         placeholder=""
         className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-10 px-3 lg:px-10 lg:ml-5 rounded-lg"
         /> */}
-       
+
       </div>
       <div className="w-1/2 p-8">
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-          
+
             <input
               type="text"
               id="productName"
@@ -213,7 +217,7 @@ console.log(formData);
             />
           </div>
           <div className="mb-4">
-            
+
             <input
               type="digit"
               id="productPrice"
@@ -285,7 +289,7 @@ console.log(formData);
           </div>
           <div className="my-8 mt-16 grid  grid-cols-3 text-start mr-14">
             <label htmlFor="modelNumber" className="block col-span-1 text-gray-700 font-bold mb-2">
-               Stock Quantity
+              Stock Quantity
             </label>
             <input
               type="text"
@@ -299,41 +303,41 @@ console.log(formData);
           </div>
 
 
-      <input className='mt-5' type="file" multiple onChange={handleImageChange} accept="image/*" />
-      <input className='mb-5' type="file" multiple onChange={handleVideoChange} accept="video/*" />
-      
+          <input className='mt-5 required' type="file" multiple onChange={handleImageChange} accept="image/*" />
+          <input className='mb-5 required' type="file" multiple onChange={handleVideoChange} accept="video/*" />
 
-      
+
+
 
 
 
           <div className="mb-4">
             <label htmlFor="shelfTimeStart" className="block text-start text-gray-700 font-bold mb-2">
-              Shelf Time 
+              Shelf Time
             </label>
             <div className="flex items-center justify-between">
-            <input
-              type="datetime-local"
-              id="shelfTimeStart"
-              className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              value={shelfStartTime}
-              onChange={handleShelfStartTimeChange}
-              required
-            />
-            <input
-              type="datetime-local"
-              id="shelfTimeEnd"
-              className="shadow appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              value={shelfEndTime}
-              onChange={handleShelfEndTimeChange}
-              required
-            />
+              <input
+                type="datetime-local"
+                id="shelfTimeStart"
+                className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                value={shelfStartTime}
+                onChange={handleShelfStartTimeChange}
+                required
+              />
+              <input
+                type="datetime-local"
+                id="shelfTimeEnd"
+                className="shadow appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                value={shelfEndTime}
+                onChange={handleShelfEndTimeChange}
+                required
+              />
             </div>
           </div>
-          
+
           <div className="mb-4">
             <label htmlFor="afterSales" className="block text-gray-700 font-bold mb-2 text-start">
-              After-Sales 
+              After-Sales
             </label>
             <textarea
               id="afterSales"
@@ -375,10 +379,10 @@ console.log(formData);
               Invoice
             </label>
             <input type="file"
-             onChange={handleInvoiceFileUpload} 
-             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-             accept=".csv, .pdf, .xls, .xlsx" />
-      
+              onChange={handleInvoiceFileUpload}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline required"
+              accept=".csv, .pdf, .xls, .xlsx" />
+
             {/* <input
               type="file"
               id="invoice"
@@ -389,11 +393,11 @@ console.log(formData);
             /> */}
           </div>
           <button
-                        className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-10 px-20 rounded-lg"
-                        onClick={handleSubmit}
-                    >
-                        Save
-                    </button>
+            className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-10 px-20 rounded-lg"
+            onClick={handleSubmit}
+          >
+            Save
+          </button>
         </form>
       </div>
     </div>

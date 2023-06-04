@@ -6,7 +6,7 @@ const AfterSalesInstruction = () => {
     return (
         <div className="mx-20 text-start my-20">
              <div>
-                <h2 className="text-center text-xl font-semibold my-8">
+                <h2 className="text-center text-xl font-semibold my-8 text-amber-400">
                 After-sales Instructions
                 </h2>
                 <p>

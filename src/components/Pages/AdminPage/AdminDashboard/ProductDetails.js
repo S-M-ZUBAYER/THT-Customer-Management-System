@@ -8,7 +8,7 @@ import { AllProductContext } from '../../../../context/ProductContext';
 function ProductDetails() {
     const { Product } = useContext(AllProductContext);
 
-    console.log(Product)
+   
 
     const [selectedImage, setSelectedImage] = useState(null);
     const [selectedVideo, setSelectedVideo] = useState(null);
@@ -44,7 +44,7 @@ function ProductDetails() {
                 <div className="px-4 sm:px-6 lg:px-8 py-12">
                     <div className="flex flex-col md:flex-row md:space-x-4">
                         <div className="md:w-1/2 mb-4 flex justify-center">
-                            <img src={`http://localhost:5000/tht/mallProductImages/${Product?.productImg}`} alt="Product" className="rounded-lg w-4/5 h-4/5" />
+                            <img src={`http://localhost:5000/tht/mallProductImages/${Product?.productImg}`} alt="Product" className="rounded-lg w-96 h-96" />
                         </div>
                         <div className="md:w-1/2 text-start pl-5">
                             <div className=" mb-5">
@@ -105,7 +105,7 @@ function ProductDetails() {
                             </div>
 
                             <div className="container">
-                                <h1 className="text-2xl font-bold mb-4">Image Gallery</h1>
+                                <h1 className="text-2xl font-bold mt-8 mb-5">Image Gallery Of <span className="text-amber-400">{Product?.productName}</span></h1>
                                 <div className="grid grid-cols-3 gap-3">
                                     {(Product.allImages).split(",").map((image, index) => (
                                         <img
@@ -139,7 +139,7 @@ function ProductDetails() {
 
 
                             <div className="container">
-                                <h1 className="text-2xl font-bold mb-4">Image Gallery</h1>
+                                <h1 className="text-2xl font-bold  mt-8 mb-5">Video Gallery Of <span className="text-amber-400">{Product?.productName}</span> </h1>
 
                                 <div className="grid grid-cols-3 gap-4">
                                     {((Product?.allVideos).split(",")).map((video, index) => (

@@ -64,8 +64,8 @@ const AllUsers = () => {
         <thead className="bg-orange-200">
           <tr className="py-2">
             <th className="text-start pl-2 py-2">Name</th>
-            <th className="text-start">Email</th>
-            <th className="text-start">Phone</th>
+            <th className="text-start hidden md:block">Email</th>
+            <th className="text-start hidden md:block">Phone</th>
             <th className="text-start">Designation</th>
             <th className="text-start">Language</th>
             <th className="text-start">Country</th>
@@ -76,9 +76,9 @@ const AllUsers = () => {
         <tbody>
           {users.map((user) => (
             <tr key={user.id} className="my-5">
-              <td className="text-start pl-2 py-2" >{user.name}</td>
-              <td className="text-start">{user.email}</td>
-              <td className="text-start">{user.phone}</td>
+              <td className="text-start pl-2 py-2 font-semibold" >{user.name}</td>
+              <td className="text-start hidden md:block">{user.email}</td>
+              <td className="text-start hidden md:block">{user.phone}</td>
               <td className="text-start">{user.designation}</td>
               <td className="text-start">{user.language}</td>
               <td className="text-start">{user.country}</td>

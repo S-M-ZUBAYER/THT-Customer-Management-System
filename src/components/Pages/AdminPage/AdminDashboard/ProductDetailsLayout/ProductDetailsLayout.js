@@ -17,7 +17,7 @@ const ProductDetailsLayout = () => {
           <ul className=" text-sm md:text-base flex items-center gap-3 md:gap-6">
             <li>
               <Link
-              className="text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75 hover:font-semibold hover:text-zinc-900"
+              className="text-gray-500 font-semibold transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75 hover:font-semibold hover:text-zinc-900"
                 to={`/admin/mallProduct/details/${Product?.Model}/afterSales`}
               >
                 After-sales
@@ -26,7 +26,7 @@ const ProductDetailsLayout = () => {
 
             <li>
               <Link
-                className="text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75 hover:font-semibold hover:text-zinc-900"
+                className="text-gray-500 font-semibold transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75 hover:font-semibold hover:text-zinc-900"
                 to={`/admin/mallProduct/details/${Product?.Model}/instruction`}
               >
                 After-sales Instructions
@@ -35,7 +35,7 @@ const ProductDetailsLayout = () => {
 
             <li>
               <Link
-                className="text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75 hover:font-semibold hover:text-zinc-900"
+                className="text-gray-500 font-semibold transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75 hover:font-semibold hover:text-zinc-900"
                 to={`/admin/mallProduct/details/${Product?.Model}/inventory`}
               >
                 Inventory
@@ -44,7 +44,7 @@ const ProductDetailsLayout = () => {
 
             <li>
               <Link
-              className="text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75 hover:font-semibold hover:text-zinc-900"
+              className="text-gray-500 font-semibold transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75 hover:font-semibold hover:text-zinc-900"
               to={`/admin/mallProduct/details/${Product?.Model}/invoice`}
               >
                 Invoice
