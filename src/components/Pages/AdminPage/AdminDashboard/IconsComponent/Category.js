@@ -12,18 +12,20 @@ const CategoryList = () => {
     console.log(category)
   };
 
+
   const handleAddCategory = () => {
+    console.log(categories)
     if (category.trim() !== '') {
       const newCategories=[...categories,category]
       setCategories(newCategories);
       //load current user data from database
-      console.log(categories,"set All categories")
+      console.log(newCategories,"set All categories")
       fetch('http://localhost:5000/tht/categories/add', {
           method: 'PUT',
           headers: {
               'content-type': 'application/json'
           },
-          body: JSON.stringify(categories)
+          body: JSON.stringify(newCategories)
       })
           .then(res => res.json())
           .then(data => {
@@ -62,7 +64,7 @@ const CategoryList = () => {
   return (
     <div>
       <h1 className="text-2xl font-bold text-yellow-900 my-5">Add Category</h1>
-      <input type="text" value={category} onChange={(e)=>handleCategoryChange(e)} placeholder="Enter category name" className="pl-2" />
+      <input type="text" value={category} onChange={(e)=>handleCategoryChange(e)} placeholder="Enter category name" className="pl-2 text-center" />
       <div>
 
       <button className="px-4 py-1 mt-5 bg-lime-200 font-semibold rounded-lg" onClick={handleAddCategory}>Add</button>

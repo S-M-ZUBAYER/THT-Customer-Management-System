@@ -4,6 +4,7 @@ import { RiDeleteBin7Line } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
 import ProductContext, { AllProductContext } from '../../../../context/ProductContext';
 import axios from 'axios';
+import { toast } from 'react-hot-toast';
 
 
 
@@ -27,17 +28,19 @@ const AddMallProducts = () => {
 //     console.log(error);
 //   });
 
-  useEffect(() => {
-    fetch('http://localhost:5000/event')
-      .then(response => response.json())
-      .then(data => setEventProduct(data));
-  }, []);
+// use useEffect to load the all mall product from data base
+useEffect(() => {
+    fetch('http://localhost:5000/tht/eventProducts')
+        .then(response => response.json())
+        .then(data => setEventProduct(data));
+}, []);
 
-  const handleToSearch = (event) => {
+ //create a function to got the specific searching products
+ const handleToSearch = (event) => {
     event.preventDefault();
     // filter products array based on search term
     const filteredProducts = eventProduct.filter((product) =>
-        product?.name.toLowerCase().includes(searchTerm.toLowerCase())
+        product?.modelNumber.toLowerCase().includes(searchTerm.toLowerCase())
     );
     // update products state with filtered products
     setEventProduct(filteredProducts);
@@ -49,11 +52,21 @@ const AddMallProducts = () => {
 
     }
 
-    const handleToDelete = (model) => {
-        const restProduct=eventProduct.filter(product=>(product.modelNo!==model));
-        setEventProduct(restProduct)
- 
-     }
+
+     //create a function to delete  any specific product
+     const handleToDelete = async (productId) => {
+        try {
+            await axios.delete(`http://localhost:5000/tht/eventProducts/delete/${productId}`);
+            toast.success(`One MallProduct deleted successfully`);
+            const restProduct=eventProduct.filter(product=>(product?.id!==productId));
+            setEventProduct(restProduct)
+        } catch (error) {
+            console.error('Error deleting user:', error);
+            toast.error('Failed to delete mall Product');
+        }
+
+    };
+    
 
 
     const handleSubmit = () => {
@@ -90,7 +103,10 @@ const AddMallProducts = () => {
                 </form>
 
                 <div className="mx-2 my-3 grid grid-cols-7  text-start text-lg font-semibold bg-slate-300 px-2 py-2">
-                    <div className=" col-span-6 grid grid-cols-2">
+                    <div className=" col-span-6 grid grid-cols-3">
+                        <p>
+                            Image
+                        </p>
                         <p>
                             product Name
                         </p>
@@ -100,30 +116,35 @@ const AddMallProducts = () => {
                     </div>
 
                     <div className="flex items-center justify-around">
-                        <FiEdit onClick={handleToEdit} className="hover:cursor-pointer"></FiEdit>
-                        <RiDeleteBin7Line onClick={handleToDelete} className="hover:cursor-pointer"></RiDeleteBin7Line>
+                        {/* <FiEdit></FiEdit> */}
+                        <RiDeleteBin7Line></RiDeleteBin7Line>
                     </div>
                 </div>
                 
                 {eventProduct?.map((product,index) => (
-                    //  <Link key={index} to={`/admin/eventProduct/details/${product?.Model}`} onClick={()=>setProduct(product)} >
-                    <div className="mx-2 my-3 grid grid-cols-7  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">
-                    <Link key={index} to={`/admin/mallProduct/details/${product?.Model}}`} onClick={() => setProduct(product)} className=" col-span-6 grid grid-cols-2">
-                            <p >
-                                {product?.name}
-                            </p>
-                            <p >
-                                {product?.modelNo}
-                            </p>
-                        </Link>
+                     // <Link to={`/admin/mallProduct/details/${product?.Model},`}>
+                     <div className="mx-2 my-3 grid grid-cols-7  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">
+                     <Link key={index} to={`/admin/eventProduct/details/${product?.modelNumber}}`} onClick={() => setProduct(product)} className=" col-span-6 grid grid-cols-3">
+                         <img className=" h-10 w-10 rounded-full" src={`http://localhost:5000/tht/eventProductImages/${product.productImg}`} alt={product.productName} ></img>
 
-                        <div className="flex items-center justify-around">
-                            <FiEdit onClick={handleToEdit} className="hover:cursor-pointer hover:text-2xl"></FiEdit>
-                            <RiDeleteBin7Line onClick={()=>handleToDelete(product?.modelNo)} className="hover:cursor-pointer hover:text-2xl"></RiDeleteBin7Line>
-                        </div>
+                         <p>
+                             {product?.productName}
+                         </p>
+                         <p className="">
+                             {product?.modelNumber}
+                         </p>
+                     </Link>
 
-                    </div>
-                    // </Link>
+                     <div className="flex items-center justify-around">
+                         {/* <button className="text-blue-500 hover:cursor-pointer hover:text-2xl" onClick={() => openEditModal(product)}>
+                             <FiEdit></FiEdit>
+                         </button>
+                         {isModalOpen && (
+                             <ModalForEdit product={selectedProduct} onSave={handleSave} onClose={handleCloseModal} />
+                         )} */}
+                         <RiDeleteBin7Line onClick={() => handleToDelete(product?.id)} className="hover:cursor-pointer hover:text-2xl"></RiDeleteBin7Line>
+                     </div>
+                 </div>
                 ))}
             </div>
 

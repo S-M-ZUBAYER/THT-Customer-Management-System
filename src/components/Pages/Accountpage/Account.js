@@ -117,20 +117,79 @@ const Account = () => {
     }
 
 
-    //create 3 functions to  delete data from localStorage
+    
 
-    const handleToDeleteAllData = () => {
-        localStorage.removeItem('totalQuestions');
-        setTotalQuestions([])
+    //create a function to delete all question from the frontend and database both side 
+  const handleToDeleteAllData = async () => {
+    try {
+      await axios.delete(`http://localhost:5000/tht/questions/delete/${user?.email}`);
+      toast.success('All questions deleted successfully');
+      setTotalQuestions(totalQuestions.filter((question) => question?.email !== user?.email));
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      toast.error('Failed to delete user');
     }
-    const handleToDeleteUnknownData = () => {
-        localStorage.removeItem('unknownQuestions');
-        setUnknownQuestions([])
+  };
+
+   //create a function to delete all unknown question from the frontend and database both side 
+   const handleToDeleteUnknownData = async () => {
+    try {
+      await axios.delete(`http://localhost:5000/tht/unknownQuestions/delete/${user?.email}`);
+      toast.success('All unknown questions deleted successfully');
+      setUnknownQuestions([]);
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      toast.error('Failed to delete user');
     }
-    const handleToDeleteTranslateData = () => {
-        localStorage.removeItem('translationQuestions');
-        setTranslationQuestions([])
+  };
+
+
+  const handleToDeleteOneUnknownQuestions=async(id)=>{
+    try {
+        await axios.delete(`http://localhost:5000/tht/unknownQuestions/deleteById/${id}`);
+        toast.success('A unknownQuestion deleted successfully');
+        setUnknownQuestions(unknownQuestions.filter((question) => question?.id !== id));
+      } catch (error) {
+        console.error('Error deleting user:', error);
+        toast.error('Failed to delete user');
+      }
+  }
+
+
+   //create a function to delete all unknown question from the frontend and database both side 
+   const handleToDeleteTranslateData = async () => {
+    try {
+      await axios.delete(`http://localhost:5000/tht/translateData/delete/${user?.email}`);
+      toast.success('All translate questions deleted successfully');
+      setTranslationQuestions([]);
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      toast.error('Failed to delete user');
     }
+  };
+
+
+  const handleToDeleteTranslationQuestions=async(id)=>{
+    try {
+        await axios.delete(`http://localhost:5000/tht/translationQuestions/deleteById/${id}`);
+        toast.success('A unknownQuestion deleted successfully');
+        setTranslationQuestions(translationQuestions.filter((question) => question?.id !== id));
+      } catch (error) {
+        console.error('Error deleting user:', error);
+        toast.error('Failed to delete user');
+      }
+  }
+  
+
+    
+    // const handleToDeleteUnknownData = () => {
+    //     localStorage.removeItem('unknownQuestions');
+    //     setUnknownQuestions([])
+    // }
+    // const handleToDeleteTranslateData = () => {
+    //     localStorage.removeItem('translationQuestions');
+    //     setTranslationQuestions([])
+    // }
 
 
 
@@ -271,9 +330,8 @@ const Account = () => {
                                         <td>{item?.date}</td>
                                         
                                         <td>
-                                            {/* <button onClick={() => handleToDeleteOneUnknownQuestions(index,unknownQuestions)}> */}
                                             <button>
-                                                <MdDeleteOutline className='ml-5 text-2xl cursor-pointer'></MdDeleteOutline>
+                                                <MdDeleteOutline onClick={()=>handleToDeleteOneUnknownQuestions(item.id)} className='ml-5 text-2xl cursor-pointer'></MdDeleteOutline>
                                             </button>
                                         </td>
                                     </tr>
@@ -320,7 +378,7 @@ const Account = () => {
                                         <td>{item?.date}</td>
                                         <td>
                                             <button>
-                                                <MdDeleteOutline className='ml-5 text-2xl cursor-pointer'></MdDeleteOutline>
+                                            <MdDeleteOutline onClick={()=>handleToDeleteTranslationQuestions(item.id)} className='ml-5 text-2xl cursor-pointer'></MdDeleteOutline>
                                             </button>
                                         </td>
                                     </tr>

@@ -14,9 +14,8 @@ function AddIcon() {
   const [selectedCategory, setSelectedCategory] = useState('');
 
   const [category, setCategory] = useState('');
-  const [categories, setCategories] = useState([]);
 
-  const {user}=useContext(AuthContext);
+  const {user,categories,setCategories}=useContext(AuthContext);
 
   useEffect(()=>{
     axios.get("http://localhost:5000/tht/icons")
@@ -26,6 +25,16 @@ function AddIcon() {
     .catch(err=>console.log(err))
   })
 
+  useEffect(() => {
+    fetch('http://localhost:5000/tht/categories')
+        .then(response => response.json())
+        .then(data =>{
+          console.log(data)
+          setCategories(JSON.parse(data[0]?.allcategories))
+          console.log(categories)
+        });
+}, []);
+
   function handleImageChange(event) {
     const file = event.target.files[0];
     setImage(file);
@@ -33,13 +42,13 @@ function AddIcon() {
   }
 
 
-  useEffect(()=>{
-    axios.get("http://localhost:5000/tht/categories")
-    .then(res=>{
-      setCategories(JSON.parse(res.data[0]?.allcategories));
-    })
-    .catch(err=>console.log(err))
-  })
+  // useEffect(()=>{
+  //   axios.get("http://localhost:5000/tht/categories")
+  //   .then(res=>{
+  //     setCategories(JSON.parse(res.data[0]?.allcategories));
+  //   })
+  //   .catch(err=>console.log(err))
+  // })
 
   
 

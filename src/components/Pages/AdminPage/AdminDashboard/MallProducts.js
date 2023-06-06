@@ -222,7 +222,7 @@ const AddMallProducts = () => {
                     </div>
 
                     <div className="flex items-center justify-around">
-                        <FiEdit></FiEdit>
+                        {/* <FiEdit></FiEdit> */}
                         <RiDeleteBin7Line></RiDeleteBin7Line>
                     </div>
                 </div>
@@ -242,12 +242,12 @@ const AddMallProducts = () => {
                         </Link>
 
                         <div className="flex items-center justify-around">
-                            <button className="text-blue-500 hover:cursor-pointer hover:text-2xl" onClick={() => openEditModal(product)}>
+                            {/* <button className="text-blue-500 hover:cursor-pointer hover:text-2xl" onClick={() => openEditModal(product)}>
                                 <FiEdit></FiEdit>
                             </button>
                             {isModalOpen && (
                                 <ModalForEdit product={selectedProduct} onSave={handleSave} onClose={handleCloseModal} />
-                            )}
+                            )} */}
                             <RiDeleteBin7Line onClick={() => handleToDelete(product?.id)} className="hover:cursor-pointer hover:text-2xl"></RiDeleteBin7Line>
                         </div>
                     </div>
@@ -269,7 +269,7 @@ const AddMallProducts = () => {
 
             {/* mall product update */}
             {/* modal part start from here to update a user information */}
-            {editingProduct && (
+            {/* {editingProduct && (
                 <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
                     <div className="bg-white p-8">
                         <h2 className="text-lg font-bold mb-4">Edit User</h2>
@@ -324,7 +324,7 @@ const AddMallProducts = () => {
                         </button>
                     </div>
                 </div>
-            )}
+            )} */}
 
 
 

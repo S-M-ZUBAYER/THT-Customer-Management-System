@@ -9,7 +9,7 @@ const AfterSales = () => {
         return;
     }
     return (
-        <div className="mx-20 text-start my-20">
+        <div className="mx-20 text-start mt-10 mb-20">
             <div>
                 <h2 className="text-center text-xl font-semibold my-8 text-amber-400">
                     After Sales

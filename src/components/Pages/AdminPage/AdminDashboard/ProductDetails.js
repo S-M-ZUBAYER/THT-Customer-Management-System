@@ -7,7 +7,8 @@ import { AllProductContext } from '../../../../context/ProductContext';
 
 function ProductDetails() {
     const { Product } = useContext(AllProductContext);
-
+    const url = window.location.href;
+    const productCategory = url.split('/')[4];
    
 
     const [selectedImage, setSelectedImage] = useState(null);
@@ -44,32 +45,32 @@ function ProductDetails() {
                 <div className="px-4 sm:px-6 lg:px-8 py-12">
                     <div className="flex flex-col md:flex-row md:space-x-4">
                         <div className="md:w-1/2 mb-4 flex justify-center">
-                            <img src={`http://localhost:5000/tht/mallProductImages/${Product?.productImg}`} alt="Product" className="rounded-lg w-96 h-96" />
+                            <img src={`http://localhost:5000/tht/${productCategory==="mallProduct"?"mallProductImages":"eventProductImages"}/${Product?.productImg}`} alt="Product" className="rounded-lg w-96 h-96" />
                         </div>
                         <div className="md:w-1/2 text-start pl-5">
                             <div className=" mb-5">
                                 <h2 className="text-lg font-semibold">Product Name</h2>
-                                <p className="text-sm text-gray-500">
+                                <p className="text-base text-gray-700">
                                     {Product?.productName}
                                 </p>
                             </div>
 
                             <div className=" mb-5">
                                 <h2 className="text-lg font-semibold">Product Price </h2>
-                                <p className="text-sm text-gray-500">
+                                <p className="text-base text-gray-700">
                                     {Product?.productPrice}
                                 </p>
                             </div>
 
                             <div className=" mb-5">
                                 <h2 className="text-lg font-semibold">Product Description</h2>
-                                <p className="text-sm text-gray-500">
+                                <p className="text-base text-gray-700">
                                     {Product?.productDescription}
                                 </p>
                             </div>
 
                             <h2 className="text-lg font-semibold">Product Details</h2>
-                            <div className=" mb-5 grid grid-cols-3 text-gray-500">
+                            <div className=" mb-5 grid grid-cols-3 text-gray-700">
                                 <div className=" text-base font-semibold">
                                     <p className="my-1">Model Number</p>
                                     <p className="my-1">Printer Color</p>
@@ -86,7 +87,7 @@ function ProductDetails() {
                             </div>
                             <div className=" mb-5">
                                 <h2 className="text-lg font-semibold">Product Name</h2>
-                                <p className="text-sm text-gray-500">
+                                <p className="text-base text-gray-700">
                                     {Product?.productName}
                                 </p>
                             </div>
@@ -110,7 +111,7 @@ function ProductDetails() {
                                     {(Product.allImages).split(",").map((image, index) => (
                                         <img
                                             key={index}
-                                            src={`http://localhost:5000/tht/mallProductImages/${image}`}
+                                            src={`http://localhost:5000/tht/${productCategory==="mallProduct"?"mallProductImages":"eventProductImages"}/${image}`}
                                             alt={`Image ${index + 1}`}
                                             onClick={() => handleImageClick(`http://localhost:5000/tht/mallProductImages/${image}`)}
                                             className="w-24 h-24 object-cover cursor-pointer mx-4 my-2 rounded-lg"
@@ -118,12 +119,12 @@ function ProductDetails() {
                                     ))}
                                 </div>
                                 {selectedImage && (
-                                    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
+                                    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-40">
                                         <div className="max-w-3xl max-h-3xl">
                                             <img
                                                 src={selectedImage}
                                                 alt="Selected Image"
-                                                className="mx-auto max-w-full max-h-full"
+                                                className="mx-auto max-w-10/12 max-h-10/12"
                                             />
                                             <button
                                                 onClick={handleCloseImage}
@@ -145,11 +146,11 @@ function ProductDetails() {
                                     {((Product?.allVideos).split(",")).map((video, index) => (
                                         <div
                                             key={index}
-                                            onClick={() => handleVideoClick(`http://localhost:5000/tht/mallProductImages/${video}`)}
+                                            onClick={() => handleVideoClick(`http://localhost:5000/tht/${productCategory==="mallProduct"?"mallProductImages":"eventProductImages"}/${video}`)}
                                             className="relative cursor-pointer"
                                         >
                                             <video
-                                                src={`http://localhost:5000/tht/mallProductImages/${video}`}
+                                                src={`http://localhost:5000/tht/${productCategory==="mallProduct"?"mallProductImages":"eventProductImages"}/${video}`}
                                                 alt={`Video ${index + 1}`}
                                                 className="w-full h-auto rounded-lg"
                                                 controls

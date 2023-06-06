@@ -21,6 +21,7 @@ function AddProduct({ product }) {
   const [fileName, setFileName] = useState("Add Image");
   const [productImg, setProductImg] = useState(null);
   const [invoiceFile, setInvoiceFile] = useState(null);
+  const [invoiceFiles, setInvoiceFiles] = useState(null);
 
   const [selectedImages, setSelectedImages] = useState([]);
   const [selectedVideos, setSelectedVideos] = useState([]);
@@ -50,6 +51,13 @@ function AddProduct({ product }) {
   //   //   console.error('Error uploading files:', error);
   //   // }
   // };
+
+
+  const url = window.location.href;
+    const productCategory = url.split('/')[4]+"s";
+    // const mallProduct = path.split('/');
+
+
 
 
 
@@ -117,9 +125,14 @@ function AddProduct({ product }) {
     setProductImg(file);
   };
 
-  const handleInvoiceFileUpload = (event) => {
-    const file = event.target.files[0];
-    setInvoiceFile(file);
+  // const handleInvoiceFileUpload = (event) => {
+  //   const file = event.target.files[0];
+  //   setInvoiceFile(file);
+  // };
+  const handleInvoiceFileChange = (event) => {
+    const files = event.target.files;
+    const selectedFiles = Array.from(files);
+    setInvoiceFiles(selectedFiles);
   };
 
   const handleSubmit = async (event) => {
@@ -127,7 +140,7 @@ function AddProduct({ product }) {
 
     const formData = new FormData();
     formData.append('productImg', productImg);
-    formData.append('invoiceFile', invoiceFile);
+    // formData.append('invoiceFile', invoiceFile);
     formData.append('productName', productName);
     formData.append('productPrice', productPrice);
     formData.append('productDescription', productDescription);
@@ -140,6 +153,11 @@ function AddProduct({ product }) {
     formData.append('afterSalesText', afterSalesText);
     formData.append('afterSalesInstruction', afterSalesInstruction);
     formData.append('inventoryText', inventoryText);
+
+    // Append selected invoice files to the form data
+    for (let i = 0; i < invoiceFiles.length; i++) {
+      formData.append('invoiceFiles', invoiceFiles[i]);
+    }
     // Append selected images to the form data
     for (let i = 0; i < selectedImages.length; i++) {
       formData.append('images', selectedImages[i]);
@@ -149,15 +167,14 @@ function AddProduct({ product }) {
     for (let i = 0; i < selectedVideos.length; i++) {
       formData.append('videos', selectedVideos[i]);
     }
-    console.log(formData);
+    
     try {
-      await axios.post('http://localhost:5000/tht/mallProducts/add', formData, {
+      await axios.post(`http://localhost:5000/tht/${productCategory}/add`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
-      console.log('Product created successfully!');
-      toast.success('Product created successfully!');
+      toast.success(`${productCategory} Product created successfully!`);
       // Reset form fields
       setProductName('');
       setProductPrice('');
@@ -269,7 +286,7 @@ function AddProduct({ product }) {
               value={printerColor}
               placeholder='Color'
               onChange={handlePrinterColorChange}
-              required
+              
             />
           </div>
           <div className="mb-4 grid  grid-cols-3 text-start mr-14">
@@ -284,7 +301,7 @@ function AddProduct({ product }) {
               placeholder='Bluetooth'
               onChange={handleConnectorTypeChange}
 
-              required
+             
             />
           </div>
           <div className="my-8 mt-16 grid  grid-cols-3 text-start mr-14">
@@ -298,18 +315,28 @@ function AddProduct({ product }) {
               value={stockQuantity}
               placeholder='Add quantity'
               onChange={handleStockQuantityChange}
-              required
+              
             />
           </div>
 
 
-          <input className='mt-5 required' type="file" multiple onChange={handleImageChange} accept="image/*" />
-          <input className='mb-5 required' type="file" multiple onChange={handleVideoChange} accept="video/*" />
+
+          <div className="my-8 mt-16 grid  grid-cols-2 text-start mr-14">
+            <label htmlFor="relatedImages" className="block col-span-1 text-gray-700 font-bold mb-2">
+            Upload related Images
+            </label>
+            <input className='mt-5 mb-8 required' type="file" multiple onChange={handleImageChange} accept="image/*" />
+          </div>
 
 
+          <div className="my-8 mt-16 grid  grid-cols-2 text-start mr-14">
+            <label htmlFor="relatedImages" className="block col-span-1 text-gray-700 font-bold mb-2">
+            Upload related videos
+            </label>
+            <input className='mt-5 mb-8 required' type="file" multiple onChange={handleVideoChange} accept="video/*" />
+          </div>
 
-
-
+        
 
           <div className="mb-4">
             <label htmlFor="shelfTimeStart" className="block text-start text-gray-700 font-bold mb-2">
@@ -378,10 +405,16 @@ function AddProduct({ product }) {
             <label htmlFor="invoice" className="block text-start text-gray-700 font-bold mb-2">
               Invoice
             </label>
-            <input type="file"
+            {/* <input type="file"
               onChange={handleInvoiceFileUpload}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline required"
-              accept=".csv, .pdf, .xls, .xlsx" />
+              accept=".csv, .pdf, .xls, .xlsx" /> */}
+            <input
+              type="file"
+              multiple
+              accept=".csv, .pdf, .xls, .xlsx"
+              onChange={handleInvoiceFileChange}
+            />
 
             {/* <input
               type="file"
