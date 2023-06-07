@@ -212,7 +212,7 @@ function AddProduct({ product }) {
 
   return (
     <div className="md:flex md:flex-row">
-      <div className="w-1/2 p-8 ">
+      <div className="w-full md:w-1/2 p-8 ">
         <img src={previewImage} alt="" className="mb-4 mx-auto h-1/4 w-2/3" />
 
         {/* <label>Product Image:</label> */}
@@ -228,7 +228,7 @@ function AddProduct({ product }) {
         /> */}
 
       </div>
-      <div className="w-1/2 p-8">
+      <div className="w-full md:w-1/2 p-8">
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
 
