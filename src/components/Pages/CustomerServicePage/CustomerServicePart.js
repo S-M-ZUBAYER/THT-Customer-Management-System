@@ -3,6 +3,8 @@ import { AuthContext } from '../../../context/UserContext';
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
 import { handleToCopy } from './FunctionsForCustomerService/FunctionsForCustomerService';
+import BtnSpinner from '../../Shared/Loading/BtnSpinner';
+import DisplaySpinner from '../../Shared/Loading/DisplaySpinner';
 
 const CustomerServicePart = () => {
 
@@ -22,16 +24,22 @@ const CustomerServicePart = () => {
     const inputField1 = document.getElementById("input1");
     const inputField2 = document.getElementById("input2");
     const inputField3 = document.getElementById("input3");
-    const [filterAns, setFilterAns] = useState([])
+    const [filterAns, setFilterAns] = useState([]);
+
+    const [sendLoading, setSendLoading] = useState(false);
+    const [storeLoading, setStoreLoading] = useState(false);
+    const [translateLoading, setTranslateLoading] = useState(false);
+    const [RadioLoading, setRadioLoading] = useState(false);
 
 
     //use useContext to got data from any component
-    const { user, totalQuestions, setTotalQuestions, setTotalQuestionLan, unknownQuestions, totalQuestionsLan, unknownQuestionsLan, setUnknownQuestions, setUnknownQuestionsLan, translationQuestions, setTranslationQuestions, setTranslationQuestionsLan, handleToStoreAllData, handleToDeleteAllData, setTranslationPercent, translateCalculatePercentage, unknownCalculatePercentage, setUnknownPercent } = useContext(AuthContext)
+    const { user, loading, setLoading, totalQuestions, setTotalQuestions, setTotalQuestionLan, unknownQuestions, totalQuestionsLan, unknownQuestionsLan, setUnknownQuestions, setUnknownQuestionsLan, translationQuestions, setTranslationQuestions, setTranslationQuestionsLan, handleToStoreAllData, handleToDeleteAllData, setTranslationPercent, translationPercent, translateCalculatePercentage, unknownCalculatePercentage, setUnknownPercent, unknownPercent } = useContext(AuthContext)
 
 
     // create this function to send the data to the backend for translation and get the possible answers according to the customer questions.
     const handleSubmit = (e) => {
         e.preventDefault();
+        setSendLoading(true);
         setSelectedPrinter("")
 
         //create this part so that any one cannot send the data without input anythings
@@ -108,7 +116,7 @@ const CustomerServicePart = () => {
             .then(response => response.json())
             .then(data => {
                 // Handle the data returned by the Python backend
-               
+
 
                 setChineseAnswer(data?.answers_CN);
                 setEnglishAnswer(data?.answers_EN);
@@ -139,6 +147,8 @@ const CustomerServicePart = () => {
                                 console.log(totalQuestionsLan, unknownQuestionsLan);
                                 setUnknownPercent(unknownCalculatePercentage(totalQuestions, unknownQuestions))
                                 setTranslationPercent(translateCalculatePercentage(totalQuestions, translationQuestions))
+                                console.log(totalQuestions, unknownQuestions,translationQuestions,translationPercent, unknownPercent)
+
 
                             }
                             else {
@@ -150,7 +160,7 @@ const CustomerServicePart = () => {
                 }
 
 
-
+                setSendLoading(false);
 
             })
             .catch(error => {
@@ -167,8 +177,8 @@ const CustomerServicePart = () => {
     //create 3 function to divided the answer in 3 categories
 
     const handleToDotPrinterAns = () => {
-       
 
+        setRadioLoading(true);
         fetch('https://grozziie.zjweiting.com:8032/get_response', {
             method: 'POST',
             body: formData,
@@ -177,24 +187,27 @@ const CustomerServicePart = () => {
             .then(response => response.json())
             .then(data => {
                 // Handle the data returned by the Python backend
-              
+
 
                 setChineseAnswer(data?.answers_CN.filter((product) => product[2].includes("Dot")));
                 setEnglishAnswer(data?.answers_EN.filter((product) => product[2].includes("Dot")));
                 setBengaliAnswer(data?.answers_BN.filter((product) => product[2].includes("Dot")));
-              }  )
+                
+            })
 
         console.log(chineseAnswer)
-            
+        setRadioLoading(false);
+
     }
 
 
     const handleToThermalPrinterAns = () => {
+        setRadioLoading(true);
         // setChineseAnswer(chineseAnswer.filter((product) => product[2].includes("Thermal")));
         // setEnglishAnswer(englishAnswer.filter((product) => product[2].includes("Thermal")));
         // setBengaliAnswer(bengaliAnswer.filter((product) => product[2].includes("Thermal")));
         // console.log(chineseAnswer)
-        
+
         fetch('https://grozziie.zjweiting.com:8032/get_response', {
             method: 'POST',
             body: formData,
@@ -203,17 +216,20 @@ const CustomerServicePart = () => {
             .then(response => response.json())
             .then(data => {
                 // Handle the data returned by the Python backend
-                
+
 
                 setChineseAnswer(data?.answers_CN.filter((product) => product[2].includes("Thermal")));
                 setEnglishAnswer(data?.answers_EN.filter((product) => product[2].includes("Thermal")));
                 setBengaliAnswer(data?.answers_BN.filter((product) => product[2].includes("Thermal")));
-              }  )
+                
+            })
 
         console.log(chineseAnswer)
+        setRadioLoading(false);
     }
 
     const handleToAttendanceMachineAns = () => {
+        setRadioLoading(true);
         // setChineseAnswer(chineseAnswer.filter((product) => product[2].includes("Attendance")));
         // setEnglishAnswer(englishAnswer.filter((product) => product[2].includes("Attendance")));
         // setBengaliAnswer(bengaliAnswer.filter((product) => product[2].includes("Attendance")));
@@ -227,15 +243,15 @@ const CustomerServicePart = () => {
             .then(response => response.json())
             .then(data => {
                 // Handle the data returned by the Python backend
-               
+
 
                 setChineseAnswer(data?.answers_CN.filter((product) => product[2].includes("Attendance")));
                 setEnglishAnswer(data?.answers_EN.filter((product) => product[2].includes("Attendance")));
                 setBengaliAnswer(data?.answers_BN.filter((product) => product[2].includes("Attendance")));
-              }  )
+               
+            })
 
-        console.log(chineseAnswer)
-    
+            setRadioLoading(false);
     }
 
 
@@ -250,7 +266,7 @@ const CustomerServicePart = () => {
             toast.error("please input correct value");
             return;
         }
-
+        setStoreLoading(true);
         // create a new Date object
         const now = new Date();
 
@@ -273,10 +289,14 @@ const CustomerServicePart = () => {
             })
                 .then(res => res.json())
                 .then(data => {
-                    if (data.acknowledged) {
+                    if (data?.insertId) {
                         toast.success('stored Successfully');
                         setUnknownQuestions([...unknownQuestions, { email: user?.email, question: text, date, time }]);
                         setUnknownQuestionsLan(unknownQuestions?.length)
+                        setUnknownPercent(unknownCalculatePercentage(totalQuestions, unknownQuestions))
+                        setTranslationPercent(translateCalculatePercentage(totalQuestions, translationQuestions))
+                        console.log(totalQuestions, unknownQuestions,translationQuestions,translationPercent, unknownPercent,"Unknown")
+
 
                     }
                     else {
@@ -284,7 +304,7 @@ const CustomerServicePart = () => {
                     }
 
                 })
-
+            setStoreLoading(false);
         }
 
 
@@ -359,6 +379,7 @@ const CustomerServicePart = () => {
             toast.error("please input correct value");
             return;
         }
+        setTranslateLoading(true)
 
         // create a new Date object
         const now = new Date();
@@ -386,6 +407,9 @@ const CustomerServicePart = () => {
                         toast.success('translation questions sstored Successfully');
                         setTranslationQuestions([...translationQuestions, { question: text, english: engText, bangla: inputField2?.value, date, time }]);
                         setTranslationQuestionsLan(translationQuestions?.length)
+                        setUnknownPercent(unknownCalculatePercentage(totalQuestions, unknownQuestions))
+                        setTranslationPercent(translateCalculatePercentage(totalQuestions, translationQuestions))
+                        console.log(totalQuestions, unknownQuestions,translationQuestions,translationPercent, unknownPercent,"Translation")
 
                     }
                     else {
@@ -393,6 +417,7 @@ const CustomerServicePart = () => {
                     }
 
                 })
+            setTranslateLoading(false);
 
         }
 
@@ -522,7 +547,12 @@ const CustomerServicePart = () => {
                                 className="bg-[#004368] hover:bg-blue-700   px-10 text-white font-bold py-1 rounded focus:outline-none focus:shadow-outline"
                                 type="submit"
                             >
-                                Send
+                                {
+                                    sendLoading ?
+                                        <BtnSpinner></BtnSpinner>
+                                        : "Send"
+                                }
+
                             </button>
 
                         </div>
@@ -538,7 +568,12 @@ const CustomerServicePart = () => {
                         <button onClick={handleToUnknownStore}
                             className=" bg-yellow-400 hover:bg-blue-200  px-1 md:px-10 text-black font-semibold md:font-bold py-1 rounded focus:outline-none focus:shadow-outline"
                         >
-                            Store
+                            {
+                                storeLoading ?
+                                    <BtnSpinner></BtnSpinner>
+                                    : 'Store'
+                            }
+
                         </button>
                     </div>
 
@@ -548,7 +583,12 @@ const CustomerServicePart = () => {
                         <button onClick={handleToStoreTranslate}
                             className=" bg-green-400 hover:bg-blue-200   px-1 md:px-10 text-black font-semibold md:font-bold py-1 rounded focus:outline-none focus:shadow-outline"
                         >
-                            Store Translate
+                            {
+                                translateLoading ?
+                                    <BtnSpinner></BtnSpinner>
+                                    : 'Store Translate'
+                            }
+
                         </button>
                     </div>
                 </div>
@@ -567,7 +607,7 @@ const CustomerServicePart = () => {
                                 onChange={handlePrinterChange}
                                 onClick={handleToDotPrinterAns}
                             />
-                                Dot Printer
+                            Dot Printer
                         </label>
                     </div>
 
@@ -580,7 +620,7 @@ const CustomerServicePart = () => {
                                 onChange={handlePrinterChange}
                                 onClick={handleToThermalPrinterAns}
                             />
-                                Thermal Printer
+                            Thermal Printer
                         </label>
                     </div>
 
@@ -593,7 +633,7 @@ const CustomerServicePart = () => {
                                 onChange={handlePrinterChange}
                                 onClick={handleToAttendanceMachineAns}
                             />
-                                Attendance
+                            Attendance
                         </label>
                     </div>
 
@@ -601,35 +641,42 @@ const CustomerServicePart = () => {
                 </div>
 
 
-               
+
 
 
 
 
                 {/* create this part to show all the possible answers */}
-                <div className=" flex items-center justify-end">
-                    <div className="text-base font-semibold text-black " id="answerPart">
 
-                        {
-                            chineseAnswer.map((element, index) => <div key={index} className="common border-2 bg-lime-200 my-5 ml-10  p-3 rounded-tl-xl rounded-br-xl">
+                {
+                    sendLoading || RadioLoading ?
+                        <DisplaySpinner></DisplaySpinner>
+                        :
+                        <div className=" flex items-center justify-end">
+                            <div className="text-base font-semibold text-black " id="answerPart">
 
-                                <p onClick={(e) => handleToCopy(e, element[1])} className=" shadow-2xl common text-base rounded-md px-2 mb-2 py-2" id="text-to-copy">
-                                    <span className="text-lg font-bold text-indigo-700">Customer</span>:- {element[1]}
-                                </p>
+                                {chineseAnswer?.length ?
+                                    chineseAnswer.map((element, index) => <div key={index} className="common border-2 bg-lime-200 my-5 ml-10  p-3 rounded-tl-xl rounded-br-xl">
 
-                                <p onClick={(e) => handleToCopy(e, element[1])} id="text-to-copy" className="common text-base  shadow-2xl rounded-md mb-2 p-2">
-                                    <span className="text-lg font-bold text-amber-800">Customer Service</span>:- {bengaliAnswer[index][1]}
-                                </p>
-                                <p onClick={(e) => handleToCopy(e, element[1])} id="text-to-copy" className="common text-base  shadow-2xl  rounded-md p-2">
-                                    <span className="text-lg font-bold text-fuchsia-700">Customer Service</span>:- {englishAnswer[index][1]}
-                                </p>
-                            </div>)
-                        }
-                    </div>
+                                        <p onClick={(e) => handleToCopy(e, element[1])} className=" shadow-2xl common text-base rounded-md px-2 mb-2 py-2" id="text-to-copy">
+                                            <span className="text-lg font-bold text-indigo-700">Customer</span>:- {element[1]}
+                                        </p>
+
+                                        <p onClick={(e) => handleToCopy(e, element[1])} id="text-to-copy" className="common text-base  shadow-2xl rounded-md mb-2 p-2">
+                                            <span className="text-lg font-bold text-amber-800">Customer Service</span>:- {bengaliAnswer[index][1]}
+                                        </p>
+                                        <p onClick={(e) => handleToCopy(e, element[1])} id="text-to-copy" className="common text-base  shadow-2xl  rounded-md p-2">
+                                            <span className="text-lg font-bold text-fuchsia-700">Customer Service</span>:- {englishAnswer[index][1]}
+                                        </p>
+                                    </div>)
+                                    :
+                                    <p className="text-2xl mr-32 mt-20 font-bold text-amber-500">No Answer Available For This Question !!!</p>
+                                }
+                            </div>
 
 
-                </div>
-
+                        </div>
+                }
 
             </div>
 

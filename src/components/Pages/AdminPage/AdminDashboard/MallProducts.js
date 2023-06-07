@@ -7,6 +7,8 @@ import { AllProductContext } from '../../../../context/ProductContext';
 import axios from 'axios';
 import ModalForEdit from './ModalForEdit';
 import { toast } from 'react-hot-toast';
+import { AuthContext } from '../../../../context/UserContext';
+import DisplaySpinner from '../../../Shared/Loading/DisplaySpinner';
 
 
 const AddMallProducts = () => {
@@ -27,12 +29,16 @@ const AddMallProducts = () => {
     //create useState To select any specific product
     const [selectedProduct, setSelectedProduct] = useState(null);
 
+    const {loading,setLoading}=useContext(AuthContext)
+
 
     // use useEffect to load the all mall product from data base
     useEffect(() => {
+        setLoading(true)
         fetch('http://localhost:5000/tht/mallProducts')
             .then(response => response.json())
             .then(data => setMallProduct(data));
+            setLoading(false)
     }, []);
 
     //create a function to got the modal of searching product
@@ -227,10 +233,19 @@ const AddMallProducts = () => {
                     </div>
                 </div>
 
-                {mallProduct?.map((product, index) => (
+                {
+                    loading?
+                    <DisplaySpinner></DisplaySpinner>
+                    :
+
+                mallProduct?.length===0
+                ?
+                <span className="text-xl font-bold text-red-400">No Mall Product Available</span>
+                :
+                mallProduct?.map((product, index) => (
                     // <Link to={`/admin/mallProduct/details/${product?.Model},`}>
-                    <div className="mx-2 my-3 grid grid-cols-7  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">
-                        <Link key={index} to={`/admin/mallProduct/details/${product?.modelNumber}}`} onClick={() => setProduct(product)} className=" col-span-6 grid grid-cols-3">
+                    <div key={index} className="mx-2 my-3 grid grid-cols-7  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">
+                        <Link to={`/admin/mallProduct/details/${product?.modelNumber}}`} onClick={() => setProduct(product)} className=" col-span-6 grid grid-cols-3">
                             <img className=" h-10 w-10 rounded-full" src={`http://localhost:5000/tht/mallProductImages/${product.productImg}`} alt={product.productName} ></img>
 
                             <p>

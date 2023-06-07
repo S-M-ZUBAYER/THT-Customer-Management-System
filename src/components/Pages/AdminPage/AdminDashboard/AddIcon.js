@@ -29,9 +29,7 @@ function AddIcon() {
     fetch('http://localhost:5000/tht/categories')
         .then(response => response.json())
         .then(data =>{
-          console.log(data)
           setCategories(JSON.parse(data[0]?.allcategories))
-          console.log(categories)
         });
 }, []);
 
@@ -60,7 +58,7 @@ function AddIcon() {
     formData.append('categoryName', selectedCategory);
   
     // TODO: Send formData to server-side script for processing
-    console.log(formData);
+   
     axios.post('http://localhost:5000/tht/icons/add',formData)
     .then(res=>{
       if(res.data.status==="success"){

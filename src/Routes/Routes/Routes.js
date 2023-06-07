@@ -40,11 +40,11 @@ export const routes=createBrowserRouter([
             },
             {
                 path:"/customer-1",
-                element:<CustomerService_1></CustomerService_1>
+                element:<PrivateRoute><CustomerService_1></CustomerService_1></PrivateRoute>
             },
             {
                 path:"/customer-2",
-                element:<CustomerService_2></CustomerService_2>
+                element:<PrivateRoute><CustomerService_2></CustomerService_2></PrivateRoute>
             },
             // {
             //     path:"/admin",
@@ -56,7 +56,7 @@ export const routes=createBrowserRouter([
             },
             {
                 path:"contact",
-                element: <PrivateRoute><Contact></Contact></PrivateRoute> 
+                element: <Contact></Contact>
             },
             {
                 path:"login",
@@ -70,84 +70,84 @@ export const routes=createBrowserRouter([
     },
     {
         path:"/admin",
-        element:<Admin></Admin>
+        element:<PrivateRoute><Admin></Admin></PrivateRoute>
         ,
         children:[
             {
                 path:"/admin/users",
-                element:<AllUsers></AllUsers>
+                element:<PrivateRoute><AllUsers></AllUsers></PrivateRoute>
             },
             {
                 path:"/admin/questionAnswer",
-                element:<QandA></QandA>
+                element:<PrivateRoute><QandA></QandA></PrivateRoute>
             },
             {
                 path:"/admin/icon",
-                element:<AddIcon></AddIcon>, 
+                element:<PrivateRoute><AddIcon></AddIcon></PrivateRoute>
             },
                 {
                     path:"/admin/icon/:name",
-                    element:<ShowIcons></ShowIcons>
+                    element:<PrivateRoute><ShowIcons></ShowIcons></PrivateRoute>
                     },
             {
                 path:"/admin/mallProduct",
-                element:<AddMallProducts></AddMallProducts>
+                element:<PrivateRoute><AddMallProducts></AddMallProducts></PrivateRoute>
             },
             {
                 path:"/admin/eventProduct",
-                element:<EventProducts></EventProducts>
+                element:<PrivateRoute><EventProducts></EventProducts></PrivateRoute>
             },
             {
                 path:"/admin/mallProduct/details/:model",
-                element:<ProductDetails></ProductDetails>,
+                element:<PrivateRoute><ProductDetails></ProductDetails></PrivateRoute>,
                 children:[
                     {
                         path:"/admin/mallProduct/details/:model/afterSales",
-                        element:<AfterSales></AfterSales>
+                        element:<PrivateRoute><AfterSales></AfterSales></PrivateRoute>
                     },
                     {
                         path:"/admin/mallProduct/details/:model/inventory",
-                        element:<Inventory></Inventory>
+                        element:<PrivateRoute><Inventory></Inventory></PrivateRoute>
                     },
                     {
                         path:"/admin/mallProduct/details/:model/invoice",
-                        element:<Invoice></Invoice>
+                        element:<PrivateRoute><Invoice></Invoice></PrivateRoute>
                     },
                     {
                         path:"/admin/mallProduct/details/:model/instruction",
-                        element:<AfterSalesInstruction></AfterSalesInstruction>
+                        element:<PrivateRoute><AfterSalesInstruction></AfterSalesInstruction></PrivateRoute>
                     },
                 ]
             },
             {
                 path:"/admin/eventProduct/details/:model",
-                element:<ProductDetails></ProductDetails>,
+                element:<PrivateRoute><ProductDetails></ProductDetails></PrivateRoute>,
                 children:[
                     {
                         path:"/admin/eventProduct/details/:model/afterSales",
-                        element:<AfterSales></AfterSales>
+                        element:<PrivateRoute><AfterSales></AfterSales></PrivateRoute>
                     },
                     {
                         path:"/admin/eventProduct/details/:model/inventory",
-                        element:<Inventory></Inventory>
+                        element:<PrivateRoute><Inventory></Inventory></PrivateRoute>
                     },
                     {
                         path:"/admin/eventProduct/details/:model/invoice",
-                        element:<Invoice></Invoice>
+                        element:<PrivateRoute><Invoice></Invoice></PrivateRoute>
                     },
                     {
                         path:"/admin/eventProduct/details/:model/instruction",
-                        element:<AfterSalesInstruction></AfterSalesInstruction>
+                        element:<PrivateRoute><AfterSalesInstruction></AfterSalesInstruction></PrivateRoute>
                     },
                 ]
             },
             {
                 path:"/admin/mallProduct/add",
-                element:<AddProduct></AddProduct>
+                element:<PrivateRoute><AddProduct></AddProduct></PrivateRoute>
             },
             {
                 path:"/admin/eventProduct/add",
-                element:<AddProduct></AddProduct>
+                element:<PrivateRoute><AddProduct></AddProduct></PrivateRoute>
             }
         ]
     }

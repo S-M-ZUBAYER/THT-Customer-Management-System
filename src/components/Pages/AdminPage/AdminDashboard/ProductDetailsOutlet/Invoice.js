@@ -8,7 +8,7 @@ const Invoice = () => {
 
 
     const { Product } = useContext(AllProductContext);
-const [allInvoiceFiles,setAllInvoiceFiles]=useState([Product?.invoiceFile])
+// const [allInvoiceFiles,setAllInvoiceFiles]=useState([Product?.invoiceFile])
 
     const handleToDownload = (product) => {
         const fileUrl = `http://localhost:5000/tht/mallProductImages/${product}`;
@@ -37,7 +37,7 @@ const [allInvoiceFiles,setAllInvoiceFiles]=useState([Product?.invoiceFile])
             <div className="mb-20">
 
            
-            {allInvoiceFiles.map((element,index)=>{
+            {((Product?.invoiceFile).split(",")).map((element,index)=>{
            return <div className="mx-2 mt-5 grid grid-cols-8  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">
                 <div className=" col-span-8 grid grid-cols-4" onClick={()=>handleToDownload(element)} >
                     {/* <img className="h-6 w-6" src={pdfLogo}></img> */}

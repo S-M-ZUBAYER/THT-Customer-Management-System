@@ -14,7 +14,7 @@ const facebookProvider = new FacebookAuthProvider();
 const UserContext = ({ children }) => {
 
     const [user, setUser] = useState({});
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
 
 
@@ -148,7 +148,7 @@ const UserContext = ({ children }) => {
 
 
     //store data in authInfo to send the data in useContext so that we can got this data from any component
-    const authInfo = { user, loading, createUser, signIn, logOut, signInWithGoogle, signInWithFacebook, resetPassword,translationQuestions,setTranslationQuestions, totalQuestions, setTotalQuestions,setTotalQuestionsLan,setUnknownQuestionsLan, translationQuestions, setTranslationQuestions, unknownQuestions, setUnknownQuestions,unknownCalculatePercentage,translateCalculatePercentage,unknownPercent, setUnknownPercent,translationPercent, setTranslationPercent,totalQuestionsLan,unknownQuestionsLan,translationQuestionsLan,setTranslationQuestionsLan,category, setCategory,categories, setCategories };
+    const authInfo = { user, loading,setLoading, createUser, signIn, logOut, signInWithGoogle, signInWithFacebook, resetPassword,translationQuestions,setTranslationQuestions, totalQuestions, setTotalQuestions,setTotalQuestionsLan,setUnknownQuestionsLan, translationQuestions, setTranslationQuestions, unknownQuestions, setUnknownQuestions,unknownCalculatePercentage,translateCalculatePercentage,unknownPercent, setUnknownPercent,translationPercent, setTranslationPercent,totalQuestionsLan,unknownQuestionsLan,translationQuestionsLan,setTranslationQuestionsLan,category, setCategory,categories, setCategories };
 
 
     return (

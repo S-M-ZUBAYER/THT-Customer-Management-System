@@ -3,10 +3,11 @@ import { AuthContext } from '../../../context/UserContext';
 import { toast } from 'react-hot-toast';
 import { MdDeleteOutline } from 'react-icons/md';
 import axios from 'axios';
+import BtnSpinner from '../../Shared/Loading/BtnSpinner';
 const Account = () => {
 
     //use useeContext to load data from  another components
-    const { logOut, user, totalQuestions, translationQuestions,translationQuestionsLan,setTranslationQuestionsLan, setTotalQuestions,setTotalQuestionsLan,totalQuestionsLan,unknownQuestionsLan,setUnknownQuestionsLan, setTranslationQuestions,translateCalculatePercentage,unknownCalculatePercentage,unknownPercent, setUnknownPercent,translationPercent, setTranslationPercent,unknownQuestions,setUnknownQuestions } = useContext(AuthContext);
+    const { logOut, loading,setLoading, user, totalQuestions, translationQuestions,translationQuestionsLan,setTranslationQuestionsLan, setTotalQuestions,setTotalQuestionsLan,totalQuestionsLan,unknownQuestionsLan,setUnknownQuestionsLan, setTranslationQuestions,translateCalculatePercentage,unknownCalculatePercentage,unknownPercent, setUnknownPercent,translationPercent, setTranslationPercent,unknownQuestions,setUnknownQuestions } = useContext(AuthContext);
     const [allUser, setAllUser] = useState([]);
     const [userInfo, setUserInfo] = useState([]);
     
@@ -107,9 +108,11 @@ const Account = () => {
     //create a function to LogOut user from this site
 
     const handleToLogOut = () => {
+      setLoading(true);
         logOut()
             .then(() => {
-                toast.success("Logout successfully")
+                toast.success("Logout successfully");
+                setLoading(false)
             })
             .catch(err => {
                 toast.error(err)
@@ -172,7 +175,7 @@ const Account = () => {
   const handleToDeleteTranslationQuestions=async(id)=>{
     try {
         await axios.delete(`http://localhost:5000/tht/translationQuestions/deleteById/${id}`);
-        toast.success('A unknownQuestion deleted successfully');
+        toast.success('A Translation deleted successfully');
         setTranslationQuestions(translationQuestions.filter((question) => question?.id !== id));
       } catch (error) {
         console.error('Error deleting user:', error);
@@ -247,7 +250,11 @@ const Account = () => {
                         </div>
                         <div className="my-20 mb-10">
                             <button onClick={handleToLogOut} className="bg-[#004368]  px-20 rounded-md py-2 ml-2 text-white font-semibold hover:bg-slate-800" >
-                                Log out
+                                {
+                                  loading?
+                                  <BtnSpinner></BtnSpinner>
+                                  :"Log out"
+                                }
                             </button>
                         </div>
                     </div>
@@ -291,7 +298,7 @@ const Account = () => {
                                             </button>
                                         </td> */}
                                     </tr>
-                                )) : <span className="text-xl font-bold text-red-400">NO Question Available</span>
+                                )) : <span className="text-xl font-bold text-red-400">NO Data Available</span>
                             }
                         </tbody>
                     </table>

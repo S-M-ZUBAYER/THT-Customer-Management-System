@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { AuthContext } from '../../../../../context/UserContext';
+import DisplaySpinner from '../../../../Shared/Loading/DisplaySpinner';
 
 const QuestionAnswerTable = ({ questionAnswers, onDelete, onEdit }) => {
   const [editQuestionAnswer, setEditQuestionAnswer] = useState(null);
@@ -6,6 +8,8 @@ const QuestionAnswerTable = ({ questionAnswers, onDelete, onEdit }) => {
   const [editedAnswer, setEditedAnswer] = useState('');
   const [editedDate, setEditedDate] = useState('');
   const [editedTime, setEditedTime] = useState('');
+
+  const {loading,setLoading}=useContext(AuthContext)
 
 
   const handleDelete = (id) => {
@@ -52,7 +56,10 @@ const QuestionAnswerTable = ({ questionAnswers, onDelete, onEdit }) => {
         </tr>
       </thead>
       <tbody>
-        {questionAnswers.map((questionAnswer,index) => (
+        {
+        questionAnswers
+        ?
+        questionAnswers.map((questionAnswer,index) => (
           <tr key={questionAnswer.id}>
             <td className="border md:px-4 py-2">{index+1}</td>
             <td className="border md:px-4 py-2">{questionAnswer.question}</td>
@@ -82,7 +89,10 @@ const QuestionAnswerTable = ({ questionAnswers, onDelete, onEdit }) => {
               </button>
             </td>
           </tr>
-        ))}
+          
+        ))
+        :
+        <DisplaySpinner></DisplaySpinner>}
       </tbody>
       {editQuestionAnswer && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-75">

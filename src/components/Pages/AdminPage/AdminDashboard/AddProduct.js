@@ -1,7 +1,10 @@
-import { useState } from 'react';
+
+import { useContext, useState } from 'react';
 import axios from 'axios';
 import addImg from "../../../../Assets/Images/Admin/Vector.jpg"
 import { toast } from 'react-hot-toast';
+import { AuthContext } from '../../../../context/UserContext';
+import BtnSpinner from '../../../Shared/Loading/BtnSpinner';
 
 function AddProduct({ product }) {
   const [productName, setProductName] = useState('');
@@ -25,6 +28,9 @@ function AddProduct({ product }) {
 
   const [selectedImages, setSelectedImages] = useState([]);
   const [selectedVideos, setSelectedVideos] = useState([]);
+
+
+  const{loading,setLoading}=useContext(AuthContext);
   // const handleUpload = async () => {
   //   const formData = new FormData();
 
@@ -133,6 +139,8 @@ function AddProduct({ product }) {
     const files = event.target.files;
     const selectedFiles = Array.from(files);
     setInvoiceFiles(selectedFiles);
+    // const selectedFiles = event.target.files;
+    // setInvoiceFiles(selectedFiles);
   };
 
   const handleSubmit = async (event) => {
@@ -175,6 +183,7 @@ function AddProduct({ product }) {
         }
       });
       toast.success(`${productCategory} Product created successfully!`);
+      setLoading(false)
       // Reset form fields
       setProductName('');
       setProductPrice('');
@@ -402,7 +411,7 @@ function AddProduct({ product }) {
             ></textarea>
           </div>
           <div className="mb-4">
-            <label htmlFor="invoice" className="block text-start text-gray-700 font-bold mb-2">
+            <label className="block text-start text-gray-700 font-bold mb-2">
               Invoice
             </label>
             {/* <input type="file"
@@ -429,7 +438,13 @@ function AddProduct({ product }) {
             className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-10 px-20 rounded-lg"
             onClick={handleSubmit}
           >
-            Save
+            {
+              loading?
+              <BtnSpinner></BtnSpinner>
+              :
+              "Save"
+            }
+            
           </button>
         </form>
       </div>

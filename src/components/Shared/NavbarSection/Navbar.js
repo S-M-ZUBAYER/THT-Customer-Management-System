@@ -11,6 +11,7 @@ const Navbar = () => {
   const [isAdminOpen, setIsAdminOpen] = useState(false);
 
   const {user}=useContext(AuthContext);
+  console.log(user.isAdmin)
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const customerToggleMenu = () => setIsCustomerOpen(!isCustomerOpen);
@@ -39,7 +40,7 @@ const Navbar = () => {
                     <ul data-aos="fade-up-right" data-aos-duration="2000" className="menu w-full text-start">
 
                         {/* {
-    isAdmin && <> */}
+    user.isAdmin==="true" && <> */}
                         <li><Link to='/admin/users' className="sm:text-xs md:text-base">All Users</Link></li>
                         <li><Link to='/admin/questionAnswer' className="sm:text-xs md:text-base">Add Q & A</Link></li>
                         <li><Link to='/admin/icon' className="sm:text-xs md:text-base">Add Icons</Link></li>
@@ -132,7 +133,9 @@ const Navbar = () => {
 
                 </li>
 
-                <li>
+                {/* {
+                  user.isAdmin==="true" &&  */}
+                  <li>
                   <Link
                     className="text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75 hover:font-semibold hover:text-zinc-900"
                     to="/admin"
@@ -140,6 +143,7 @@ const Navbar = () => {
                     Admin
                   </Link>
                 </li>
+                {/*  } */}
 
                 <li>
                   <Link

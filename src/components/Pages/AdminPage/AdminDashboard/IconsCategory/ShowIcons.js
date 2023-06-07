@@ -1,14 +1,18 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { useLocation } from 'react-router-dom';
 import { MdDelete } from 'react-icons/md';
 import { AiOutlineDownload } from 'react-icons/ai';
+import { AuthContext } from '../../../../../context/UserContext';
+import DisplaySpinner from '../../../../Shared/Loading/DisplaySpinner';
 
 const ShowIcons = () => {
    const[allIcons,setAllIcons]=useState([]);
     const location = useLocation();
     const categoryName = location.pathname.split('/').pop().replace(/%20/g, ' ');
+
+    const {loading,setLoading}=useContext(AuthContext)
    
 //got the current user data from database  
 useEffect(() => {
@@ -19,6 +23,7 @@ useEffect(() => {
   }, [categoryName]);
 
   const fetchQuestionsAnswerByEmail = async () => {
+setLoading(true);
     try {
       const response = await axios.get('http://localhost:5000/tht/icons', {
         params: {
@@ -26,6 +31,7 @@ useEffect(() => {
         },
       });
       setAllIcons(response?.data);
+      setLoading(false);
   
     } catch (error) {
       console.error('Error fetching user data:', error);
@@ -69,20 +75,27 @@ const handleToDelete = async (id) => {
             <h1 className="text-3xl font-bold text-yellow-400 my-10">
                 Available icons for <span className="text-teal-400">{categoryName}</span> category
             </h1> 
-            {allIcons?.length===0?<p className="text-2xl font-semibold text-amber-500">No Icons Available !!!</p>
-            :
-            <div className="grid sm:grid-cols-2 md:grid-cols-6 mx-1 md:mx-5  gap-4 text-center">
-      {
-       allIcons.map((element,index)=>{
-          return <div  className=" relative border-2">
-            <AiOutlineDownload onClick={()=>handleToDownload(element?.icon)} className=" absolute top-0 hover:cursor-pointer text-green-500"></AiOutlineDownload>
-            <MdDelete onClick={()=>handleToDelete(element?.id)} className=" absolute right-0 hover:cursor-pointer text-red-500"></MdDelete>
-            <img key={index} id="myDiv" className=" inline-block w-28 h-28" src={`http://localhost:5000/tht/images/${element.icon}`} alt="Icon"></img>
-            </div>
-        })
-    }
-      </div>
+            {
+              loading?
+              <DisplaySpinner></DisplaySpinner>
+              :
+              allIcons?.length===0?<p className="text-2xl font-semibold text-amber-500">No Icons Available !!!</p>
+              :
+              <div className="grid sm:grid-cols-2 md:grid-cols-6 mx-1 md:mx-5  gap-4 text-center">
+        {
+         allIcons.map((element,index)=>{
+            return <div  className=" relative border-2">
+              <AiOutlineDownload onClick={()=>handleToDownload(element?.icon)} className=" absolute top-0 hover:cursor-pointer text-green-500"></AiOutlineDownload>
+              <MdDelete onClick={()=>handleToDelete(element?.id)} className=" absolute right-0 hover:cursor-pointer text-red-500"></MdDelete>
+              <img key={index} id="myDiv" className=" inline-block w-28 h-28" src={`http://localhost:5000/tht/images/${element.icon}`} alt="Icon"></img>
+              </div>
+          })
       }
+        </div>
+        }
+
+            
+            
         </div>
     );
 };

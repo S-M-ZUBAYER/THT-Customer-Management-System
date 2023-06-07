@@ -14,7 +14,6 @@ const CategoryList = () => {
 
 
   const handleAddCategory = () => {
-    console.log(categories)
     if (category.trim() !== '') {
       const newCategories=[...categories,category]
       setCategories(newCategories);

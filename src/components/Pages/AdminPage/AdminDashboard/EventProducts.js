@@ -5,13 +5,15 @@ import { Link } from 'react-router-dom';
 import ProductContext, { AllProductContext } from '../../../../context/ProductContext';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import DisplaySpinner from '../../../Shared/Loading/DisplaySpinner';
+import { AuthContext } from '../../../../context/UserContext';
 
 
 
 const AddMallProducts = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const {allEventProduct,setAllEventProduct,setProduct}=useContext(AllProductContext)
-   
+   const{loading,setLoading}=useContext(AuthContext)
 
 
     const handleChange = (event) => {
@@ -30,9 +32,11 @@ const AddMallProducts = () => {
 
 // use useEffect to load the all mall product from data base
 useEffect(() => {
+    setLoading(true)
     fetch('http://localhost:5000/tht/eventProducts')
         .then(response => response.json())
         .then(data => setEventProduct(data));
+        setLoading(false);
 }, []);
 
  //create a function to got the specific searching products
@@ -121,7 +125,15 @@ useEffect(() => {
                     </div>
                 </div>
                 
-                {eventProduct?.map((product,index) => (
+                {   loading?
+                    <DisplaySpinner></DisplaySpinner>
+                    :
+
+                eventProduct?.length===0
+                ?
+                <span className="text-xl font-bold text-red-400">No Mall Product Available</span>
+                :
+                eventProduct?.map((product,index) => (
                      // <Link to={`/admin/mallProduct/details/${product?.Model},`}>
                      <div className="mx-2 my-3 grid grid-cols-7  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">
                      <Link key={index} to={`/admin/eventProduct/details/${product?.modelNumber}}`} onClick={() => setProduct(product)} className=" col-span-6 grid grid-cols-3">

@@ -11,6 +11,7 @@ import facebookLogo from "../../../Assets/Images/Icons/facebookLogo.png"
 import wechatLogo from "../../../Assets/Images/Icons/wechatLogo.png"
 import { AllProductContext } from '../../../context/ProductContext';
 import { toast } from 'react-hot-toast';
+import BtnSpinner from '../../Shared/Loading/BtnSpinner';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -21,7 +22,7 @@ const Login = () => {
 
     const [show, setShow]=useState(false)
 
-    const {signIn,signInWithGoogle,signInWithFacebook,resetPassword}=useContext(AuthContext);
+    const {signIn,signInWithGoogle,signInWithFacebook,resetPassword, loading,setLoading}=useContext(AuthContext);
 
 
     const handleEmailChange = (event) => {
@@ -34,11 +35,13 @@ const Login = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        setLoading(true);
         const form=event.target;
         // handle form submission logic here
         signIn(email,password)
         .then(result=>{
             const user=result.user;
+            setLoading(false);
             navigate("/")
             console.log(setLanguage)
             setLanguage(localStorage.getItem('language'));
@@ -144,7 +147,11 @@ const Login = () => {
                        
                     </div>
                     <div className="my-2 ">
-                         <button  className="bg-[#004368]  text-white rounded-md px-32 py-1 text-xl font-semibold " type="submit">Sign In</button>
+                         <button  className="bg-[#004368]  text-white rounded-md px-32 py-1 text-xl font-semibold " type="submit">{
+                            loading?
+                            <BtnSpinner></BtnSpinner>
+                            :"Sign In"
+                         }</button>
                     </div>
                 </form>
                 <div className="text-sm my-3">

@@ -1,8 +1,9 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { FiEdit } from 'react-icons/fi';
 import { RiDeleteBin7Line } from 'react-icons/ri';
 import { toast } from 'react-hot-toast';
+import DisplaySpinner from '../../../Shared/Loading/DisplaySpinner';
 
 
 const AllUsers = () => {
@@ -10,9 +11,11 @@ const AllUsers = () => {
   //create useState for the user and update 
   const [users, setUsers] = useState([]);
   const [editingUser, setEditingUser] = useState(null);
+  
 
 
 //start the part to get all the users from database
+
     axios.get('http://localhost:5000/tht/allUsers')
   .then(response => {
     setUsers(response.data);
@@ -56,6 +59,38 @@ const AllUsers = () => {
     setEditingUser(null);
   };
 
+  //create a function to update a user from the frontend and database both side 
+  const updateUserToAdmin = async (userId) => {
+    // setUsers(users.map((user) => (user.id === updatedUser.id ? updatedUser : user)));
+    const isAdmin=true;
+    
+    try {
+      const response = await axios.put(`http://localhost:5000/tht/users/update/admin/${userId}`, isAdmin);
+      console.log(users)
+      setUsers(users.map((user)=>{
+        console.log(users)
+        if(user?.id===userId){
+          user.isAdmin="true";
+        }
+        return user;
+      }))
+      
+      console.log(users)
+   
+      
+      response?.statusText && toast.success("Make admin successfully");
+      // Optionally, you can show a success message to the user using a toast or other UI notification.
+    } catch (error) {
+      toast.error('Error updating user To admin:', error);
+      // Optionally, you can show an error message to the user using a toast or other UI notification.
+    }
+  };
+  // const saveUser = (userId,updatedUser) => {
+  //   updateUser(userId, updatedUser);
+  //   setUsers(users.map((user) => (user.id === updatedUser.id ? updatedUser : user)));
+  //   setEditingUser(null);
+  // };
+
 
 
   return (
@@ -69,12 +104,14 @@ const AllUsers = () => {
             <th className="text-start">Designation</th>
             <th className="text-start">Language</th>
             <th className="text-start">Country</th>
+            <th className="text-start">Admin</th>
             <th>Edit</th>
             <th>Delete</th>
           </tr>
         </thead>
         <tbody>
-          {users.map((user) => (
+          {
+            users.map((user) => (
             <tr key={user.id} className="my-5">
               <td className="text-start pl-2 py-2 font-semibold" >{user.name}</td>
               <td className="text-start hidden md:block">{user.email}</td>
@@ -82,6 +119,15 @@ const AllUsers = () => {
               <td className="text-start">{user.designation}</td>
               <td className="text-start">{user.language}</td>
               <td className="text-start">{user.country}</td>
+              <td> 
+                {
+                  user?.isAdmin==="true"?
+                  <button  className=" bg-yellow-300 rounded-tl-lg rounded-br-lg py-1 px-2">Admin</button>
+                :
+                <button onClick={()=>updateUserToAdmin(user?.id)} className=" bg-red-400 rounded-tl-lg rounded-br-lg py-1 px-2">Make Admin</button>
+
+                }
+                </td>
               <td>
                 <button className="text-blue-500" onClick={() => openEditModal(user)}>
                   <FiEdit></FiEdit>
@@ -93,7 +139,9 @@ const AllUsers = () => {
                 </button>
               </td>
             </tr>
-          ))}
+          ))
+          }
+          
         </tbody>
       </table>
 
