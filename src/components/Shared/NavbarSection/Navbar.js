@@ -11,7 +11,6 @@ const Navbar = () => {
   const [isAdminOpen, setIsAdminOpen] = useState(false);
 
   const {user}=useContext(AuthContext);
-  console.log(user.isAdmin)
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const customerToggleMenu = () => setIsCustomerOpen(!isCustomerOpen);
@@ -138,7 +137,7 @@ const Navbar = () => {
                   <li>
                   <Link
                     className="text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75 hover:font-semibold hover:text-zinc-900"
-                    to="/admin"
+                    to="/admin/dashboard"
                   >
                     Admin
                   </Link>

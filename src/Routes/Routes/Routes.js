@@ -22,6 +22,7 @@ import AfterSalesInstruction from "../../components/Pages/AdminPage/AdminDashboa
 import Inventory from "../../components/Pages/AdminPage/AdminDashboard/ProductDetailsOutlet/Inventory";
 import Invoice from "../../components/Pages/AdminPage/AdminDashboard/ProductDetailsOutlet/Invoice";
 import ShowIcons from "../../components/Pages/AdminPage/AdminDashboard/IconsCategory/ShowIcons";
+import AdminDashboard from "../../components/Pages/AdminPage/AdminDashboard/AdminDashboard";
 
 
 export const routes=createBrowserRouter([
@@ -73,6 +74,10 @@ export const routes=createBrowserRouter([
         element:<PrivateRoute><Admin></Admin></PrivateRoute>
         ,
         children:[
+            {
+                path:"/admin/dashboard",
+                element:<PrivateRoute><AdminDashboard></AdminDashboard></PrivateRoute>
+            },
             {
                 path:"/admin/users",
                 element:<PrivateRoute><AllUsers></AllUsers></PrivateRoute>

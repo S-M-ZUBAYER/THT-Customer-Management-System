@@ -4,7 +4,7 @@ import { GrFacebook, GrGoogle } from "react-icons/gr";
 import { BsEyeFill, BsWechat } from "react-icons/bs";
 import { RiEyeCloseLine } from "react-icons/ri";
 // import { BsEyeFill } from "react-icons/bs";
-import { Form, Link, useNavigate } from 'react-router-dom';
+import { Form, Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../context/UserContext';
 import googleLogo from "../../../Assets/Images/Icons/gmailLogo.jpg"
 import facebookLogo from "../../../Assets/Images/Icons/facebookLogo.png"
@@ -16,6 +16,7 @@ import BtnSpinner from '../../Shared/Loading/BtnSpinner';
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const location=useLocation();
     const navigate=useNavigate();
     const {setLanguage}=useContext(AllProductContext);
    
@@ -23,6 +24,8 @@ const Login = () => {
     const [show, setShow]=useState(false)
 
     const {signIn,signInWithGoogle,signInWithFacebook,resetPassword, loading,setLoading}=useContext(AuthContext);
+
+    const from=location?.state?.from?.pathname || "/";
 
 
     const handleEmailChange = (event) => {
@@ -42,9 +45,7 @@ const Login = () => {
         .then(result=>{
             const user=result.user;
             setLoading(false);
-            navigate("/")
-            console.log(setLanguage)
-            setLanguage(localStorage.getItem('language'));
+            navigate(from,{replace:true})
             form.reset();
            
         })
