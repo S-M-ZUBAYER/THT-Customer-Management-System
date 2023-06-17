@@ -11,7 +11,7 @@ const Invoice = () => {
 // const [allInvoiceFiles,setAllInvoiceFiles]=useState([Product?.invoiceFile])
 
     const handleToDownload = (product) => {
-        const fileUrl = `http://localhost:5000/tht/mallProductImages/${product}`;
+        const fileUrl = `https://customer-server-theta.vercel.app/tht/mallProductImages/${product}`;
 
         fetch(fileUrl)
             .then((response) => response.blob())

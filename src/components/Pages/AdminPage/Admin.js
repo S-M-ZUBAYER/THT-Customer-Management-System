@@ -13,6 +13,7 @@ import { AuthContext } from '../../../context/UserContext';
 const Admin = () => {
 
     const { user } = useContext(AuthContext);
+ 
 
     const [isOpen, setIsOpen] = useState(false);
     const toggleMenu = () => setIsOpen(!isOpen);
@@ -61,7 +62,7 @@ const Admin = () => {
                         </Link> */}
                     </ul>
                 </div>
-                <div className="col-span-5 lg:col-span-4 shadow-lg rounded-lg">
+                <div className="col-span-5 lg:col-span-4 shadow-lg rounded-lg mb-10">
 
                     
                     <Outlet></Outlet>

@@ -22,7 +22,7 @@ const AddMallProducts = () => {
     
     const [eventProduct, setEventProduct] = useState([]);
 
-//     axios.get('http://localhost:5000/event')
+//     axios.get('https://customer-server-theta.vercel.app/event')
 //   .then(response => {
 //     setEventProduct(response.data);
 //   })
@@ -33,7 +33,7 @@ const AddMallProducts = () => {
 // use useEffect to load the all mall product from data base
 useEffect(() => {
     setLoading(true)
-    fetch('http://localhost:5000/tht/eventProducts')
+    fetch('https://customer-server-theta.vercel.app/tht/eventProducts')
         .then(response => response.json())
         .then(data => setEventProduct(data));
         setLoading(false);
@@ -60,7 +60,7 @@ useEffect(() => {
      //create a function to delete  any specific product
      const handleToDelete = async (productId) => {
         try {
-            await axios.delete(`http://localhost:5000/tht/eventProducts/delete/${productId}`);
+            await axios.delete(`https://customer-server-theta.vercel.app/tht/eventProducts/delete/${productId}`);
             toast.success(`One MallProduct deleted successfully`);
             const restProduct=eventProduct.filter(product=>(product?.id!==productId));
             setEventProduct(restProduct)
@@ -137,7 +137,7 @@ useEffect(() => {
                      // <Link to={`/admin/mallProduct/details/${product?.Model},`}>
                      <div className="mx-2 my-3 grid grid-cols-7  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">
                      <Link key={index} to={`/admin/eventProduct/details/${product?.modelNumber}}`} onClick={() => setProduct(product)} className=" col-span-6 grid grid-cols-3">
-                         <img className=" h-10 w-10 rounded-full" src={`http://localhost:5000/tht/eventProductImages/${product.productImg}`} alt={product.productName} ></img>
+                         <img className=" h-10 w-10 rounded-full" src={`https://customer-server-theta.vercel.app/tht/eventProductImages/${product.productImg}`} alt={product.productName} ></img>
 
                          <p>
                              {product?.productName}

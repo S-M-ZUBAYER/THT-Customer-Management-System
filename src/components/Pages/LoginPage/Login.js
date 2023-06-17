@@ -38,6 +38,10 @@ const Login = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        if(email===""||password===""){
+            toast.error("please input all the information properly")
+            return;
+        }
         setLoading(true);
         const form=event.target;
         // handle form submission logic here
@@ -50,7 +54,9 @@ const Login = () => {
            
         })
         .catch(err=>{
-            console.log(err)
+            toast.error("Invalid User Name Or Password")
+            console.log(err);
+            setLoading(false);
         })
     };
 

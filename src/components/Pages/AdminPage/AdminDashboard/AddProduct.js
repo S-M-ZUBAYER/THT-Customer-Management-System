@@ -28,7 +28,7 @@ function AddProduct({ product }) {
 
   const [selectedImages, setSelectedImages] = useState([]);
   const [selectedVideos, setSelectedVideos] = useState([]);
-
+const now=new Date();
 
   const{loading,setLoading}=useContext(AuthContext);
   // const handleUpload = async () => {
@@ -127,6 +127,7 @@ function AddProduct({ product }) {
 
 
   const handleProductImgUpload = (event) => {
+    // extract the current date and time components
     const file = event.target.files[0];
     setProductImg(file);
   };
@@ -145,7 +146,8 @@ function AddProduct({ product }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    const date = now.toLocaleDateString();
+    const time = now.toLocaleTimeString();
     const formData = new FormData();
     formData.append('productImg', productImg);
     // formData.append('invoiceFile', invoiceFile);
@@ -161,6 +163,8 @@ function AddProduct({ product }) {
     formData.append('afterSalesText', afterSalesText);
     formData.append('afterSalesInstruction', afterSalesInstruction);
     formData.append('inventoryText', inventoryText);
+    formData.append('date', date);
+    formData.append('time', time);
 
     // Append selected invoice files to the form data
     for (let i = 0; i < invoiceFiles.length; i++) {
@@ -177,7 +181,7 @@ function AddProduct({ product }) {
     }
     
     try {
-      await axios.post(`http://localhost:5000/tht/${productCategory}/add`, formData, {
+      await axios.post(`https://customer-server-theta.vercel.app/tht/${productCategory}/add`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

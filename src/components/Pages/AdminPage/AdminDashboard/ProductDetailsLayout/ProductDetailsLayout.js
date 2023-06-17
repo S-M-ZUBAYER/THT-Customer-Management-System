@@ -58,7 +58,7 @@ const ProductDetailsLayout = () => {
     </div>
   </div>
 </header>
-
+           
 <Outlet></Outlet>
 
         </div>

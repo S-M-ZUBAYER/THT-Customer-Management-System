@@ -131,7 +131,7 @@ const CustomerServicePart = () => {
                 if (user) {
 
                     //load current user data from database
-                    fetch('http://localhost:5000/tht/questions/add', {
+                    fetch('https://customer-server-theta.vercel.app/tht/questions/add', {
                         method: 'POST',
                         headers: {
                             'content-type': 'application/json'
@@ -140,19 +140,17 @@ const CustomerServicePart = () => {
                     })
                         .then(res => res.json())
                         .then(data => {
-                            if (data.acknowledged) {
+                            if (data) {
                                 toast.success('stored Successfully');
                                 setTotalQuestions([...totalQuestions, { email: user?.email, question: text, date, time }]);
-                                setTotalQuestionLan(totalQuestions?.length);
-                                console.log(totalQuestionsLan, unknownQuestionsLan);
                                 setUnknownPercent(unknownCalculatePercentage(totalQuestions, unknownQuestions))
                                 setTranslationPercent(translateCalculatePercentage(totalQuestions, translationQuestions))
-                                console.log(totalQuestions, unknownQuestions,translationQuestions,translationPercent, unknownPercent)
 
 
                             }
                             else {
                                 toast.error(data.message);
+                                // console.log(data.message)
                             }
 
                         })
@@ -192,10 +190,10 @@ const CustomerServicePart = () => {
                 setChineseAnswer(data?.answers_CN.filter((product) => product[2].includes("Dot")));
                 setEnglishAnswer(data?.answers_EN.filter((product) => product[2].includes("Dot")));
                 setBengaliAnswer(data?.answers_BN.filter((product) => product[2].includes("Dot")));
-                
+
             })
 
-        console.log(chineseAnswer)
+
         setRadioLoading(false);
 
     }
@@ -221,10 +219,10 @@ const CustomerServicePart = () => {
                 setChineseAnswer(data?.answers_CN.filter((product) => product[2].includes("Thermal")));
                 setEnglishAnswer(data?.answers_EN.filter((product) => product[2].includes("Thermal")));
                 setBengaliAnswer(data?.answers_BN.filter((product) => product[2].includes("Thermal")));
-                
+
             })
 
-        console.log(chineseAnswer)
+
         setRadioLoading(false);
     }
 
@@ -248,10 +246,10 @@ const CustomerServicePart = () => {
                 setChineseAnswer(data?.answers_CN.filter((product) => product[2].includes("Attendance")));
                 setEnglishAnswer(data?.answers_EN.filter((product) => product[2].includes("Attendance")));
                 setBengaliAnswer(data?.answers_BN.filter((product) => product[2].includes("Attendance")));
-               
+
             })
 
-            setRadioLoading(false);
+        setRadioLoading(false);
     }
 
 
@@ -278,9 +276,27 @@ const CustomerServicePart = () => {
 
         //store all the questions in Sql database
         if (user) {
+            //create the functionalities to check so that same thing no need to store again
+            let isDuplicate = false;
+
+            unknownQuestions.forEach(question => {
+                if (question.question === text) {
+                    
+                    toast.error("This question has already been stored as an unknown question");
+                    isDuplicate = true;
+                }
+            });
+
+            if (isDuplicate) {
+            setStoreLoading(false);
+            setText("");
+            inputField2.value = ""
+            inputField3.value = ""
+                return;
+            }
 
             //load current user data from database
-            fetch('http://localhost:5000/tht/unknownQuestions/add', {
+            fetch('https://customer-server-theta.vercel.app/tht/unknownQuestions/add', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json'
@@ -292,10 +308,8 @@ const CustomerServicePart = () => {
                     if (data?.insertId) {
                         toast.success('stored Successfully');
                         setUnknownQuestions([...unknownQuestions, { email: user?.email, question: text, date, time }]);
-                        setUnknownQuestionsLan(unknownQuestions?.length)
                         setUnknownPercent(unknownCalculatePercentage(totalQuestions, unknownQuestions))
                         setTranslationPercent(translateCalculatePercentage(totalQuestions, translationQuestions))
-                        console.log(totalQuestions, unknownQuestions,translationQuestions,translationPercent, unknownPercent,"Unknown")
 
 
                     }
@@ -325,7 +339,7 @@ const CustomerServicePart = () => {
                 setText("");
                 inputField2.value = ""
                 inputField3.value = ""
-                toast.success("Question added successfully");
+                // toast.success("Question added successfully");
 
 
                 // //start the part to store data in localStorage
@@ -354,7 +368,7 @@ const CustomerServicePart = () => {
 
                 return;
             }
-            console.log(data)
+
 
             if (data?.status === "error") {
                 setText("");
@@ -393,8 +407,34 @@ const CustomerServicePart = () => {
 
         if (user) {
 
+            let isDuplicate = false;
+
+            translationQuestions.forEach(question => {
+                if (question.question === text) {
+                    
+                    toast.error("This question has already been stored as an translation question problem");
+                    isDuplicate = true;
+                }
+            });
+
+            if (isDuplicate) {
+            setTranslateLoading(false);
+            setText("");
+            inputField2.value = ""
+            inputField3.value = ""
+                return;
+            }
+
+            //create the functionalities to check so that same thing no need to store again
+            translationQuestions.map((question) => {
+                if (question.question === text) {
+                    toast.error("This question has already store as an translations problem question")
+                    return;
+                }
+            })
+
             //load current user data from database
-            fetch('http://localhost:5000/tht/translationsQuestions/add', {
+            fetch('https://customer-server-theta.vercel.app/tht/translationsQuestions/add', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json'
@@ -403,13 +443,11 @@ const CustomerServicePart = () => {
             })
                 .then(res => res.json())
                 .then(data => {
-                    if (data.acknowledged) {
-                        toast.success('translation questions sstored Successfully');
+                    if (data) {
+                        toast.success('translation questions stored Successfully');
                         setTranslationQuestions([...translationQuestions, { question: text, english: engText, bangla: inputField2?.value, date, time }]);
-                        setTranslationQuestionsLan(translationQuestions?.length)
                         setUnknownPercent(unknownCalculatePercentage(totalQuestions, unknownQuestions))
                         setTranslationPercent(translateCalculatePercentage(totalQuestions, translationQuestions))
-                        console.log(totalQuestions, unknownQuestions,translationQuestions,translationPercent, unknownPercent,"Translation")
 
                     }
                     else {
@@ -470,7 +508,7 @@ const CustomerServicePart = () => {
             setText("");
             inputField2.value = ""
             inputField3.value = ""
-            toast.success("Question added successfully");
+            // toast.success("Question added successfully");
 
             return;
         }
