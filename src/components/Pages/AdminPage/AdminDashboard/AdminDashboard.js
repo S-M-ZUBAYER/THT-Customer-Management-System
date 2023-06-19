@@ -31,7 +31,7 @@ const AdminDashboard = () => {
 
   const fetchUserByEmail = async () => {
     try {
-      const response = await axios.get('https://customer-server-theta.vercel.app/tht/users', {
+      const response = await axios.get('http://localhost:5000/tht/users', {
         params: {
           email: user?.email,
         },
@@ -44,7 +44,7 @@ const AdminDashboard = () => {
   // use useEffect to load the all mall product from data base
   useEffect(() => {
 
-    fetch('https://customer-server-theta.vercel.app/tht/eventProducts')
+    fetch('http://localhost:5000/tht/eventProducts')
       .then(response => response.json())
       .then(data => setEventProduct(data));
   }, []);
@@ -52,7 +52,7 @@ const AdminDashboard = () => {
 
   //start the part to get all the users from database
 
-  axios.get('https://customer-server-theta.vercel.app/tht/allUsers')
+  axios.get('http://localhost:5000/tht/allUsers')
     .then(response => {
       setAllUsers(response.data);
     })
@@ -63,13 +63,13 @@ const AdminDashboard = () => {
   // use useEffect to load the all mall product from data base
   useEffect(() => {
 
-    fetch('https://customer-server-theta.vercel.app/tht/mallProducts')
+    fetch('http://localhost:5000/tht/mallProducts')
       .then(response => response.json())
       .then(data => setMallProduct(data));
   }, []);
 
   useEffect(() => {
-    fetch('https://customer-server-theta.vercel.app/tht/categories')
+    fetch('http://localhost:5000/tht/categories')
       .then(response => response.json())
       .then(data => {
         setCategories(JSON.parse(data[0]?.allcategories))
@@ -80,7 +80,7 @@ const AdminDashboard = () => {
 
   const fetchQuestionsAnswerByEmail = async () => {
     try {
-      const response = await axios.get('https://customer-server-theta.vercel.app/tht/QandAnswers', {
+      const response = await axios.get('http://localhost:5000/tht/QandAnswers', {
         params: {
           email: user?.email,
         },

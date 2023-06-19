@@ -130,7 +130,7 @@ const Login = () => {
                 <form onSubmit={handleSubmit}>
                     {/* <label htmlFor="email">Email:</label> */}
                     <input className=" w-full pl-2" placeholder="username or email" type="email" id="email" value={email} onChange={handleEmailChange} />
-                    <hr className=" border-slate-400 mb-10" ></hr>
+                    <hr className="  mb-10" ></hr>
                     {/* <label htmlFor="password">Password:</label> */}
                     <div className='relative'>
                         <div className='flex items-center'>
@@ -143,7 +143,7 @@ const Login = () => {
                         </button> 
                         </div>
                         
-                        <hr className=" border-slate-400" ></hr>
+                        <hr className=" " ></hr>
                         {/* <button>digit to start</button>
                         <button>start to digit</button> */}
                     </div>

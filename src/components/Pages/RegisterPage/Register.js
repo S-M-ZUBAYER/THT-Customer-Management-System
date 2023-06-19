@@ -164,7 +164,7 @@ const Register = () => {
                     toast.success('Registration Completed Successfully');
 
                     //load current user data from database
-                    fetch('https://customer-server-theta.vercel.app/tht/users/add', {
+                    fetch('http://localhost:5000/tht/users/add', {
                         method: 'POST',
                         headers: {
                             'content-type': 'application/json'

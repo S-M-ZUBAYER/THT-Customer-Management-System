@@ -18,7 +18,7 @@ function AddIcon() {
   const {user,categories,setCategories}=useContext(AuthContext);
 
   useEffect(()=>{
-    axios.get("https://customer-server-theta.vercel.app/tht/icons")
+    axios.get("http://localhost:5000/tht/icons")
     .then(res=>{
       setIcons(res.data)
     })
@@ -26,7 +26,7 @@ function AddIcon() {
   })
 
   useEffect(() => {
-    fetch('https://customer-server-theta.vercel.app/tht/categories')
+    fetch('http://localhost:5000/tht/categories')
         .then(response => response.json())
         .then(data =>{
           setCategories(JSON.parse(data[0]?.allcategories))
@@ -41,7 +41,7 @@ function AddIcon() {
 
 
   // useEffect(()=>{
-  //   axios.get("https://customer-server-theta.vercel.app/tht/categories")
+  //   axios.get("http://localhost:5000/tht/categories")
   //   .then(res=>{
   //     setCategories(JSON.parse(res.data[0]?.allcategories));
   //   })
@@ -59,7 +59,7 @@ function AddIcon() {
   
     // TODO: Send formData to server-side script for processing
    
-    axios.post('https://customer-server-theta.vercel.app/tht/icons/add',formData)
+    axios.post('http://localhost:5000/tht/icons/add',formData)
     .then(res=>{
       if(res.data.status==="success"){
         toast.success("Image uploaded successfully");

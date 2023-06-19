@@ -40,7 +40,7 @@ const CustomerServicePart = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         setSendLoading(true);
-        setSelectedPrinter("")
+        setSelectedPrinter()
 
         //create this part so that any one cannot send the data without input anythings
         if (!text) {
@@ -131,7 +131,7 @@ const CustomerServicePart = () => {
                 if (user) {
 
                     //load current user data from database
-                    fetch('https://customer-server-theta.vercel.app/tht/questions/add', {
+                    fetch('http://localhost:5000/tht/questions/add', {
                         method: 'POST',
                         headers: {
                             'content-type': 'application/json'
@@ -296,7 +296,7 @@ const CustomerServicePart = () => {
             }
 
             //load current user data from database
-            fetch('https://customer-server-theta.vercel.app/tht/unknownQuestions/add', {
+            fetch('http://localhost:5000/tht/unknownQuestions/add', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json'
@@ -434,7 +434,7 @@ const CustomerServicePart = () => {
             })
 
             //load current user data from database
-            fetch('https://customer-server-theta.vercel.app/tht/translationsQuestions/add', {
+            fetch('http://localhost:5000/tht/translationsQuestions/add', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json'

@@ -22,7 +22,7 @@ function QandA() {
 
   const fetchQuestionsAnswerByEmail = async () => {
     try {
-      const response = await axios.get('https://customer-server-theta.vercel.app/tht/QandAnswers', {
+      const response = await axios.get('http://localhost:5000/tht/QandAnswers', {
         params: {
           email: user?.email,
         },
@@ -41,7 +41,7 @@ function QandA() {
 //create a function to delete a user from the frontend and database both side 
 const handleDelete = async (userId) => {
   try {
-    await axios.delete(`https://customer-server-theta.vercel.app/tht/QandAnswers/delete/${userId}`);
+    await axios.delete(`http://localhost:5000/tht/QandAnswers/delete/${userId}`);
     toast.success('Question Answer deleted successfully');
     setQuestionsAnswer(questionAnswer.filter((user) => user.id !== userId));
   } catch (error) {
@@ -56,7 +56,7 @@ const handleDelete = async (userId) => {
 //create a function to update a user from the frontend and database both side 
 const updateUser = async (userId, editingUser) => {
   try {
-    const response = await axios.put(`https://customer-server-theta.vercel.app/tht/QandAnswers/update/${userId}`, editingUser);
+    const response = await axios.put(`http://localhost:5000/tht/QandAnswers/update/${userId}`, editingUser);
     toast.success("user information updated successfully");
     // Optionally, you can show a success message to the user using a toast or other UI notification.
   } catch (error) {
@@ -86,7 +86,7 @@ const updateUser = async (userId, editingUser) => {
  const time = now.toLocaleTimeString();
  console.log(user?.email,question,answer,date,time)
       //load current user data from database
-      fetch('https://customer-server-theta.vercel.app/tht/QandAnswers/add', {
+      fetch('http://localhost:5000/tht/QandAnswers/add', {
           method: 'POST',
           headers: {
               'content-type': 'application/json'
@@ -132,7 +132,7 @@ const updateUser = async (userId, editingUser) => {
       return questionAnswer;
     }));
     try {
-      const response = await axios.put(`https://customer-server-theta.vercel.app/tht/QandAnswers/update/${id}`, {editedQuestion, editedAnswer, editedDate, editedTime});
+      const response = await axios.put(`http://localhost:5000/tht/QandAnswers/update/${id}`, {editedQuestion, editedAnswer, editedDate, editedTime});
       toast.success("user information updated successfully");
       // Optionally, you can show a success message to the user using a toast or other UI notification.
     } catch (error) {

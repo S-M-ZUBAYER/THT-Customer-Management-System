@@ -17,7 +17,7 @@ const Navbar = () => {
   const adminToggleMenu = () => setIsAdminOpen(!isAdminOpen);
 
   return (
-    <header aria-label="Site Header" className="bg-white dark:bg-gray-900">
+    <header aria-label="Site Header" className="bg-white ">
       <div className="mx-auto px-6 md:px-0">
         <div className="flex h-16 items-center justify-between">
 
@@ -83,7 +83,7 @@ const Navbar = () => {
               <ul className="flex items-center gap-6 text-base ">
                 <li>
                   <Link
-                    className="text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75 hover:font-semibold hover:text-zinc-900"
+                    className="text-gray-500 transition hover:text-gray-500/75  dark:hover:text-white/75 hover:font-semibold hover:text-zinc-900"
                     to="/home"
                   >
                     Home
@@ -93,7 +93,7 @@ const Navbar = () => {
                 <li>
                   <div className="relative">
                     <button
-                      className="flex justify-between items-center  text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75 hover:font-semibold hover:text-zinc-900"
+                      className="flex justify-between items-center  text-gray-500 transition hover:text-gray-500/75  dark:hover:text-white/75 hover:font-semibold hover:text-zinc-900"
                       onClick={toggleMenu}
                     >
                       Customer Service  
@@ -136,7 +136,7 @@ const Navbar = () => {
                   user.isAdmin==="true" &&  */}
                   <li>
                   <Link
-                    className="text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75 hover:font-semibold hover:text-zinc-900"
+                    className="text-gray-500 transition hover:text-gray-500/75  dark:hover:text-white/75 hover:font-semibold hover:text-zinc-900"
                     to="/admin/dashboard"
                   >
                     Admin
@@ -146,7 +146,7 @@ const Navbar = () => {
 
                 <li>
                   <Link
-                    className="text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75 hover:font-semibold hover:text-zinc-900"
+                    className="text-gray-500 transition hover:text-gray-500/75  dark:hover:text-white/75 hover:font-semibold hover:text-zinc-900"
                     to="/account"
                   >
                     Account
@@ -155,7 +155,7 @@ const Navbar = () => {
 
                 <li>
                   <Link
-                    className="text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75 hover:font-semibold hover:text-zinc-900"
+                    className="text-gray-500 transition hover:text-gray-500/75  dark:hover:text-white/75 hover:font-semibold hover:text-zinc-900"
                     to="/contact"
                   >
                     Contact

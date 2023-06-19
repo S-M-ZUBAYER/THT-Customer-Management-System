@@ -45,7 +45,7 @@ function ProductDetails() {
                 <div className="px-4 sm:px-6 lg:px-8 py-12">
                     <div className="flex flex-col md:flex-row md:space-x-4">
                         <div className="md:w-1/2 mb-4 flex justify-center">
-                            <img src={`https://customer-server-theta.vercel.app/tht/${productCategory==="mallProduct"?"mallProductImages":"eventProductImages"}/${Product?.productImg}`} alt="Product" className="rounded-lg w-96 h-96" />
+                            <img src={`http://localhost:5000/tht/${productCategory==="mallProduct"?"mallProductImages":"eventProductImages"}/${Product?.productImg}`} alt="Product" className="rounded-lg w-96 h-96" />
                         </div>
                         <div className="md:w-1/2 text-start pl-5">
                             <div className=" mb-5">
@@ -111,9 +111,9 @@ function ProductDetails() {
                                     {(Product.allImages).split(",").map((image, index) => (
                                         <img
                                             key={index}
-                                            src={`https://customer-server-theta.vercel.app/tht/${productCategory==="mallProduct"?"mallProductImages":"eventProductImages"}/${image}`}
+                                            src={`http://localhost:5000/tht/${productCategory==="mallProduct"?"mallProductImages":"eventProductImages"}/${image}`}
                                             alt={`Image ${index + 1}`}
-                                            onClick={() => handleImageClick(`https://customer-server-theta.vercel.app/tht/mallProductImages/${image}`)}
+                                            onClick={() => handleImageClick(`http://localhost:5000/tht/mallProductImages/${image}`)}
                                             className="w-24 h-24 object-cover cursor-pointer mx-4 my-2 rounded-lg"
                                         />
                                     ))}
@@ -146,11 +146,11 @@ function ProductDetails() {
                                     {((Product?.allVideos).split(",")).map((video, index) => (
                                         <div
                                             key={index}
-                                            onClick={() => handleVideoClick(`https://customer-server-theta.vercel.app/tht/${productCategory==="mallProduct"?"mallProductImages":"eventProductImages"}/${video}`)}
+                                            onClick={() => handleVideoClick(`http://localhost:5000/tht/${productCategory==="mallProduct"?"mallProductImages":"eventProductImages"}/${video}`)}
                                             className="relative cursor-pointer"
                                         >
                                             <video
-                                                src={`https://customer-server-theta.vercel.app/tht/${productCategory==="mallProduct"?"mallProductImages":"eventProductImages"}/${video}`}
+                                                src={`http://localhost:5000/tht/${productCategory==="mallProduct"?"mallProductImages":"eventProductImages"}/${video}`}
                                                 alt={`Video ${index + 1}`}
                                                 className="w-full h-auto rounded-lg"
                                                 controls
