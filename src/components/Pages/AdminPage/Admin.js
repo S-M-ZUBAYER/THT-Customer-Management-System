@@ -43,15 +43,15 @@ const Admin = () => {
             <Navbar></Navbar>
             <div className="grid grid-cols-5 lg:gap-3">
                 <div className="hidden lg:block col-span-1 shadow-lg rounded-lg">
-                    <ul data-aos="fade-up-right" data-aos-duration="2000" className="menu w-full text-start pb-20">
+                    <ul data-aos="fade-up-right" data-aos-duration="2000" className="menu w-full text-start pb-20 ">
 
                         {/* {
     isAdmin && <> */}
-                        <li><Link to='/admin/users' className="sm:text-xs md:text-base">All Users</Link></li>
-                        <li><Link to='/admin/questionAnswer' className="sm:text-xs md:text-base">Add Q & A</Link></li>
-                        <li><Link to='/admin/icon' className="sm:text-xs md:text-base">Add Icons</Link></li>
-                        <li><Link to='/admin/mallProduct' className="sm:text-xs md:text-base">Add Mall Products</Link></li>
-                        <li><Link to='/admin/eventProduct' className="sm:text-xs md:text-base">Add Event Products</Link></li>
+                        <li><Link to='/admin/users' className="sm:text-xs md:text-base text-gray-700">All Users</Link></li>
+                        <li><Link to='/admin/questionAnswer' className="sm:text-xs md:text-base text-gray-700">Add Q & A</Link></li>
+                        <li><Link to='/admin/icon' className="sm:text-xs md:text-base text-gray-700">Add Icons</Link></li>
+                        <li><Link to='/admin/mallProduct' className="sm:text-xs md:text-base text-gray-700">Add Mall Products</Link></li>
+                        <li><Link to='/admin/eventProduct' className="sm:text-xs md:text-base text-gray-700">Add Event Products</Link></li>
                         {/* </>
 } */}
 {/* 

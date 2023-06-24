@@ -30,7 +30,7 @@ const Footer = () => {
           
 
         <p
-          className="mt-6 max-w-md text-center leading-relaxed text-white dark:text-gray-400 sm:max-w-xs sm:text-left"
+          className="mt-6 max-w-md text-center leading-relaxed text-white  sm:max-w-xs sm:text-left"
         >
           123 Chaowai St, Chaoyang District, Beijing, 
 China, 100020

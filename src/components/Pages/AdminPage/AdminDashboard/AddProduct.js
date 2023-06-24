@@ -181,7 +181,7 @@ const now=new Date();
     }
     
     try {
-      await axios.post(`http://localhost:5000/tht/${productCategory}/add`, formData, {
+      await axios.post(`https://customer-server-theta.vercel.app/tht/${productCategory}/add`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -240,7 +240,7 @@ const now=new Date();
               type="text"
               id="productName"
               placeholder='ProductName'
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
               value={productName}
               onChange={handleProductNameChange}
               required
@@ -252,7 +252,7 @@ const now=new Date();
               type="digit"
               id="productPrice"
               placeholder='Product Price'
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
               value={productPrice}
               onChange={handleProductPriceChange}
               required
@@ -265,7 +265,7 @@ const now=new Date();
             <textarea
               id="productDescription"
               placeholder="Add Product description"
-              className="shadow resize-none appearance-none border rounded-lg w-full h-44  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow resize-none appearance-none border rounded-lg w-full h-44  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
               value={productDescription}
               onChange={handleProductDescriptionChange}
               required
@@ -281,7 +281,7 @@ const now=new Date();
             <input
               type="text"
               id="modelNumber"
-              className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
               value={modelNumber}
               placeholder='Model Number'
               onChange={handleModelNumberChange}
@@ -295,7 +295,7 @@ const now=new Date();
             <input
               type="text"
               id="printerColor"
-              className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
               value={printerColor}
               placeholder='Color'
               onChange={handlePrinterColorChange}
@@ -309,7 +309,7 @@ const now=new Date();
             <input
               type="text"
               id="connectorType"
-              className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
               value={connectorType}
               placeholder='Bluetooth'
               onChange={handleConnectorTypeChange}
@@ -324,7 +324,7 @@ const now=new Date();
             <input
               type="text"
               id="stockQuantity"
-              className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
               value={stockQuantity}
               placeholder='Add quantity'
               onChange={handleStockQuantityChange}
@@ -338,7 +338,7 @@ const now=new Date();
             <label htmlFor="relatedImages" className="block col-span-1 text-gray-700 font-bold mb-2">
             Upload related Images
             </label>
-            <input className='mt-5 mb-8 required' type="file" multiple onChange={handleImageChange} accept="image/*" />
+            <input className='mt-5 mb-8 required bg-white' type="file" multiple onChange={handleImageChange} accept="image/*" />
           </div>
 
 
@@ -359,7 +359,7 @@ const now=new Date();
               <input
                 type="datetime-local"
                 id="shelfTimeStart"
-                className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
                 value={shelfStartTime}
                 onChange={handleShelfStartTimeChange}
                 required
@@ -367,7 +367,7 @@ const now=new Date();
               <input
                 type="datetime-local"
                 id="shelfTimeEnd"
-                className="shadow appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
                 value={shelfEndTime}
                 onChange={handleShelfEndTimeChange}
                 required
@@ -382,7 +382,7 @@ const now=new Date();
             <textarea
               id="afterSales"
               placeholder="Add after-sales description"
-              className="shadow resize-none appearance-none border rounded w-full h-44 py-2 px-3  text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow resize-none appearance-none border rounded w-full h-44 py-2 px-3  text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
               value={afterSalesText}
               onChange={handleAfterSalesTextChange}
               required
@@ -395,7 +395,7 @@ const now=new Date();
             <textarea
               id="afterSalesInstructions"
               placeholder='Add after-sales instructions'
-              className="shadow appearance-none border rounded resize-none w-full h-44 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded resize-none w-full h-44 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
               value={afterSalesInstruction}
               onChange={handleAfterSalesInstructionChange}
               required
@@ -408,7 +408,7 @@ const now=new Date();
             <textarea
               id="inventory"
               placeholder="Add inventory description"
-              className="shadow appearance-none border resize-none rounded w-full h-44 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border resize-none rounded w-full h-44 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
               value={inventoryText}
               onChange={handleInventoryTextChange}
               required
@@ -420,7 +420,7 @@ const now=new Date();
             </label>
             {/* <input type="file"
               onChange={handleInvoiceFileUpload}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline required"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white required"
               accept=".csv, .pdf, .xls, .xlsx" /> */}
             <input
               type="file"
@@ -433,7 +433,7 @@ const now=new Date();
               type="file"
               id="invoice"
               accept="application/pdf"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
               onChange={handleInvoiceFileChange}
               required
             /> */}

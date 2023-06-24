@@ -131,7 +131,7 @@ const CustomerServicePart = () => {
                 if (user) {
 
                     //load current user data from database
-                    fetch('http://localhost:5000/tht/questions/add', {
+                    fetch('https://customer-server-theta.vercel.app/tht/questions/add', {
                         method: 'POST',
                         headers: {
                             'content-type': 'application/json'
@@ -296,7 +296,7 @@ const CustomerServicePart = () => {
             }
 
             //load current user data from database
-            fetch('http://localhost:5000/tht/unknownQuestions/add', {
+            fetch('https://customer-server-theta.vercel.app/tht/unknownQuestions/add', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json'
@@ -434,7 +434,7 @@ const CustomerServicePart = () => {
             })
 
             //load current user data from database
-            fetch('http://localhost:5000/tht/translationsQuestions/add', {
+            fetch('https://customer-server-theta.vercel.app/tht/translationsQuestions/add', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json'
@@ -535,9 +535,8 @@ const CustomerServicePart = () => {
 
 
     return (
-        <div>
             <div>
-                <div className=" my-6 flex justify-start">
+                <div className=" my-6 flex justify-start bg-white">
 
                     {/* create a from to send the question to the backend to translation and get all the possible ans */}
                     <form onSubmit={handleSubmit} className="rounded w-2/3 pb-8 mb-4 ">
@@ -635,11 +634,12 @@ const CustomerServicePart = () => {
                 {/* section to select the specific printer to get the proper ans for this particular printer */}
 
 
-                <div className="flex justify-around w-8/12">
+                <div className="flex justify-around w-8/12 text-gray-700">
                     <div>
                         <label>
                             <input
                                 type="radio"
+                                className="bg-white"
                                 value="Dot Printer"
                                 checked={selectedPrinter === 'Dot Printer'}
                                 onChange={handlePrinterChange}
@@ -653,6 +653,7 @@ const CustomerServicePart = () => {
                         <label>
                             <input
                                 type="radio"
+                                className="bg-white"
                                 value="Thermal Printer"
                                 checked={selectedPrinter === 'Thermal Printer'}
                                 onChange={handlePrinterChange}
@@ -666,6 +667,7 @@ const CustomerServicePart = () => {
                         <label>
                             <input
                                 type="radio"
+                                className="bg-white"
                                 value="Attendance"
                                 checked={selectedPrinter === 'Attendance'}
                                 onChange={handlePrinterChange}
@@ -719,7 +721,7 @@ const CustomerServicePart = () => {
             </div>
 
 
-        </div>
+        
     );
 };
 

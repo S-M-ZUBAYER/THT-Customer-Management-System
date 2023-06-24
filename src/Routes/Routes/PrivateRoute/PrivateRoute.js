@@ -5,7 +5,12 @@ import { Navigate, useLocation } from 'react-router-dom';
 const PrivateRoute = ({children}) => {
 const {user,loading,setLoading,}=useContext(AuthContext);
 const location=useLocation();
-
+if(user){
+    setLoading(false)
+}
+if(user===null){
+    setLoading(false)
+}
 if(loading){
     return <div className='flex justify-center items-center mt-32'>
     <p className='text-7xl font-bold text-fuchsia-900'>L</p>

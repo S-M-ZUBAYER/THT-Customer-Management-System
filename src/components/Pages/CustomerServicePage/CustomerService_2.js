@@ -7,7 +7,7 @@ const CustomerService_2 = () => {
    
 
     return (
-        <div className="text-left md:mx-20 px-3 md:px-12 my-10 py-10 shadow-lg  rounded-lg">
+        <div className="text-left md:mx-20 px-3 md:px-12 my-10 py-10 shadow-lg  rounded-lg bg-white">
             
             <h1 className="text-2xl font-semibold text-gray-400 mt-5">
                 {/* Customer Name

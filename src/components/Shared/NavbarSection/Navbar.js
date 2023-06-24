@@ -24,7 +24,7 @@ const Navbar = () => {
         <div className="relative visible lg:hidden">
               <button
 
-                className="rounded bg-gray-100 p-2 text-gray-600 transition hover:text-gray-600/75 dark:bg-gray-800 dark:text-white dark:hover:text-white/75"
+                className="rounded bg-gray-100 p-2 text-gray-600 transition hover:text-gray-600"
 
                 id="options-menu"
                 aria-haspopup="true"
@@ -40,11 +40,11 @@ const Navbar = () => {
 
                         {/* {
     user.isAdmin==="true" && <> */}
-                        <li><Link to='/admin/users' className="sm:text-xs md:text-base">All Users</Link></li>
-                        <li><Link to='/admin/questionAnswer' className="sm:text-xs md:text-base">Add Q & A</Link></li>
-                        <li><Link to='/admin/icon' className="sm:text-xs md:text-base">Add Icons</Link></li>
-                        <li><Link to='/admin/mallProduct' className="sm:text-xs md:text-base">Add Mall Products</Link></li>
-                        <li><Link to='/admin/eventProduct' className="sm:text-xs md:text-base">Add Event Products</Link></li>
+                        <li><Link to='/admin/users' className="sm:text-xs md:text-base text-gray-700">All Users</Link></li>
+                        <li><Link to='/admin/questionAnswer' className="sm:text-xs md:text-base text-gray-700">Add Q & A</Link></li>
+                        <li><Link to='/admin/icon' className="sm:text-xs md:text-base text-gray-700">Add Icons</Link></li>
+                        <li><Link to='/admin/mallProduct' className="sm:text-xs md:text-base text-gray-700">Add Mall Products</Link></li>
+                        <li><Link to='/admin/eventProduct' className="sm:text-xs md:text-base text-gray-700">Add Event Products</Link></li>
                         {/* </>
 } */}
 
@@ -83,7 +83,7 @@ const Navbar = () => {
               <ul className="flex items-center gap-6 text-base ">
                 <li>
                   <Link
-                    className="text-gray-500 transition hover:text-gray-500/75  dark:hover:text-white/75 hover:font-semibold hover:text-zinc-900"
+                    className="text-gray-500 transition hover:font-semibold hover:text-zinc-900"
                     to="/home"
                   >
                     Home
@@ -93,7 +93,7 @@ const Navbar = () => {
                 <li>
                   <div className="relative">
                     <button
-                      className="flex justify-between items-center  text-gray-500 transition hover:text-gray-500/75  dark:hover:text-white/75 hover:font-semibold hover:text-zinc-900"
+                      className="flex justify-between items-center  text-gray-500 transition hover:font-semibold hover:text-zinc-900"
                       onClick={toggleMenu}
                     >
                       Customer Service  
@@ -136,7 +136,7 @@ const Navbar = () => {
                   user.isAdmin==="true" &&  */}
                   <li>
                   <Link
-                    className="text-gray-500 transition hover:text-gray-500/75  dark:hover:text-white/75 hover:font-semibold hover:text-zinc-900"
+                    className="text-gray-500 transition hover:font-semibold hover:text-zinc-900"
                     to="/admin/dashboard"
                   >
                     Admin
@@ -146,7 +146,7 @@ const Navbar = () => {
 
                 <li>
                   <Link
-                    className="text-gray-500 transition hover:text-gray-500/75  dark:hover:text-white/75 hover:font-semibold hover:text-zinc-900"
+                    className="text-gray-500 transition hover:font-semibold hover:text-zinc-900"
                     to="/account"
                   >
                     Account
@@ -155,7 +155,7 @@ const Navbar = () => {
 
                 <li>
                   <Link
-                    className="text-gray-500 transition hover:text-gray-500/75  dark:hover:text-white/75 hover:font-semibold hover:text-zinc-900"
+                    className="text-gray-500 transition hover:font-semibold hover:text-zinc-900"
                     to="/contact"
                   >
                     Contact
@@ -214,14 +214,14 @@ const Navbar = () => {
                   >
                     <Link
                       to="/home"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100  hover:font-semibold hover:text-zinc-900"
                       role="menuitem"
                     >
                       Home
                     </Link>
                     <div className="relative px-4">
                     <button
-                      className="mx-auto flex justify-between items-center  text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75 hover:font-semibold hover:text-zinc-900"
+                      className="mx-auto flex justify-between items-center  text-gray-500 transition hover:text-gray-500/75  hover:font-semibold hover:text-zinc-900"
                       onClick={customerToggleMenu}
                     >
                       Customer Service  
@@ -229,7 +229,7 @@ const Navbar = () => {
 
                     </button>
                     {isCustomerOpen && (
-                      <div className="absolute left-[-180px] top-3 z-40 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                      <div className="absolute left-[-180px] top-3 z-40 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hover:font-semibold hover:text-zinc-900">
                         <div
                           className="py-1"
                           role="menu"
@@ -239,7 +239,7 @@ const Navbar = () => {
                           <Link
                             to="/customer-1"
                             onClick={customerToggleMenu}
-                            className="block py-2 text-sm text-gray-700 hover:bg-gray-100  hover:font-semibold hover:text-zinc-900"
+                            className="block py-2 text-sm text-gray-700 hover:bg-gray-100 ring-black ring-opacity-5  hover:font-semibold hover:text-zinc-900 "
                             role="menuitem"
                           >
                             Customer Service 1

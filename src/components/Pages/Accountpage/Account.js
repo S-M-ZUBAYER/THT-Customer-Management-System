@@ -4,10 +4,11 @@ import { toast } from 'react-hot-toast';
 import { MdDeleteOutline } from 'react-icons/md';
 import axios from 'axios';
 import BtnSpinner from '../../Shared/Loading/BtnSpinner';
+import { Navigate } from 'react-router-dom';
 const Account = () => {
 
   //use useeContext to load data from  another components
-  const { logOut, loading, setLoading, user, totalQuestions, translationQuestions, setTotalQuestions, setTranslationQuestions, translateCalculatePercentage, unknownCalculatePercentage, unknownPercent, setUnknownPercent, translationPercent, setTranslationPercent, unknownQuestions, setUnknownQuestions } = useContext(AuthContext);
+  const { logOut, loading, setLoading, user, setUser, totalQuestions, translationQuestions, setTotalQuestions, setTranslationQuestions, translateCalculatePercentage, unknownCalculatePercentage, unknownPercent, setUnknownPercent, translationPercent, setTranslationPercent, unknownQuestions, setUnknownQuestions } = useContext(AuthContext);
   const [allUser, setAllUser] = useState([]);
   const [userInfo, setUserInfo] = useState([]);
 
@@ -26,7 +27,7 @@ const Account = () => {
 
   const fetchUserByEmail = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/tht/users', {
+      const response = await axios.get('https://customer-server-theta.vercel.app/tht/users', {
         params: {
           email: user?.email,
         },
@@ -40,7 +41,7 @@ const Account = () => {
 
   const fetchQuestionsByEmail = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/tht/questions', {
+      const response = await axios.get('https://customer-server-theta.vercel.app/tht/questions', {
         params: {
           email: user?.email,
         },
@@ -61,7 +62,7 @@ const Account = () => {
 
   const fetchUnknownQuestionsByEmail = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/tht/unknownQuestions', {
+      const response = await axios.get('https://customer-server-theta.vercel.app/tht/unknownQuestions', {
         params: {
           email: user?.email,
         },
@@ -81,7 +82,7 @@ const Account = () => {
 
   const translationsQuestionsByEmail = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/tht/translationsQuestions', {
+      const response = await axios.get('https://customer-server-theta.vercel.app/tht/translationsQuestions', {
         params: {
           email: user?.email,
         },
@@ -105,15 +106,19 @@ const Account = () => {
   //create a function to LogOut user from this site
 
   const handleToLogOut = () => {
-    setLoading(true);
-    logOut()
-      .then(() => {
-        toast.success("Logout successfully");
-        setLoading(false)
-      })
-      .catch(err => {
-        toast.error(err)
-      })
+    try {
+      setLoading(true);
+      setUser(null);
+      localStorage.removeItem('user');
+      toast.success("Logout successfully");
+      setLoading(false);
+      // Navigate('/login')
+    }
+    catch (err) {
+      toast.error(err)
+    }
+
+
   }
 
 
@@ -122,7 +127,7 @@ const Account = () => {
   //create a function to delete all question from the frontend and database both side 
   // const handleToDeleteAllData = async () => {
   //   try {
-  //     await axios.delete(`http://localhost:5000/tht/questions/delete/${user?.email}`);
+  //     await axios.delete(`https://customer-server-theta.vercel.app/tht/questions/delete/${user?.email}`);
   //     toast.success('All questions deleted successfully');
   //     setTotalQuestions(totalQuestions.filter((question) => question?.email !== user?.email));
   //   } catch (error) {
@@ -137,7 +142,7 @@ const Account = () => {
         return; // Cancel the deletion if the user clicks Cancel or closes the modal
       }
 
-      await axios.delete(`http://localhost:5000/tht/questions/delete/${user?.email}`);
+      await axios.delete(`https://customer-server-theta.vercel.app/tht/questions/delete/${user?.email}`);
       toast.success('All questions deleted successfully');
       setTotalQuestions(totalQuestions.filter((question) => question?.email !== user?.email));
       setUnknownPercent(unknownCalculatePercentage(totalQuestions, unknownQuestions));
@@ -156,7 +161,7 @@ const Account = () => {
         return;
       }
 
-      await axios.delete(`http://localhost:5000/tht/unknownQuestions/delete/${user?.email}`);
+      await axios.delete(`https://customer-server-theta.vercel.app/tht/unknownQuestions/delete/${user?.email}`);
       toast.success('All unknown questions deleted successfully');
       setUnknownQuestions([]);
       setUnknownPercent(unknownCalculatePercentage(totalQuestions, unknownQuestions));
@@ -174,7 +179,7 @@ const Account = () => {
       if (!confirmed) {
         return;
       }
-      await axios.delete(`http://localhost:5000/tht/unknownQuestions/deleteById/${id}`);
+      await axios.delete(`https://customer-server-theta.vercel.app/tht/unknownQuestions/deleteById/${id}`);
       toast.success('A unknownQuestion deleted successfully');
       setUnknownQuestions(unknownQuestions.filter((question) => question?.id !== id));
       setUnknownPercent(unknownCalculatePercentage(totalQuestions, unknownQuestions));
@@ -193,7 +198,7 @@ const Account = () => {
       if (!confirmed) {
         return;
       }
-      await axios.delete(`http://localhost:5000/tht/translateData/delete/${user?.email}`);
+      await axios.delete(`https://customer-server-theta.vercel.app/tht/translateData/delete/${user?.email}`);
       toast.success('All translate questions deleted successfully');
       setTranslationQuestions([]);
       setUnknownPercent(unknownCalculatePercentage(totalQuestions, unknownQuestions));
@@ -211,7 +216,7 @@ const Account = () => {
       if (!confirmed) {
         return;
       }
-      await axios.delete(`http://localhost:5000/tht/translationQuestions/deleteById/${id}`);
+      await axios.delete(`https://customer-server-theta.vercel.app/tht/translationQuestions/deleteById/${id}`);
       toast.success('A Translation deleted successfully');
       setTranslationQuestions(translationQuestions.filter((question) => question?.id !== id));
       setUnknownPercent(unknownCalculatePercentage(totalQuestions, unknownQuestions));
@@ -237,7 +242,7 @@ const Account = () => {
 
 
   return (
-    <div className="mt-32 md:mx-36">
+    <div className="mt-32 md:mx-36 text-gray-800">
       <div className="grid grid-cols-1 md:grid-cols-2 text-center">
 
         {/* create this part to show th user pic */}

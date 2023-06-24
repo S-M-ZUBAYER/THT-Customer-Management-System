@@ -11,7 +11,6 @@ function QandA() {
   const {user}=useContext(AuthContext);
   const now=new Date();
 
-
   //got the current user data from database  
   useEffect(() => {
     if (user?.email) {
@@ -22,7 +21,7 @@ function QandA() {
 
   const fetchQuestionsAnswerByEmail = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/tht/QandAnswers', {
+      const response = await axios.get('https://customer-server-theta.vercel.app/tht/QandAnswers', {
         params: {
           email: user?.email,
         },
@@ -41,7 +40,7 @@ function QandA() {
 //create a function to delete a user from the frontend and database both side 
 const handleDelete = async (userId) => {
   try {
-    await axios.delete(`http://localhost:5000/tht/QandAnswers/delete/${userId}`);
+    await axios.delete(`https://customer-server-theta.vercel.app/tht/QandAnswers/delete/${userId}`);
     toast.success('Question Answer deleted successfully');
     setQuestionsAnswer(questionAnswer.filter((user) => user.id !== userId));
   } catch (error) {
@@ -56,7 +55,7 @@ const handleDelete = async (userId) => {
 //create a function to update a user from the frontend and database both side 
 const updateUser = async (userId, editingUser) => {
   try {
-    const response = await axios.put(`http://localhost:5000/tht/QandAnswers/update/${userId}`, editingUser);
+    const response = await axios.put(`https://customer-server-theta.vercel.app/tht/QandAnswers/update/${userId}`, editingUser);
     toast.success("user information updated successfully");
     // Optionally, you can show a success message to the user using a toast or other UI notification.
   } catch (error) {
@@ -86,7 +85,7 @@ const updateUser = async (userId, editingUser) => {
  const time = now.toLocaleTimeString();
  console.log(user?.email,question,answer,date,time)
       //load current user data from database
-      fetch('http://localhost:5000/tht/QandAnswers/add', {
+      fetch('https://customer-server-theta.vercel.app/tht/QandAnswers/add', {
           method: 'POST',
           headers: {
               'content-type': 'application/json'
@@ -132,7 +131,7 @@ const updateUser = async (userId, editingUser) => {
       return questionAnswer;
     }));
     try {
-      const response = await axios.put(`http://localhost:5000/tht/QandAnswers/update/${id}`, {editedQuestion, editedAnswer, editedDate, editedTime});
+      const response = await axios.put(`https://customer-server-theta.vercel.app/tht/QandAnswers/update/${id}`, {editedQuestion, editedAnswer, editedDate, editedTime});
       toast.success("user information updated successfully");
       // Optionally, you can show a success message to the user using a toast or other UI notification.
     } catch (error) {
@@ -143,14 +142,14 @@ const updateUser = async (userId, editingUser) => {
 
 
   return (
-    <div className="mx-2 md:mx-20 my-5 md:my-32">
+    <div className="mx-2 md:mx-20 my-5 md:my-32 text-gray-800">
     <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
-      <div className="mb-4">
-        <label className="block text-gray-400 mb-2 pl-2 text-start" htmlFor="name">
+      <div className="mb-4 X">
+        <label className="block  mb-2 pl-2 text-start text-gray-600" htmlFor="name">
           Question:
         </label>
         <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          className="shadow appearance-none border rounded w-full py-2 px-3 bg-white text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           id="question"
           type="text"
           placeholder="Please input question"
@@ -159,11 +158,11 @@ const updateUser = async (userId, editingUser) => {
         />
       </div>
       <div className="mb-6">
-        <label className="block text-gray-400 mb-2 pl-2 text-start" htmlFor="email">
+        <label className="block  mb-2 pl-2 text-start text-gray-600" htmlFor="email">
           Answer
         </label>
         <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-400 leading-tight focus:outline-none focus:shadow-outline"
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-600 leading-tight focus:outline-none focus:shadow-outline bg-white"
           id="answer"
           type="text"
           placeholder="Please input answer"
@@ -181,7 +180,7 @@ const updateUser = async (userId, editingUser) => {
       </div>
     </form>
 <div>
-  <h1 className="mt-32 mb-10 text-sky-300 text-3xl font-bold ">
+  <h1 className="mt-32 mb-10 text-sky-500 text-3xl font-bold ">
     Questions And Answer list
   </h1>
     

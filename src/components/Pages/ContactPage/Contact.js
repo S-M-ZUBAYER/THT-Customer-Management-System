@@ -66,7 +66,7 @@ const Contact = () => {
                 <h1 className="text-black text-xl lg:text-3xl font-semibold mb-5">
                     Contact Us
                 </h1>
-                <p className=" text-gray-500">
+                <p className=" text-gray-600">
                     If you need to get in touch with us, there are several ways to do so. You can reach out to us via email, phone, or through our website's contact form.
                 </p>
 
@@ -77,21 +77,21 @@ const Contact = () => {
                     </div>
                     <div className=" md:text-start  md:ml-28 my-auto mx-auto">
                         <div className="my-5">
-                            <h1 className="text-lg font-semibold mb-2">
+                            <h1 className="text-lg font-semibold mb-2 text-gray-600">
                                 Head Office Address
                             </h1>
-                            <p className="text-gray-500">
+                            <p className="text-gray-600">
                                 123 Chaowai St, Chaoyang District, Beijing,
                                 China, 100020
                             </p>
                         </div>
 
                         <div className="my-5">
-                            <h1 className="text-lg font-semibold mb-2 ">
+                            <h1 className="text-lg font-semibold mb-2 text-gray-600">
                                 Contact Number
                             </h1>
 
-                            <div className="text-gray-500">
+                            <div className="text-gray-600">
                                 <p className="mb-1">
                                     +000 12345 6789
                                 </p>
@@ -106,10 +106,10 @@ const Contact = () => {
                         </div>
 
                         <div className="my-5">
-                            <h1 className="text-lg font-semibold mb-2">
+                            <h1 className="text-lg font-semibold mb-2 text-gray-600">
                                 Contact Email
                             </h1>
-                            <p className="text-gray-500">
+                            <p className="text-gray-600">
                                 smzubayer9004@gmail.com
                             </p>
                         </div>
@@ -121,16 +121,16 @@ const Contact = () => {
 
             <div>
                 <div className="w-5/6 md:w-4/6 lg:w-full mx-auto">
-                    <h1 className="text-xl font-semibold text-black capitalize dark:text-white lg:text-3xl">Let’s get in touch</h1>
+                    <h1 className="text-xl font-semibold text-black capitalize  lg:text-3xl">Let’s get in touch</h1>
 
-                    <p className="mt-4 text-gray-500 dark:text-gray-400">
+                    <p className="mt-4 text-gray-600  ">
                         If you need to get in touch with us, there are several ways to do so. You can reach out to us via email, phone, or through our website's contact form.
                     </p>
 
                     <form onSubmit={handleToSendEmail} className="mt-12 text-slate-500">
                         <div className="-mx-2 md:items-center md:flex">
                             <div className="flex-1 px-2">
-                                {/* <label className="block mb-2 text-sm text-gray-200 dark:text-gray-200">Full Name</label> */}
+                                {/* <label className="block mb-2 text-sm text-gray-600 dark:text-gray-600">Full Name</label> */}
                                 <input
                                     id="name"
                                     type="text"
@@ -140,7 +140,7 @@ const Contact = () => {
                             </div>
 
                             <div className="flex-1 px-2 mt-4 md:mt-0">
-                                {/* <label className="block mb-2 text-sm text-gray-200 dark:text-gray-200">Email address</label> */}
+                                {/* <label className="block mb-2 text-sm text-gray-600 dark:text-gray-600">Email address</label> */}
                                 <input
                                     id="email"
                                     type="email"
@@ -151,7 +151,7 @@ const Contact = () => {
                         </div>
 
                         <div className="w-full mt-4">
-                            {/* <label className="block mb-2 text-sm text-gray-200 dark:text-gray-200">Message</label> */}
+                            {/* <label className="block mb-2 text-sm text-gray-600 dark:text-gray-600">Message</label> */}
                             <textarea
                                 id="message"
                                 placeholder="Enter your message here"

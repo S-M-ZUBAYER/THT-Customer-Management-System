@@ -11,28 +11,28 @@ import axios from 'axios';
 const CustomerService_1 = () => {
 
     const { user } = useContext(AuthContext);
-    const [currentUser,setCurrentUser]=useState(null)
-    
-     //got the current user data from database  
-     useEffect(() => {
+    const [currentUser, setCurrentUser] = useState(null)
+
+    //got the current user data from database  
+    useEffect(() => {
         if (user?.email) {
-          fetchUserByEmail();
+            fetchUserByEmail();
         }
-      }, [user?.email]);
+    }, [user?.email]);
 
 
     const fetchUserByEmail = async () => {
         try {
-          const response = await axios.get('http://localhost:5000/tht/users', {
-            params: {
-              email: user?.email,
-            },
-          });
-          setCurrentUser(response.data[0]);
+            const response = await axios.get('https://customer-server-theta.vercel.app/tht/users', {
+                params: {
+                    email: user?.email,
+                },
+            });
+            setCurrentUser(response.data[0]);
         } catch (error) {
-          console.error('Error fetching user data:', error);
+            console.error('Error fetching user data:', error);
         }
-      };
+    };
 
     const customerName = [
         {
@@ -61,7 +61,7 @@ const CustomerService_1 = () => {
 
     return (
         <div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 md:gap-8 mx-3 md:mx-12 my-12 text-gray-600" >
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 md:gap-8 mx-3 md:mx-12 my-12 text-gray-600 bg-white" >
 
 
 
@@ -72,9 +72,9 @@ const CustomerService_1 = () => {
                 <div className="shadow-lg rounded-lg py-5 md:px-10">
 
                     <div className="flex items-center justify-start">
-                        <img className="h-8 w-8 ml-3 rounded-full  shadow-slate-900" src={currentUser?currentUser?.image: user?.photoURL} alt="" />
+                        <img className="h-8 w-8 ml-3 rounded-full  shadow-slate-900" src={currentUser ? currentUser?.image : user?.photoURL} alt="" />
                         <h1 className=" font-semibold ml-3">
-                           {currentUser?currentUser?.name: "User Name"}
+                            {currentUser ? currentUser?.name : "User Name"}
                         </h1>
                     </div>
 
