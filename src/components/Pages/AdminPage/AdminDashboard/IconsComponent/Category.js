@@ -19,7 +19,7 @@ const CategoryList = () => {
       setCategories(newCategories);
       //load current user data from database
       console.log(newCategories,"set All categories")
-      fetch('https://customer-server-theta.vercel.app/tht/categories/add', {    
+      fetch('https://grozziie.zjweiting.com:8033/tht/categories/add', {    
           method: 'PUT',
           headers: {
               'content-type': 'application/json'
@@ -48,7 +48,7 @@ const CategoryList = () => {
   // //create a function to update a user from the frontend and database both side 
   // const updateUser = async (userId, editingUser) => {
   //   try {
-  //     const response = await axios.put(`https://customer-server-theta.vercel.app/tht/users/update/${userId}`, editingUser);
+  //     const response = await axios.put(`https://grozziie.zjweiting.com:8033/tht/users/update/${userId}`, editingUser);
   //     toast.success("user information updated successfully");
   //     // Optionally, you can show a success message to the user using a toast or other UI notification.
   //   } catch (error) {

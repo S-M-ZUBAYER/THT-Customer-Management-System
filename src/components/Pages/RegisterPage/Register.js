@@ -16,13 +16,14 @@ import { useCallback } from 'react';
 import axios from 'axios';
 import { useDropzone } from 'react-dropzone';
 import { toast } from 'react-hot-toast';
+import BtnSpinner from '../../Shared/Loading/BtnSpinner';
 
 
 
 
 
 const Register = () => {
-    const { setUser } = useContext(AuthContext)
+    const { setUser, loading, setLoading } = useContext(AuthContext)
     //create different kind of state to get the current value
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -45,9 +46,9 @@ const Register = () => {
 
     const [userExists, setUserExists] = useState(false);
 
-   
 
-    axios.get('https://customer-server-theta.vercel.app/tht/allUsers')
+
+    axios.get('https://grozziie.zjweiting.com:8033/tht/allUsers')
         .then(response => {
             setAllUsers(response.data);
 
@@ -151,14 +152,15 @@ const Register = () => {
     //create a submit function to create user and store user information in Sql database
     const handleSubmit = (event) => {
         event.preventDefault();
+        setLoading(true);
 
         const user = { name: name, image: image, phone: phone, country: country, language: language, email: email, designation: designation }
 
 
         const form = event.target;
-       
 
-        fetch('https://customer-server-theta.vercel.app/tht/check-user', {
+
+        fetch('https://grozziie.zjweiting.com:8033/tht/check-user', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -175,7 +177,7 @@ const Register = () => {
             });
 
 
-        if (!userExists) {
+        if (userExists) {
 
             console.log(userExists)
             //create condition check for error handling
@@ -190,7 +192,7 @@ const Register = () => {
             }
 
 
-            fetch('https://customer-server-theta.vercel.app/tht/users/add', {
+            fetch('https://grozziie.zjweiting.com:8033/tht/users/add', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json'
@@ -201,13 +203,15 @@ const Register = () => {
                 .then(data => {
                     localStorage.setItem('user', JSON.stringify(user));
                     setUser(user)
+                    setLoading(false)
                     if (data) {
                         toast.success("Registration complete Successfully")
                         form.reset();
-            navigate("/")
+                        navigate("/")
                     }
                     else {
                         toast.error(data.message);
+                        setLoading(false)
                     }
 
                 })
@@ -217,12 +221,13 @@ const Register = () => {
             localStorage.setItem("language", language);
             localStorage.setItem("name", name);
 
-            
+
 
 
         }
         else {
             toast.error("This email already have an account");
+            setLoading(false)
         }
 
     };
@@ -362,7 +367,13 @@ const Register = () => {
 
 
                         <div className="my-2 ">
-                            <button className="bg-[#004368] text-white w-full py-2 text-xl font-semibold rounded-md" type="submit">Register</button>
+                            <button className="bg-[#004368] text-white w-full py-2 text-xl font-semibold rounded-md" type="submit">
+                                {
+                                    loading ?
+                                        <BtnSpinner></BtnSpinner> :
+                                        Register
+                                }
+                            </button>
                         </div>
 
 

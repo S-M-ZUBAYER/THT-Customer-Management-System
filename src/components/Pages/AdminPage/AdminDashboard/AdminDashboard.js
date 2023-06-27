@@ -7,6 +7,7 @@ import eventLogo from "../../../../Assets/Images/Admin/Event.png"
 import QALogo from "../../../../Assets/Images/Admin/Q&A.jpg"
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import BtnSpinner from '../../../Shared/Loading/BtnSpinner';
 
 const AdminDashboard = () => {
   const { user } = useContext(AuthContext);
@@ -19,7 +20,14 @@ const AdminDashboard = () => {
   const [categories, setCategories] = useState(null);
   const [categoriesLoading, setCategoriesLoading] = useState(false)
   const [questionAnswer, setQuestionsAnswer] = useState(null);
-  const [questionAnswerLoading, setquestionAnswerLoading] = useState(false)
+  const [questionAnswerLoading, setquestionAnswerLoading] = useState(true)
+ const [userLoading,setUserLoading]=useState(true)
+ const [eventLoading,setEventLoading]=useState(true)
+ const [mallLoading,setMallLoading]=useState(true)
+ const [categoryLoading,setCategoryLoading]=useState(true)
+ const [qandALoading,setQandALoading]=useState(true)
+
+
   //got the current user data from database  
   useEffect(() => {
     if (user?.email) {
@@ -31,7 +39,7 @@ const AdminDashboard = () => {
 
   const fetchUserByEmail = async () => {
     try {
-      const response = await axios.get('https://customer-server-theta.vercel.app/tht/users', {
+      const response = await axios.get('https://grozziie.zjweiting.com:8033/tht/users', {
         params: {
           email: user?.email,
         },
@@ -43,18 +51,19 @@ const AdminDashboard = () => {
   };
   // use useEffect to load the all mall product from data base
   useEffect(() => {
-
-    fetch('https://customer-server-theta.vercel.app/tht/eventProducts')
+    fetch('https://grozziie.zjweiting.com:8033/tht/eventProducts')
       .then(response => response.json())
       .then(data => setEventProduct(data));
+      setEventLoading(false);
   }, []);
 
 
   //start the part to get all the users from database
 
-  axios.get('https://customer-server-theta.vercel.app/tht/allUsers')
+  axios.get('https://grozziie.zjweiting.com:8033/tht/allUsers')
     .then(response => {
       setAllUsers(response.data);
+      setUserLoading(false)
     })
     .catch(error => {
       console.log(error);
@@ -63,16 +72,18 @@ const AdminDashboard = () => {
   // use useEffect to load the all mall product from data base
   useEffect(() => {
 
-    fetch('https://customer-server-theta.vercel.app/tht/mallProducts')
+    fetch('https://grozziie.zjweiting.com:8033/tht/mallProducts')
       .then(response => response.json())
       .then(data => setMallProduct(data));
+      setMallLoading(false)
   }, []);
 
   useEffect(() => {
-    fetch('https://customer-server-theta.vercel.app/tht/categories')
+    fetch('https://grozziie.zjweiting.com:8033/tht/categories')
       .then(response => response.json())
       .then(data => {
         setCategories(JSON.parse(data[0]?.allcategories))
+        setCategoriesLoading(false)
       });
   }, []);
 
@@ -80,12 +91,13 @@ const AdminDashboard = () => {
 
   const fetchQuestionsAnswerByEmail = async () => {
     try {
-      const response = await axios.get('https://customer-server-theta.vercel.app/tht/QandAnswers', {
+      const response = await axios.get('https://grozziie.zjweiting.com:8033/tht/QandAnswers', {
         params: {
           email: user?.email,
         },
       });
       setQuestionsAnswer(response.data);
+      setQandALoading(false)
     } catch (error) {
       console.error('Error fetching user data:', error);
     }
@@ -124,7 +136,13 @@ const AdminDashboard = () => {
               <img className="w-16 h-16" src={usersLogo}></img>
             </div>
             <div className="flex flex-col justify-center align-middle">
-              <p className="text-3xl font-semibold leading-none">{allUsers?.length}</p>
+              <p className="text-3xl font-semibold leading-none">
+                {
+                  userLoading?
+                  <BtnSpinner></BtnSpinner>
+                  :allUsers?.length
+                }
+                </p>
               <p className="capitalize">Total Users</p>
             </div>
           </Link>
@@ -134,7 +152,13 @@ const AdminDashboard = () => {
               <img className="w-16 h-16" src={IconsLogo}></img>
             </div>
             <div className="flex flex-col justify-center align-middle">
-              <p className="text-3xl font-semibold leading-none">{categories?.length}</p>
+              <p className="text-3xl font-semibold leading-none">
+              {
+                  categoriesLoading?
+                  <BtnSpinner></BtnSpinner>
+                  :categories?.length
+                }
+                </p>
               <p className="capitalize">Total Icons Category</p>
             </div>
           </Link>
@@ -144,7 +168,13 @@ const AdminDashboard = () => {
               <img className="w-16 h-16" src={mallLogo}></img>
             </div>
             <div className="flex flex-col justify-center align-middle">
-              <p className="text-3xl font-semibold leading-none">{mallProduct?.length}</p>
+              <p className="text-3xl font-semibold leading-none">
+              {
+                  mallLoading?
+                  <BtnSpinner></BtnSpinner>
+                  :mallProduct?.length
+                }
+                </p>
               <p className="capitalize">Total Mall Product</p>
             </div>
           </Link>
@@ -154,7 +184,13 @@ const AdminDashboard = () => {
               <img className="w-16 h-16" src={eventLogo}></img>
             </div>
             <div className="flex flex-col justify-center align-middle">
-              <p className="text-3xl font-semibold leading-none">{eventProduct?.length}</p>
+              <p className="text-3xl font-semibold leading-none">
+              {
+                  eventLoading?
+                  <BtnSpinner></BtnSpinner>
+                  :eventProduct?.length
+                }
+                </p>
               <p className="capitalize">Total Event Product</p>
             </div>
           </Link>
@@ -164,7 +200,13 @@ const AdminDashboard = () => {
               <img className="w-16 h-16" src={QALogo}></img>
             </div>
             <div className="flex flex-col justify-center align-middle">
-              <p className="text-3xl font-semibold leading-none">{questionAnswer?.length}</p>
+              <p className="text-3xl font-semibold leading-none">
+              {
+                qandALoading?
+                  <BtnSpinner></BtnSpinner>
+                  :questionAnswer?.length
+                }
+                {}</p>
               <p className="capitalize">Total Q&A</p>
             </div>
           </Link>

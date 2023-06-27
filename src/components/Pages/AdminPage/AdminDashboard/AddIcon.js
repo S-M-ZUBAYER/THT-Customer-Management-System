@@ -18,7 +18,7 @@ function AddIcon() {
   const {user,categories,setCategories}=useContext(AuthContext);
 
   useEffect(()=>{
-    axios.get("https://customer-server-theta.vercel.app/tht/icons")
+    axios.get("https://grozziie.zjweiting.com:8033/tht/icons")
     .then(res=>{
       setIcons(res.data)
     })
@@ -26,13 +26,13 @@ function AddIcon() {
   })
 
   useEffect(() => {
-    fetch('https://customer-server-theta.vercel.app/tht/categories')
+    fetch('https://grozziie.zjweiting.com:8033/tht/categories')
         .then(response => response.json())
         .then(data =>{
           setCategories(JSON.parse(data[0]?.allcategories))
         });
 }, []);
-
+  
   function handleImageChange(event) {
     const file = event.target.files[0];
     setImage(file);
@@ -41,7 +41,7 @@ function AddIcon() {
 
 
   // useEffect(()=>{
-  //   axios.get("https://customer-server-theta.vercel.app/tht/categories")
+  //   axios.get("https://grozziie.zjweiting.com:8033/tht/categories")
   //   .then(res=>{
   //     setCategories(JSON.parse(res.data[0]?.allcategories));
   //   })
@@ -59,7 +59,7 @@ function AddIcon() {
   
     // TODO: Send formData to server-side script for processing
    
-    axios.post('https://customer-server-theta.vercel.app/tht/icons/add',formData)
+    axios.post('https://grozziie.zjweiting.com:8033/tht/icons/add',formData)
     .then(res=>{
       if(res.data.status==="success"){
         toast.success("Image uploaded successfully");

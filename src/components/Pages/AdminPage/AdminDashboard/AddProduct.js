@@ -181,7 +181,7 @@ const now=new Date();
     }
     
     try {
-      await axios.post(`https://customer-server-theta.vercel.app/tht/${productCategory}/add`, formData, {
+      await axios.post(`https://grozziie.zjweiting.com:8033/tht/${productCategory}/add`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

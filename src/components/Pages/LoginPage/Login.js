@@ -50,7 +50,7 @@
 //         setLoading(true);
 //         const form=event.target;
 //         // handle form submission logic here
-//         fetch('https://customer-server-theta.vercel.app/tht/login', {
+//         fetch('https://grozziie.zjweiting.com:8033/tht/login', {
 //             method: 'POST',
 //             headers: {
 //                 'content-type': 'application/json'
@@ -133,7 +133,7 @@
 //         }
     
 //         // Call the API endpoint to reset password with the email
-//         fetch('https://customer-server-theta.vercel.app/tht/reset-password', {
+//         fetch('https://grozziie.zjweiting.com:8033/tht/reset-password', {
 //           method: 'POST',
 //           headers: {
 //             'Content-Type': 'application/json',
@@ -336,7 +336,7 @@ const Login = () => {
         setLoading(true);
         const form=event.target;
         // handle form submission logic here
-        fetch('https://customer-server-theta.vercel.app/tht/login', {
+        fetch('https://grozziie.zjweiting.com:8033/tht/login', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'
@@ -345,17 +345,32 @@ const Login = () => {
         })
             .then(res => res.json())
             .then(data => {
-                if (data) {
-                setUser(data[0])
+            //     if (data?.message!=="Wrong email/password combination!"|| data?.message!=="User doesn't exist") {
+            //       console.log(data)
+            //     setUser(data[0])
+            //     localStorage.setItem('user', JSON.stringify(data[0]));
+            // setLoading(false);
+            // navigate(from,{replace:true})
+            // form.reset();
+            //         toast.success('User Login Successfully');
+
+            //     }
+                if(data?.message==="Wrong email/password combination!") {
+                    toast.error(data.message);
+                    setLoading(false);
+                }
+                else if(data?.message==="User doesn't exist") {
+                    toast.error(data.message);
+                    setLoading(false);
+                }
+                else{
+                  console.log(data)
+                  setUser(data[0])
                 localStorage.setItem('user', JSON.stringify(data[0]));
             setLoading(false);
             navigate(from,{replace:true})
             form.reset();
                     toast.success('User Login Successfully');
-
-                }
-                else {
-                    toast.error(data.message);
                 }
 
             })
@@ -419,7 +434,7 @@ const Login = () => {
         }
     
         // Call the API endpoint to reset password with the email
-        fetch('https://customer-server-theta.vercel.app/tht/reset-password', {
+        fetch('https://grozziie.zjweiting.com:8033/tht/reset-password', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -480,12 +495,12 @@ const Login = () => {
                 <div className="my-3">or</div>
                 <form onSubmit={handleSubmit}>
                     {/* <label htmlFor="email">Email:</label> */}
-                    <input className=" w-full pl-2 bg-white" placeholder="username or email" type="email" id="email" value={email} onChange={handleEmailChange} />
+                    <input className=" w-full pl-2 text-gray-800 bg-white" placeholder="username or email" type="email" id="email" value={email} onChange={handleEmailChange} />
                     <hr className="  mb-10" ></hr>
                     {/* <label htmlFor="password">Password:</label> */}
                     <div className='relative'>
                         <div className='flex items-center'>
-                         <input className=" w-full pl-2 bg-white" placeholder="password" type={show? "text":"password"} id="password" value={password} onChange={handlePasswordChange} />
+                         <input className=" w-full pl-2 text-gray-800 bg-white" placeholder="password" type={show? "text":"password"} id="password" value={password} onChange={handlePasswordChange} />
                         <button className="absolute right-0 pr-2" onClick={handleToShow}>
                             {
                                 show?  <BsEyeFill className="text-slate-500"></BsEyeFill> :<RiEyeCloseLine className="text-slate-500"></RiEyeCloseLine>

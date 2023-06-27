@@ -25,7 +25,7 @@ useEffect(() => {
   const fetchQuestionsAnswerByEmail = async () => {
 
     try {
-      const response = await axios.get('https://customer-server-theta.vercel.app/tht/icons', {
+      const response = await axios.get('https://grozziie.zjweiting.com:8033/tht/icons', {
         params: {
           categoryName: categoryName,
         },
@@ -41,7 +41,7 @@ useEffect(() => {
 //create a function to delete icon from the frontend and database both side 
 const handleToDelete = async (id) => {
     try {
-      await axios.delete(`https://customer-server-theta.vercel.app/tht/icons/delete/${id}`);
+      await axios.delete(`https://grozziie.zjweiting.com:8033/tht/icons/delete/${id}`);
       toast.success('Icon deleted successfully');
       setAllIcons(allIcons.filter((icon) => icon.id !== id));
     } catch (error) {
@@ -51,7 +51,7 @@ const handleToDelete = async (id) => {
   };
   
   const  handleToDownload=(icon)=>{
-    const imageURL = `https://customer-server-theta.vercel.app/tht/images/${icon}`; // Replace with your image URL
+    const imageURL = `https://grozziie.zjweiting.com:8033/tht/images/${icon}`; // Replace with your image URL
   
     fetch(imageURL)
       .then((response) => response.blob())
@@ -87,7 +87,7 @@ const handleToDelete = async (id) => {
             return <div  className=" relative border-2">
               <AiOutlineDownload onClick={()=>handleToDownload(element?.icon)} className=" absolute top-0 hover:cursor-pointer text-green-500"></AiOutlineDownload>
               <MdDelete onClick={()=>handleToDelete(element?.id)} className=" absolute right-0 hover:cursor-pointer text-red-500"></MdDelete>
-              <img key={index} id="myDiv" className=" inline-block w-28 h-28" src={`https://customer-server-theta.vercel.app/tht/images/${element.icon}`} alt="Icon"></img>
+              <img key={index} id="myDiv" className=" inline-block w-28 h-28" src={`https://grozziie.zjweiting.com:8033/tht/images/${element.icon}`} alt="Icon"></img>
               </div>
           })
       }
