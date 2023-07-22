@@ -138,14 +138,30 @@ const facebookProvider = new FacebookAuthProvider();
 
 const UserContext = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [DUser, setDUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+
+  
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
       try {
         const parsedUser = JSON.parse(storedUser);
         setUser(parsedUser);
+      } catch (error) {
+        console.error('Error parsing user from local storage:', error);
+      }
+    }
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('DUser');
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setDUser(parsedUser);
       } catch (error) {
         console.error('Error parsing user from local storage:', error);
       }
@@ -217,6 +233,8 @@ const UserContext = ({ children }) => {
 
   const authInfo = {
     user,
+    DUser,
+    setDUser,
     setUser,
     loading,
     setLoading,

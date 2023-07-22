@@ -163,7 +163,7 @@ const AllUsers = () => {
               placeholder="Name"
               value={editingUser.name}
               onChange={(e) => setEditingUser({ ...editingUser, name: e.target.value })}
-              className="mb-2 px-4 py-2 border border-gray-300 rounded-md w-full"
+              className="mb-2 px-4 py-2 border border-gray-300 bg-white rounded-md w-full"
             />
             <input
               type="email"
@@ -171,35 +171,35 @@ const AllUsers = () => {
               readOnly
               value={editingUser.email}
               onChange={(e) => setEditingUser({ ...editingUser, email: e.target.value })}
-              className="mb-2 px-4 py-2 border border-gray-300 rounded-md w-full"
+              className="mb-2 px-4 py-2 border border-gray-300 bg-white rounded-md w-full"
             />
             <input
               type="text"
               placeholder="Phone"
               value={editingUser.phone}
               onChange={(e) => setEditingUser({ ...editingUser, phone: e.target.value })}
-              className="mb-2 px-4 py-2 border border-gray-300 rounded-md w-full"
+              className="mb-2 px-4 py-2 border border-gray-300 bg-white rounded-md w-full"
             />
             <input
               type="text"
               placeholder="Designation"
               value={editingUser.designation}
               onChange={(e) => setEditingUser({ ...editingUser, designation: e.target.value })}
-              className="mb-2 px-4 py-2 border border-gray-300 rounded-md w-full"
+              className="mb-2 px-4 py-2 border border-gray-300 bg-white rounded-md w-full"
             />
             <input
               type="text"
               placeholder="Language"
               value={editingUser.language}
               onChange={(e) => setEditingUser({ ...editingUser, language: e.target.value })}
-              className="mb-2 px-4 py-2 border border-gray-300 rounded-md w-full"
+              className="mb-2 px-4 py-2 border border-gray-300 bg-white rounded-md w-full"
             />
             <input
               type="text"
               placeholder="Country"
               value={editingUser.country}
               onChange={(e) => setEditingUser({ ...editingUser, country: e.target.value })}
-              className="mb-2 px-4 py-2 border border-gray-300 rounded-md w-full"
+              className="mb-2 px-4 py-2 border border-gray-300 bg-white rounded-md w-full"
             />
             <button
               className="bg-blue-500 text-white px-4 py-2 rounded-md"

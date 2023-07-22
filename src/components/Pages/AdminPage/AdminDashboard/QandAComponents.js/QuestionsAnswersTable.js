@@ -9,7 +9,10 @@ const QuestionAnswerTable = ({ questionAnswers, onDelete, onEdit }) => {
   const [editedDate, setEditedDate] = useState('');
   const [editedTime, setEditedTime] = useState('');
 
-  const {loading,setLoading}=useContext(AuthContext)
+  const {loading,setLoading}=useContext(AuthContext);
+
+
+
 
 
   const handleDelete = (id) => {
@@ -100,21 +103,21 @@ const QuestionAnswerTable = ({ questionAnswers, onDelete, onEdit }) => {
             <h2 className="text-lg font-bold mb-4">Edit Question Answer</h2>
             <input
               type="text"
-              className="border w-full p-2 mb-4"
+              className="border w-full p-2 mb-4 bg-white"
               placeholder="Question"
               value={editedQuestion}
               onChange={(e) => setEditedQuestion(e.target.value)}
             />
             <input
               type="text"
-              className="border w-full p-2 mb-4"
+              className="border w-full p-2 mb-4 bg-white"
               placeholder="Answer"
               value={editedAnswer}
               onChange={(e) => setEditedAnswer(e.target.value)}
             />
             <input
               type="text"
-              className="border w-full p-2 mb-4"
+              className="border w-full p-2 mb-4 bg-white"
               placeholder="date"
               value={editedDate.split("T")[0]}
               readOnly
@@ -122,7 +125,7 @@ const QuestionAnswerTable = ({ questionAnswers, onDelete, onEdit }) => {
             />
             <input
               type="time"
-              className="border w-full p-2 mb-4"
+              className="border w-full p-2 mb-4 bg-white"
               placeholder="Time"
               value={editedTime}
               readOnly

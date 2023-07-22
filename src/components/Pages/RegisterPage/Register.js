@@ -23,7 +23,8 @@ import BtnSpinner from '../../Shared/Loading/BtnSpinner';
 
 
 const Register = () => {
-    const { setUser, loading, setLoading } = useContext(AuthContext)
+    const { setUser } = useContext(AuthContext)
+    const [loading, setLoading]=useState(false)
     //create different kind of state to get the current value
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -150,87 +151,104 @@ const Register = () => {
     const { createUser, signInWithGoogle, signInWithFacebook } = useContext(AuthContext)
 
     //create a submit function to create user and store user information in Sql database
+    ;
+
     const handleSubmit = (event) => {
         event.preventDefault();
+        
+        if( name===""||image===""||phone===""||country===""||language===""|| email===""||designation===""){
+            toast.error("Please provide all the information");
+            return;
+        }
         setLoading(true);
-
-        const user = { name: name, image: image, phone: phone, country: country, language: language, email: email, designation: designation }
-
-
+        const user = {
+          name,
+          image,
+          phone,
+          country,
+          language,
+          email,
+          designation,
+        };
+      
         const form = event.target;
-
-
+      
         fetch('https://grozziie.zjweiting.com:8033/tht/check-user', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email }),
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email }),
         })
-            .then((response) => response.json())
-            .then((data) => {
-                setUserExists(data.exists);
-                console.log(data.exists)
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-
-
-        if (userExists) {
-
-            console.log(userExists)
-            //create condition check for error handling
-            if (password.length < 6) {
-                setLengthError("Your Password have to minimum 6 characters");
+          .then((response) => response.json())
+          .then((data) => {
+            const userExists = data.exists;
+            console.log(userExists);
+      
+            if (!userExists) {
+              // Validate password length
+              if (password.length < 6) {
+                setLengthError("Your password must be at least 6 characters long");
+                setLoading(false);
                 return;
-            }
-
-            if (password !== confirmPassword) {
-                setMatchError("Your Password did not match");
+              }
+      
+              // Validate password match
+              if (password !== confirmPassword) {
+                setMatchError("Your passwords do not match");
+                setLoading(false);
                 return;
-            }
-
-
-            fetch('https://grozziie.zjweiting.com:8033/tht/users/add', {
+              }
+      
+              fetch('https://grozziie.zjweiting.com:8033/tht/users/add', {
                 method: 'POST',
                 headers: {
-                    'content-type': 'application/json'
+                  'content-type': 'application/json',
                 },
-                body: JSON.stringify({ name: name, image: image, phone: phone, country: country, language: language, email: email, password: password, designation: designation, isAdmin: "false" })
-            })
-                .then(res => res.json())
-                .then(data => {
+                body: JSON.stringify({
+                  name,
+                  image,
+                  phone,
+                  country,
+                  language,
+                  email,
+                  password,
+                  designation,
+                  isAdmin: "false",
+                }),
+              })
+                .then((res) => res.json())
+                .then((data) => {
+                  if (data) {
                     localStorage.setItem('user', JSON.stringify(user));
-                    setUser(user)
-                    setLoading(false)
-                    if (data) {
-                        toast.success("Registration complete Successfully")
-                        form.reset();
-                        navigate("/")
-                    }
-                    else {
-                        toast.error(data.message);
-                        setLoading(false)
-                    }
-
+                    setUser(user);
+                    setLoading(false);
+                    toast.success("Registration complete Successfully");
+                    form.reset();
+                    navigate("/");
+                  } else {
+                    toast.error(data.message);
+                    setLoading(false);
+                  }
                 })
+                .catch((error) => {
+                  console.error('Error:', error);
+                  toast.error("An error occurred during registration");
+                  setLoading(false);
+                });
+            } else {
+              toast.error("This email already has an account");
+              setLoading(false);
+            }
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+            toast.error("An error occurred while checking user existence");
+            setLoading(false);
+          });
+      };
+      
 
-
-            //   }
-            localStorage.setItem("language", language);
-            localStorage.setItem("name", name);
-
-
-
-
-        }
-        else {
-            toast.error("This email already have an account");
-            setLoading(false)
-        }
-
-    };
 
     // create a function to google authentication system
     const handleToGoogleLogIn = () => {
@@ -369,9 +387,9 @@ const Register = () => {
                         <div className="my-2 ">
                             <button className="bg-[#004368] text-white w-full py-2 text-xl font-semibold rounded-md" type="submit">
                                 {
-                                    loading ?
-                                        <BtnSpinner></BtnSpinner> :
-                                        Register
+                                    !loading?
+                                    "Register"
+                                         :<BtnSpinner></BtnSpinner>
                                 }
                             </button>
                         </div>

@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../../context/UserContext';
 import { toast } from 'react-hot-toast';
-import axios from 'axios';
 import { handleToCopy } from './FunctionsForCustomerService/FunctionsForCustomerService';
 import BtnSpinner from '../../Shared/Loading/BtnSpinner';
 import DisplaySpinner from '../../Shared/Loading/DisplaySpinner';
 
 const CustomerServicePart = () => {
+    const { user, DUser, setDUser, loading, setLoading, totalQuestions, setTotalQuestions, setTotalQuestionLan, unknownQuestions, totalQuestionsLan, unknownQuestionsLan, setUnknownQuestions, setUnknownQuestionsLan, translationQuestions, setTranslationQuestions, setTranslationQuestionsLan, handleToStoreAllData, handleToDeleteAllData, setTranslationPercent, translationPercent, translateCalculatePercentage, unknownCalculatePercentage, setUnknownPercent, unknownPercent } = useContext(AuthContext)
 
     //create this part to send data to the backend to got data
     const formData = new FormData();
@@ -30,17 +30,39 @@ const CustomerServicePart = () => {
     const [storeLoading, setStoreLoading] = useState(false);
     const [translateLoading, setTranslateLoading] = useState(false);
     const [RadioLoading, setRadioLoading] = useState(false);
-
+    const [selectedShops, setSelectedShops] = useState(DUser?.selectedShops);
+    const shopNames = DUser?.selectedShops;
+    const handleCheckboxChange = (event) => {
+        const { value, checked } = event.target;
+        if (checked) {
+            setSelectedShops((prevSelected) => [...prevSelected, value]);
+        } else {
+            setSelectedShops((prevSelected) => prevSelected.filter((shop) => shop !== value));
+        }
+    };
 
     //use useContext to got data from any component
-    const { user, loading, setLoading, totalQuestions, setTotalQuestions, setTotalQuestionLan, unknownQuestions, totalQuestionsLan, unknownQuestionsLan, setUnknownQuestions, setUnknownQuestionsLan, translationQuestions, setTranslationQuestions, setTranslationQuestionsLan, handleToStoreAllData, handleToDeleteAllData, setTranslationPercent, translationPercent, translateCalculatePercentage, unknownCalculatePercentage, setUnknownPercent, unknownPercent } = useContext(AuthContext)
 
+
+    // create 3 functions for 3 languages shop related ans....
+    const filteredChineseAnswers = chineseAnswer.filter((product) =>
+  selectedShops.some((shop) => product[3].includes(shop))
+); 
+
+    const filteredBengaliAnswers = bengaliAnswer.filter((product) =>
+  selectedShops.some((shop) => product[3].includes(shop))
+); 
+
+    const filteredEnglishAnswers = englishAnswer.filter((product) =>
+  selectedShops.some((shop) => product[3].includes(shop))
+); 
 
     // create this function to send the data to the backend for translation and get the possible answers according to the customer questions.
     const handleSubmit = (e) => {
         e.preventDefault();
         setSendLoading(true);
-        setSelectedPrinter()
+        setSelectedPrinter();
+       
 
         //create this part so that any one cannot send the data without input anythings
         if (!text) {
@@ -118,15 +140,15 @@ const CustomerServicePart = () => {
                 // Handle the data returned by the Python backend
 
 
-                setChineseAnswer(data?.answers_CN);
-                setEnglishAnswer(data?.answers_EN);
-                setBengaliAnswer(data?.answers_BN);
+                setChineseAnswer(data?.answers_CN.filter((product) =>
+                selectedShops.some((shop) => product[3].includes(shop))));
+                setEnglishAnswer(data?.answers_EN.filter((product) =>
+                selectedShops.some((shop) => product[3].includes(shop))));
+                setBengaliAnswer(data?.answers_BN.filter((product) =>
+                selectedShops.some((shop) => product[3].includes(shop))));
 
 
-
-
-
-
+                console.log(bengaliAnswer)
                 //store all the questions in Sql database
                 if (user) {
 
@@ -164,19 +186,49 @@ const CustomerServicePart = () => {
             .catch(error => {
                 // Handle any errors that occurred during the request
                 console.error('There was an error!', error);
+                setLoading(false)
             });
 
 
     };
 
+// create a function for all check box filtering ans
+    const handleToShowShopAns=()=>{
+        setSendLoading(true);
+        fetch('https://grozziie.zjweiting.com:8032/get_response', {
+            method: 'POST',
+            body: formData,
 
+        })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the data returned by the Python backend
+
+
+                setChineseAnswer(data?.answers_CN.filter((product) =>
+                selectedShops.some((shop) => product[3].includes(shop))));
+                setEnglishAnswer(data?.answers_EN.filter((product) =>
+                selectedShops.some((shop) => product[3].includes(shop))));
+                setBengaliAnswer(data?.answers_BN.filter((product) =>
+                selectedShops.some((shop) => product[3].includes(shop))));
+                setSendLoading(false);
+
+
+
+            })
+            .catch(error => {
+                // Handle any errors that occurred during the request
+                console.error('There was an error!', error);
+            });
+
+    }
 
 
     //create 3 function to divided the answer in 3 categories
 
     const handleToDotPrinterAns = () => {
 
-        setRadioLoading(true);
+        setSendLoading(true);
         fetch('https://grozziie.zjweiting.com:8032/get_response', {
             method: 'POST',
             body: formData,
@@ -187,24 +239,26 @@ const CustomerServicePart = () => {
                 // Handle the data returned by the Python backend
 
 
-                setChineseAnswer(data?.answers_CN.filter((product) => product[2].includes("Dot")));
-                setEnglishAnswer(data?.answers_EN.filter((product) => product[2].includes("Dot")));
-                setBengaliAnswer(data?.answers_BN.filter((product) => product[2].includes("Dot")));
+                setChineseAnswer((data?.answers_CN.filter((product) => product[2].includes("Dot"))).filter((product) =>
+                selectedShops.some((shop) => product[3].includes(shop))));
+                setEnglishAnswer((data?.answers_EN.filter((product) => product[2].includes("Dot"))).filter((product) =>
+                selectedShops.some((shop) => product[3].includes(shop))));
+                setBengaliAnswer((data?.answers_BN.filter((product) => product[2].includes("Dot"))).filter((product) =>
+                selectedShops.some((shop) => product[3].includes(shop))));
+
+               
 
             })
 
 
-        setRadioLoading(false);
+        setSendLoading(false);
 
     }
 
 
     const handleToThermalPrinterAns = () => {
-        setRadioLoading(true);
-        // setChineseAnswer(chineseAnswer.filter((product) => product[2].includes("Thermal")));
-        // setEnglishAnswer(englishAnswer.filter((product) => product[2].includes("Thermal")));
-        // setBengaliAnswer(bengaliAnswer.filter((product) => product[2].includes("Thermal")));
-        // console.log(chineseAnswer)
+        setSendLoading(true);
+       
 
         fetch('https://grozziie.zjweiting.com:8032/get_response', {
             method: 'POST',
@@ -215,23 +269,24 @@ const CustomerServicePart = () => {
             .then(data => {
                 // Handle the data returned by the Python backend
 
+                setChineseAnswer((data?.answers_CN.filter((product) => product[2].includes("Thermal"))).filter((product) =>
+                selectedShops.some((shop) => product[3].includes(shop))));
+                setEnglishAnswer((data?.answers_EN.filter((product) => product[2].includes("Thermal"))).filter((product) =>
+                selectedShops.some((shop) => product[3].includes(shop))));
+                setBengaliAnswer((data?.answers_BN.filter((product) => product[2].includes("Thermal"))).filter((product) =>
+                selectedShops.some((shop) => product[3].includes(shop))));
 
-                setChineseAnswer(data?.answers_CN.filter((product) => product[2].includes("Thermal")));
-                setEnglishAnswer(data?.answers_EN.filter((product) => product[2].includes("Thermal")));
-                setBengaliAnswer(data?.answers_BN.filter((product) => product[2].includes("Thermal")));
+               
 
             })
 
 
-        setRadioLoading(false);
+        setSendLoading(false);
     }
 
     const handleToAttendanceMachineAns = () => {
-        setRadioLoading(true);
-        // setChineseAnswer(chineseAnswer.filter((product) => product[2].includes("Attendance")));
-        // setEnglishAnswer(englishAnswer.filter((product) => product[2].includes("Attendance")));
-        // setBengaliAnswer(bengaliAnswer.filter((product) => product[2].includes("Attendance")));
-        // console.log(chineseAnswer)
+        setSendLoading(true);
+       
 
         fetch('https://grozziie.zjweiting.com:8032/get_response', {
             method: 'POST',
@@ -243,13 +298,17 @@ const CustomerServicePart = () => {
                 // Handle the data returned by the Python backend
 
 
-                setChineseAnswer(data?.answers_CN.filter((product) => product[2].includes("Attendance")));
-                setEnglishAnswer(data?.answers_EN.filter((product) => product[2].includes("Attendance")));
-                setBengaliAnswer(data?.answers_BN.filter((product) => product[2].includes("Attendance")));
+                setChineseAnswer((data?.answers_CN.filter((product) => product[2].includes("Attendance"))).filter((product) =>
+                selectedShops.some((shop) => product[3].includes(shop))));
+                setEnglishAnswer((data?.answers_EN.filter((product) => product[2].includes("Attendance"))).filter((product) =>
+                selectedShops.some((shop) => product[3].includes(shop))));
+                setBengaliAnswer((data?.answers_BN.filter((product) => product[2].includes("Attendance"))).filter((product) =>
+                selectedShops.some((shop) => product[3].includes(shop))));
 
+                console.log(bengaliAnswer)
             })
 
-        setRadioLoading(false);
+        setSendLoading(false);
     }
 
 
@@ -281,17 +340,17 @@ const CustomerServicePart = () => {
 
             unknownQuestions.forEach(question => {
                 if (question.question === text) {
-                    
+
                     toast.error("This question has already been stored as an unknown question");
                     isDuplicate = true;
                 }
             });
 
             if (isDuplicate) {
-            setStoreLoading(false);
-            setText("");
-            inputField2.value = ""
-            inputField3.value = ""
+                setStoreLoading(false);
+                setText("");
+                inputField2.value = ""
+                inputField3.value = ""
                 return;
             }
 
@@ -339,31 +398,7 @@ const CustomerServicePart = () => {
                 setText("");
                 inputField2.value = ""
                 inputField3.value = ""
-                // toast.success("Question added successfully");
-
-
-                // //start the part to store data in localStorage
-
-                //     // Retrieve the array from local storage
-                //     const storedArrayUnknownQuestions = localStorage.getItem('unknownQuestions');
-                //     let storedArray = [];
-
-                //     // Check if the stored array exists
-                //     if (storedArrayUnknownQuestions) {
-                //         storedArray = JSON.parse(storedArrayUnknownQuestions);
-                //     }
-
-                //     // Add a new element to the array
-                //     const newElement = { text, date, time };
-                //     storedArray.push(newElement);
-
-                //     setUnknownQuestions(storedArray)
-
-                //     // Convert the modified array back to a string
-                //     const updatedArrayString = JSON.stringify(storedArray);
-
-                //     // Store the updated array in local storage
-                //     localStorage.setItem('unknownQuestions', updatedArrayString);
+                
 
 
                 return;
@@ -411,17 +446,17 @@ const CustomerServicePart = () => {
 
             translationQuestions.forEach(question => {
                 if (question.question === text) {
-                    
+
                     toast.error("This question has already been stored as an translation question problem");
                     isDuplicate = true;
                 }
             });
 
             if (isDuplicate) {
-            setTranslateLoading(false);
-            setText("");
-            inputField2.value = ""
-            inputField3.value = ""
+                setTranslateLoading(false);
+                setText("");
+                inputField2.value = ""
+                inputField3.value = ""
                 return;
             }
 
@@ -535,193 +570,213 @@ const CustomerServicePart = () => {
 
 
     return (
-            <div>
-                <div className=" my-6 flex justify-start bg-white">
+        <div>
+            <div className=" my-6 flex justify-between bg-white">
 
-                    {/* create a from to send the question to the backend to translation and get all the possible ans */}
-                    <form onSubmit={handleSubmit} className="rounded w-2/3 pb-8 mb-4 ">
-                        <div className="mb-4">
-                            <label className="block font-semibold text-gray-700 mb-2 pl-2" htmlFor="input1">
-                                Question from app
-                            </label>
-                            <textarea
-                                className="shadow overflow-y-scroll resize-none appearance-none border rounded w-full py-2 px-3 bg-gray-200 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                id="input1"
-                                name='inputField'
-                                type="text"
-                                placeholder="Enter Question from app"
-                                value={text}
-                                onChange={(e) => setText(e.target.value)}
-                            />
-                        </div>
-                        <div className="mb-4">
-                            <label className="block  font-semibold text-gray-700 mb-2  pl-2" htmlFor="input2">
-                                Customer Service Formate
-                            </label>
-                            <textarea
-                                className="shadow overflow-y-scroll resize-none appearance-none border rounded w-full py-2 px-3 bg-gray-200 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                id="input2"
-                                type="text"
-                                name='outputField1'
-                                placeholder="Show in Customer Service"
-                            />
-                        </div>
-                        <div className="mb-4">
-                            <label className="block font-semibold text-gray-700 mb-2  pl-2" htmlFor="input3">
-                                English Formate
-                            </label>
-                            <textarea
-                                className="shadow overflow-y-scroll resize-none appearance-none border rounded w-full py-2 px-3 bg-gray-200 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                id="input3"
-                                type="text"
-                                placeholder="Show in English"
-                                name='outputField2'
+                {/* create a from to send the question to the backend to translation and get all the possible ans */}
+                <form onSubmit={handleSubmit} className="rounded w-2/3 pb-8 mb-4 ">
+                    <div className="mb-4">
+                        <label className="block font-semibold text-gray-700 mb-2 pl-2" htmlFor="input1">
+                            Question from app
+                        </label>
+                        <textarea
+                            className="shadow overflow-y-scroll resize-none appearance-none border rounded w-full py-2 px-3 bg-gray-200 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            id="input1"
+                            name='inputField'
+                            type="text"
+                            placeholder="Enter Question from app"
+                            value={text}
+                            onChange={(e) => setText(e.target.value)}
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block  font-semibold text-gray-700 mb-2  pl-2" htmlFor="input2">
+                            Customer Service Formate
+                        </label>
+                        <textarea
+                            className="shadow overflow-y-scroll resize-none appearance-none border rounded w-full py-2 px-3 bg-gray-200 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            id="input2"
+                            type="text"
+                            name='outputField1'
+                            placeholder="Show in Customer Service"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block font-semibold text-gray-700 mb-2  pl-2" htmlFor="input3">
+                            English Formate
+                        </label>
+                        <textarea
+                            className="shadow overflow-y-scroll resize-none appearance-none border rounded w-full py-2 px-3 bg-gray-200 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            id="input3"
+                            type="text"
+                            placeholder="Show in English"
+                            name='outputField2'
 
-                            />
-                        </div>
-                        <div className="flex items-center justify-center">
-                            <button
-                                className="bg-[#004368] hover:bg-blue-700   px-10 text-white font-bold py-1 rounded focus:outline-none focus:shadow-outline"
-                                type="submit"
-                            >
-                                {
-                                    sendLoading ?
-                                        <BtnSpinner></BtnSpinner>
-                                        : "Send"
-                                }
-
-                            </button>
-
-                        </div>
-
-                    </form>
-
-                </div>
-
-
-                {/* create store button to call the function store the unknown questions to the database */}
-                <div className="w-7/12 md:w-5/12 flex ml-auto">
-                    <div className="w-full flex justify-end">
-                        <button onClick={handleToUnknownStore}
-                            className=" bg-yellow-400 hover:bg-blue-200  px-1 md:px-10 text-black font-semibold md:font-bold py-1 rounded focus:outline-none focus:shadow-outline"
+                        />
+                    </div>
+                    <div className="flex items-center justify-center">
+                        <button
+                            className="bg-[#004368] hover:bg-blue-700   px-10 text-white font-bold py-1 rounded focus:outline-none focus:shadow-outline"
+                            type="submit"
                         >
                             {
-                                storeLoading ?
+                                sendLoading ?
                                     <BtnSpinner></BtnSpinner>
-                                    : 'Store'
+                                    : "Send"
                             }
 
                         </button>
+
                     </div>
 
+                </form>
 
-                    {/* create store Translate button to call the function store miss translation part to the database */}
-                    <div className="w-full flex justify-end">
-                        <button onClick={handleToStoreTranslate}
-                            className=" bg-green-400 hover:bg-blue-200   px-1 md:px-10 text-black font-semibold md:font-bold py-1 rounded focus:outline-none focus:shadow-outline"
-                        >
-                            {
-                                translateLoading ?
-                                    <BtnSpinner></BtnSpinner>
-                                    : 'Store Translate'
-                            }
-
-                        </button>
-                    </div>
-                </div>
-
-
-                {/* section to select the specific printer to get the proper ans for this particular printer */}
-
-
-                <div className="flex justify-around w-8/12 text-gray-700">
-                    <div>
-                        <label>
+                <div className=" ml-3">
+                    <h1 className="font-semibold my-3 text-slate-800 text-center" >--Select ShopeNames--</h1>
+                
+                <div className="text-start mb-8 " style={{minHeight:"290px" ,overflowY: 'scroll', border: '1px solid #ccc' }}>
+                    {shopNames.map((shop, index) => (
+                        <div className="pl-3" key={index}>
                             <input
-                                type="radio"
-                                className="bg-white"
-                                value="Dot Printer"
-                                checked={selectedPrinter === 'Dot Printer'}
-                                onChange={handlePrinterChange}
-                                onClick={handleToDotPrinterAns}
+                                className="mr-2"
+                                type="checkbox"
+                                value={shop}
+                                checked={selectedShops.includes(shop)}
+                                onChange={handleCheckboxChange}
+                                // onClick={handleToShowShopAns}
                             />
-                            Dot Printer
-                        </label>
-                    </div>
-
-                    <div>
-                        <label>
-                            <input
-                                type="radio"
-                                className="bg-white"
-                                value="Thermal Printer"
-                                checked={selectedPrinter === 'Thermal Printer'}
-                                onChange={handlePrinterChange}
-                                onClick={handleToThermalPrinterAns}
-                            />
-                            Thermal Printer
-                        </label>
-                    </div>
-
-                    <div>
-                        <label>
-                            <input
-                                type="radio"
-                                className="bg-white"
-                                value="Attendance"
-                                checked={selectedPrinter === 'Attendance'}
-                                onChange={handlePrinterChange}
-                                onClick={handleToAttendanceMachineAns}
-                            />
-                            Attendance
-                        </label>
-                    </div>
-
-
-                </div>
-
-
-
-
-
-
-
-                {/* create this part to show all the possible answers */}
-
-                {
-                    sendLoading || RadioLoading ?
-                        <DisplaySpinner></DisplaySpinner>
-                        :
-                        <div className=" flex items-center justify-end">
-                            <div className="text-base font-semibold text-black " id="answerPart">
-
-                                {chineseAnswer?.length ?
-                                    chineseAnswer.map((element, index) => <div key={index} className="common border-2 bg-lime-200 my-5 ml-10  p-3 rounded-tl-xl rounded-br-xl">
-
-                                        <p onClick={(e) => handleToCopy(e, element[1])} className=" shadow-2xl common text-base rounded-md px-2 mb-2 py-2" id="text-to-copy">
-                                            <span className="text-lg font-bold text-indigo-700">Customer</span>:- {element[1]}
-                                        </p>
-
-                                        <p onClick={(e) => handleToCopy(e, element[1])} id="text-to-copy" className="common text-base  shadow-2xl rounded-md mb-2 p-2">
-                                            <span className="text-lg font-bold text-amber-800">Customer Service</span>:- {bengaliAnswer[index][1]}
-                                        </p>
-                                        <p onClick={(e) => handleToCopy(e, element[1])} id="text-to-copy" className="common text-base  shadow-2xl  rounded-md p-2">
-                                            <span className="text-lg font-bold text-fuchsia-700">Customer Service</span>:- {englishAnswer[index][1]}
-                                        </p>
-                                    </div>)
-                                    :
-                                    <p className="text-2xl mr-32 mt-20 font-bold text-amber-500">No Answer Available For This Question !!!</p>
-                                }
-                            </div>
-
-
+                            {shop}
                         </div>
-                }
+                    ))}
+                </div>
+                </div>
 
             </div>
 
 
-        
+            {/* create store button to call the function store the unknown questions to the database */}
+            <div className="w-7/12 md:w-5/12 flex ml-auto">
+                <div className="w-full flex justify-end">
+                    <button onClick={handleToUnknownStore}
+                        className=" bg-yellow-400 hover:bg-blue-200  px-1 md:px-10 text-black font-semibold md:font-bold py-1 rounded focus:outline-none focus:shadow-outline"
+                    >
+                        {
+                            storeLoading ?
+                                <BtnSpinner></BtnSpinner>
+                                : 'Store'
+                        }
+
+                    </button>
+                </div>
+
+
+                {/* create store Translate button to call the function store miss translation part to the database */}
+                <div className="w-full flex justify-end">
+                    <button onClick={handleToStoreTranslate}
+                        className=" bg-green-400 hover:bg-blue-200   px-1 md:px-10 text-black font-semibold md:font-bold py-1 rounded focus:outline-none focus:shadow-outline"
+                    >
+                        {
+                            translateLoading ?
+                                <BtnSpinner></BtnSpinner>
+                                : 'Store Translate'
+                        }
+
+                    </button>
+                </div>
+            </div>
+
+
+            {/* section to select the specific printer to get the proper ans for this particular printer */}
+
+
+            <div className="flex justify-around w-8/12 text-gray-700">
+                <div>
+                    <label>
+                        <input
+                            type="radio"
+                            className="bg-white"
+                            value="Dot Printer"
+                            checked={selectedPrinter === 'Dot Printer'}
+                            onChange={handlePrinterChange}
+                            onClick={handleToDotPrinterAns}
+                        />
+                        Dot Printer
+                    </label>
+                </div>
+
+                <div>
+                    <label>
+                        <input
+                            type="radio"
+                            className="bg-white"
+                            value="Thermal Printer"
+                            checked={selectedPrinter === 'Thermal Printer'}
+                            onChange={handlePrinterChange}
+                            onClick={handleToThermalPrinterAns}
+                        />
+                        Thermal Printer
+                    </label>
+                </div>
+
+                <div>
+                    <label>
+                        <input
+                            type="radio"
+                            className="bg-white"
+                            value="Attendance"
+                            checked={selectedPrinter === 'Attendance'}
+                            onChange={handlePrinterChange}
+                            onClick={handleToAttendanceMachineAns}
+                        />
+                        Attendance
+                    </label>
+                </div>
+
+
+            </div>
+
+
+
+
+
+
+
+            {/* create this part to show all the possible answers */}
+
+            {
+                sendLoading || RadioLoading ?
+                    <DisplaySpinner></DisplaySpinner>
+                    :
+                    <div className=" flex items-center justify-end">
+                        <div className="text-base font-semibold text-black " id="answerPart">
+
+                            {chineseAnswer?.length ?
+                                chineseAnswer.map((element, index) => <div key={index} className="common border-2 bg-lime-200 my-5 ml-10  p-3 rounded-tl-xl rounded-br-xl">
+
+                                    <p onClick={(e) => handleToCopy(e, element[1])} className=" shadow-2xl common text-base rounded-md px-2 mb-2 py-2" id="text-to-copy">
+                                        <span className="text-lg font-bold text-indigo-700">Customer</span>:- {element[1]}
+                                    </p>
+
+                                    <p onClick={(e) => handleToCopy(e, element[1])} id="text-to-copy" className="common text-base  shadow-2xl rounded-md mb-2 p-2">
+                                        <span className="text-lg font-bold text-amber-800">Customer Service</span>:- {bengaliAnswer[index][1]}
+                                    </p>
+                                    <p onClick={(e) => handleToCopy(e, element[1])} id="text-to-copy" className="common text-base  shadow-2xl  rounded-md p-2">
+                                        <span className="text-lg font-bold text-fuchsia-700">Customer Service</span>:- {englishAnswer[index][1]}
+                                    </p>
+                                </div>)
+                                :
+                                <p className="text-2xl mr-32 mt-20 font-bold text-amber-500">No Answer Available For This Question !!!</p>
+                            }
+                        </div>
+
+
+                    </div>
+            }
+
+        </div>
+
+
+
     );
 };
 
