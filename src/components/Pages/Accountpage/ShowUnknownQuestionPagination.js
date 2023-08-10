@@ -7,14 +7,10 @@ import { MdDeleteOutline } from 'react-icons/md';
 const ShowUnknownQuestionPagination = ({ handleToDeleteUnknownData, unknownQuestions,handleToDeleteOneUnknownQuestions,unknownPercent}) => {
     const [currentPage, setCurrentPage] = useState(2);
     const QuestionPerPage =25;
-console.log(currentPage,typeof(currentPage), "current page")
     const totalPages = Math.ceil(unknownQuestions.length / QuestionPerPage);
-    console.log(totalPages,"total pages")
     const startIndex = (currentPage-1) * QuestionPerPage;
     const endIndex = startIndex + QuestionPerPage;
-console.log(startIndex,endIndex, "start end")
     const currentQuestions = unknownQuestions.slice(startIndex, endIndex);
-    console.log(currentQuestions)
 
     const handlePageChange = (newPage) => {
         if (newPage >= 1 && newPage <= totalPages) {

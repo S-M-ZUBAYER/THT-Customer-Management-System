@@ -4,6 +4,7 @@ import { AuthContext } from '../../../../context/UserContext';
 //create function to copy the answer
 
 export const handleToCopy = (e, element) => {
+    console.log(element,e)
 
     setTimeout(() => {
 

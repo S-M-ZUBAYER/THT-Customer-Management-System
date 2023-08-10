@@ -24,7 +24,7 @@ const CustomerServicePart = () => {
     const [firstChineseAnswer, setFirstChineseAnswer] = useState([]);
     const [firstBengaliAnswer, setFirstBengaliAnswer] = useState([]);
     const [firstEnglishAnswer, setFirstEnglishAnswer] = useState([]);
-   
+
     const [customerTranslation, setCustomerTranslation] = useState("");
     const inputField1 = document.getElementById("input1");
     const inputField2 = document.getElementById("input2");
@@ -38,42 +38,48 @@ const CustomerServicePart = () => {
     const [selectedShops, setSelectedShops] = useState(DUser?.selectedShops);
     const shopNames = DUser?.selectedShops;
 
-   
+
 
     const handleCheckboxChange = (event) => {
         const { value, checked } = event.target;
         if (checked) {
-          setSelectedShops((prevSelected) => [...prevSelected, value]);
+            setSelectedShops((prevSelected) => [...prevSelected, value]);
         } else {
-          setSelectedShops((prevSelected) => prevSelected.filter((shop) => shop !== value));
+            setSelectedShops((prevSelected) => prevSelected.filter((shop) => shop !== value));
         }
-      };
-    
+    };
 
-      useEffect(() => {
+
+    useEffect(() => {
         // console.log(selectedShops, "after");
         // Call the function that depends on the updated selectedShops here if needed
         handleToShowShopAns();
-      }, [selectedShops]);
+    }, [selectedShops]);
 
 
     // create this function to send the data to the backend for translation and get the possible answers according to the customer questions.
     const handleSubmit = (e) => {
         e.preventDefault();
         setSendLoading(true);
-        setSelectedPrinter();
-       
+        setChineseAnswer([]);
+        setEnglishAnswer([]);
+        setBengaliAnswer([]);
+        setFirstBengaliAnswer([]);
+        setFirstEnglishAnswer([]);
+        setFirstChineseAnswer([]);
+
+        console.log(englishAnswer,firstEnglishAnswer)
 
         //create this part so that any one cannot send the data without input anythings
         if (!text) {
             toast.error("please input correct value");
+            setLoading(false)
+            setSendLoading(false)
             return;
         }
 
         // start the part for translations
-        setChineseAnswer([]);
-        setEnglishAnswer([]);
-        setBengaliAnswer([]);
+        
         setText(e.target.inputField.value);
         setLanguage(localStorage.getItem('language'));
         setName(localStorage.getItem('name'));
@@ -96,7 +102,7 @@ const CustomerServicePart = () => {
             text: text
         }
         // let apiUrl = `https://zuss-chat-translator-server-site.vercel.app/translate`;
-        let apiUrl = `http://localhost:5000/tht/translate`;
+        let apiUrl = `https://grozziie.zjweiting.com:8035/tht/translate`;
         fetch(apiUrl, {
             method: "POST",
             headers: {
@@ -112,7 +118,7 @@ const CustomerServicePart = () => {
 
 
         //create an object to send backend and start the process for Bengali translations
-
+console.log(selectedPrinter,bengaliAnswer)
         const customerInput = {
             target: "Bengali",
             text: text
@@ -140,22 +146,69 @@ const CustomerServicePart = () => {
             .then(data => {
                 // Handle the data returned by the Python backend
 
-                setChineseAnswer(data?.answers_CN.filter((product) =>
-                (selectedShops.map(selected=>selected.split('/')[0])).some((shop) => product[3].includes(shop))));
-                setEnglishAnswer(data?.answers_EN.filter((product) =>
-                (shopNames.map(selected=>selected.split('/')[0])).some((shop) => product[3].includes(shop))));
-                setBengaliAnswer(data?.answers_BN.filter((product) =>
-                (shopNames.map(selected=>selected.split('/')[0])).some((shop) => product[3].includes(shop))));
-
                 setFirstChineseAnswer(data?.answers_CN.filter((product) =>
-                (shopNames.map(selected=>selected.split('/')[0])).some((shop) => product[3].includes(shop))));
+                    (shopNames.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop))));
                 setFirstEnglishAnswer(data?.answers_EN.filter((product) =>
-                (shopNames.map(selected=>selected.split('/')[0])).some((shop) => product[3].includes(shop))));
+                    (shopNames.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop))));
                 setFirstBengaliAnswer(data?.answers_BN.filter((product) =>
-                (shopNames.map(selected=>selected.split('/')[0])).some((shop) => product[3].includes(shop))));
+                    (shopNames.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop))));
 
 
-               
+
+                if (selectedPrinter === "Attendance") {
+                    setChineseAnswer(((data?.answers_CN.filter((product) =>
+                    (shopNames.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop)))).filter((product) => product[2].includes("Attendance"))).filter((product) =>
+                        (selectedShops.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop))));
+                    setEnglishAnswer(((data?.answers_EN.filter((product) =>
+                    (shopNames.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop)))).filter((product) => product[2].includes("Attendance"))).filter((product) =>
+                        (selectedShops.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop))));
+                    setBengaliAnswer(((data?.answers_BN.filter((product) =>
+                    (shopNames.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop)))).filter((product) => product[2].includes("Attendance"))).filter((product) =>
+                        (selectedShops.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop))));
+                }
+
+                else if ("Thermal Printer") {
+
+                    setChineseAnswer(((data?.answers_CN.filter((product) =>
+                    (shopNames.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop)))).filter((product) => product[2].includes("Thermal"))).filter((product) =>
+                        (selectedShops.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop))));
+                    setEnglishAnswer(((data?.answers_EN.filter((product) =>
+                    (shopNames.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop)))).filter((product) => product[2].includes("Thermal"))).filter((product) =>
+                        (selectedShops.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop))));
+                    setBengaliAnswer(((data?.answers_BN.filter((product) =>
+                    (shopNames.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop)))).filter((product) => product[2].includes("Thermal"))).filter((product) =>
+                        (selectedShops.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop))));
+                }
+
+                else if ("Dot Printer") {
+
+                    setChineseAnswer(((data?.answers_CN.filter((product) =>
+                    (shopNames.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop)))).filter((product) => product[2].includes("Dot"))).filter((product) =>
+                        (selectedShops.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop))));
+                    setEnglishAnswer(((data?.answers_EN.filter((product) =>
+                    (shopNames.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop)))).filter((product) => product[2].includes("Dot"))).filter((product) =>
+                        (selectedShops.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop))));
+                    setBengaliAnswer(((data?.answers_BN.filter((product) =>
+                    (shopNames.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop)))).filter((product) => product[2].includes("Dot"))).filter((product) =>
+                        (selectedShops.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop))));
+                }
+
+
+                else {
+                    setChineseAnswer(data?.answers_CN.filter((product) =>
+                        (selectedShops.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop))));
+                    setEnglishAnswer(data?.answers_EN.filter((product) =>
+                        (shopNames.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop))));
+                    setBengaliAnswer(data?.answers_BN.filter((product) =>
+                        (shopNames.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop))));
+
+
+                }
+
+
+
+
+
                 //store all the questions in Sql database
                 if (user) {
 
@@ -199,29 +252,29 @@ const CustomerServicePart = () => {
 
     };
 
-// create a function for all check box filtering ans
-const handleToShowShopAns = async () => {
-    // console.log("click", selectedShops);
-    setChineseAnswer([]);
-    setBengaliAnswer([]);
-    setEnglishAnswer([]);
-    localStorage.setItem('DUser', JSON.stringify({ email:DUser?.email, password:DUser?.password, selectedShops }));
-      setSendLoading(true);
-  
-      setChineseAnswer(firstChineseAnswer.filter((product) =>
-        selectedShops.map(selected => selected.split('/')[0]).some((shop) => product[3].includes(shop))));
-  
-        setEnglishAnswer (firstEnglishAnswer.filter((product) =>
-        selectedShops.map(selected => selected.split('/')[0]).some((shop) => product[3].includes(shop))));
-  
+    // create a function for all check box filtering ans
+    const handleToShowShopAns = async () => {
+        // console.log("click", selectedShops);
+        setChineseAnswer([]);
+        setBengaliAnswer([]);
+        setEnglishAnswer([]);
+        localStorage.setItem('DUser', JSON.stringify({ email: DUser?.email, password: DUser?.password, selectedShops }));
+        setSendLoading(true);
+
+        setChineseAnswer(firstChineseAnswer.filter((product) =>
+            selectedShops.map(selected => selected.split('/')[0]).some((shop) => product[3].includes(shop))));
+
+        setEnglishAnswer(firstEnglishAnswer.filter((product) =>
+            selectedShops.map(selected => selected.split('/')[0]).some((shop) => product[3].includes(shop))));
+
         setBengaliAnswer(firstBengaliAnswer.filter((product) =>
-        selectedShops.map(selected => selected.split('/')[0]).some((shop) => product[3].includes(shop))));
-  
+            selectedShops.map(selected => selected.split('/')[0]).some((shop) => product[3].includes(shop))));
+
         setSendLoading(false);
-  
-    // console.log(bengaliAnswer)
-  };
-  
+
+        // console.log(bengaliAnswer)
+    };
+
 
 
     //create 3 function to divided the answer in 3 categories
@@ -229,15 +282,15 @@ const handleToShowShopAns = async () => {
     const handleToDotPrinterAns = () => {
 
         setSendLoading(true);
-       
-                setChineseAnswer((firstChineseAnswer.filter((product) => product[2].includes("Dot"))).filter((product) =>
-                (selectedShops.map(selected=>selected.split('/')[0])).some((shop) => product[3].includes(shop))));
-                setEnglishAnswer((firstEnglishAnswer.filter((product) => product[2].includes("Dot"))).filter((product) =>
-                (selectedShops.map(selected=>selected.split('/')[0])).some((shop) => product[3].includes(shop))));
-                setBengaliAnswer((firstBengaliAnswer.filter((product) => product[2].includes("Dot"))).filter((product) =>
-                (selectedShops.map(selected=>selected.split('/')[0])).some((shop) => product[3].includes(shop))));
 
-            
+        setChineseAnswer((firstChineseAnswer.filter((product) => product[2].includes("Dot"))).filter((product) =>
+            (selectedShops.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop))));
+        setEnglishAnswer((firstEnglishAnswer.filter((product) => product[2].includes("Dot"))).filter((product) =>
+            (selectedShops.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop))));
+        setBengaliAnswer((firstBengaliAnswer.filter((product) => product[2].includes("Dot"))).filter((product) =>
+            (selectedShops.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop))));
+
+
         setSendLoading(false);
 
     }
@@ -245,14 +298,14 @@ const handleToShowShopAns = async () => {
 
     const handleToThermalPrinterAns = () => {
         setSendLoading(true);
-       
 
-                setChineseAnswer((firstChineseAnswer.filter((product) => product[2].includes("Thermal"))).filter((product) =>
-                (selectedShops.map(selected=>selected.split('/')[0])).some((shop) => product[3].includes(shop))));
-                setEnglishAnswer((firstEnglishAnswer.filter((product) => product[2].includes("Thermal"))).filter((product) =>
-                (selectedShops.map(selected=>selected.split('/')[0])).some((shop) => product[3].includes(shop))));
-                setBengaliAnswer((firstBengaliAnswer.filter((product) => product[2].includes("Thermal"))).filter((product) =>
-                (selectedShops.map(selected=>selected.split('/')[0])).some((shop) => product[3].includes(shop))));
+
+        setChineseAnswer((firstChineseAnswer.filter((product) => product[2].includes("Thermal"))).filter((product) =>
+            (selectedShops.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop))));
+        setEnglishAnswer((firstEnglishAnswer.filter((product) => product[2].includes("Thermal"))).filter((product) =>
+            (selectedShops.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop))));
+        setBengaliAnswer((firstBengaliAnswer.filter((product) => product[2].includes("Thermal"))).filter((product) =>
+            (selectedShops.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop))));
 
 
         setSendLoading(false);
@@ -262,12 +315,12 @@ const handleToShowShopAns = async () => {
         setSendLoading(true);
 
 
-                setChineseAnswer((firstChineseAnswer.filter((product) => product[2].includes("Attendance"))).filter((product) =>
-                (selectedShops.map(selected=>selected.split('/')[0])).some((shop) => product[3].includes(shop))));
-                setEnglishAnswer((firstEnglishAnswer.filter((product) => product[2].includes("Attendance"))).filter((product) =>
-                (selectedShops.map(selected=>selected.split('/')[0])).some((shop) => product[3].includes(shop))));
-                setBengaliAnswer((firstBengaliAnswer.filter((product) => product[2].includes("Attendance"))).filter((product) =>
-                (selectedShops.map(selected=>selected.split('/')[0])).some((shop) => product[3].includes(shop))));
+        setChineseAnswer((firstChineseAnswer.filter((product) => product[2].includes("Attendance"))).filter((product) =>
+            (selectedShops.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop))));
+        setEnglishAnswer((firstEnglishAnswer.filter((product) => product[2].includes("Attendance"))).filter((product) =>
+            (selectedShops.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop))));
+        setBengaliAnswer((firstBengaliAnswer.filter((product) => product[2].includes("Attendance"))).filter((product) =>
+            (selectedShops.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop))));
 
 
         setSendLoading(false);
@@ -360,7 +413,7 @@ const handleToShowShopAns = async () => {
                 setText("");
                 inputField2.value = ""
                 inputField3.value = ""
-                
+
 
 
                 return;
@@ -524,7 +577,7 @@ const handleToShowShopAns = async () => {
 
     // ***** select printer section ************************
 
-  
+
 
     const handlePrinterChange = (e) => {
         setSelectedPrinter(e.target.value);
@@ -598,22 +651,22 @@ const handleToShowShopAns = async () => {
 
                 <div className=" ml-3">
                     <h1 className="font-semibold my-3 text-slate-800 text-center" >--Select ShopeNames--</h1>
-                
-                <div className="text-start mb-8 " style={{minHeight:"290px" ,overflowY: 'scroll', border: '1px solid #ccc' }}>
-                    {shopNames.map((shop, index) => (
-                        <div className="pl-3" key={index}>
-                            <input
-                                className="mr-2"
-                                type="checkbox"
-                                value={shop}
-                                checked={selectedShops.includes(shop)}
-                                onChange={handleCheckboxChange}
+
+                    <div className="text-start mb-8 " style={{ minHeight: "290px", overflowY: 'scroll', border: '1px solid #ccc' }}>
+                        {shopNames.map((shop, index) => (
+                            <div className="pl-3" key={index}>
+                                <input
+                                    className="mr-2"
+                                    type="checkbox"
+                                    value={shop}
+                                    checked={selectedShops.includes(shop)}
+                                    onChange={handleCheckboxChange}
                                 //  onClick={handleToShowShopAns}
-                            />
-                            {shop}
-                        </div>
-                    ))}
-                </div>
+                                />
+                                {shop}
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
             </div>
