@@ -5,12 +5,15 @@ import { MdDeleteOutline } from 'react-icons/md';
 import axios from 'axios';
 import BtnSpinner from '../../Shared/Loading/BtnSpinner';
 import { Navigate } from 'react-router-dom';
+import ShowQuestionPagination from './ShowQuestionPagination';
+import ShowUnknownQuestionPagination from './ShowUnknownQuestionPagination';
 const Account = () => {
 
   //use useeContext to load data from  another components
   const { logOut, loading, setLoading, user, setUser, totalQuestions, translationQuestions, setTotalQuestions, setTranslationQuestions, translateCalculatePercentage, unknownCalculatePercentage, unknownPercent, setUnknownPercent, translationPercent, setTranslationPercent, unknownQuestions, setUnknownQuestions } = useContext(AuthContext);
   const [allUser, setAllUser] = useState([]);
   const [userInfo, setUserInfo] = useState([]);
+  const QuestionPerPage = 25;
 
 
 
@@ -124,17 +127,7 @@ const Account = () => {
 
 
 
-  //create a function to delete all question from the frontend and database both side 
-  // const handleToDeleteAllData = async () => {
-  //   try {
-  //     await axios.delete(`https://grozziie.zjweiting.com:8033/tht/questions/delete/${user?.email}`);
-  //     toast.success('All questions deleted successfully');
-  //     setTotalQuestions(totalQuestions.filter((question) => question?.email !== user?.email));
-  //   } catch (error) {
-  //     console.error('Error deleting user:', error);
-  //     toast.error('Failed to delete user');
-  //   }
-  // };
+
   const handleToDeleteAllData = async () => {
     try {
       const confirmed = window.confirm('Are you sure you want to delete all questions?');
@@ -256,7 +249,7 @@ const Account = () => {
 
         </div>
 
-        {/* create this part to show the user information */}
+
         <div className="text-start mt-20 md:mt-0 ">
           <div className="ml-20 md:ml-0 mx-auto md:mx-0">
 
@@ -310,88 +303,22 @@ const Account = () => {
       </div>
 
 
-      {/* create this part to show all of the data try to get according to the customer questions */}
       <div className="mb-10 text-base">
-        <div className="flex justify-between text-3xl bg-red-200 py-1 font-bold mt-32 px-4">
-          <h2 className="">total Questions</h2>
-          <MdDeleteOutline onClick={handleToDeleteAllData} className='text-2xl cursor-pointer'></MdDeleteOutline>
-        </div>
 
-        <div>
-          <table className="w-full">
-            <thead>
-              <tr className="bg-orange-200">
-                <th>No.</th>
-                <th>Question</th>
-                <th>Time</th>
-                <th>Date</th>
-                {/* <th>Action</th> */}
-              </tr>
-            </thead>
-            <tbody>
-              {
-                totalQuestions.length !== 0 ? totalQuestions.map((item, index) => (
-                  <tr key={item.id}>
-                    <td>{index + 1}</td>
-                    <td className="text-start">{item?.question}</td>
-                    <td>{item?.time}</td>
-                    <td>{item?.date}</td>
-                    {/* <td>
-                                            <button onClick={() => handleToDeleteOneTotalQuestions(index,totalQuestions)}>
-                                                <MdDeleteOutline className='ml-5 text-2xl cursor-pointer'></MdDeleteOutline>
-                                            </button>
-                                        </td> */}
-                  </tr>
-                )) : <span className="text-xl font-bold text-red-400">NO Data Available</span>
-              }
-            </tbody>
-          </table>
-        </div>
+        <ShowQuestionPagination
+          handleToDeleteAllData={handleToDeleteAllData}
+          totalQuestions={totalQuestions}
+          QuestionPerPage={QuestionPerPage}
+        ></ShowQuestionPagination>
 
 
 
-        {/* create this part to show all of the store data which question didn't get properly*/}
-        <div className="flex justify-between text-3xl bg-red-200 py-1 font-bold mt-20 px-4">
-          <h2 className="">Unknown Questions</h2>
-          <div className="flex items-center">
-            <p>{unknownPercent}% </p>
-            {/* <p>0% </p> */}
-            <MdDeleteOutline onClick={handleToDeleteUnknownData} className='ml-5 text-2xl cursor-pointer'></MdDeleteOutline>
-          </div>
-
-        </div>
-        <div>
-          <table className="w-full">
-            <thead>
-              <tr className="bg-orange-200">
-                <th>No.</th>
-                <th>Question</th>
-                <th>Time</th>
-                <th>Date</th>
-                <th>Delete</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                unknownQuestions.length !== 0 ? unknownQuestions.map((item, index) => (
-                  <tr key={item.id}>
-                    <td>{index + 1}</td>
-                    <td className="text-start">{item?.question}</td>
-                    <td>{item?.time}</td>
-                    <td>{item?.date}</td>
-
-                    <td>
-                      <button>
-                        <MdDeleteOutline onClick={() => handleToDeleteOneUnknownQuestions(item.id)} className='ml-5 text-2xl cursor-pointer'></MdDeleteOutline>
-                      </button>
-                    </td>
-                  </tr>
-                )) : <span className="text-xl font-bold text-red-400">NO Question Available</span>
-              }
-            </tbody>
-          </table>
-        </div>
-
+        <ShowUnknownQuestionPagination
+          handleToDeleteUnknownData={handleToDeleteUnknownData}
+          unknownQuestions={unknownQuestions}
+          handleToDeleteOneUnknownQuestions={handleToDeleteOneUnknownQuestions}
+          unknownPercent={unknownPercent}
+        ></ShowUnknownQuestionPagination>
 
         {/* create this part to show all of the store translation data which translation didn't get properly*/}
 

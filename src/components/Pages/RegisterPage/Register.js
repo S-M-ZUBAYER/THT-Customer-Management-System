@@ -185,7 +185,7 @@ const Register = () => {
             const userExists = data.exists;
             console.log(userExists);
       
-            if (!userExists) {
+            if (userExists===false) {
               // Validate password length
               if (password.length < 6) {
                 setLengthError("Your password must be at least 6 characters long");

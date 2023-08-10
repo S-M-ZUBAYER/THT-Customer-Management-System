@@ -15,11 +15,16 @@ const CustomerServicePart = () => {
     const [language, setLanguage] = useState("")
     const [name, setName] = useState("")
     const [engText, setEngText] = useState("")
-    const [text, setText] = useState("")
+    const [text, setText] = useState("");
+    const [selectedPrinter, setSelectedPrinter] = useState('');
     formData.append('message', text);
     const [chineseAnswer, setChineseAnswer] = useState([]);
     const [bengaliAnswer, setBengaliAnswer] = useState([]);
     const [englishAnswer, setEnglishAnswer] = useState([]);
+    const [firstChineseAnswer, setFirstChineseAnswer] = useState([]);
+    const [firstBengaliAnswer, setFirstBengaliAnswer] = useState([]);
+    const [firstEnglishAnswer, setFirstEnglishAnswer] = useState([]);
+   
     const [customerTranslation, setCustomerTranslation] = useState("");
     const inputField1 = document.getElementById("input1");
     const inputField2 = document.getElementById("input2");
@@ -32,30 +37,25 @@ const CustomerServicePart = () => {
     const [RadioLoading, setRadioLoading] = useState(false);
     const [selectedShops, setSelectedShops] = useState(DUser?.selectedShops);
     const shopNames = DUser?.selectedShops;
+
+   
+
     const handleCheckboxChange = (event) => {
         const { value, checked } = event.target;
         if (checked) {
-            setSelectedShops((prevSelected) => [...prevSelected, value]);
+          setSelectedShops((prevSelected) => [...prevSelected, value]);
         } else {
-            setSelectedShops((prevSelected) => prevSelected.filter((shop) => shop !== value));
+          setSelectedShops((prevSelected) => prevSelected.filter((shop) => shop !== value));
         }
-    };
+      };
+    
 
-    //use useContext to got data from any component
+      useEffect(() => {
+        // console.log(selectedShops, "after");
+        // Call the function that depends on the updated selectedShops here if needed
+        handleToShowShopAns();
+      }, [selectedShops]);
 
-
-    // create 3 functions for 3 languages shop related ans....
-    const filteredChineseAnswers = chineseAnswer.filter((product) =>
-  selectedShops.some((shop) => product[3].includes(shop))
-); 
-
-    const filteredBengaliAnswers = bengaliAnswer.filter((product) =>
-  selectedShops.some((shop) => product[3].includes(shop))
-); 
-
-    const filteredEnglishAnswers = englishAnswer.filter((product) =>
-  selectedShops.some((shop) => product[3].includes(shop))
-); 
 
     // create this function to send the data to the backend for translation and get the possible answers according to the customer questions.
     const handleSubmit = (e) => {
@@ -95,7 +95,8 @@ const CustomerServicePart = () => {
             target: "English",
             text: text
         }
-        let apiUrl = `https://zuss-chat-translator-server-site.vercel.app/translate`;
+        // let apiUrl = `https://zuss-chat-translator-server-site.vercel.app/translate`;
+        let apiUrl = `http://localhost:5000/tht/translate`;
         fetch(apiUrl, {
             method: "POST",
             headers: {
@@ -139,16 +140,22 @@ const CustomerServicePart = () => {
             .then(data => {
                 // Handle the data returned by the Python backend
 
-
                 setChineseAnswer(data?.answers_CN.filter((product) =>
-                selectedShops.some((shop) => product[3].includes(shop))));
+                (selectedShops.map(selected=>selected.split('/')[0])).some((shop) => product[3].includes(shop))));
                 setEnglishAnswer(data?.answers_EN.filter((product) =>
-                selectedShops.some((shop) => product[3].includes(shop))));
+                (shopNames.map(selected=>selected.split('/')[0])).some((shop) => product[3].includes(shop))));
                 setBengaliAnswer(data?.answers_BN.filter((product) =>
-                selectedShops.some((shop) => product[3].includes(shop))));
+                (shopNames.map(selected=>selected.split('/')[0])).some((shop) => product[3].includes(shop))));
+
+                setFirstChineseAnswer(data?.answers_CN.filter((product) =>
+                (shopNames.map(selected=>selected.split('/')[0])).some((shop) => product[3].includes(shop))));
+                setFirstEnglishAnswer(data?.answers_EN.filter((product) =>
+                (shopNames.map(selected=>selected.split('/')[0])).some((shop) => product[3].includes(shop))));
+                setFirstBengaliAnswer(data?.answers_BN.filter((product) =>
+                (shopNames.map(selected=>selected.split('/')[0])).some((shop) => product[3].includes(shop))));
 
 
-                console.log(bengaliAnswer)
+               
                 //store all the questions in Sql database
                 if (user) {
 
@@ -193,35 +200,28 @@ const CustomerServicePart = () => {
     };
 
 // create a function for all check box filtering ans
-    const handleToShowShopAns=()=>{
-        setSendLoading(true);
-        fetch('https://grozziie.zjweiting.com:8032/get_response', {
-            method: 'POST',
-            body: formData,
-
-        })
-            .then(response => response.json())
-            .then(data => {
-                // Handle the data returned by the Python backend
-
-
-                setChineseAnswer(data?.answers_CN.filter((product) =>
-                selectedShops.some((shop) => product[3].includes(shop))));
-                setEnglishAnswer(data?.answers_EN.filter((product) =>
-                selectedShops.some((shop) => product[3].includes(shop))));
-                setBengaliAnswer(data?.answers_BN.filter((product) =>
-                selectedShops.some((shop) => product[3].includes(shop))));
-                setSendLoading(false);
-
-
-
-            })
-            .catch(error => {
-                // Handle any errors that occurred during the request
-                console.error('There was an error!', error);
-            });
-
-    }
+const handleToShowShopAns = async () => {
+    // console.log("click", selectedShops);
+    setChineseAnswer([]);
+    setBengaliAnswer([]);
+    setEnglishAnswer([]);
+    localStorage.setItem('DUser', JSON.stringify({ email:DUser?.email, password:DUser?.password, selectedShops }));
+      setSendLoading(true);
+  
+      setChineseAnswer(firstChineseAnswer.filter((product) =>
+        selectedShops.map(selected => selected.split('/')[0]).some((shop) => product[3].includes(shop))));
+  
+        setEnglishAnswer (firstEnglishAnswer.filter((product) =>
+        selectedShops.map(selected => selected.split('/')[0]).some((shop) => product[3].includes(shop))));
+  
+        setBengaliAnswer(firstBengaliAnswer.filter((product) =>
+        selectedShops.map(selected => selected.split('/')[0]).some((shop) => product[3].includes(shop))));
+  
+        setSendLoading(false);
+  
+    // console.log(bengaliAnswer)
+  };
+  
 
 
     //create 3 function to divided the answer in 3 categories
@@ -229,28 +229,15 @@ const CustomerServicePart = () => {
     const handleToDotPrinterAns = () => {
 
         setSendLoading(true);
-        fetch('https://grozziie.zjweiting.com:8032/get_response', {
-            method: 'POST',
-            body: formData,
+       
+                setChineseAnswer((firstChineseAnswer.filter((product) => product[2].includes("Dot"))).filter((product) =>
+                (selectedShops.map(selected=>selected.split('/')[0])).some((shop) => product[3].includes(shop))));
+                setEnglishAnswer((firstEnglishAnswer.filter((product) => product[2].includes("Dot"))).filter((product) =>
+                (selectedShops.map(selected=>selected.split('/')[0])).some((shop) => product[3].includes(shop))));
+                setBengaliAnswer((firstBengaliAnswer.filter((product) => product[2].includes("Dot"))).filter((product) =>
+                (selectedShops.map(selected=>selected.split('/')[0])).some((shop) => product[3].includes(shop))));
 
-        })
-            .then(response => response.json())
-            .then(data => {
-                // Handle the data returned by the Python backend
-
-
-                setChineseAnswer((data?.answers_CN.filter((product) => product[2].includes("Dot"))).filter((product) =>
-                selectedShops.some((shop) => product[3].includes(shop))));
-                setEnglishAnswer((data?.answers_EN.filter((product) => product[2].includes("Dot"))).filter((product) =>
-                selectedShops.some((shop) => product[3].includes(shop))));
-                setBengaliAnswer((data?.answers_BN.filter((product) => product[2].includes("Dot"))).filter((product) =>
-                selectedShops.some((shop) => product[3].includes(shop))));
-
-               
-
-            })
-
-
+            
         setSendLoading(false);
 
     }
@@ -260,25 +247,12 @@ const CustomerServicePart = () => {
         setSendLoading(true);
        
 
-        fetch('https://grozziie.zjweiting.com:8032/get_response', {
-            method: 'POST',
-            body: formData,
-
-        })
-            .then(response => response.json())
-            .then(data => {
-                // Handle the data returned by the Python backend
-
-                setChineseAnswer((data?.answers_CN.filter((product) => product[2].includes("Thermal"))).filter((product) =>
-                selectedShops.some((shop) => product[3].includes(shop))));
-                setEnglishAnswer((data?.answers_EN.filter((product) => product[2].includes("Thermal"))).filter((product) =>
-                selectedShops.some((shop) => product[3].includes(shop))));
-                setBengaliAnswer((data?.answers_BN.filter((product) => product[2].includes("Thermal"))).filter((product) =>
-                selectedShops.some((shop) => product[3].includes(shop))));
-
-               
-
-            })
+                setChineseAnswer((firstChineseAnswer.filter((product) => product[2].includes("Thermal"))).filter((product) =>
+                (selectedShops.map(selected=>selected.split('/')[0])).some((shop) => product[3].includes(shop))));
+                setEnglishAnswer((firstEnglishAnswer.filter((product) => product[2].includes("Thermal"))).filter((product) =>
+                (selectedShops.map(selected=>selected.split('/')[0])).some((shop) => product[3].includes(shop))));
+                setBengaliAnswer((firstBengaliAnswer.filter((product) => product[2].includes("Thermal"))).filter((product) =>
+                (selectedShops.map(selected=>selected.split('/')[0])).some((shop) => product[3].includes(shop))));
 
 
         setSendLoading(false);
@@ -286,27 +260,15 @@ const CustomerServicePart = () => {
 
     const handleToAttendanceMachineAns = () => {
         setSendLoading(true);
-       
-
-        fetch('https://grozziie.zjweiting.com:8032/get_response', {
-            method: 'POST',
-            body: formData,
-
-        })
-            .then(response => response.json())
-            .then(data => {
-                // Handle the data returned by the Python backend
 
 
-                setChineseAnswer((data?.answers_CN.filter((product) => product[2].includes("Attendance"))).filter((product) =>
-                selectedShops.some((shop) => product[3].includes(shop))));
-                setEnglishAnswer((data?.answers_EN.filter((product) => product[2].includes("Attendance"))).filter((product) =>
-                selectedShops.some((shop) => product[3].includes(shop))));
-                setBengaliAnswer((data?.answers_BN.filter((product) => product[2].includes("Attendance"))).filter((product) =>
-                selectedShops.some((shop) => product[3].includes(shop))));
+                setChineseAnswer((firstChineseAnswer.filter((product) => product[2].includes("Attendance"))).filter((product) =>
+                (selectedShops.map(selected=>selected.split('/')[0])).some((shop) => product[3].includes(shop))));
+                setEnglishAnswer((firstEnglishAnswer.filter((product) => product[2].includes("Attendance"))).filter((product) =>
+                (selectedShops.map(selected=>selected.split('/')[0])).some((shop) => product[3].includes(shop))));
+                setBengaliAnswer((firstBengaliAnswer.filter((product) => product[2].includes("Attendance"))).filter((product) =>
+                (selectedShops.map(selected=>selected.split('/')[0])).some((shop) => product[3].includes(shop))));
 
-                console.log(bengaliAnswer)
-            })
 
         setSendLoading(false);
     }
@@ -562,11 +524,14 @@ const CustomerServicePart = () => {
 
     // ***** select printer section ************************
 
-    const [selectedPrinter, setSelectedPrinter] = useState('');
+  
 
     const handlePrinterChange = (e) => {
         setSelectedPrinter(e.target.value);
     };
+
+
+
 
 
     return (
@@ -643,7 +608,7 @@ const CustomerServicePart = () => {
                                 value={shop}
                                 checked={selectedShops.includes(shop)}
                                 onChange={handleCheckboxChange}
-                                // onClick={handleToShowShopAns}
+                                //  onClick={handleToShowShopAns}
                             />
                             {shop}
                         </div>

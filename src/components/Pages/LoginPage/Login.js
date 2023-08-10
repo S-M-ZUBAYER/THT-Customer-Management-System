@@ -30,29 +30,14 @@ const Login = () => {
   const [selectedShops, setSelectedShops] = useState(DUser?.selectedShops || []);
 
   const shopNames = [
-    '维尔新',
-    '拼多多格志旗舰店',
-    '维庭数码专营点',
-    '加普威旗舰店',
-    'grozziie格志旗舰店',
-    '京东格志旗舰店',
-    '京东格志自营旗舰店',
-    '京东格志自营旗舰店',
-    '京东格志自营旗舰店',
-    '京东格志自营旗舰店',
-    '京东格志自营旗舰店',
-    '京东格志自营旗舰店',
-    '京东格志自营旗舰店',
-    '京东格志自营旗舰店',
-    '京东格志自营旗舰店',
-    '京东格志自营旗舰店',
-    '京东格志自营旗舰店',
-    '京东格志自营旗舰店',
-    '京东格志自营旗舰店',
-    '京东格志自营旗舰店',
-    '京东格志自营旗舰店',
-    '京东格志自营旗舰店',
-
+    '维尔新/WeiErXin PinDuoDuo FlagShop',
+    '加普威旗舰店/JiaPuWei Tmall FlagShop',
+    '拼多多格志旗舰店/GROZZIIE PinDuoDuo FlagShop',
+    'grozziie格志旗舰店/GROZZIIE TMall FlagShop',
+    '京东格志旗舰店/GROZZIIE JDPOP FlagShop',
+    '京东格志自营旗舰店/GROZZIIE JD FlagShop',
+    "维庭数码专营店/WEITING  Digital PinDuoDuo Shop",
+  
   ];
 
   // const handleSelectChange = (event) => {
@@ -118,12 +103,10 @@ const Login = () => {
           setLoading(false);
         }
         else {
-          console.log(data)
           setUser(data[0])
           localStorage.setItem('user', JSON.stringify(data[0]));
           localStorage.setItem('DUser', JSON.stringify({ email, password, selectedShops }));
           setDUser({ email, password, selectedShops })
-          console.log(email, password, selectedShops)
           setLoading(false);
           navigate(from, { replace: true })
           form.reset();
@@ -165,7 +148,6 @@ const Login = () => {
           toast.success("Welcome to THT-Space Electrical Company Ltd Customer service site")
         }
         navigate("/")
-        console.log(user);
       })
       .catch(err => {
         console.log(err)
@@ -176,7 +158,6 @@ const Login = () => {
       .then(result => {
         const user = result.user;
         navigate("/")
-        console.log(user);
       })
       .catch(err => {
         console.log(err)
@@ -234,17 +215,17 @@ const Login = () => {
 
   return (
     <div className="bg-white flex justify-center items-center">
-      <div className="shadow-lg lg:w-6/12 my-12 py-10 px-12" >
+      <div className="shadow-lg  my-12 py-10 px-12" >
         <h2 className="text-2xl text-[#004368] mb-8 font-semibold my-4">Sign In</h2>
 
 
         <form onSubmit={handleSubmit}>
 
 
-          <div className="flex justify-evenly  items-center">
+          <div className="">
 
             {/* <label htmlFor="password">Password:</label> */}
-            <div className="w-4/12">
+            <div className="">
 
               <div className="text-2xl" >
                 <button onClick={handleToGoogleLogIn} className="mr-8">
