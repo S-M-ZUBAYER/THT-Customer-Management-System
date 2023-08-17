@@ -23,6 +23,8 @@ import Inventory from "../../components/Pages/AdminPage/AdminDashboard/ProductDe
 import Invoice from "../../components/Pages/AdminPage/AdminDashboard/ProductDetailsOutlet/Invoice";
 import ShowIcons from "../../components/Pages/AdminPage/AdminDashboard/IconsCategory/ShowIcons";
 import AdminDashboard from "../../components/Pages/AdminPage/AdminDashboard/AdminDashboard";
+import Translator from "../../components/Pages/Translator/Translator";
+import Detect from "../../components/Pages/Detect/Detect";
 
 
 export const routes=createBrowserRouter([
@@ -54,6 +56,14 @@ export const routes=createBrowserRouter([
             {
                 path:"account",
                 element:<PrivateRoute><Account></Account></PrivateRoute> 
+            },
+            {
+                path:"translator",
+                element:<PrivateRoute><Translator></Translator></PrivateRoute> 
+            },
+            {
+                path:"detect",
+                element:<PrivateRoute><Detect></Detect></PrivateRoute> 
             },
             {
                 path:"contact",

@@ -17,7 +17,7 @@ const Navbar = () => {
   const adminToggleMenu = () => setIsAdminOpen(!isAdminOpen);
 
   return (
-    <header aria-label="Site Header" className="bg-white ">
+    <header aria-label="Site Header" className="bg-white  sticky top-0 z-50">
       <div className="mx-auto px-6 md:px-0">
         <div className="flex h-16 items-center justify-between">
 
@@ -147,6 +147,22 @@ const Navbar = () => {
                 <li>
                   <Link
                     className="text-gray-500 transition hover:font-semibold hover:text-zinc-900"
+                    to="/translator"
+                  >
+                    Translator
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className="text-gray-500 transition hover:font-semibold hover:text-zinc-900"
+                    to="/detect"
+                  >
+                    Detect
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className="text-gray-500 transition hover:font-semibold hover:text-zinc-900"
                     to="/account"
                   >
                     Account
@@ -263,6 +279,20 @@ const Navbar = () => {
                       role="menuitem"
                     >
                       Admin
+                    </Link>
+                    <Link
+                      to="/translator"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                      role="menuitem"
+                    >
+                      Translator
+                    </Link>
+                    <Link
+                      to="/detect"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                      role="menuitem"
+                    >
+                      Detect
                     </Link>
                     <Link
                       to="/account"

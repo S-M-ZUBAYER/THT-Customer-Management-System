@@ -167,7 +167,7 @@ console.log(selectedPrinter,bengaliAnswer)
                         (selectedShops.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop))));
                 }
 
-                else if ("Thermal Printer") {
+                else if (selectedPrinter ==="Thermal Printer") {
 
                     setChineseAnswer(((data?.answers_CN.filter((product) =>
                     (shopNames.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop)))).filter((product) => product[2].includes("Thermal"))).filter((product) =>
@@ -180,7 +180,7 @@ console.log(selectedPrinter,bengaliAnswer)
                         (selectedShops.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop))));
                 }
 
-                else if ("Dot Printer") {
+                else if (selectedPrinter ==="Dot Printer") {
 
                     setChineseAnswer(((data?.answers_CN.filter((product) =>
                     (shopNames.map(selected => selected.split('/')[0])).some((shop) => product[3].includes(shop)))).filter((product) => product[2].includes("Dot"))).filter((product) =>
