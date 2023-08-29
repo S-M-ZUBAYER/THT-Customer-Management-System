@@ -25,6 +25,7 @@ import ShowIcons from "../../components/Pages/AdminPage/AdminDashboard/IconsCate
 import AdminDashboard from "../../components/Pages/AdminPage/AdminDashboard/AdminDashboard";
 import Translator from "../../components/Pages/Translator/Translator";
 import Detect from "../../components/Pages/Detect/Detect";
+import Chat from "../../components/Pages/Chat/Chat";
 
 
 export const routes=createBrowserRouter([
@@ -72,6 +73,10 @@ export const routes=createBrowserRouter([
             {
                 path:"login",
                 element:<Login></Login>
+            },
+            {
+                path:"chat",
+                element:<Chat></Chat>
             },
             {
                 path:"register",

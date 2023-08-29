@@ -19,7 +19,10 @@ function AddProduct({ product }) {
   const [afterSalesText, setAfterSalesText] = useState('');
   const [afterSalesInstruction, setAfterSalesInstruction] = useState('');
   const [inventoryText, setInventoryText] = useState('');
-  // const [invoiceFile, setInvoiceFile] = useState(null);
+  const [productImgLink, setProductImgLink] = useState("");
+  const [productImgRemark, setProductImgRemark] = useState("");
+  const [relatedImgLink, setRelatedImgLink] = useState("");
+  const [relatedImgRemark, setRelatedImgRemark] = useState("");
   const [previewImage, setPreviewImage] = useState(addImg);
   const [fileName, setFileName] = useState("Add Image");
   const [productImg, setProductImg] = useState(null);
@@ -28,9 +31,11 @@ function AddProduct({ product }) {
 
   const [selectedImages, setSelectedImages] = useState([]);
   const [selectedVideos, setSelectedVideos] = useState([]);
-const now=new Date();
+  const [selectedInstructionsImages, setSelectedInstructionsImages] = useState([]);
+  const [selectedInstructionsVideos, setSelectedInstructionsVideos] = useState([]);
+  const now = new Date();
 
-  const{loading,setLoading}=useContext(AuthContext);
+  const { loading, setLoading } = useContext(AuthContext);
   // const handleUpload = async () => {
   //   const formData = new FormData();
 
@@ -60,8 +65,8 @@ const now=new Date();
 
 
   const url = window.location.href;
-    const productCategory = url.split('/')[4]+"s";
-    // const mallProduct = path.split('/');
+  const productCategory = url.split('/')[4] + "s";
+  // const mallProduct = path.split('/');
 
 
 
@@ -73,6 +78,13 @@ const now=new Date();
 
   const handleVideoChange = (e) => {
     setSelectedVideos(e.target.files);
+  };
+  const handleInstructionsImageChange = (e) => {
+    setSelectedInstructionsImages(e.target.files);
+  };
+
+  const handleInstructionsVideoChange = (e) => {
+    setSelectedInstructionsVideos(e.target.files);
   };
 
 
@@ -124,7 +136,23 @@ const now=new Date();
     setInventoryText(e.target.value);
   };
 
+  const handleProductImgLink = (e) => {
+    setProductImgLink(e.target.value);
 
+  }
+  const handleProductImageRemark = (e) => {
+    setProductImgRemark(e.target.value);
+
+  }
+
+  const handleRelatedImgLink = (e) => {
+    setRelatedImgLink(e.target.value);
+
+  }
+  const handleRelatedImageRemark = (e) => {
+    setRelatedImgRemark(e.target.value);
+
+  }
 
   const handleProductImgUpload = (event) => {
     // extract the current date and time components
@@ -152,6 +180,10 @@ const now=new Date();
     formData.append('productImg', productImg);
     // formData.append('invoiceFile', invoiceFile);
     formData.append('productName', productName);
+    formData.append('productImgLink', productImgLink);
+    formData.append('productImgRemark', productImgRemark);
+    formData.append('relatedImgLink', relatedImgLink);
+    formData.append('relatedImgRemark', relatedImgRemark);
     formData.append('productPrice', productPrice);
     formData.append('productDescription', productDescription);
     formData.append('modelNumber', modelNumber);
@@ -179,7 +211,16 @@ const now=new Date();
     for (let i = 0; i < selectedVideos.length; i++) {
       formData.append('videos', selectedVideos[i]);
     }
-    
+    // Append selected images to the form data
+    for (let i = 0; i < selectedInstructionsImages.length; i++) {
+      formData.append('instructionsImages', selectedInstructionsImages[i]);
+    }
+
+    // Append selected videos to the form data
+    for (let i = 0; i < selectedInstructionsVideos.length; i++) {
+      formData.append('instructionsVideos', selectedInstructionsVideos[i]);
+    }
+
     try {
       await axios.post(`https://grozziie.zjweiting.com:8033/tht/${productCategory}/add`, formData, {
         headers: {
@@ -191,6 +232,10 @@ const now=new Date();
       // Reset form fields
       setProductName('');
       setProductPrice('');
+      setProductImgLink("");
+      setProductImgRemark("");
+      setRelatedImgLink("");
+      setRelatedImgRemark("");
       setProductDescription('');
       setModelNumber('');
       setPrinterColor('');
@@ -198,11 +243,15 @@ const now=new Date();
       setStockQuantity('');
       setSelectedImages([]);
       setSelectedVideos([]);
+      setSelectedInstructionsImages([]);
+      setSelectedInstructionsVideos([]);
       setShelfStartTime('');
       setShelfEndTime('');
       setAfterSalesText('');
       setAfterSalesInstruction('');
       setInventoryText('');
+      setProductImg(null);
+      setInvoiceFile(null);
       setProductImg(null);
       setInvoiceFile(null);
     } catch (error) {
@@ -230,22 +279,53 @@ const now=new Date();
         placeholder=""
         className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-10 px-3 lg:px-10 lg:ml-5 rounded-lg"
         /> */}
+        <div>
+          <div className="mb-4 grid  grid-cols-3 text-start">
+            <label htmlFor="modelNumber" className="block col-span-1 text-gray-500 font-semibold mb-2">
+              Product Img Link
+            </label>
+            <input
+              type="text"
+              id="printerColor"
+              className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+              value={productImgLink}
+              placeholder='Enter the product Image link'
+              onChange={handleProductImgLink}
 
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="productImageRemark" className="block text-start text-gray-700 font-bold mb-2">
+              Product Image Remarks
+            </label>
+            <textarea
+              id="productImageRemark"
+              placeholder="Add product Image Remark"
+              className="shadow resize-none appearance-none border rounded-lg w-full h-44  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+              value={productImgRemark}
+              onChange={handleProductImageRemark}
+              required
+            ></textarea>
+          </div>
+        </div>
       </div>
       <div className="w-full md:w-1/2 p-8">
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-
-            <input
-              type="text"
+            <select
               id="productName"
-              placeholder='ProductName'
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
               value={productName}
               onChange={handleProductNameChange}
               required
-            />
+            >
+              <option value="">Select Product</option>
+              <option value="Dot Printer">Dot Printer</option>
+              <option value="Thermal Printer">Thermal Printer</option>
+              <option value="Attendance Machine">Attendance Machine</option>
+            </select>
           </div>
+
           <div className="mb-4">
 
             <input
@@ -299,7 +379,7 @@ const now=new Date();
               value={printerColor}
               placeholder='Color'
               onChange={handlePrinterColorChange}
-              
+
             />
           </div>
           <div className="mb-4 grid  grid-cols-3 text-start mr-14">
@@ -314,7 +394,7 @@ const now=new Date();
               placeholder='Bluetooth'
               onChange={handleConnectorTypeChange}
 
-             
+
             />
           </div>
           <div className="my-8 mt-16 grid  grid-cols-3 text-start mr-14">
@@ -328,28 +408,73 @@ const now=new Date();
               value={stockQuantity}
               placeholder='Add quantity'
               onChange={handleStockQuantityChange}
-              
+
             />
           </div>
 
 
 
-          <div className="my-8 mt-16 grid  grid-cols-2 text-start mr-14">
-            <label htmlFor="relatedImages" className="block col-span-1 text-gray-700 font-bold mb-2">
-            Upload related Images
-            </label>
-            <input className='mt-5 mb-8 required bg-white' type="file" multiple onChange={handleImageChange} accept="image/*" />
+
+          <div className="my-8 mt-16  text-start mr-14 bg-gray-100 p-3 rounded-lg">
+            <div className="mt-5 grid  grid-cols-2 text-start" >
+              <label htmlFor="relatedImages" className="block col-span-1 text-gray-700 font-bold mb-2">
+                Upload related Images
+              </label>
+              <input className='mt-5 mb-8 required bg-white' type="file" multiple onChange={handleImageChange} accept="image/*" />
+            </div>
+            <div className="mb-4 grid  grid-cols-3 text-start">
+              <label htmlFor="relatedImgLink" className="block col-span-1 text-gray-500 font-semibold mb-2">
+                Related Imgs Link
+              </label>
+              <input
+                type="text"
+                id="relatedImgLink"
+                className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                value={relatedImgLink}
+                placeholder='Enter the related Image link'
+                onChange={handleRelatedImgLink}
+
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="productImageRemark" className="block text-start text-gray-700 font-bold mb-2">
+                Related Images Remarks
+              </label>
+              <textarea
+                id="relatedImgRemark"
+                placeholder="Add product related Image Remark Remark"
+                className="shadow resize-none appearance-none border rounded-lg w-full h-20  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                value={relatedImgRemark}
+                onChange={handleRelatedImageRemark}
+                required
+              ></textarea>
+            </div>
           </div>
 
 
           <div className="my-8 mt-16 grid  grid-cols-2 text-start mr-14">
             <label htmlFor="relatedImages" className="block col-span-1 text-gray-700 font-bold mb-2">
-            Upload related videos
+              Upload related videos
             </label>
             <input className='mt-5 mb-8 required' type="file" multiple onChange={handleVideoChange} accept="video/*" />
           </div>
 
-        
+          <div className="my-8 mt-16 grid  grid-cols-2 text-start mr-14">
+            <label htmlFor="relatedImages" className="block col-span-1 text-gray-700 font-bold mb-2">
+              Upload Instructions Images
+            </label>
+            <input className='mt-5 mb-8 required bg-white' type="file" multiple onChange={handleInstructionsImageChange} accept="image/*" />
+          </div>
+
+
+          <div className="my-8 mt-16 grid  grid-cols-2 text-start mr-14">
+            <label htmlFor="relatedImages" className="block col-span-1 text-gray-700 font-bold mb-2">
+              Upload Instructions videos
+            </label>
+            <input className='mt-5 mb-8 required' type="file" multiple onChange={handleInstructionsVideoChange} accept="video/*" />
+          </div>
+
+
 
           <div className="mb-4">
             <label htmlFor="shelfTimeStart" className="block text-start text-gray-700 font-bold mb-2">
@@ -443,12 +568,12 @@ const now=new Date();
             onClick={handleSubmit}
           >
             {
-              loading?
-              <BtnSpinner></BtnSpinner>
-              :
-              "Save"
+              loading ?
+                <BtnSpinner></BtnSpinner>
+                :
+                "Save"
             }
-            
+
           </button>
         </form>
       </div>

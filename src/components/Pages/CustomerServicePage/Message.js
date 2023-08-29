@@ -2,7 +2,7 @@ import React from 'react';
 
 const Message = () => {
     return (
-        <div         >
+        <div >
 
             <div className=" my-2 flex gap-0 w-full">
                 <div className="w-6">

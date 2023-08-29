@@ -42,7 +42,7 @@ const AllUsers = () => {
     setEditingUser(user);
   };
 
-
+console.log(users)
 
   //create a function to update a user from the frontend and database both side 
   const updateUser = async (userId, editingUser) => {

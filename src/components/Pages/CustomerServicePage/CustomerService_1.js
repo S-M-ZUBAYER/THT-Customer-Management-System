@@ -2,11 +2,13 @@ import React, { useContext, useEffect, useState } from 'react';
 import img from "../../../Assets/Images/messi.jpg"
 import { FaFileImage } from "react-icons/fa";
 import { AiOutlineSend } from "react-icons/ai";
+import { MdOndemandVideo } from "react-icons/md";
 
 import CustomerServicePart from './CustomerServicePart';
 import { AuthContext } from '../../../context/UserContext';
 import Messages from './Messages';
 import axios from 'axios';
+import MessageInput from '../Chat/MessegeInput';
 
 const CustomerService_1 = () => {
 
@@ -36,32 +38,67 @@ const CustomerService_1 = () => {
 
     const customerName = [
         {
+            id:10,
             name: "S M ZUBAYER",
-            time: "3:33 pm"
+            time: "3:22 pm",
+            online: true
         },
         {
+            id:11,
             name: "S M SABIT",
-            time: "3:54 pm"
+            time: "3:54 pm",
+            online: false
         },
         {
+            id:12,
             name: "ABU SAYED",
-            time: "3:33 pm"
+            time: "4:34 am",
+            online: true
         },
         {
+            id:13,
             name: "ABU SAYED",
-            time: "3:33 pm"
+            time: "3:33 pm",
+            online: true
         },
         {
-            name: "ABU SAYED",
-            time: "3:33 pm"
+            id:14,
+            name: "S M SABIT",
+            time: "3:54 pm",
+            online: false
         },
+        {
+            id:15,
+            name: "ABU SAYED",
+            time: "3:33 am",
+            online: false
+        },
+        {
+            id:16,
+            name: "ABU SAYED",
+            time: "7:83 pm",
+            online: true
+        },
+        {
+            id:17,
+            name: "S M SABIT",
+            time: "4:53 am",
+            online: false
+        },
+        {
+            id:18,
+            name: "ABU SAYED",
+            time: "3:40 pm",
+            online: true
+        }
 
     ]
 
 
+
     return (
         <div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 md:gap-8 mx-3 md:mx-12 my-12 text-gray-600 bg-white" >
+            <div className="  grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 md:gap-8 mx-3 md:mx-12 my-12 text-gray-600 bg-white" >
 
 
 
@@ -69,7 +106,7 @@ const CustomerService_1 = () => {
 
 
 
-                <div className="shadow-lg rounded-lg py-5 md:px-10">
+                <div className=" h-[80vh] shadow-lg rounded-lg py-5 md:px-10">
 
                     <div className="flex items-center justify-start">
                         <img className="h-8 w-8 ml-3 rounded-full  shadow-slate-900" src={currentUser ? currentUser?.image : user?.photoURL} alt="" />
@@ -80,21 +117,30 @@ const CustomerService_1 = () => {
 
                     <div className="mt-6 mx-2 ">
                         <h2 className="bg-[#004368] text-gray-300 py-1 mx-1 rounded-md font-semibold">
-                            Customer Service
+                            Customer Name List
                         </h2>
                     </div>
 
-                    <div>
+                    <div className=" overflow-y-scroll h-[60vh]">
                         {
                             customerName.map((element, index) => {
-                                return <div key={index} className="text-sm ml-2">
-                                    <div className="flex justify-between  mx-1 my-1">
+                                return <div key={index} className="text-sm  ml-2 px-3">
+                                    <div className="flex justify-between items-center mx-1 my-1">
                                         <div className="text-start">
                                             <p>{element?.name}</p>
                                             <p className="">This is message</p>
                                         </div>
+                                        <div className="">
+                                            {element.online ?
+                                            <p className=" flex ml-auto bg-green-400 w-2 h-2 mb-1 rounded-full"></p>
+                                            :
+                                            // <p className=" flex ml-auto bg-slate-400 w-2 h-2 mb-1 rounded-full"></p> 
+                                            ""
 
-                                        <p>{element?.time}</p>
+                                        }
+                                            <p>{element?.time}</p>
+                                        </div>
+
                                     </div>
                                     <hr></hr>
                                 </div>
@@ -130,7 +176,7 @@ const CustomerService_1 = () => {
                 {/* chatting customer field for customer and customer service ************************************       */}
 
 
-                <div className="shadow-lg rounded-lg relative  mt-10 md:mt-0 md:px-10">
+                <div className=" h-[80vh] shadow-lg rounded-lg relative  mt-10 md:mt-0 md:px-10">
 
 
                     <div className="flex justify-around ">
@@ -144,12 +190,12 @@ const CustomerService_1 = () => {
                         </h1>
                         <hr className="text-black font-bold my-1 mx-1"></hr>
                     </div>
-                    <div className="text-start h-screen">
+                    <div className="text-start">
                         <Messages></Messages>
                     </div>
 
 
-                    <div className=" absolute rounded-b-lg z-40 bg-white pt-1 w-full bottom-0 ">
+                    {/* <div className=" absolute rounded-b-lg z-40 bg-white pt-1 w-full bottom-0 ">
                         <div className="flex justify-around text-sm">
                             <button className="bg-[#004368] text-white ml-8 hover:bg-blue-700                                                          px-2 py-1 rounded-md mr-3">
                                 Auto Reply
@@ -162,14 +208,16 @@ const CustomerService_1 = () => {
                             </button>
                         </div>
 
-                        <div className="flex w-full items-center px-3 my-2 bg-white z-40">
-                            <FaFileImage className="mr-2 text-gray-400"></FaFileImage>
-                            <input className="w-10/12 py-1 rounded-md relative bg-cyan-200"></input>
-                            <AiOutlineSend className=" absolute right-[55px] lg:right-[70px]"></AiOutlineSend>
+                        <div className="flex relative w-full items-center px-3 my-2 bg-white z-40">
+                            <MdOndemandVideo className="mr-2 text-gray-400 text-xl cursor-pointer"></MdOndemandVideo>
+                            <FaFileImage className="mr-2 text-gray-400 cursor-pointer"></FaFileImage>
+                            <input className="w-9/12 py-1 px-2 rounded-md  bg-cyan-200"></input>
+                            <AiOutlineSend className=" absolute right-[55px] lg:right-[95px] cursor-pointer"></AiOutlineSend>
                         </div>
 
 
-                    </div>
+                    </div> */}
+                    <MessageInput></MessageInput>
 
                 </div>
 

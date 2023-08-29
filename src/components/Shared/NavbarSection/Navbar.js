@@ -38,15 +38,15 @@ const Navbar = () => {
                   <div className="col-span-1 shadow-lg rounded-lg">
                     <ul data-aos="fade-up-right" data-aos-duration="2000" className="menu w-full text-start">
 
-                        {/* {
-    user.isAdmin==="true" && <> */}
+                        {
+    user.isAdmin==="true" && <>
                         <li><Link to='/admin/users' className="sm:text-xs md:text-base text-gray-700">All Users</Link></li>
                         <li><Link to='/admin/questionAnswer' className="sm:text-xs md:text-base text-gray-700">Add Q & A</Link></li>
                         <li><Link to='/admin/icon' className="sm:text-xs md:text-base text-gray-700">Add Icons</Link></li>
                         <li><Link to='/admin/mallProduct' className="sm:text-xs md:text-base text-gray-700">Add Mall Products</Link></li>
                         <li><Link to='/admin/eventProduct' className="sm:text-xs md:text-base text-gray-700">Add Event Products</Link></li>
-                        {/* </>
-} */}
+                        </>
+}
 
                         <Link className="text-left ml-2" to='/'>
                             <button className='px-4 py-2 mt-8 ml-0 font-semibold bg-[#004368] text-white lg:text-lg rounded  mb-5'>
@@ -273,13 +273,16 @@ const Navbar = () => {
                       </div>
                     )}
                   </div>
-                    <Link
+                  {
+                    user?.isAdmin &&<Link
                       to="/admin"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                       role="menuitem"
                     >
                       Admin
                     </Link>
+                  }
+                    
                     <Link
                       to="/translator"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
