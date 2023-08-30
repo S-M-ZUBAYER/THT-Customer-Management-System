@@ -46,7 +46,7 @@ function ProductDetails() {
                 <div className="px-4 sm:px-6 lg:px-8 py-12">
                     <div className="flex flex-col md:flex-row md:space-x-4">
                         <div  title={`Link:  ${Product?.productImgLink}\nRemark:  ${Product?.productImgRemark}`}  className="md:w-1/2 mb-4 flex justify-center">
-                            <img src={`https://grozziie.zjweiting.com:8033/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${Product?.productImg}`} alt="Product" className="rounded-lg w-96 h-96" />
+                            <img src={`http://localhost:2000/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${Product?.productImg}`} alt="Product" className="rounded-lg w-96 h-96" />
                         </div>
                         <div className="md:w-1/2 text-start pl-5">
                             <div className=" mb-5">
@@ -112,9 +112,9 @@ function ProductDetails() {
                                     {(Product.allImages)?.split(",")?.map((image, index) => (
                                         <img
                                             key={index}
-                                            src={`https://grozziie.zjweiting.com:8033/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${image}`}
+                                            src={`http://localhost:2000/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${image}`}
                                             alt={`Image ${index + 1}`}
-                                            onClick={() => handleImageClick(`https://grozziie.zjweiting.com:8033/tht/mallProductImages/${image}`)}
+                                            onClick={() => handleImageClick(`http://localhost:2000/tht/mallProductImages/${image}`)}
                                             className="w-24 h-24 object-cover cursor-pointer mx-4 my-2 rounded-lg"
                                         />
                                     ))}
@@ -151,7 +151,7 @@ function ProductDetails() {
                                             key={index}
                                             onClick={() =>
                                                 handleVideoClick(
-                                                    `https://grozziie.zjweiting.com:8033/tht/${productCategory === 'mallProduct'
+                                                    `http://localhost:2000/tht/${productCategory === 'mallProduct'
                                                         ? 'mallProductImages'
                                                         : 'eventProductImages'
                                                     }/${video}`
@@ -161,7 +161,7 @@ function ProductDetails() {
                                         >
                                             <div className="w-full h-auto rounded-lg overflow-hidden">
                                                 <ReactPlayer
-                                                    url={`https://grozziie.zjweiting.com:8033/tht/${productCategory === 'mallProduct'
+                                                    url={`http://localhost:2000/tht/${productCategory === 'mallProduct'
                                                             ? 'mallProductImages'
                                                             : 'eventProductImages'
                                                         }/${video}`}
@@ -201,9 +201,9 @@ function ProductDetails() {
                                     {(Product?.allInstructionsImage)?.split(",")?.map((image, index) => (
                                         <img
                                             key={index}
-                                            src={`https://grozziie.zjweiting.com:8033/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${image}`}
+                                            src={`http://localhost:2000/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${image}`}
                                             alt={`Image ${index + 1}`}
-                                            onClick={() => handleImageClick(`https://grozziie.zjweiting.com:8033/tht/mallProductImages/${image}`)}
+                                            onClick={() => handleImageClick(`http://localhost:2000/tht/mallProductImages/${image}`)}
                                             className="w-24 h-24 object-cover cursor-pointer mx-4 my-2 rounded-lg"
                                         />
                                     ))}
@@ -241,7 +241,7 @@ function ProductDetails() {
                                             key={index}
                                             onClick={() =>
                                                 handleVideoClick(
-                                                    `https://grozziie.zjweiting.com:8033/tht/${productCategory === 'mallProduct'
+                                                    `http://localhost:2000/tht/${productCategory === 'mallProduct'
                                                         ? 'mallProductImages'
                                                         : 'eventProductImages'
                                                     }/${video}`
@@ -251,7 +251,7 @@ function ProductDetails() {
                                         >
                                             <div className="w-full h-auto rounded-lg overflow-hidden">
                                                 <ReactPlayer
-                                                    url={`https://grozziie.zjweiting.com:8033/tht/${productCategory === 'mallProduct'
+                                                    url={`http://localhost:2000/tht/${productCategory === 'mallProduct'
                                                             ? 'mallProductImages'
                                                             : 'eventProductImages'
                                                         }/${video}`}

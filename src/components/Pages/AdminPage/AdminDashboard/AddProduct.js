@@ -7,6 +7,7 @@ import { AuthContext } from '../../../../context/UserContext';
 import BtnSpinner from '../../../Shared/Loading/BtnSpinner';
 
 function AddProduct({ product }) {
+  const [loading, setLoading] = useState(false);
   const [productName, setProductName] = useState('');
   const [productPrice, setProductPrice] = useState('');
   const [productDescription, setProductDescription] = useState('');
@@ -25,9 +26,9 @@ function AddProduct({ product }) {
   const [relatedImgRemark, setRelatedImgRemark] = useState("");
   const [previewImage, setPreviewImage] = useState(addImg);
   const [fileName, setFileName] = useState("Add Image");
-  const [productImg, setProductImg] = useState(null);
-  const [invoiceFile, setInvoiceFile] = useState(null);
-  const [invoiceFiles, setInvoiceFiles] = useState(null);
+  const [productImg, setProductImg] = useState([]);
+  const [invoiceFile, setInvoiceFile] = useState([]);
+  const [invoiceFiles, setInvoiceFiles] = useState([]);
 
   const [selectedImages, setSelectedImages] = useState([]);
   const [selectedVideos, setSelectedVideos] = useState([]);
@@ -35,7 +36,7 @@ function AddProduct({ product }) {
   const [selectedInstructionsVideos, setSelectedInstructionsVideos] = useState([]);
   const now = new Date();
 
-  const { loading, setLoading } = useContext(AuthContext);
+ 
   // const handleUpload = async () => {
   //   const formData = new FormData();
 
@@ -174,10 +175,12 @@ function AddProduct({ product }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true)
     const date = now.toLocaleDateString();
     const time = now.toLocaleTimeString();
     const formData = new FormData();
     formData.append('productImg', productImg);
+    console.log(loading)
     // formData.append('invoiceFile', invoiceFile);
     formData.append('productName', productName);
     formData.append('productImgLink', productImgLink);
@@ -228,8 +231,9 @@ function AddProduct({ product }) {
         }
       });
       toast.success(`${productCategory} Product created successfully!`);
-      setLoading(false)
-      // Reset form fields
+      setLoading(false);
+
+      // Reset all form fields
       setProductName('');
       setProductPrice('');
       setProductImgLink("");
@@ -250,13 +254,14 @@ function AddProduct({ product }) {
       setAfterSalesText('');
       setAfterSalesInstruction('');
       setInventoryText('');
-      setProductImg(null);
-      setInvoiceFile(null);
-      setProductImg(null);
-      setInvoiceFile(null);
+      setProductImg([]);
+      setInvoiceFiles([]);
+    console.log(loading)
+
     } catch (error) {
       console.error('Error creating product:', error);
-      toast.error("Failed to upload, Please input every data properly")
+      toast.error("Failed to upload, Please input every data properly");
+      setLoading(false)
     }
   };
 
@@ -266,12 +271,12 @@ function AddProduct({ product }) {
   return (
     <div className="md:flex md:flex-row">
       <div className="w-full md:w-1/2 p-8 ">
-        <img src={previewImage} alt="" className="mb-4 mx-auto h-1/4 w-2/3" />
+        <img src={previewImage} alt="" className="mb-4 mx-auto w-2/3" />
 
         {/* <label>Product Image:</label> */}
         <input type="file"
           onChange={handleProductImgUpload}
-          className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-10 px-3 lg:px-10 lg:ml-5 rounded-lg required"
+          className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-10 px-3 lg:px-10 lg:ml-5 rounded-lg "
           accept="image/*" />
         {/* <input 
         type="file"
@@ -304,7 +309,6 @@ function AddProduct({ product }) {
               className="shadow resize-none appearance-none border rounded-lg w-full h-44  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
               value={productImgRemark}
               onChange={handleProductImageRemark}
-              required
             ></textarea>
           </div>
         </div>
@@ -420,7 +424,7 @@ function AddProduct({ product }) {
               <label htmlFor="relatedImages" className="block col-span-1 text-gray-700 font-bold mb-2">
                 Upload related Images
               </label>
-              <input className='mt-5 mb-8 required bg-white' type="file" multiple onChange={handleImageChange} accept="image/*" />
+              <input className='mt-5 mb-8 bg-white' type="file" multiple onChange={handleImageChange} accept="image/*" />
             </div>
             <div className="mb-4 grid  grid-cols-3 text-start">
               <label htmlFor="relatedImgLink" className="block col-span-1 text-gray-500 font-semibold mb-2">
@@ -446,7 +450,6 @@ function AddProduct({ product }) {
                 className="shadow resize-none appearance-none border rounded-lg w-full h-20  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
                 value={relatedImgRemark}
                 onChange={handleRelatedImageRemark}
-                required
               ></textarea>
             </div>
           </div>
@@ -456,7 +459,7 @@ function AddProduct({ product }) {
             <label htmlFor="relatedImages" className="block col-span-1 text-gray-700 font-bold mb-2">
               Upload related videos
             </label>
-            <input className='mt-5 mb-8 required' type="file" multiple onChange={handleVideoChange} accept="video/*" />
+            <input className='mt-5 mb-8' type="file" multiple onChange={handleVideoChange} accept="video/*" />
           </div>
 
           <div className="my-8 mt-16 grid  grid-cols-2 text-start mr-14">
@@ -471,7 +474,7 @@ function AddProduct({ product }) {
             <label htmlFor="relatedImages" className="block col-span-1 text-gray-700 font-bold mb-2">
               Upload Instructions videos
             </label>
-            <input className='mt-5 mb-8 required' type="file" multiple onChange={handleInstructionsVideoChange} accept="video/*" />
+            <input className='mt-5 mb-8' type="file" multiple onChange={handleInstructionsVideoChange} accept="video/*" />
           </div>
 
 
@@ -487,7 +490,6 @@ function AddProduct({ product }) {
                 className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
                 value={shelfStartTime}
                 onChange={handleShelfStartTimeChange}
-                required
               />
               <input
                 type="datetime-local"
@@ -495,7 +497,6 @@ function AddProduct({ product }) {
                 className="shadow appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
                 value={shelfEndTime}
                 onChange={handleShelfEndTimeChange}
-                required
               />
             </div>
           </div>
@@ -510,7 +511,6 @@ function AddProduct({ product }) {
               className="shadow resize-none appearance-none border rounded w-full h-44 py-2 px-3  text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
               value={afterSalesText}
               onChange={handleAfterSalesTextChange}
-              required
             ></textarea>
           </div>
           <div className="mb-4">
@@ -523,7 +523,6 @@ function AddProduct({ product }) {
               className="shadow appearance-none border rounded resize-none w-full h-44 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
               value={afterSalesInstruction}
               onChange={handleAfterSalesInstructionChange}
-              required
             ></textarea>
           </div>
           <div className="mb-4">
@@ -536,7 +535,6 @@ function AddProduct({ product }) {
               className="shadow appearance-none border resize-none rounded w-full h-44 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
               value={inventoryText}
               onChange={handleInventoryTextChange}
-              required
             ></textarea>
           </div>
           <div className="mb-4">
@@ -545,7 +543,7 @@ function AddProduct({ product }) {
             </label>
             {/* <input type="file"
               onChange={handleInvoiceFileUpload}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white required"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
               accept=".csv, .pdf, .xls, .xlsx" /> */}
             <input
               type="file"
@@ -560,7 +558,7 @@ function AddProduct({ product }) {
               accept="application/pdf"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
               onChange={handleInvoiceFileChange}
-              required
+              
             /> */}
           </div>
           <button

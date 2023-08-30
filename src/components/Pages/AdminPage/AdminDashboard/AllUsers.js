@@ -16,7 +16,7 @@ const AllUsers = () => {
 
 //start the part to get all the users from database
 
-    axios.get('https://grozziie.zjweiting.com:8033/tht/allUsers')
+    axios.get('http://localhost:2000/tht/allUsers')
   .then(response => {
     setUsers(response.data);
     setLoading(false)
@@ -30,7 +30,7 @@ const AllUsers = () => {
 //create a function to delete a user from the frontend and database both side 
   const deleteUser = async (userId) => {
     try {
-      await axios.delete(`https://grozziie.zjweiting.com:8033/tht/users/delete/${userId}`);
+      await axios.delete(`http://localhost:2000/tht/users/delete/${userId}`);
       toast.success('User deleted successfully');
       setUsers(users.filter((user) => user.id !== userId));
     } catch (error) {
@@ -47,7 +47,7 @@ console.log(users)
   //create a function to update a user from the frontend and database both side 
   const updateUser = async (userId, editingUser) => {
     try {
-      const response = await axios.put(`https://grozziie.zjweiting.com:8033/tht/users/update/${userId}`, editingUser);
+      const response = await axios.put(`http://localhost:2000/tht/users/update/${userId}`, editingUser);
       toast.success("user information updated successfully");
       // Optionally, you can show a success message to the user using a toast or other UI notification.
     } catch (error) {
@@ -67,7 +67,7 @@ console.log(users)
     const isAdmin=true;
     
     try {
-      const response = await axios.put(`https://grozziie.zjweiting.com:8033/tht/users/update/admin/${userId}`, isAdmin);
+      const response = await axios.put(`http://localhost:2000/tht/users/update/admin/${userId}`, isAdmin);
       console.log(users)
       setUsers(users.map((user)=>{
         console.log(users)
