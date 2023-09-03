@@ -39,7 +39,7 @@ const AdminDashboard = () => {
 
   const fetchUserByEmail = async () => {
     try {
-      const response = await axios.get('http://localhost:2000/tht/users', {
+      const response = await axios.get('https://grozziie.zjweiting.com:8033/tht/users', {
         params: {
           email: user?.email,
         },
@@ -51,7 +51,7 @@ const AdminDashboard = () => {
   };
   // use useEffect to load the all mall product from data base
   useEffect(() => {
-    fetch('http://localhost:2000/tht/eventProducts')
+    fetch('https://grozziie.zjweiting.com:8033/tht/eventProducts')
       .then(response => response.json())
       .then(data => setEventProduct(data));
       setEventLoading(false);
@@ -60,7 +60,7 @@ const AdminDashboard = () => {
 
   //start the part to get all the users from database
 
-  axios.get('http://localhost:2000/tht/allUsers')
+  axios.get('https://grozziie.zjweiting.com:8033/tht/allUsers')
     .then(response => {
       setAllUsers(response.data);
       setUserLoading(false)
@@ -72,14 +72,14 @@ const AdminDashboard = () => {
   // use useEffect to load the all mall product from data base
   useEffect(() => {
 
-    fetch('http://localhost:2000/tht/mallProducts')
+    fetch('https://grozziie.zjweiting.com:8033/tht/mallProducts')
       .then(response => response.json())
       .then(data => setMallProduct(data));
       setMallLoading(false)
   }, []);
 
   useEffect(() => {
-    fetch('http://localhost:2000/tht/categories')
+    fetch('https://grozziie.zjweiting.com:8033/tht/categories')
       .then(response => response.json())
       .then(data => {
         setCategories(JSON.parse(data[0]?.allcategories))
@@ -91,7 +91,7 @@ const AdminDashboard = () => {
 
   const fetchQuestionsAnswerByEmail = async () => {
     try {
-      const response = await axios.get('http://localhost:2000/tht/QandAnswers', {
+      const response = await axios.get('https://grozziie.zjweiting.com:8033/tht/QandAnswers', {
         params: {
           email: user?.email,
         },

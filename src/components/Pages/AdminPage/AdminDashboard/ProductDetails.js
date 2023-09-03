@@ -46,13 +46,19 @@ function ProductDetails() {
                 <div className="px-4 sm:px-6 lg:px-8 py-12">
                     <div className="flex flex-col md:flex-row md:space-x-4">
                         <div  title={`Link:  ${Product?.productImgLink}\nRemark:  ${Product?.productImgRemark}`}  className="md:w-1/2 mb-4 flex justify-center">
-                            <img src={`http://localhost:2000/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${Product?.productImg}`} alt="Product" className="rounded-lg w-96 h-96" />
+                            <img src={`https://grozziie.zjweiting.com:8033/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${Product?.productImg}`} alt="Product" className="rounded-lg w-96 h-96" />
                         </div>
                         <div className="md:w-1/2 text-start pl-5">
                             <div className=" mb-5">
                                 <h2 className="text-lg font-semibold">Product Name</h2>
                                 <p className="text-base text-gray-700">
                                     {Product?.productName}
+                                </p>
+                            </div>
+                            <div className=" mb-5">
+                                <h2 className="text-lg font-semibold">Product Language Code</h2>
+                                <p className="text-base text-gray-700">
+                                    {Product?.productCountryName}
                                 </p>
                             </div>
 
@@ -112,15 +118,15 @@ function ProductDetails() {
                                     {(Product.allImages)?.split(",")?.map((image, index) => (
                                         <img
                                             key={index}
-                                            src={`http://localhost:2000/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${image}`}
+                                            src={`https://grozziie.zjweiting.com:8033/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${image}`}
                                             alt={`Image ${index + 1}`}
-                                            onClick={() => handleImageClick(`http://localhost:2000/tht/mallProductImages/${image}`)}
+                                            onClick={() => handleImageClick(`https://grozziie.zjweiting.com:8033/tht/mallProductImages/${image}`)}
                                             className="w-24 h-24 object-cover cursor-pointer mx-4 my-2 rounded-lg"
                                         />
                                     ))}
                                 </div>
                                 {selectedImage && (
-                                    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-40">
+                                    <div className="fixed inset-0 flex items-center justify-center mx-auto w-3/4 h-3/4  bg-black bg-opacity-75 z-40">
                                         <div className="max-w-3xl max-h-3xl">
                                             <img
                                                 src={selectedImage}
@@ -151,7 +157,7 @@ function ProductDetails() {
                                             key={index}
                                             onClick={() =>
                                                 handleVideoClick(
-                                                    `http://localhost:2000/tht/${productCategory === 'mallProduct'
+                                                    `https://grozziie.zjweiting.com:8033/tht/${productCategory === 'mallProduct'
                                                         ? 'mallProductImages'
                                                         : 'eventProductImages'
                                                     }/${video}`
@@ -161,7 +167,7 @@ function ProductDetails() {
                                         >
                                             <div className="w-full h-auto rounded-lg overflow-hidden">
                                                 <ReactPlayer
-                                                    url={`http://localhost:2000/tht/${productCategory === 'mallProduct'
+                                                    url={`https://grozziie.zjweiting.com:8033/tht/${productCategory === 'mallProduct'
                                                             ? 'mallProductImages'
                                                             : 'eventProductImages'
                                                         }/${video}`}
@@ -201,15 +207,15 @@ function ProductDetails() {
                                     {(Product?.allInstructionsImage)?.split(",")?.map((image, index) => (
                                         <img
                                             key={index}
-                                            src={`http://localhost:2000/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${image}`}
+                                            src={`https://grozziie.zjweiting.com:8033/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${image}`}
                                             alt={`Image ${index + 1}`}
-                                            onClick={() => handleImageClick(`http://localhost:2000/tht/mallProductImages/${image}`)}
+                                            onClick={() => handleImageClick(`https://grozziie.zjweiting.com:8033/tht/mallProductImages/${image}`)}
                                             className="w-24 h-24 object-cover cursor-pointer mx-4 my-2 rounded-lg"
                                         />
                                     ))}
                                 </div>
                                 {selectedImage && (
-                                    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-40">
+                                    <div className="fixed inset-0 flex items-center justify-center w-3/4 h-3/4 bg-black bg-opacity-75 z-40">
                                         <div className="max-w-3xl max-h-3xl">
                                             <img
                                                 src={selectedImage}
@@ -241,7 +247,7 @@ function ProductDetails() {
                                             key={index}
                                             onClick={() =>
                                                 handleVideoClick(
-                                                    `http://localhost:2000/tht/${productCategory === 'mallProduct'
+                                                    `https://grozziie.zjweiting.com:8033/tht/${productCategory === 'mallProduct'
                                                         ? 'mallProductImages'
                                                         : 'eventProductImages'
                                                     }/${video}`
@@ -251,7 +257,7 @@ function ProductDetails() {
                                         >
                                             <div className="w-full h-auto rounded-lg overflow-hidden">
                                                 <ReactPlayer
-                                                    url={`http://localhost:2000/tht/${productCategory === 'mallProduct'
+                                                    url={`https://grozziie.zjweiting.com:8033/tht/${productCategory === 'mallProduct'
                                                             ? 'mallProductImages'
                                                             : 'eventProductImages'
                                                         }/${video}`}

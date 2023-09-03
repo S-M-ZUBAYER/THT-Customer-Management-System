@@ -1,38 +1,40 @@
 import { useContext, useEffect, useState } from "react";
-import addIcon from "../../../../Assets/Images/Admin/AddIcon.jpg"
+import addIcon from "../../../../../Assets/Images/Admin/AddIcon.jpg"
 import { toast } from "react-hot-toast";
 
 import axios from "axios";
 import html2canvas from 'html2canvas';
-import CategoryList from "./IconsComponent/Category";
-import { AuthContext } from "../../../../context/UserContext";
-import IconsCategoryList from "./IconsCategory/IconsCategoryList";
+import { AuthContext } from "../../../../../context/UserContext";
+import CategoryList from "../IconsComponent/Category";
+import IconsCategoryList from "../IconsCategory/IconsCategoryList";
+import AddBackgroundCategory from "./AddBackgroundCategory";
 
-function AddIcon() {
+function AddBackgroundImg() {
   const [selectedImages, setSelectedImages] = useState([]);
-  const [icons, setIcons] = useState([]);
+  const [BackgroundImgs, setBackgroundImgs] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [categories, setCategories] = useState([]);
 
-  const [category, setCategory] = useState('');
-
-  const { user, categories, setCategories } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     axios.get("https://grozziie.zjweiting.com:8033/tht/icons")
       .then(res => {
-        setIcons(res.data)
+        setBackgroundImgs(res.data)
       })
       .catch(err => console.log(err))
   })
 
   useEffect(() => {
-    fetch('https://grozziie.zjweiting.com:8033/tht/categories')
+    fetch('http://localhost:2000/tht/BackgroundCategories')
       .then(response => response.json())
       .then(data => {
-        setCategories(JSON.parse(data[0]?.allcategories))
+        console.log(data)
+        setCategories(data.map(category=>category.allBackgroundCategoris))
+        
       });
   }, []);
-
+  console.log(categories)
   const handleImageChange = (e) => {
     const files = e.target.files;
     setSelectedImages(files);
@@ -65,20 +67,19 @@ function AddIcon() {
     formData.append('categoryName', selectedCategory);
   
     // TODO: Send formData to server-side script for processing
-  
-    axios.post('http://localhost:2000/tht/icons/add', formData)
+    axios.post('http://localhost:2000/tht/backgroundImgs/add', formData)
       .then(res => {
         if (res.data.status === "success") {
           toast.success("Images uploaded successfully");
           console.log("success")
         }
         else {
-          console.log("image faild")
+          console.log("image failed")
           toast.error("Images uploaded failed")
         }
       })
   }
-  
+ 
 
   const handleSelectChange = (e) => {
     setSelectedCategory(e.target.value);
@@ -88,14 +89,10 @@ function AddIcon() {
   return (
 
     <div>
-      <CategoryList
-        category={category}
-        setCategory={setCategory}
+      <AddBackgroundCategory
         categories={categories}
         setCategories={setCategories}
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-      ></CategoryList>
+      ></AddBackgroundCategory>
 
 
       <div className="my-32 flex items-center justify-center">
@@ -118,7 +115,7 @@ function AddIcon() {
             onClick={handleUpload}
             disabled={!selectedImages}
           >
-            Add Icon
+            Add Background Image
           </button>
 
 
@@ -136,4 +133,4 @@ function AddIcon() {
 }
 
 
-export default AddIcon;
+export default AddBackgroundImg;

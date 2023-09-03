@@ -213,7 +213,7 @@ console.log(selectedPrinter,bengaliAnswer)
                 if (user) {
 
                     //load current user data from database
-                    fetch('http://localhost:2000/tht/questions/add', {
+                    fetch('https://grozziie.zjweiting.com:8033/tht/questions/add', {
                         method: 'POST',
                         headers: {
                             'content-type': 'application/json'
@@ -370,7 +370,7 @@ console.log(selectedPrinter,bengaliAnswer)
             }
 
             //load current user data from database
-            fetch('http://localhost:2000/tht/unknownQuestions/add', {
+            fetch('https://grozziie.zjweiting.com:8033/tht/unknownQuestions/add', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json'
@@ -484,7 +484,7 @@ console.log(selectedPrinter,bengaliAnswer)
             })
 
             //load current user data from database
-            fetch('http://localhost:2000/tht/translationsQuestions/add', {
+            fetch('https://grozziie.zjweiting.com:8033/tht/translationsQuestions/add', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json'

@@ -22,7 +22,7 @@ const AddMallProducts = () => {
     
     const [eventProduct, setEventProduct] = useState([]);
 
-//     axios.get('http://localhost:2000/event')
+//     axios.get('https://grozziie.zjweiting.com:8033/event')
 //   .then(response => {
 //     setEventProduct(response.data);
 //   })
@@ -33,7 +33,7 @@ const AddMallProducts = () => {
 // use useEffect to load the all mall product from data base
 useEffect(() => {
     setLoading(true)
-    fetch('http://localhost:2000/tht/eventProducts')
+    fetch('https://grozziie.zjweiting.com:8033/tht/eventProducts')
         .then(response => response.json())
         .then(data => setEventProduct(data));
         setLoading(false);
@@ -60,7 +60,7 @@ useEffect(() => {
      //create a function to delete  any specific product
      const handleToDelete = async (productId) => {
         try {
-            await axios.delete(`http://localhost:2000/tht/eventProducts/delete/${productId}`);
+            await axios.delete(`https://grozziie.zjweiting.com:8033/tht/eventProducts/delete/${productId}`);
             toast.success(`One MallProduct deleted successfully`);
             const restProduct=eventProduct.filter(product=>(product?.id!==productId));
             setEventProduct(restProduct)
@@ -107,7 +107,7 @@ useEffect(() => {
                 </form>
 
                 <div className="mx-2 my-3 grid grid-cols-7  text-start text-lg font-semibold bg-slate-300 px-2 py-2">
-                    <div className=" col-span-6 grid grid-cols-3">
+                    <div className=" col-span-6 grid grid-cols-4">
                         <p>
                             Image
                         </p>
@@ -116,6 +116,9 @@ useEffect(() => {
                         </p>
                         <p className="">
                             Model No
+                        </p>
+                        <p className="">
+                            Show Type
                         </p>
                     </div>
 
@@ -136,14 +139,17 @@ useEffect(() => {
                 eventProduct?.map((product,index) => (
                      // <Link to={`/admin/mallProduct/details/${product?.Model},`}>
                      <div className="mx-2 my-3 grid grid-cols-7  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">
-                     <Link key={index} to={`/admin/eventProduct/details/${product?.modelNumber}}`} onClick={() => setProduct(product)} className=" col-span-6 grid grid-cols-3">
-                         <img className=" h-10 w-10 rounded-full" src={`http://localhost:2000/tht/eventProductImages/${product.productImg}`} alt={product.productName} ></img>
+                     <Link key={index} to={`/admin/eventProduct/details/${product?.modelNumber}}`} onClick={() => setProduct(product)} className=" col-span-6 grid grid-cols-4">
+                         <img className=" h-10 w-10 rounded-full" src={`https://grozziie.zjweiting.com:8033/tht/eventProductImages/${product.productImg}`} alt={product.productName} ></img>
 
                          <p>
                              {product?.productName}
                          </p>
                          <p className="">
                              {product?.modelNumber}
+                         </p>
+                         <p className="">
+                             {product?.productImgRemark}
                          </p>
                      </Link>
 

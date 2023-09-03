@@ -8,6 +8,7 @@ import BtnSpinner from '../../../Shared/Loading/BtnSpinner';
 
 function AddProduct({ product }) {
   const [loading, setLoading] = useState(false);
+  const [productCountryName, setProductCountryName] = useState('');
   const [productName, setProductName] = useState('');
   const [productPrice, setProductPrice] = useState('');
   const [productDescription, setProductDescription] = useState('');
@@ -24,19 +25,21 @@ function AddProduct({ product }) {
   const [productImgRemark, setProductImgRemark] = useState("");
   const [relatedImgLink, setRelatedImgLink] = useState("");
   const [relatedImgRemark, setRelatedImgRemark] = useState("");
+  const [colorImgRemark, setColorImgRemark] = useState("");
   const [previewImage, setPreviewImage] = useState(addImg);
   const [fileName, setFileName] = useState("Add Image");
   const [productImg, setProductImg] = useState([]);
   const [invoiceFile, setInvoiceFile] = useState([]);
   const [invoiceFiles, setInvoiceFiles] = useState([]);
 
+  const [selectedColorImages, setSelectedColorImages] = useState([]);
   const [selectedImages, setSelectedImages] = useState([]);
   const [selectedVideos, setSelectedVideos] = useState([]);
   const [selectedInstructionsImages, setSelectedInstructionsImages] = useState([]);
   const [selectedInstructionsVideos, setSelectedInstructionsVideos] = useState([]);
   const now = new Date();
 
- 
+
   // const handleUpload = async () => {
   //   const formData = new FormData();
 
@@ -89,6 +92,9 @@ function AddProduct({ product }) {
   };
 
 
+  const handleProductCountryNameChange = (e) => {
+    setProductCountryName(e.target.value);
+  };
   const handleProductNameChange = (e) => {
     setProductName(e.target.value);
   };
@@ -155,6 +161,14 @@ function AddProduct({ product }) {
 
   }
 
+  const handleColorImageChange = (e) => {
+    setSelectedColorImages(e.target.files);
+  };
+  const handleColorImageRemark = (e) => {
+    setColorImgRemark(e.target.value);
+
+  }
+
   const handleProductImgUpload = (event) => {
     // extract the current date and time components
     const file = event.target.files[0];
@@ -182,11 +196,13 @@ function AddProduct({ product }) {
     formData.append('productImg', productImg);
     console.log(loading)
     // formData.append('invoiceFile', invoiceFile);
+    formData.append('productCountryName', productCountryName);
     formData.append('productName', productName);
     formData.append('productImgLink', productImgLink);
     formData.append('productImgRemark', productImgRemark);
     formData.append('relatedImgLink', relatedImgLink);
     formData.append('relatedImgRemark', relatedImgRemark);
+    formData.append('colorImgRemark', colorImgRemark);
     formData.append('productPrice', productPrice);
     formData.append('productDescription', productDescription);
     formData.append('modelNumber', modelNumber);
@@ -200,7 +216,7 @@ function AddProduct({ product }) {
     formData.append('inventoryText', inventoryText);
     formData.append('date', date);
     formData.append('time', time);
-
+console.log(formData)
     // Append selected invoice files to the form data
     for (let i = 0; i < invoiceFiles.length; i++) {
       formData.append('invoiceFiles', invoiceFiles[i]);
@@ -208,6 +224,10 @@ function AddProduct({ product }) {
     // Append selected images to the form data
     for (let i = 0; i < selectedImages.length; i++) {
       formData.append('images', selectedImages[i]);
+    }
+    // Append selected ColorImages to the form data
+    for (let i = 0; i < selectedColorImages.length; i++) {
+      formData.append('colorImages', selectedColorImages[i]);
     }
 
     // Append selected videos to the form data
@@ -225,7 +245,7 @@ function AddProduct({ product }) {
     }
 
     try {
-      await axios.post(`https://grozziie.zjweiting.com:8033/tht/${productCategory}/add`, formData, {
+      await axios.post(`http://localhost:2000/tht/${productCategory}/add`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -234,18 +254,21 @@ function AddProduct({ product }) {
       setLoading(false);
 
       // Reset all form fields
+      setProductCountryName('');
       setProductName('');
       setProductPrice('');
       setProductImgLink("");
       setProductImgRemark("");
       setRelatedImgLink("");
       setRelatedImgRemark("");
+      setColorImgRemark("");
       setProductDescription('');
       setModelNumber('');
       setPrinterColor('');
       setConnectorType('');
       setStockQuantity('');
       setSelectedImages([]);
+      setSelectedColorImages(null);
       setSelectedVideos([]);
       setSelectedInstructionsImages([]);
       setSelectedInstructionsVideos([]);
@@ -256,7 +279,7 @@ function AddProduct({ product }) {
       setInventoryText('');
       setProductImg([]);
       setInvoiceFiles([]);
-    console.log(loading)
+      console.log(loading)
 
     } catch (error) {
       console.error('Error creating product:', error);
@@ -315,6 +338,25 @@ function AddProduct({ product }) {
       </div>
       <div className="w-full md:w-1/2 p-8">
         <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <select
+              id="productCountryCategory"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+              value={productCountryName}
+              onChange={handleProductCountryNameChange}
+              required
+            >
+              <option value="">Select Country Category</option>
+              <option value="zh-CN">中文</option>
+              <option value="en-US">English</option>
+              <option value="th-TH">ไทย</option>
+              <option value="fil-PH">Philippines</option>
+              <option value="vi-VN">Tiếng Việt</option>
+              <option value="ms-MY">Malaysia</option>
+              <option value="id-ID">Indonesia</option>
+            </select>
+          </div>
+
           <div className="mb-4">
             <select
               id="productName"
@@ -453,6 +495,7 @@ function AddProduct({ product }) {
               ></textarea>
             </div>
           </div>
+          
 
 
           <div className="my-8 mt-16 grid  grid-cols-2 text-start mr-14">
@@ -477,6 +520,27 @@ function AddProduct({ product }) {
             <input className='mt-5 mb-8' type="file" multiple onChange={handleInstructionsVideoChange} accept="video/*" />
           </div>
 
+          <div className="my-8 mt-16  text-start mr-14 bg-gray-100 p-3 rounded-lg">
+            <div className="mt-5 grid  grid-cols-2 text-start" >
+              <label htmlFor="relatedImages" className="block col-span-1 text-gray-700 font-bold mb-2">
+                Upload Color Images
+              </label>
+              <input className='mt-5 mb-8 bg-white' type="file" multiple onChange={handleColorImageChange} accept="image/*" />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="productImageRemark" className="block text-start text-gray-700 font-bold mb-2">
+                Color Images Remarks
+              </label>
+              <textarea
+                id="relatedImgRemark"
+                placeholder="Add product related Image Remark Remark"
+                className="shadow resize-none appearance-none border rounded-lg w-full h-20  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                value={colorImgRemark}
+                onChange={handleColorImageRemark}
+              ></textarea>
+            </div>
+          </div>
 
 
           <div className="mb-4">

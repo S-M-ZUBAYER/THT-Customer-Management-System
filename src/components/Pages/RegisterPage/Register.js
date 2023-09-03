@@ -49,7 +49,7 @@ const Register = () => {
 
 
 
-    axios.get('http://localhost:2000/tht/allUsers')
+    axios.get('https://grozziie.zjweiting.com:8033/tht/allUsers')
         .then(response => {
             setAllUsers(response.data);
 
@@ -173,7 +173,7 @@ const Register = () => {
       
         const form = event.target;
       
-        fetch('http://localhost:2000/tht/check-user', {
+        fetch('https://grozziie.zjweiting.com:8033/tht/check-user', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -200,7 +200,7 @@ const Register = () => {
                 return;
               }
       
-              fetch('http://localhost:2000/tht/users/add', {
+              fetch('https://grozziie.zjweiting.com:8033/tht/users/add', {
                 method: 'POST',
                 headers: {
                   'content-type': 'application/json',

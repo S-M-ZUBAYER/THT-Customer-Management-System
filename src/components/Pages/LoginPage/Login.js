@@ -75,7 +75,7 @@ const Login = () => {
     setLoading(true);
     const form = event.target;
     // handle form submission logic here
-    fetch('http://localhost:2000/tht/login', {
+    fetch('https://grozziie.zjweiting.com:8033/tht/login', {
       method: 'POST',
       headers: {
         'content-type': 'application/json'
@@ -172,7 +172,7 @@ const Login = () => {
     }
 
     // Call the API endpoint to reset password with the email
-    fetch('http://localhost:2000/tht/reset-password', {
+    fetch('https://grozziie.zjweiting.com:8033/tht/reset-password', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
