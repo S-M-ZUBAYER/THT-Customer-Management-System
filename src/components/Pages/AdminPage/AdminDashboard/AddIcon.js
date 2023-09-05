@@ -23,7 +23,7 @@ function AddIcon() {
         setIcons(res.data)
       })
       .catch(err => console.log(err))
-  })
+  }, []);
 
   useEffect(() => {
     fetch('https://grozziie.zjweiting.com:8033/tht/categories')
@@ -50,12 +50,40 @@ function AddIcon() {
 
 
 
+  // const handleUpload = (event) => {
+  //   event.preventDefault();
+    
+  //   // Create a new FormData object
+  //   const formData = new FormData();
+    
+  //   // Append each selected image to the formData
+  //   for (let i = 0; i < selectedImages.length; i++) {
+  //     formData.append("images", selectedImages[i]);
+  //   }
+  
+  //   formData.append('email', user?.email);
+  //   formData.append('categoryName', selectedCategory);
+  
+  //   // TODO: Send formData to server-side script for processing
+  
+  //   axios.post('https://grozziie.zjweiting.com:8033/tht/icons/add', formData)
+  //     .then(res => {
+  //       if (res.data.status === "success") {
+  //         toast.success("Images uploaded successfully");
+  //         console.log("success")
+  //       }
+  //       else {
+  //         console.log("image faild")
+  //         toast.error("Images uploaded failed")
+  //       }
+  //     })
+  // }
+  
   const handleUpload = (event) => {
     event.preventDefault();
     
     // Create a new FormData object
     const formData = new FormData();
-    
     // Append each selected image to the formData
     for (let i = 0; i < selectedImages.length; i++) {
       formData.append("images", selectedImages[i]);
@@ -65,7 +93,6 @@ function AddIcon() {
     formData.append('categoryName', selectedCategory);
   
     // TODO: Send formData to server-side script for processing
-  
     axios.post('http://localhost:2000/tht/icons/add', formData)
       .then(res => {
         if (res.data.status === "success") {
@@ -73,12 +100,12 @@ function AddIcon() {
           console.log("success")
         }
         else {
-          console.log("image faild")
+          console.log("image failed")
           toast.error("Images uploaded failed")
         }
       })
   }
-  
+
 
   const handleSelectChange = (e) => {
     setSelectedCategory(e.target.value);

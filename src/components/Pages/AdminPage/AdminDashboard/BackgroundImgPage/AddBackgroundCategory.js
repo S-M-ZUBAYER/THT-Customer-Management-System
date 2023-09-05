@@ -17,7 +17,7 @@ const AddBackgroundCategory = ({categories, setCategories}) => {
   const handleAddCategory = () => {
     if (categoryName.trim() !== '') {
       setCategories([...categories,categoryName]);
-      axios.post('http://localhost:2000/tht/backgroundCategories/add', {
+      axios.post('https://grozziie.zjweiting.com:8033/tht/backgroundCategories/add', {
         categoryName: categoryName,
       })
       .then((response) => {

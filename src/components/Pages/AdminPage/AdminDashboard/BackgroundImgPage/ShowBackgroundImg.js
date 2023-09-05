@@ -18,7 +18,7 @@ const ShowBackgroundImg = () => {
 
   useEffect(() => {
     // Define the URL for your backend route with the categoryName parameter
-    const apiUrl = `http://localhost:2000/tht/backgroundImgs/${categoryName}`;
+    const apiUrl = `https://grozziie.zjweiting.com:8033/tht/backgroundImgs/${categoryName}`;
 
     // Make a GET request to fetch data for the specified category
     axios.get(apiUrl)
@@ -44,7 +44,7 @@ const handleToDelete = async (id) => {
   };
   
   const  handleToDownload=(icon)=>{
-    const imageURL = `http://localhost:2000/tht/backgroundImgs/${icon}`; // Replace with your image URL
+    const imageURL = `https://grozziie.zjweiting.com:8033/tht/backgroundImgs/${icon}`; // Replace with your image URL
   
     fetch(imageURL)
       .then((response) => response.blob())

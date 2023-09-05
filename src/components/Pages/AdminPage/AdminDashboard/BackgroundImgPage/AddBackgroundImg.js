@@ -5,9 +5,9 @@ import { toast } from "react-hot-toast";
 import axios from "axios";
 import html2canvas from 'html2canvas';
 import { AuthContext } from "../../../../../context/UserContext";
-import CategoryList from "../IconsComponent/Category";
 import IconsCategoryList from "../IconsCategory/IconsCategoryList";
 import AddBackgroundCategory from "./AddBackgroundCategory";
+import BackgroundCategoryList from "./BackgroundCategoryList";
 
 function AddBackgroundImg() {
   const [selectedImages, setSelectedImages] = useState([]);
@@ -16,25 +16,25 @@ function AddBackgroundImg() {
   const [categories, setCategories] = useState([]);
 
   const { user } = useContext(AuthContext);
+console.log(user)
+useEffect(() => {
+  axios.get("https://grozziie.zjweiting.com:8033/tht/icons")
+    .then(res => {
+      setBackgroundImgs(res.data)
+    })
+    .catch(err => console.log(err))
+}, []); 
+
 
   useEffect(() => {
-    axios.get("https://grozziie.zjweiting.com:8033/tht/icons")
-      .then(res => {
-        setBackgroundImgs(res.data)
-      })
-      .catch(err => console.log(err))
-  })
-
-  useEffect(() => {
-    fetch('http://localhost:2000/tht/BackgroundCategories')
+    fetch('https://grozziie.zjweiting.com:8033/tht/BackgroundCategories')
       .then(response => response.json())
       .then(data => {
-        console.log(data)
+        
         setCategories(data.map(category=>category.allBackgroundCategoris))
         
       });
   }, []);
-  console.log(categories)
   const handleImageChange = (e) => {
     const files = e.target.files;
     setSelectedImages(files);
@@ -42,13 +42,6 @@ function AddBackgroundImg() {
   }
 
 
-  // useEffect(()=>{
-  //   axios.get("https://grozziie.zjweiting.com:8033/tht/categories")
-  //   .then(res=>{
-  //     setCategories(JSON.parse(res.data[0]?.allcategories));
-  //   })
-  //   .catch(err=>console.log(err))
-  // })
 
 
 
@@ -57,7 +50,6 @@ function AddBackgroundImg() {
     
     // Create a new FormData object
     const formData = new FormData();
-    
     // Append each selected image to the formData
     for (let i = 0; i < selectedImages.length; i++) {
       formData.append("images", selectedImages[i]);
@@ -65,7 +57,7 @@ function AddBackgroundImg() {
   
     formData.append('email', user?.email);
     formData.append('categoryName', selectedCategory);
-  
+  console.log(selectedImages)
     // TODO: Send formData to server-side script for processing
     axios.post('http://localhost:2000/tht/backgroundImgs/add', formData)
       .then(res => {
@@ -121,9 +113,9 @@ function AddBackgroundImg() {
 
         </form>
       </div>
-      <IconsCategoryList
+      <BackgroundCategoryList
         categories={categories}
-      ></IconsCategoryList>
+      ></BackgroundCategoryList>
 
     </div>
 
