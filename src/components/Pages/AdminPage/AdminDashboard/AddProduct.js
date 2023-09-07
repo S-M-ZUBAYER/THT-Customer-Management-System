@@ -25,14 +25,14 @@ function AddProduct({ product }) {
   const [productImgRemark, setProductImgRemark] = useState("");
   const [relatedImgLink, setRelatedImgLink] = useState("");
   const [relatedImgRemark, setRelatedImgRemark] = useState("");
-  const [colorImgRemark, setColorImgRemark] = useState("");
+  const [descriptionImgRemark, setDescriptionImgRemark] = useState("");
   const [previewImage, setPreviewImage] = useState(addImg);
   const [fileName, setFileName] = useState("Add Image");
   const [productImg, setProductImg] = useState([]);
   const [invoiceFile, setInvoiceFile] = useState([]);
   const [invoiceFiles, setInvoiceFiles] = useState([]);
 
-  const [selectedColorImages, setSelectedColorImages] = useState([]);
+  const [selectedDescriptionImages, setSelectedDescriptionImages] = useState([]);
   const [selectedImages, setSelectedImages] = useState([]);
   const [selectedVideos, setSelectedVideos] = useState([]);
   const [selectedInstructionsImages, setSelectedInstructionsImages] = useState([]);
@@ -161,13 +161,14 @@ function AddProduct({ product }) {
 
   }
 
-  const handleColorImageChange = (e) => {
-    setSelectedColorImages(e.target.files);
+  const handleDescriptionImageChange = (e) => {
+    setSelectedDescriptionImages(e.target.files);
   };
-  const handleColorImageRemark = (e) => {
-    setColorImgRemark(e.target.value);
+  const handleDescriptionImageRemark = (e) => {
+    setDescriptionImgRemark(e.target.value);
 
   }
+  
 
   const handleProductImgUpload = (event) => {
     // extract the current date and time components
@@ -202,7 +203,7 @@ function AddProduct({ product }) {
     formData.append('productImgRemark', productImgRemark);
     formData.append('relatedImgLink', relatedImgLink);
     formData.append('relatedImgRemark', relatedImgRemark);
-    formData.append('colorImgRemark', colorImgRemark);
+    formData.append('descriptionImgRemark', descriptionImgRemark);
     formData.append('productPrice', productPrice);
     formData.append('productDescription', productDescription);
     formData.append('modelNumber', modelNumber);
@@ -225,9 +226,9 @@ console.log(formData)
     for (let i = 0; i < selectedImages.length; i++) {
       formData.append('images', selectedImages[i]);
     }
-    // Append selected ColorImages to the form data
-    for (let i = 0; i < selectedColorImages.length; i++) {
-      formData.append('colorImages', selectedColorImages[i]);
+    // Append selected descriptionImages to the form data
+    for (let i = 0; i < selectedDescriptionImages.length; i++) {
+      formData.append('descriptionImages', selectedDescriptionImages[i]);
     }
 
     // Append selected videos to the form data
@@ -261,14 +262,14 @@ console.log(formData)
       setProductImgRemark("");
       setRelatedImgLink("");
       setRelatedImgRemark("");
-      setColorImgRemark("");
+      setDescriptionImgRemark("");
       setProductDescription('');
       setModelNumber('');
       setPrinterColor('');
       setConnectorType('');
       setStockQuantity('');
       setSelectedImages([]);
-      setSelectedColorImages(null);
+      setSelectedDescriptionImages(null);
       setSelectedVideos([]);
       setSelectedInstructionsImages([]);
       setSelectedInstructionsVideos([]);
@@ -314,7 +315,7 @@ console.log(formData)
             </label>
             <input
               type="text"
-              id="printerColor"
+              id="productImgLink"
               className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
               value={productImgLink}
               placeholder='Enter the product Image link'
@@ -397,6 +398,30 @@ console.log(formData)
               required
             ></textarea>
           </div>
+
+          <div className="my-8 mt-16  text-start mr-14 bg-gray-100 p-3 rounded-lg">
+            <div className="mt-5 grid  grid-cols-2 text-start" >
+              <label htmlFor="relatedImages" className="block col-span-1 text-gray-700 font-bold mb-2">
+                Upload Description Images
+              </label>
+              <input className='mt-5 mb-8 bg-white' type="file" multiple onChange={handleDescriptionImageChange} accept="image/*" />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="productImageRemark" className="block text-start text-gray-700 font-bold mb-2">
+              Description Images Remarks
+              </label>
+              <textarea
+                id="descriptionImgRemark"
+                placeholder="Add product related Image Remark Remark"
+                className="shadow resize-none appearance-none border rounded-lg w-full h-20  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                value={descriptionImgRemark}
+                onChange={handleDescriptionImageRemark}
+              ></textarea>
+            </div>
+          </div>
+
+
           <h2 className="text-lg font-bold text-start my-10">
             Product Details
           </h2>
@@ -520,28 +545,6 @@ console.log(formData)
             <input className='mt-5 mb-8' type="file" multiple onChange={handleInstructionsVideoChange} accept="video/*" />
           </div>
 
-          <div className="my-8 mt-16  text-start mr-14 bg-gray-100 p-3 rounded-lg">
-            <div className="mt-5 grid  grid-cols-2 text-start" >
-              <label htmlFor="relatedImages" className="block col-span-1 text-gray-700 font-bold mb-2">
-                Upload Color Images
-              </label>
-              <input className='mt-5 mb-8 bg-white' type="file" multiple onChange={handleColorImageChange} accept="image/*" />
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="productImageRemark" className="block text-start text-gray-700 font-bold mb-2">
-                Color Images Remarks
-              </label>
-              <textarea
-                id="relatedImgRemark"
-                placeholder="Add product related Image Remark Remark"
-                className="shadow resize-none appearance-none border rounded-lg w-full h-20  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
-                value={colorImgRemark}
-                onChange={handleColorImageRemark}
-              ></textarea>
-            </div>
-          </div>
-
 
           <div className="mb-4">
             <label htmlFor="shelfTimeStart" className="block text-start text-gray-700 font-bold mb-2">
@@ -605,10 +608,7 @@ console.log(formData)
             <label className="block text-start text-gray-700 font-bold mb-2">
               Invoice
             </label>
-            {/* <input type="file"
-              onChange={handleInvoiceFileUpload}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
-              accept=".csv, .pdf, .xls, .xlsx" /> */}
+           
             <input
               type="file"
               multiple
@@ -616,14 +616,7 @@ console.log(formData)
               onChange={handleInvoiceFileChange}
             />
 
-            {/* <input
-              type="file"
-              id="invoice"
-              accept="application/pdf"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
-              onChange={handleInvoiceFileChange}
-              
-            /> */}
+            
           </div>
           <button
             className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-10 px-20 rounded-lg"

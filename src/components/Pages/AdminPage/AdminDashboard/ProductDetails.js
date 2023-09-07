@@ -3,6 +3,9 @@ import ReactPlayer from 'react-player';
 import img from "../../../../Assets/Images/Admin/printer.jpg"
 import ProductDetailsLayout from './ProductDetailsLayout/ProductDetailsLayout';
 import { AllProductContext } from '../../../../context/ProductContext';
+import { toast } from 'react-hot-toast';
+import axios from 'axios';
+import AddColorImg from './AddColorImg';
 
 
 function ProductDetails() {
@@ -15,8 +18,12 @@ function ProductDetails() {
     const [selectedColorImage, setSelectedColorImage] = useState(null);
     const [selectedInstructionImage, setSelectedInstructionImage] = useState(null);
     const [selectedVideo, setSelectedVideo] = useState(null);
-
-
+    const [colorImg, setColorImg] = useState("");
+    const [selectedColorImages, setSelectedColorImages] = useState([]);
+    const [productPrice, setProductPrice] = useState('');
+    const [productDescription, setProductDescription] = useState('');
+    const [stockQuantity, setStockQuantity] = useState('');
+    const [modelNumber, setModelNumber] = useState('');
 
     const handleInstructionImageClick = (image) => {
         setSelectedInstructionImage(image);
@@ -27,6 +34,9 @@ function ProductDetails() {
     const handleColorImageClick = (image) => {
         setSelectedColorImage(image);
     };
+    const handleColorImage= (e) => {
+        setColorImg(e.target.value);
+    };
 
 
 
@@ -35,7 +45,13 @@ function ProductDetails() {
     };
 
 
+    const handleProductPriceChange = (e) => {
+        setProductPrice(e.target.value);
+    };
 
+    const handleProductDescriptionChange = (e) => {
+        setProductDescription(e.target.value);
+    };
 
     const handleVideoClick = (video) => {
         setSelectedVideo(video);
@@ -53,15 +69,29 @@ function ProductDetails() {
         setSelectedColorImage(null);
     };
 
+
+      
       
 
     return (
         <div className="text-gray-800">
             <div className="flex justify-around items-center">
+
                 <div className="px-4 sm:px-6 lg:px-8 py-12">
                     <div className="flex flex-col md:flex-row md:space-x-4">
-                        <div  title={`Link:  ${Product?.productImgLink}\nRemark:  ${Product?.productImgRemark}`}  className="md:w-1/2 mb-4 flex justify-center">
-                            <img src={`https://grozziie.zjweiting.com:8033/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${Product?.productImg}`} alt="Product" className="rounded-lg w-96 h-96" />
+                        <div>
+                            <div title={`Link:  ${Product?.productImgLink}\nRemark:  ${Product?.productImgRemark}`} className="md:w-1/2 mb-4 flex justify-center">
+                                <img src={`http://localhost:2000/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${Product?.productImg}`} alt="Product" className="rounded-lg w-96 h-96 " />
+
+
+                            </div>
+
+
+                        {/* need to paste in here */}
+<AddColorImg
+Product={Product}
+></AddColorImg>
+
                         </div>
                         <div className="md:w-1/2 text-start pl-5">
                             <div className=" mb-5">
@@ -128,190 +158,14 @@ function ProductDetails() {
                             </div>
 
                             <div className="container">
-                                <h1 className="text-2xl font-bold mt-8 mb-5">Image Gallery Of <span className="text-amber-400">{Product?.productName}</span></h1>
-                                <div  title={`Link: ${Product?.relatedImgLink}\nRemark: ${Product?.relatedImgRemark}`} className="grid grid-cols-3 gap-3">
-                                    {(Product.allImages)?.split(",")?.map((image, index) => (
-                                        <img
-                                            key={index}
-                                            src={`https://grozziie.zjweiting.com:8033/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${image}`}
-                                            alt={`Image ${index + 1}`}
-                                            onClick={() => handleImageClick(`https://grozziie.zjweiting.com:8033/tht/mallProductImages/${image}`)}
-                                            className="w-24 h-24 object-cover cursor-pointer mx-4 my-2 rounded-lg"
-                                        />
-                                    ))}
-                                </div>
-                                {selectedImage && (
-                                    <div className="fixed inset-0 flex items-center justify-center mx-auto my-auto w-3/4 h-3/4 bg-black bg-opacity-75 z-40 overflow-scroll">
-                                    <div className="max-w-3xl max-h-3xl ">
-                                        <img
-                                            src={selectedImage}
-                                            alt="Selected Image"
-                                            className="mx-auto max-w-10/12 max-h-10/12"
-                                        />
-                                            <button
-                                                onClick={handleCloseImage}
-                                                className="mt-4 px-4 py-2 bg-gray-800 text-white rounded-lg"
-                                            >
-                                                Close
-                                            </button>
-                                        </div>
-                                    </div>
-                                )}
-
-                            </div>
-
-                            <div className="container">
-                                <h1 className="text-2xl font-bold mt-8 mb-5">
-                                    Video Gallery Of{' '}
-                                    <span className="text-amber-400">{Product?.productName}</span>{' '}
-                                </h1>
-
-                                <div className="grid grid-cols-3 gap-4">
-                                    {((Product?.allVideos)?.split(','))?.map((video, index) => (
-                                        <div
-                                            key={index}
-                                            onClick={() =>
-                                                handleVideoClick(
-                                                    `https://grozziie.zjweiting.com:8033/tht/${productCategory === 'mallProduct'
-                                                        ? 'mallProductImages'
-                                                        : 'eventProductImages'
-                                                    }/${video}`
-                                                )
-                                            }
-                                            className="relative cursor-pointer"
-                                        >
-                                            <div className="w-full h-auto rounded-lg overflow-hidden">
-                                                <ReactPlayer
-                                                    url={`https://grozziie.zjweiting.com:8033/tht/${productCategory === 'mallProduct'
-                                                            ? 'mallProductImages'
-                                                            : 'eventProductImages'
-                                                        }/${video}`}
-                                                    controls
-                                                    width="100%"
-                                                    height="100%"
-                                                />
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                                {selectedVideo && (
-                                    <div className="fixed inset-0 flex items-center justify-center bg-black">
-                                        <ReactPlayer
-                                            url={selectedVideo}
-                                            controls
-                                            width="80%" // Adjust the width as needed
-                                            height="auto"
-                                            playing
-                                        />
-                                        <button
-                                            onClick={handleClose}
-                                            className="absolute top-4 right-4 px-4 py-2 bg-gray-800 text-white rounded-lg"
-                                        >
-                                            Close
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-
-
-                     
-
-                            <div className="container">
-                                <h1 className="text-2xl font-bold mt-8 mb-5">Instructions Image Gallery Of  <span className="text-amber-400">{Product?.productName}</span></h1>
+                                <h1 className="text-2xl font-bold mt-8 mb-5">Description Image Gallery Of  <span className="text-amber-400">{Product?.productName}</span></h1>
                                 <div className="grid grid-cols-3 gap-3">
-                                    {(Product?.allInstructionsImage)?.split(",")?.map((image, index) => (
+                                    {(Product?.allDescriptionImages)?.split(",")?.map((image, index) => (
                                         <img
                                             key={index}
-                                            src={`https://grozziie.zjweiting.com:8033/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${image}`}
+                                            src={`http://localhost:2000/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${image}`}
                                             alt={`Image ${index + 1}`}
-                                            onClick={() => handleInstructionImageClick(`https://grozziie.zjweiting.com:8033/tht/mallProductImages/${image}`)}
-                                            className="w-24 h-24 object-cover cursor-pointer mx-4 my-2 rounded-lg"
-                                        />
-                                    ))}
-                                </div>
-                                {selectedInstructionImage && (
-                                     <div className="fixed inset-0 flex items-center justify-center mx-auto my-auto w-3/4 h-3/4 bg-black bg-opacity-75 z-40 overflow-scroll">
-                                     <div className="max-w-3xl max-h-3xl ">
-                                         <img
-                                             src={selectedInstructionImage}
-                                             alt="Selected Image"
-                                             className="mx-auto max-w-10/12 max-h-10/12"
-                                         />
-                                            <button
-                                                onClick={handleCloseInstructionImage}
-                                                className="mt-4 px-4 py-2 bg-gray-800 text-white rounded-lg"
-                                            >
-                                                Close
-                                            </button>
-                                        </div>
-                                    </div>
-                                )}
-
-                            </div>
-
-                           
-                            <div className="container">
-                                <h1 className="text-2xl font-bold mt-8 mb-5">
-                                    Instructions Video Gallery Of{' '}
-                                    <span className="text-amber-400">{Product?.productName}</span>{' '}
-                                </h1>
-
-                                <div className="grid grid-cols-3 gap-4">
-                                    {((Product?.allInstructionsVideos)?.split(','))?.map((video, index) => (
-                                        <div
-                                            key={index}
-                                            onClick={() =>
-                                                handleVideoClick(
-                                                    `https://grozziie.zjweiting.com:8033/tht/${productCategory === 'mallProduct'
-                                                        ? 'mallProductImages'
-                                                        : 'eventProductImages'
-                                                    }/${video}`
-                                                )
-                                            }
-                                            className="relative cursor-pointer"
-                                        >
-                                            <div className="w-full h-auto rounded-lg overflow-hidden">
-                                                <ReactPlayer
-                                                    url={`https://grozziie.zjweiting.com:8033/tht/${productCategory === 'mallProduct'
-                                                            ? 'mallProductImages'
-                                                            : 'eventProductImages'
-                                                        }/${video}`}
-                                                    controls
-                                                    width="100%"
-                                                    height="100%"
-                                                />
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                                {selectedVideo && (
-                                    <div className="fixed inset-0 flex items-center justify-center bg-black">
-                                        <ReactPlayer
-                                            url={selectedVideo}
-                                            controls
-                                            width="80%" // Adjust the width as needed
-                                            height="auto"
-                                            playing
-                                        />
-                                        <button
-                                            onClick={handleClose}
-                                            className="absolute top-4 right-4 px-4 py-2 bg-gray-800 text-white rounded-lg"
-                                        >
-                                            Close
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-
-                            <div className="container">
-                                <h1 className="text-2xl font-bold mt-8 mb-5">Color Image Gallery Of  <span className="text-amber-400">{Product?.productName}</span></h1>
-                                <div className="grid grid-cols-3 gap-3">
-                                    {(Product?.allColorImages)?.split(",")?.map((image, index) => (
-                                        <img
-                                            key={index}
-                                            src={`https://grozziie.zjweiting.com:8033/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${image}`}
-                                            alt={`Image ${index + 1}`}
-                                            onClick={() => handleColorImageClick(`https://grozziie.zjweiting.com:8033/tht/mallProductImages/${image}`)}
+                                            onClick={() => handleColorImageClick(`http://localhost:2000/tht/mallProductImages/${image}`)}
                                             className="w-24 h-24 object-cover cursor-pointer mx-4 my-2 rounded-lg"
                                         />
                                     ))}
@@ -335,6 +189,184 @@ function ProductDetails() {
                                 )}
 
                             </div>
+
+                            <div className="container">
+                                <h1 className="text-2xl font-bold mt-8 mb-5">Related Image Gallery Of <span className="text-amber-400">{Product?.productName}</span></h1>
+                                <div title={`Link: ${Product?.relatedImgLink}\nRemark: ${Product?.relatedImgRemark}`} className="grid grid-cols-3 gap-3">
+                                    {(Product.allImages)?.split(",")?.map((image, index) => (
+                                        <img
+                                            key={index}
+                                            src={`http://localhost:2000/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${image}`}
+                                            alt={`Image ${index + 1}`}
+                                            onClick={() => handleImageClick(`http://localhost:2000/tht/mallProductImages/${image}`)}
+                                            className="w-24 h-24 object-cover cursor-pointer mx-4 my-2 rounded-lg"
+                                        />
+                                    ))}
+                                </div>
+                                {selectedImage && (
+                                    <div className="fixed inset-0 flex items-center justify-center mx-auto my-auto w-3/4 h-3/4 bg-black bg-opacity-75 z-40 overflow-scroll">
+                                        <div className="max-w-3xl max-h-3xl ">
+                                            <img
+                                                src={selectedImage}
+                                                alt="Selected Image"
+                                                className="mx-auto max-w-10/12 max-h-10/12"
+                                            />
+                                            <button
+                                                onClick={handleCloseImage}
+                                                className="mt-4 px-4 py-2 bg-gray-800 text-white rounded-lg"
+                                            >
+                                                Close
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+
+                            </div>
+
+                            <div className="container">
+                                <h1 className="text-2xl font-bold mt-8 mb-5">
+                                    Related Video Gallery Of{' '}
+                                    <span className="text-amber-400">{Product?.productName}</span>{' '}
+                                </h1>
+
+                                <div className="grid grid-cols-3 gap-4">
+                                    {((Product?.allVideos)?.split(','))?.map((video, index) => (
+                                        <div
+                                            key={index}
+                                            onClick={() =>
+                                                handleVideoClick(
+                                                    `http://localhost:2000/tht/${productCategory === 'mallProduct'
+                                                        ? 'mallProductImages'
+                                                        : 'eventProductImages'
+                                                    }/${video}`
+                                                )
+                                            }
+                                            className="relative cursor-pointer"
+                                        >
+                                            <div className="w-full h-auto rounded-lg overflow-hidden">
+                                                <ReactPlayer
+                                                    url={`http://localhost:2000/tht/${productCategory === 'mallProduct'
+                                                        ? 'mallProductImages'
+                                                        : 'eventProductImages'
+                                                        }/${video}`}
+                                                    controls
+                                                    width="100%"
+                                                    height="100%"
+                                                />
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                                {selectedVideo && (
+                                    <div className="fixed inset-0 flex items-center justify-center bg-black">
+                                        <ReactPlayer
+                                            url={selectedVideo}
+                                            controls
+                                            width="80%" // Adjust the width as needed
+                                            height="auto"
+                                            playing
+                                        />
+                                        <button
+                                            onClick={handleClose}
+                                            className="absolute top-4 right-4 px-4 py-2 bg-gray-800 text-white rounded-lg"
+                                        >
+                                            Close
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+
+
+
+
+                            <div className="container">
+                                <h1 className="text-2xl font-bold mt-8 mb-5">Instructions Image Gallery Of  <span className="text-amber-400">{Product?.productName}</span></h1>
+                                <div className="grid grid-cols-3 gap-3">
+                                    {(Product?.allInstructionsImage)?.split(",")?.map((image, index) => (
+                                        <img
+                                            key={index}
+                                            src={`http://localhost:2000/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${image}`}
+                                            alt={`Image ${index + 1}`}
+                                            onClick={() => handleInstructionImageClick(`http://localhost:2000/tht/mallProductImages/${image}`)}
+                                            className="w-24 h-24 object-cover cursor-pointer mx-4 my-2 rounded-lg"
+                                        />
+                                    ))}
+                                </div>
+                                {selectedInstructionImage && (
+                                    <div className="fixed inset-0 flex items-center justify-center mx-auto my-auto w-3/4 h-3/4 bg-black bg-opacity-75 z-40 overflow-scroll">
+                                        <div className="max-w-3xl max-h-3xl ">
+                                            <img
+                                                src={selectedInstructionImage}
+                                                alt="Selected Image"
+                                                className="mx-auto max-w-10/12 max-h-10/12"
+                                            />
+                                            <button
+                                                onClick={handleCloseInstructionImage}
+                                                className="mt-4 px-4 py-2 bg-gray-800 text-white rounded-lg"
+                                            >
+                                                Close
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+
+                            </div>
+
+
+                            <div className="container">
+                                <h1 className="text-2xl font-bold mt-8 mb-5">
+                                    Instructions Video Gallery Of{' '}
+                                    <span className="text-amber-400">{Product?.productName}</span>{' '}
+                                </h1>
+
+                                <div className="grid grid-cols-3 gap-4">
+                                    {((Product?.allInstructionsVideos)?.split(','))?.map((video, index) => (
+                                        <div
+                                            key={index}
+                                            onClick={() =>
+                                                handleVideoClick(
+                                                    `http://localhost:2000/tht/${productCategory === 'mallProduct'
+                                                        ? 'mallProductImages'
+                                                        : 'eventProductImages'
+                                                    }/${video}`
+                                                )
+                                            }
+                                            className="relative cursor-pointer"
+                                        >
+                                            <div className="w-full h-auto rounded-lg overflow-hidden">
+                                                <ReactPlayer
+                                                    url={`http://localhost:2000/tht/${productCategory === 'mallProduct'
+                                                        ? 'mallProductImages'
+                                                        : 'eventProductImages'
+                                                        }/${video}`}
+                                                    controls
+                                                    width="100%"
+                                                    height="100%"
+                                                />
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                                {selectedVideo && (
+                                    <div className="fixed inset-0 flex items-center justify-center bg-black">
+                                        <ReactPlayer
+                                            url={selectedVideo}
+                                            controls
+                                            width="80%" // Adjust the width as needed
+                                            height="auto"
+                                            playing
+                                        />
+                                        <button
+                                            onClick={handleClose}
+                                            className="absolute top-4 right-4 px-4 py-2 bg-gray-800 text-white rounded-lg"
+                                        >
+                                            Close
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+
+
 
                         </div>
 
