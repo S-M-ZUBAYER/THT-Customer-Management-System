@@ -34,7 +34,7 @@ const ShowBackgroundImg = () => {
 //create a function to delete icon from the frontend and database both side 
 const handleToDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:2000/tht/backgroundImgs/delete/${id}`);
+      await axios.delete(`https://grozziie.zjweiting.com:8033/tht/backgroundImgs/delete/${id}`);
       toast.success('Icon deleted successfully');
       setAllIcons(allIcons.filter((icon) => icon.id !== id));
     } catch (error) {
@@ -80,7 +80,7 @@ const handleToDelete = async (id) => {
             return <div  className=" relative border-2">
               <AiOutlineDownload onClick={()=>handleToDownload(element?.image)} className=" absolute top-0 hover:cursor-pointer text-green-500"></AiOutlineDownload>
               <MdDelete onClick={()=>handleToDelete(element?.id)} className=" absolute right-0 hover:cursor-pointer text-red-500"></MdDelete>
-              <img key={index} id="myDiv" className=" inline-block w-28 h-28" src={`http://localhost:2000/tht/backgroundImgs/${element.image}`} alt="Icon"></img>
+              <img key={index} id="myDiv" className=" inline-block w-28 h-28" src={`https://grozziie.zjweiting.com:8033/tht/backgroundImgs/${element.image}`} alt="Icon"></img>
               </div>
           })
       }

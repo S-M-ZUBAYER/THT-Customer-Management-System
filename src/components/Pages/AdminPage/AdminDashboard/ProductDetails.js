@@ -34,7 +34,7 @@ function ProductDetails() {
     const handleColorImageClick = (image) => {
         setSelectedColorImage(image);
     };
-    const handleColorImage= (e) => {
+    const handleColorImage = (e) => {
         setColorImg(e.target.value);
     };
 
@@ -70,8 +70,8 @@ function ProductDetails() {
     };
 
 
-      
-      
+
+
 
     return (
         <div className="text-gray-800">
@@ -80,17 +80,18 @@ function ProductDetails() {
                 <div className="px-4 sm:px-6 lg:px-8 py-12">
                     <div className="flex flex-col md:flex-row md:space-x-4">
                         <div>
-                            <div title={`Link:  ${Product?.productImgLink}\nRemark:  ${Product?.productImgRemark}`} className="md:w-1/2 mb-4 flex justify-center">
-                                <img src={`http://localhost:2000/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${Product?.productImg}`} alt="Product" className="rounded-lg w-96 h-96 " />
-
-
+                            <div className="flex justify-center">
+                                <div title={`Link:  ${Product?.productImgLink}\nRemark:  ${Product?.productImgRemark}`} className="md:w-1/2 mb-4 ">
+                                    <img src={`https://grozziie.zjweiting.com:8033/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${Product?.productImg}`} alt="Product" className="rounded-lg w-96 h-96 " />
+                                </div>
                             </div>
 
 
-                        {/* need to paste in here */}
-<AddColorImg
-Product={Product}
-></AddColorImg>
+
+                            {/* need to paste in here */}
+                            <AddColorImg
+                                Product={Product}
+                            ></AddColorImg>
 
                         </div>
                         <div className="md:w-1/2 text-start pl-5">
@@ -163,9 +164,9 @@ Product={Product}
                                     {(Product?.allDescriptionImages)?.split(",")?.map((image, index) => (
                                         <img
                                             key={index}
-                                            src={`http://localhost:2000/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${image}`}
+                                            src={`https://grozziie.zjweiting.com:8033/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${image}`}
                                             alt={`Image ${index + 1}`}
-                                            onClick={() => handleColorImageClick(`http://localhost:2000/tht/mallProductImages/${image}`)}
+                                            onClick={() => handleColorImageClick(`https://grozziie.zjweiting.com:8033/tht/mallProductImages/${image}`)}
                                             className="w-24 h-24 object-cover cursor-pointer mx-4 my-2 rounded-lg"
                                         />
                                     ))}
@@ -196,9 +197,9 @@ Product={Product}
                                     {(Product.allImages)?.split(",")?.map((image, index) => (
                                         <img
                                             key={index}
-                                            src={`http://localhost:2000/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${image}`}
+                                            src={`https://grozziie.zjweiting.com:8033/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${image}`}
                                             alt={`Image ${index + 1}`}
-                                            onClick={() => handleImageClick(`http://localhost:2000/tht/mallProductImages/${image}`)}
+                                            onClick={() => handleImageClick(`https://grozziie.zjweiting.com:8033/tht/mallProductImages/${image}`)}
                                             className="w-24 h-24 object-cover cursor-pointer mx-4 my-2 rounded-lg"
                                         />
                                     ))}
@@ -235,7 +236,7 @@ Product={Product}
                                             key={index}
                                             onClick={() =>
                                                 handleVideoClick(
-                                                    `http://localhost:2000/tht/${productCategory === 'mallProduct'
+                                                    `https://grozziie.zjweiting.com:8033/tht/${productCategory === 'mallProduct'
                                                         ? 'mallProductImages'
                                                         : 'eventProductImages'
                                                     }/${video}`
@@ -245,7 +246,7 @@ Product={Product}
                                         >
                                             <div className="w-full h-auto rounded-lg overflow-hidden">
                                                 <ReactPlayer
-                                                    url={`http://localhost:2000/tht/${productCategory === 'mallProduct'
+                                                    url={`https://grozziie.zjweiting.com:8033/tht/${productCategory === 'mallProduct'
                                                         ? 'mallProductImages'
                                                         : 'eventProductImages'
                                                         }/${video}`}
@@ -285,9 +286,9 @@ Product={Product}
                                     {(Product?.allInstructionsImage)?.split(",")?.map((image, index) => (
                                         <img
                                             key={index}
-                                            src={`http://localhost:2000/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${image}`}
+                                            src={`https://grozziie.zjweiting.com:8033/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${image}`}
                                             alt={`Image ${index + 1}`}
-                                            onClick={() => handleInstructionImageClick(`http://localhost:2000/tht/mallProductImages/${image}`)}
+                                            onClick={() => handleInstructionImageClick(`https://grozziie.zjweiting.com:8033/tht/mallProductImages/${image}`)}
                                             className="w-24 h-24 object-cover cursor-pointer mx-4 my-2 rounded-lg"
                                         />
                                     ))}
@@ -325,7 +326,7 @@ Product={Product}
                                             key={index}
                                             onClick={() =>
                                                 handleVideoClick(
-                                                    `http://localhost:2000/tht/${productCategory === 'mallProduct'
+                                                    `https://grozziie.zjweiting.com:8033/tht/${productCategory === 'mallProduct'
                                                         ? 'mallProductImages'
                                                         : 'eventProductImages'
                                                     }/${video}`
@@ -335,7 +336,7 @@ Product={Product}
                                         >
                                             <div className="w-full h-auto rounded-lg overflow-hidden">
                                                 <ReactPlayer
-                                                    url={`http://localhost:2000/tht/${productCategory === 'mallProduct'
+                                                    url={`https://grozziie.zjweiting.com:8033/tht/${productCategory === 'mallProduct'
                                                         ? 'mallProductImages'
                                                         : 'eventProductImages'
                                                         }/${video}`}

@@ -11,7 +11,6 @@ import CustomerService_1 from "../../components/Pages/CustomerServicePage/Custom
 import CustomerService_2 from "../../components/Pages/CustomerServicePage/CustomerService_2";
 import AllUsers from "../../components/Pages/AdminPage/AdminDashboard/AllUsers";
 import QandA from "../../components/Pages/AdminPage/AdminDashboard/QandA";
-import AddIcon from "../../components/Pages/AdminPage/AdminDashboard/AddIcon";
 import AddMallProducts from "../../components/Pages/AdminPage/AdminDashboard/MallProducts";
 import EventProducts from "../../components/Pages/AdminPage/AdminDashboard/EventProducts";
 import PrivateRoute from "./PrivateRoute/PrivateRoute";
@@ -21,13 +20,14 @@ import AfterSales from "../../components/Pages/AdminPage/AdminDashboard/ProductD
 import AfterSalesInstruction from "../../components/Pages/AdminPage/AdminDashboard/ProductDetailsOutlet/AfterSalesInstruction";
 import Inventory from "../../components/Pages/AdminPage/AdminDashboard/ProductDetailsOutlet/Inventory";
 import Invoice from "../../components/Pages/AdminPage/AdminDashboard/ProductDetailsOutlet/Invoice";
-import ShowIcons from "../../components/Pages/AdminPage/AdminDashboard/IconsCategory/ShowIcons";
 import AdminDashboard from "../../components/Pages/AdminPage/AdminDashboard/AdminDashboard";
 import Translator from "../../components/Pages/Translator/Translator";
 import Detect from "../../components/Pages/Detect/Detect";
 import Chat from "../../components/Pages/Chat/Chat";
 import AddBackgroundImg from "../../components/Pages/AdminPage/AdminDashboard/BackgroundImgPage/AddBackgroundImg";
 import ShowBackgroundImg from "../../components/Pages/AdminPage/AdminDashboard/BackgroundImgPage/ShowBackgroundImg";
+import AddIconImg from "../../components/Pages/AdminPage/AdminDashboard/IconImgPage/AddIconImg";
+import ShowIconImg from "../../components/Pages/AdminPage/AdminDashboard/IconImgPage/ShowIconImg";
 
 
 export const routes = createBrowserRouter([
@@ -105,11 +105,11 @@ export const routes = createBrowserRouter([
             },
             {
                 path: "/admin/icon",
-                element: <PrivateRoute><AddIcon></AddIcon></PrivateRoute>
+                element: <PrivateRoute><AddIconImg></AddIconImg></PrivateRoute>
             },
             {
                 path: "/admin/icon/:name",
-                element: <PrivateRoute><ShowIcons></ShowIcons></PrivateRoute>
+                element: <PrivateRoute><ShowIconImg></ShowIconImg></PrivateRoute>
             },
             {
                 path: "/admin/backgroundImg",

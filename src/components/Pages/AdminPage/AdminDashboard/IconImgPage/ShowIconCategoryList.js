@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import {AiFillFolderOpen} from "react-icons/ai";
 import { Link } from 'react-router-dom';
 
-const IconsCategoryList = ({categories}) => {
+const ShowIconCategoryList = ({categories}) => {
     const [routeCategory,setRouteCategory]=useState("")
 
 
   return (
     <div>
-      <h1 className="text-3xl my-5 font-bold text-green-400">All Available Categories</h1>
+      <h1 className="text-3xl my-5 font-bold text-green-400">All Available Icons Image Categories</h1>
     <div className="grid grid-cols-3 md:grid-cols-5">
         {categories.map((category, index) => (
           
@@ -19,10 +19,10 @@ const IconsCategoryList = ({categories}) => {
                 </p>
             </Link>
           
-        ))}
+        ))} 
       </div>
     </div>
   );
 };
 
-export default IconsCategoryList;
+export default ShowIconCategoryList;

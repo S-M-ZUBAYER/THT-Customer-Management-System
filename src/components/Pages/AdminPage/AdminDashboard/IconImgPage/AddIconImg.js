@@ -6,12 +6,14 @@ import axios from "axios";
 import html2canvas from 'html2canvas';
 import { AuthContext } from "../../../../../context/UserContext";
 // import IconsCategoryList from "../IconsCategory/IconsCategoryList";
-import AddBackgroundCategory from "./AddBackgroundCategory";
-import BackgroundCategoryList from "./BackgroundCategoryList";
+// import AddBackgroundCategory from "./AddBackgroundCategory";
+// import BackgroundCategoryList from "./BackgroundCategoryList";
+import AddIconCategory from "./AddIconCategory";
+import ShowIconCategoryList from "./ShowIconCategoryList";
 
-function AddBackgroundImg() {
+function AddIconImg () {
   const [selectedImages, setSelectedImages] = useState([]);
-  const [BackgroundImgs, setBackgroundImgs] = useState([]);
+  const [iconImgs, setIconImgs] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [categories, setCategories] = useState([]);
 
@@ -20,18 +22,18 @@ console.log(user)
 useEffect(() => {
   axios.get("https://grozziie.zjweiting.com:8033/tht/icons")
     .then(res => {
-      setBackgroundImgs(res.data)
+        setIconImgs(res.data)
     })
     .catch(err => console.log(err))
 }, []); 
 
 
   useEffect(() => {
-    fetch('https://grozziie.zjweiting.com:8033/tht/BackgroundCategories')
+    fetch('https://grozziie.zjweiting.com:8033/tht/iconCategories')
       .then(response => response.json())
       .then(data => {
         
-        setCategories(data.map(category=>category.allBackgroundCategoris))
+        setCategories(data.map(category=>category.allIconsCategoris 	))
         
       });
   }, []);
@@ -45,14 +47,9 @@ useEffect(() => {
 
 
 
-  const handleSelectChange = (e) => {
-    setSelectedCategory(e.target.value);
-  };
-
-
   const handleUpload = (event) => {
     event.preventDefault();
-  
+    
     // Create a new FormData object
     const formData = new FormData();
     // Append each selected image to the formData
@@ -62,32 +59,39 @@ useEffect(() => {
   
     formData.append('email', user?.email);
     formData.append('categoryName', selectedCategory);
-  
-    // Send formData to the server-side script for processing
-    axios.post('https://grozziie.zjweiting.com:8033/tht/backgroundImgs/add', formData)
-      .then(res => {
-        if (res.data.status === "success") {
-          toast.success("Images uploaded successfully");
-          console.log("success")
-        } else {
-          console.log("image failed")
-          toast.error("Images upload failed")
-        }
-      })
-      .catch(error => {
-        console.error("An error occurred while uploading images:", error);
-        toast.error("An error occurred while uploading images");
-      });
+  console.log(selectedImages)
+    // TODO: Send formData to server-side script for processing
+    axios
+  .post('https://grozziie.zjweiting.com:8033/tht/icons/add', formData)
+  .then((res) => {
+    if (res.data.status === "success") {
+      toast.success("Images uploaded successfully");
+      console.log("success");
+    } else {
+      console.log("image failed");
+      toast.error("Images uploaded failed");
+    }
+  })
+  .catch((error) => {
+    console.error(error); // Log the error to the console
+    toast.error("An error occurred while uploading images"); // Show a toast for the error
+  });
   }
-  
+ 
+
+  const handleSelectChange = (e) => {
+    setSelectedCategory(e.target.value);
+  };
+
 
   return (
 
     <div>
-      <AddBackgroundCategory
-        categories={categories}
-        setCategories={setCategories}
-      ></AddBackgroundCategory>
+        <AddIconCategory
+         categories={categories}
+         setCategories={setCategories}
+        ></AddIconCategory>
+      
 
 
       <div className="my-32 flex items-center justify-center">
@@ -110,15 +114,15 @@ useEffect(() => {
             onClick={handleUpload}
             disabled={!selectedImages}
           >
-            Add Background Image
+            Add Icon Image
           </button>
 
 
         </form>
       </div>
-      <BackgroundCategoryList
+      <ShowIconCategoryList
         categories={categories}
-      ></BackgroundCategoryList>
+      ></ShowIconCategoryList>
 
     </div>
 
@@ -128,4 +132,4 @@ useEffect(() => {
 }
 
 
-export default AddBackgroundImg;
+export default AddIconImg;

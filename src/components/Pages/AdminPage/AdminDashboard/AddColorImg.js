@@ -1,16 +1,18 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
+import ShowColorImgList from './ShowColorImgList';
 
 const AddColorImg = ({ Product }) => {
 
-    const [colorImg, setColorImg] = useState("");
+
     const [selectedColorImage, setSelectedColorImage] = useState([]);
     const [productPrice, setProductPrice] = useState('');
     const [productDescription, setProductDescription] = useState('');
     const [stockQuantity, setStockQuantity] = useState('');
     const [typeName, setTypeName] = useState('');
     const [colorName, setColorName] = useState('');
+    
 
     const handleColorImageChange = (e) => {
         setSelectedColorImage(e.target.files);
@@ -53,9 +55,8 @@ const AddColorImg = ({ Product }) => {
         formData.append('stockQuantity', stockQuantity);
         formData.append('productDescription', productDescription);
         console.log(formData,selectedColorImage[0])
-
         // Make a POST request to your server
-        axios.post('http://localhost:2000/tht/colorImg/add', formData)
+        axios.post('https://grozziie.zjweiting.com:8033/tht/colorImg/add', formData)
             .then(response => {
                 if (response.data.status === "success") {
                     toast.success("Color Image and image information uploaded successfully");
@@ -79,7 +80,8 @@ const AddColorImg = ({ Product }) => {
 
 
     return (
-        <div className="my-8 mt-16  text-start mr-14 bg-gray-100 p-3 rounded-lg">
+    <div>
+         <div className="my-8 mt-16  text-start mx-auto md:mr-14 bg-gray-100 p-3 rounded-lg">
             <h1 className="text-2xl font-bold text-amber-600 text-center">Color Image</h1>
             <div className=" grid grid-cols-2 text-start">
                 <label htmlFor="relatedImages" className="block col-span-1 text-gray-700 font-bold mb-2">
@@ -161,9 +163,17 @@ const AddColorImg = ({ Product }) => {
                 ></textarea>
             </div>
             <div className="flex justify-center">
-                <button className="mt-5 rounded  py-1 px-4 bg-green-400 " onClick={handleToAddColorImg} >Add</button>
+                <button className="mt-5 rounded  py-1 px-4 bg-green-700 " onClick={handleToAddColorImg} >Add</button>
             </div>
         </div>
+        <div>
+            <h1 className="mt-10 text-2xl text-green-400 font-bold">Show the list Of {Product?.modelNumber}'s Color Images</h1>
+             <ShowColorImgList
+             modelNumber={Product?.modelNumber}
+             ></ShowColorImgList>
+        </div>
+    </div>
+       
     );
 };
 

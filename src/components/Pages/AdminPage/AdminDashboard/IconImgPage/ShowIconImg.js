@@ -7,37 +7,30 @@ import { AiOutlineDownload } from 'react-icons/ai';
 import { AuthContext } from '../../../../../context/UserContext';
 import DisplaySpinner from '../../../../Shared/Loading/DisplaySpinner';
 
-const ShowIcons = () => {
+const ShowIconImg = () => {
    const[allIcons,setAllIcons]=useState([]);
     const location = useLocation();
     const categoryName = location.pathname.split('/').pop().replace(/%20/g, ' ');
 
     const {loading,setLoading}=useContext(AuthContext)
-   
-//got the current user data from database  
-useEffect(() => {
-    if (categoryName) {
-      // setLoading(true);
-      fetchQuestionsAnswerByEmail();
-    }
-  }, [categoryName]);
+  
 
-  const fetchQuestionsAnswerByEmail = async () => {
 
-    try {
-      const response = await axios.get('https://grozziie.zjweiting.com:8033/tht/icons', {
-        params: {
-          categoryName: categoryName,
-        },
+  useEffect(() => {
+    // Define the URL for your backend route with the categoryName parameter
+    const apiUrl = `https://grozziie.zjweiting.com:8033/tht/icons/${categoryName}`;
+
+    // Make a GET request to fetch data for the specified category
+    axios.get(apiUrl)
+      .then((response) => {
+        setAllIcons(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+        setLoading(false);
       });
-      // setLoading(false);
-      setAllIcons(response?.data);
-  console.log(response.data,"alkdsakjfkldsja")
-    } catch (error) {
-      console.error('Error fetching user data:', error);
-    }
-  };
- 
+  }, [categoryName]);
 //create a function to delete icon from the frontend and database both side 
 const handleToDelete = async (id) => {
     try {
@@ -49,7 +42,7 @@ const handleToDelete = async (id) => {
       toast.error('Failed to delete Icon');
     }
   };
-  console.log(categoryName)
+  
   const  handleToDownload=(icon)=>{
     const imageURL = `https://grozziie.zjweiting.com:8033/tht/images/${icon}`; // Replace with your image URL
   
@@ -85,7 +78,7 @@ const handleToDelete = async (id) => {
         {
          allIcons.map((element,index)=>{
             return <div  className=" relative border-2">
-              <AiOutlineDownload onClick={()=>handleToDownload(element?.icon)} className=" absolute top-0 hover:cursor-pointer text-green-500"></AiOutlineDownload>
+              <AiOutlineDownload onClick={()=>handleToDownload(element?.image)} className=" absolute top-0 hover:cursor-pointer text-green-500"></AiOutlineDownload>
               <MdDelete onClick={()=>handleToDelete(element?.id)} className=" absolute right-0 hover:cursor-pointer text-red-500"></MdDelete>
               <img key={index} id="myDiv" className=" inline-block w-28 h-28" src={`https://grozziie.zjweiting.com:8033/tht/images/${element.icon}`} alt="Icon"></img>
               </div>
@@ -100,4 +93,4 @@ const handleToDelete = async (id) => {
     );
 };
 
-export default ShowIcons;
+export default ShowIconImg;

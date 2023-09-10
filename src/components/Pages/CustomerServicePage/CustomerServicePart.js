@@ -102,7 +102,7 @@ const CustomerServicePart = () => {
             text: text
         }
         // let apiUrl = `https://zuss-chat-translator-server-site.vercel.app/translate`;
-        let apiUrl = `https://grozziie.zjweiting.com:8035/tht/translate`;
+        let apiUrl = `https://grozziie.zjweiting.com:8033/tht/translate`;
         fetch(apiUrl, {
             method: "POST",
             headers: {

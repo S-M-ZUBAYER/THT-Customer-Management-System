@@ -246,7 +246,7 @@ console.log(formData)
     }
 
     try {
-      await axios.post(`http://localhost:2000/tht/${productCategory}/add`, formData, {
+      await axios.post(`https://grozziie.zjweiting.com:8033/tht/${productCategory}/add`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
