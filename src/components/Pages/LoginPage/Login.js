@@ -13,6 +13,7 @@ import wechatLogo from "../../../Assets/Images/Icons/wechatLogo.png"
 import { AllProductContext } from '../../../context/ProductContext';
 import { toast } from 'react-hot-toast';
 import BtnSpinner from '../../Shared/Loading/BtnSpinner';
+import axios from 'axios';
 
 
 const Login = () => {
@@ -83,7 +84,7 @@ const Login = () => {
       body: JSON.stringify({ email: email, password: password })
     })
       .then(res => res.json())
-      .then(data => {
+      .then(async data => {
         //     if (data?.message!=="Wrong email/password combination!"|| data?.message!=="User doesn't exist") {
         //       console.log(data)
         //     setUser(data[0])
@@ -107,6 +108,44 @@ const Login = () => {
           localStorage.setItem('user', JSON.stringify(data[0]));
           localStorage.setItem('DUser', JSON.stringify({ email, password, selectedShops }));
           setDUser({ email, password, selectedShops })
+
+          try {
+            const response = await axios.post(
+                'http://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/api/dev/user/signUp',
+                {
+                  userEmail: email,
+                  userPassword:password
+                  }
+            );
+
+            if (response) {
+                // localStorage.setItem('chattingUser', JSON.stringify({ userName: name,
+                //     userEmail: email,
+                //     role: "customer_service",
+                //     designation: designation,
+                //     country: country}));
+                //     setChattingUser({ userName: name,
+                //         userEmail: email,
+                //         role: "customer_service",
+                //         designation: designation,
+                //         country: country});
+                console.log(response)
+                toast.success("Chatting Registration complete");
+                setLoading(false);
+                toast.success("Registration complete Successfully");
+                form.reset();
+                navigate("/");
+            } else {
+                toast.error(response.data.message);
+                setLoading(false);
+            }
+        } catch (error) {
+            console.error("Chatting Registration Error", error);
+            toast.error("Chatting Registration failed");
+            setLoading(false);
+        }
+
+
           setLoading(false);
           navigate(from, { replace: true })
           form.reset();

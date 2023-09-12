@@ -12,6 +12,7 @@ const facebookProvider = new FacebookAuthProvider();
 
 const UserContext = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [chattingUser, setChattingUser] = useState(null);
   const [DUser, setDUser] = useState(null);
   const [loading, setLoading] = useState(true);
 

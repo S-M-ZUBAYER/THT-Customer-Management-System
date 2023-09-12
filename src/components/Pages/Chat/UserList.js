@@ -134,27 +134,7 @@ const handleToSelectedCustomer=(element)=>{
         })
     }
 
-    {/* <div className="text-sm mx-2">
-    <div className="flex justify-between items-center mx-1 my-1">
-        <p>Customer Name</p>
-        <p>Text time</p>
-    </div>
-    <hr></hr>
-</div>
-<div className="text-sm mx-2">
-    <div className="flex justify-between items-center mx-1 my-1">
-        <p>Customer Name</p>
-        <p>Text time</p>
-    </div>
-    <hr></hr>
-</div>
-<div className="text-sm mx-2">
-    <div className="flex justify-between items-center mx-1 my-1">
-        <p>Customer Name</p>
-        <p>Text time</p>
-    </div>
-    <hr></hr>
-</div> */}
+
 </div>
 
 </div>

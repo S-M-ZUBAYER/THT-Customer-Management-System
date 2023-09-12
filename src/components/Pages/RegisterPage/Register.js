@@ -23,8 +23,8 @@ import BtnSpinner from '../../Shared/Loading/BtnSpinner';
 
 
 const Register = () => {
-    const { setUser } = useContext(AuthContext)
-    const [loading, setLoading]=useState(false)
+    const { setUser,setChattingUser } = useContext(AuthContext)
+    const [loading, setLoading] = useState(false)
     //create different kind of state to get the current value
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -150,104 +150,145 @@ const Register = () => {
     //get this value by useContext from AuthContext
     const { createUser, signInWithGoogle, signInWithFacebook } = useContext(AuthContext)
 
-    //create a submit function to create user and store user information in Sql database
-    ;
+        //create a submit function to create user and store user information in Sql database
+        ;
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        
-        if( name===""||image===""||phone===""||country===""||language===""|| email===""||designation===""){
+
+        const chatRegistration = {
+            userName: name,
+            userEmail: email,
+            userPassword: password,
+            role: "customer_service",
+            designation: designation,
+            country: country
+        }
+
+
+        if (name === "" || image === "" || phone === "" || country === "" || language === "" || email === "" || designation === "") {
             toast.error("Please provide all the information");
             return;
         }
         setLoading(true);
         const user = {
-          name,
-          image,
-          phone,
-          country,
-          language,
-          email,
-          designation,
+            name,
+            image,
+            phone,
+            country,
+            language,
+            email,
+            designation,
         };
-      
+
         const form = event.target;
-      
+
         fetch('https://grozziie.zjweiting.com:8033/tht/check-user', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email }),
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email }),
         })
-          .then((response) => response.json())
-          .then((data) => {
-            const userExists = data.exists;
-            console.log(userExists);
-      
-            if (userExists===false) {
-              // Validate password length
-              if (password.length < 6) {
-                setLengthError("Your password must be at least 6 characters long");
-                setLoading(false);
-                return;
-              }
-      
-              // Validate password match
-              if (password !== confirmPassword) {
-                setMatchError("Your passwords do not match");
-                setLoading(false);
-                return;
-              }
-      
-              fetch('https://grozziie.zjweiting.com:8033/tht/users/add', {
-                method: 'POST',
-                headers: {
-                  'content-type': 'application/json',
-                },
-                body: JSON.stringify({
-                  name,
-                  image,
-                  phone,
-                  country,
-                  language,
-                  email,
-                  password,
-                  designation,
-                  isAdmin: "false",
-                }),
-              })
-                .then((res) => res.json())
-                .then((data) => {
-                  if (data) {
-                    localStorage.setItem('user', JSON.stringify(user));
-                    setUser(user);
+            .then((response) => response.json())
+            .then((data) => {
+                const userExists = data.exists;
+                console.log(userExists);
+
+                if (userExists === false) {
+                    // Validate password length
+                    if (password.length < 6) {
+                        setLengthError("Your password must be at least 6 characters long");
+                        setLoading(false);
+                        return;
+                    }
+
+                    // Validate password match
+                    if (password !== confirmPassword) {
+                        setMatchError("Your passwords do not match");
+                        setLoading(false);
+                        return;
+                    }
+
+                    fetch('https://grozziie.zjweiting.com:8033/tht/users/add', {
+                        method: 'POST',
+                        headers: {
+                            'content-type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            name,
+                            image,
+                            phone,
+                            country,
+                            language,
+                            email,
+                            password,
+                            designation,
+                            isAdmin: "false",
+                        }),
+                    })
+                        .then((res) => res.json())
+                        .then(async (data) => {
+                            if (data) {
+                                localStorage.setItem('user', JSON.stringify(user));
+                                setUser(user);
+                                // setLoading(false);
+                                //         toast.success("Registration complete Successfully");
+                                //         form.reset();
+                                //         navigate("/");
+                                try {
+                                    const response = await axios.post(
+                                        'http://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/api/dev/user/signUp',
+                                        chatRegistration
+                                    );
+                        
+                                    if (response) {
+                                        localStorage.setItem('chattingUser', JSON.stringify({ userName: name,
+                                            userEmail: email,
+                                            role: "customer_service",
+                                            designation: designation,
+                                            country: country}));
+                                            setChattingUser({ userName: name,
+                                                userEmail: email,
+                                                role: "customer_service",
+                                                designation: designation,
+                                                country: country});
+                                        toast.success("Chatting Registration complete");
+                                        setLoading(false);
+                                        toast.success("Registration complete Successfully");
+                                        form.reset();
+                                        navigate("/");
+                                    } else {
+                                        toast.error(response.data.message);
+                                        setLoading(false);
+                                    }
+                                } catch (error) {
+                                    console.error("Chatting Registration Error", error);
+                                    toast.error("Chatting Registration failed");
+                                    setLoading(false);
+                                }
+                            } else {
+                                toast.error(data.message);
+                                setLoading(false);
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                            toast.error("An error occurred during registration");
+                            setLoading(false);
+                        });
+                } else {
+                    toast.error("This email already has an account");
                     setLoading(false);
-                    toast.success("Registration complete Successfully");
-                    form.reset();
-                    navigate("/");
-                  } else {
-                    toast.error(data.message);
-                    setLoading(false);
-                  }
-                })
-                .catch((error) => {
-                  console.error('Error:', error);
-                  toast.error("An error occurred during registration");
-                  setLoading(false);
-                });
-            } else {
-              toast.error("This email already has an account");
-              setLoading(false);
-            }
-          })
-          .catch((error) => {
-            console.error('Error:', error);
-            toast.error("An error occurred while checking user existence");
-            setLoading(false);
-          });
-      };
-      
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                toast.error("An error occurred while checking user existence");
+                setLoading(false);
+            });
+    };
+
 
 
     // create a function to google authentication system
@@ -387,9 +428,9 @@ const Register = () => {
                         <div className="my-2 ">
                             <button className="bg-[#004368] text-white w-full py-2 text-xl font-semibold rounded-md" type="submit">
                                 {
-                                    !loading?
-                                    "Register"
-                                         :<BtnSpinner></BtnSpinner>
+                                    !loading ?
+                                        "Register"
+                                        : <BtnSpinner></BtnSpinner>
                                 }
                             </button>
                         </div>

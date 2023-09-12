@@ -3,7 +3,6 @@ import UserList from './UserList';
 import ConversationView from './ConversationView';
 import MessageInput from './MessegeInput';
 import { AuthContext } from '../../../context/UserContext';
-import ImageCompressor from './ImageCompression';
 
 const Chat = () => {
   const [users, setUsers] = useState([
@@ -45,10 +44,7 @@ const Chat = () => {
       <UserList users={users} setSelectedCustomer={setSelectedCustomer} messages={messages}  setMessages={setMessages} customerMessages={customerMessages} selectedCustomer={selectedCustomer}/>
       <ConversationView messages={messages} selectedCustomer={selectedCustomer} />
       <MessageInput onSendMessage={sendMessage} selectedCustomer={selectedCustomer} />
-    <div>
-
-      <ImageCompressor></ImageCompressor>
-    </div>
+    
     </div>
     // </AuthContext.Provider>
   );

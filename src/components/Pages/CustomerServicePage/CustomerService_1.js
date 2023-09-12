@@ -6,14 +6,16 @@ import { MdOndemandVideo } from "react-icons/md";
 
 import CustomerServicePart from './CustomerServicePart';
 import { AuthContext } from '../../../context/UserContext';
-import Messages from './Messages';
 import axios from 'axios';
 import MessageInput from '../Chat/MessegeInput';
+import Message from './Message';
+import ConversationView from '../Chat/ConversationView';
 
 const CustomerService_1 = () => {
 
     const { user } = useContext(AuthContext);
     const [currentUser, setCurrentUser] = useState(null)
+    const [selectedCustomerChat, setSelectedCustomerChat] = useState(null)
 
     //got the current user data from database  
     useEffect(() => {
@@ -30,7 +32,7 @@ const CustomerService_1 = () => {
                     email: user?.email,
                 },
             });
-            setCurrentUser(response.data[0]);
+            // setCurrentUser(response.data[0]);
         } catch (error) {
             console.error('Error fetching user data:', error);
         }
@@ -38,59 +40,101 @@ const CustomerService_1 = () => {
 
     const customerName = [
         {
-            id:10,
+            id: 10,
             name: "S M ZUBAYER",
             time: "3:22 pm",
             online: true
         },
         {
-            id:11,
+            id: 11,
             name: "S M SABIT",
             time: "3:54 pm",
             online: false
         },
         {
-            id:12,
+            id: 12,
             name: "ABU SAYED",
             time: "4:34 am",
             online: true
         },
         {
-            id:13,
+            id: 13,
             name: "ABU SAYED",
             time: "3:33 pm",
             online: true
         },
         {
-            id:14,
+            id: 14,
             name: "S M SABIT",
             time: "3:54 pm",
             online: false
         },
         {
-            id:15,
+            id: 15,
             name: "ABU SAYED",
             time: "3:33 am",
             online: false
         },
         {
-            id:16,
+            id: 16,
             name: "ABU SAYED",
             time: "7:83 pm",
             online: true
         },
         {
-            id:17,
+            id: 17,
             name: "S M SABIT",
             time: "4:53 am",
             online: false
         },
         {
-            id:18,
+            id: 18,
             name: "ABU SAYED",
             time: "3:40 pm",
             online: true
         }
+
+    ]
+
+    const handleToSelectCustomer = (customer) => {
+        setCurrentUser(customer)
+        setSelectedCustomerChat((chatSms.filter(eachChat => eachChat.myId === customer?.id))[0])
+    }
+
+
+    const chatSms = [
+        {
+            name: "S M ZUBAYER",
+            myId: 10,
+            userId: 78126321,
+            sms: [
+                { user: "you", msg: "hi.. What up bro...?", time: "8:30 PM" },
+                { user: "I", msg: "Hello.. I am File...?", time: "8:33 PM" },
+                { user: "I", msg: "Thank you...What about you...?", time: "8:33 PM" },
+                { user: "you", msg: "I am good.. What are your doing now...?", time: "8:34 PM" },
+                { user: "you", msg: "And.. Why are you now...?", time: "8:34 PM" },
+                { user: "I", msg: "Good.. I am in office now...?", time: "8:35 PM" },
+                { user: "I", msg: "Good.. I am doing my work in office...?", time: "8:36 PM" },
+                { user: "I", msg: "what are your now and where are you...?", time: "8:36 PM" },
+            ]
+
+        },
+        {
+            name: "S M SABIT",
+            userId: 98327458,
+            myId: 11,
+            sms: [
+                { user: "you", msg: "How are you my friend?", time: "2:30 PM" },
+                { user: "I", msg: "Hello.. I am File?", time: "2:33 PM" },
+                { user: "I", msg: "What about your current condition?", time: "2:33 PM" },
+                { user: "you", msg: "I am good.. When you will come to dhaka?", time: "2:34 PM" },
+                { user: "you", msg: "I am still waiting for you?", time: "2:34 PM" },
+                { user: "I", msg: "may be with in 2 days.. i will come?", time: "8:35 PM" },
+                { user: "I", msg: "Do't wait for me . you should start your project?", time: "2:36 PM" },
+                { user: "I", msg: "I will join after coming", time: "2:36 PM" }
+            ]
+
+        },
 
     ]
 
@@ -109,9 +153,9 @@ const CustomerService_1 = () => {
                 <div className=" h-[80vh] shadow-lg rounded-lg py-5 md:px-10">
 
                     <div className="flex items-center justify-start">
-                        <img className="h-8 w-8 ml-3 rounded-full  shadow-slate-900" src={currentUser ? currentUser?.image : user?.photoURL} alt="" />
+                        <img className="h-8 w-8 ml-3 rounded-full  shadow-slate-900" src={user?.image} alt="" />
                         <h1 className=" font-semibold ml-3">
-                            {currentUser ? currentUser?.name : "User Name"}
+                            {user?.name}
                         </h1>
                     </div>
 
@@ -125,19 +169,19 @@ const CustomerService_1 = () => {
                         {
                             customerName.map((element, index) => {
                                 return <div key={index} className="text-sm  ml-2 px-3">
-                                    <div className="flex justify-between items-center mx-1 my-1">
+                                    <div onClick={() => handleToSelectCustomer(element)} className="flex justify-between items-center mx-1 my-1">
                                         <div className="text-start">
                                             <p>{element?.name}</p>
                                             <p className="">This is message</p>
                                         </div>
                                         <div className="">
                                             {element.online ?
-                                            <p className=" flex ml-auto bg-green-400 w-2 h-2 mb-1 rounded-full"></p>
-                                            :
-                                            // <p className=" flex ml-auto bg-slate-400 w-2 h-2 mb-1 rounded-full"></p> 
-                                            ""
+                                                <p className=" flex ml-auto bg-green-400 w-2 h-2 mb-1 rounded-full"></p>
+                                                :
+                                                // <p className=" flex ml-auto bg-slate-400 w-2 h-2 mb-1 rounded-full"></p> 
+                                                ""
 
-                                        }
+                                            }
                                             <p>{element?.time}</p>
                                         </div>
 
@@ -181,19 +225,23 @@ const CustomerService_1 = () => {
 
                     <div className="flex justify-around ">
                         <p className="bg-[#004368] text-gray-200 px-2 rounded-b-lg py-1">Text from app</p>
-                        <p>Customer Service</p>
+                        <p className="font-semibold">{user?.name}</p>
                     </div>
 
                     <div>
-                        <h1 className="text-xl font-medium text-gray-400 text-start pl-1 mt-2">
-                            Customer Name
+                        <h1 className="text-xl font-semibold text-gray-400 text-start pl-1 mt-2">
+                            {currentUser?.name}
                         </h1>
                         <hr className="text-black font-bold my-1 mx-1"></hr>
                     </div>
-                    <div className="text-start">
-                        <Messages></Messages>
-                    </div>
 
+                    <div className=" overflow-y-scroll h-[60vh] mb-10 text-start">
+                        <Message
+                            chatSms={chatSms}
+                            selectedCustomerChat={selectedCustomerChat}
+                        ></Message>
+
+                    </div>
 
                     {/* <div className=" absolute rounded-b-lg z-40 bg-white pt-1 w-full bottom-0 ">
                         <div className="flex justify-around text-sm">
@@ -217,7 +265,10 @@ const CustomerService_1 = () => {
 
 
                     </div> */}
-                    <MessageInput></MessageInput>
+                    <MessageInput
+                        selectedCustomerChat={selectedCustomerChat}
+                        setSelectedCustomerChat={setSelectedCustomerChat}
+                    ></MessageInput>
 
                 </div>
 
@@ -236,8 +287,8 @@ const CustomerService_1 = () => {
                 </div>
 
                 <div>
-                    <h1 className="text-xl font-medium text-gray-400 text-start pl-1 mt-2">
-                        Customer Name
+                    <h1 className="text-xl  font-semibold text-gray-400 text-start pl-1 mt-2">
+                        {currentUser?.name}
                     </h1>
                     <hr className="text-black font-bold my-1 mx-1"></hr>
                 </div>

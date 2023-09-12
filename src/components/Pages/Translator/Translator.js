@@ -129,8 +129,7 @@ function Translator() {
         }
 
 
-        // fetch the api to use post method the get the response from OpenAI
-        // Here we can get the value from detect language to English language
+      
 
         // let apiUrlEng = `http://localhost:5000/tht/translate`;
         let apiUrlEng = `https://grozziie.zjweiting.com:8033/tht/translate`;
