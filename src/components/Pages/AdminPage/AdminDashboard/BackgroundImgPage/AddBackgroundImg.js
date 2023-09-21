@@ -14,9 +14,10 @@ function AddBackgroundImg() {
   const [BackgroundImgs, setBackgroundImgs] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [categories, setCategories] = useState([]);
+  const [height, setHeight] = useState('');
+  const [width, setWidth] = useState('');
 
   const { user } = useContext(AuthContext);
-console.log(user)
 useEffect(() => {
   axios.get("https://grozziie.zjweiting.com:8033/tht/icons")
     .then(res => {
@@ -62,15 +63,18 @@ useEffect(() => {
   
     formData.append('email', user?.email);
     formData.append('categoryName', selectedCategory);
+    formData.append('height', height);
+    formData.append('width', width);
   
     // Send formData to the server-side script for processing
-    axios.post('https://grozziie.zjweiting.com:8033/tht/backgroundImgs/add', formData)
+    // axios.post('https://grozziie.zjweiting.com:8033/tht/backgroundImgs/add', formData)
+    axios.post('http://localhost:2000/tht/backgroundImgs/add', formData)
       .then(res => {
         if (res.data.status === "success") {
           toast.success("Images uploaded successfully");
-          console.log("success")
+        
         } else {
-          console.log("image failed")
+          
           toast.error("Images upload failed")
         }
       })
@@ -79,7 +83,18 @@ useEffect(() => {
         toast.error("An error occurred while uploading images");
       });
   }
-  
+
+
+  // Event handlers to update the state when input values change
+  const handleHeightChange = (event) => {
+    setHeight(event.target.value);
+  };
+
+  const handleWidthChange = (event) => {
+    setWidth(event.target.value);
+  };
+
+ 
 
   return (
 
@@ -103,6 +118,27 @@ useEffect(() => {
               <option key={index} value={cat}>{cat}</option>
             ))}
           </select>
+
+          <div className="mt-2">
+          <label className="font-semibold" htmlFor="height">Height:</label>
+          <input
+            type="number"
+            id="height"
+            className="border-2 ml-3"
+            value={height}
+            onChange={handleHeightChange}
+          />
+        </div>
+        <div className="mt-2">
+          <label className="font-semibold" htmlFor="width">Width:</label>
+          <input
+            type="number"
+            id="width"
+            value={width}
+            className="border-2 ml-3"
+            onChange={handleWidthChange}
+          />
+        </div>
 
 
           <button

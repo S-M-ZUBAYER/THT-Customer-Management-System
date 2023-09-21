@@ -6,11 +6,10 @@ import { toast } from 'react-hot-toast';
 
 const AddBackgroundCategory = ({categories, setCategories}) => {
     const [categoryName, setCategoryName]=useState("");
- console.log(categories)
+
 
   const handleCategoryChange = (e) => {
     setCategoryName(e.target.value);
-    console.log(categoryName)
   };
 
 
@@ -21,7 +20,6 @@ const AddBackgroundCategory = ({categories, setCategories}) => {
         categoryName: categoryName,
       })
       .then((response) => {
-        console.log('Category added successfully', response.data);
         toast.success("New Category Added Successfully")
         // Handle success, reset the input field, or show a success message
         setCategoryName('');

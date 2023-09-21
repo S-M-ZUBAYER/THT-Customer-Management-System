@@ -3,21 +3,28 @@ import React, { useContext } from 'react';
 import { AuthContext } from '../../../../context/UserContext';
 //create function to copy the answer
 
-export const handleToCopy = (e, element) => {
-    console.log(element,e)
-
-    setTimeout(() => {
-
-        e.target.classList.remove("bg-orange-100")
-        e.target.classList.add("bg-yellow-100")
-
-    }, 20);
 
 
-    e.target.classList.remove("bg-orange-100")
-    // let copyValue=v.split("：")[1]
-    navigator.clipboard.writeText(element)
-}
+export const handleToCopy = (e, element, index) => {
+    console.log(element, e, index);
+
+    const containerId = `allAnswer${index}`;
+    const containerClass = document.getElementsByClassName("allColor");
+    const container = document.getElementById(containerId);
+    if (container) {
+        // Loop through the elements with class "allColor"
+        for (let i = 0; i < containerClass.length; i++) {
+            containerClass[i].classList.remove("bg-yellow-100");
+        }
+
+        container.classList.add("bg-yellow-100");
+        container.classList.remove("bg-lime-200");
+    }
+
+    // Copy the text to the clipboard
+    navigator.clipboard.writeText(element);
+};
+
 
 
 const FunctionsForCustomerService = () => {

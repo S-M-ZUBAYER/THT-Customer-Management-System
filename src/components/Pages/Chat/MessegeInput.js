@@ -5,16 +5,20 @@ import React, { useState } from 'react';
 import { FaFileImage } from 'react-icons/fa';
 import { AiOutlineSend } from 'react-icons/ai';
 import { MdOndemandVideo } from 'react-icons/md';
-import { click } from '@testing-library/user-event/dist/click';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+// import {  sendMessage } from '../Chat/WebSocketService';
 
 const MessageInput = ({
-  selectedCustomer,
+  setAllChat,
   selectedCustomerChat,
-  setSelectedCustomerChat,
+  allChat,
 }) => {
   const [message, setMessage] = useState('');
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [fileType, setFileType] = useState(null); // Default to 'image'
+
+
 
   const handleFileChange = (e) => {
     const files = e.target.files;
@@ -44,8 +48,9 @@ const MessageInput = ({
     setSelectedFiles(updatedFiles);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit =async (e) => {
     e.preventDefault();
+
     if (message.trim() !== '' || selectedFiles.length > 0) {
       // Create an array to hold all messages (text, images, and videos)
       const allMessages = [];
@@ -53,11 +58,38 @@ const MessageInput = ({
       // If there's a text message, add it to the array
       if (message.trim() !== '') {
         const textMessage = {
-          user: 'I',
-          msg: message,
-          time: getCurrentTime(),
+          chatId: selectedCustomerChat?.chatId,
+          sentBy: selectedCustomerChat?.customerServiceId,
+          sentTo: selectedCustomerChat?.userId,
+          message: message,
+          msgType: "text",
+          timestmp: getCurrentTime(),
         };
         allMessages.push(textMessage);
+
+        try {
+          console.log(allMessages, "messages all post")
+          const response = await axios.post(
+            'http://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/api/dev/messages',
+            allMessages[0]
+          );
+
+          // sendMessage(allMessages, 'ws://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/websocket/app/messages');
+
+          // Handle the response as needed
+          if (response?.status === 201) {
+
+            toast.success("Message(s) sent successfully");
+          }
+
+          // Update the chat state with all messages
+          setAllChat([...allChat, ...allMessages]);
+        } catch (error) {
+          // Handle errors from the API request
+          toast.error('Error sending message(s):', error)
+          console.error('Error sending message(s):', error);
+        }
+        console.log(allMessages,"text trial")
       }
 
       // If there are selected files (images or videos), add them as messages
@@ -67,33 +99,55 @@ const MessageInput = ({
           selectedFiles.map(async (file) => {
             const base64Data = await readAsBase64(file);
             return {
-              user: 'I',
-              msg: fileType === 'video' ? `data:video/mp4;base64,${base64Data}` : `data:image/png;base64,${base64Data}`,
-              time: getCurrentTime(),
+              chatId: selectedCustomerChat?.chatId,
+              sentBy: selectedCustomerChat?.customerServiceId,
+              sentTo: selectedCustomerChat?.userId,
+              message: fileType === 'video' ? `${base64Data}` : `${base64Data}`,
+              msgType: fileType === "video" ? "video" : "image",
+              timestmp: getCurrentTime(),
             };
           })
-        ).then((filesMessages) => {
+        ).then(async (filesMessages) => {
           allMessages.push(...filesMessages);
 
-          // Update the chat state with all messages
-          setSelectedCustomerChat((prevChat) => ({
-            ...prevChat || {},
-            sms: [...(prevChat?.sms || []), ...allMessages],
-          }));
+
+          console.log(allMessages[0], "Image trail")
+          
+
+          try {
+            console.log(allMessages, "messages all post")
+            const response = await axios.post(
+              'http://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/api/dev/messages',
+              allMessages[0]
+            );
+
+            // Handle the response as needed
+            if (response?.status === 201) {
+
+              toast.success("Message(s) sent successfully");
+            }
+
+            // Update the chat state with all messages
+            setAllChat([...allChat, ...allMessages]);
+          } catch (error) {
+            // Handle errors from the API request
+            toast.error('Error sending message(s):', error)
+            console.error('Error sending message(s):', error);
+          }
 
           // Clear the 'text' and 'selectedFiles' variables if needed
           setMessage('');
           setSelectedFiles([]);
+
+          // Update the chat state with all messages
+          // setAllChat([...allChat, ...allMessages]);
         });
       } else {
-        // Update the chat state with only text messages
-        setSelectedCustomerChat((prevChat) => ({
-          ...prevChat || {},
-          sms: [...(prevChat?.sms || []), ...allMessages],
-        }));
-
         // Clear the 'text' variable if needed
         setMessage('');
+
+        // Update the chat state with only text messages
+        setAllChat([...allChat, ...allMessages]);
       }
     }
   };
@@ -114,16 +168,14 @@ const MessageInput = ({
     document.getElementById('fileInput').click();
     setFileType(type);
   };
+
   const handleKeyDown = (e) => {
     // Check if the Enter key is pressed (key code 13)
-    if (e.keyCode === 13) {
+    if (e.keyCode === 13 && !e.shiftKey) {
       e.preventDefault();
-      console.log(e.keyCode);
       handleSubmit(e);
-      // handleSubmit()
     }
   };
-
 
   return (
     <div className=" absolute rounded-b-lg z-40 bg-white pt-1 w-full bottom-0 ">
@@ -139,57 +191,56 @@ const MessageInput = ({
         </button>
       </div>
       <form onSubmit={handleSubmit} className="p-4">
-      <div className="flex gap-2  w-full items-center px-3 my-2 bg-white z-40">
-        <button
-          onClick={() => handleFileIconClick('image')}
-          className={` ${fileType === 'image' ? 'selected' : ''}`}
-        >
-           <FaFileImage className="mr-2 text-gray-400 cursor-pointer"></FaFileImage>
-        </button>
-        <button
-          onClick={() => handleFileIconClick('video')}
-          className={` ${fileType === 'video' ? 'selected' : 'image'}`}
-        >
-         
-          <MdOndemandVideo className="mr-2 text-gray-400 text-xl cursor-pointer"></MdOndemandVideo>
-        </button>
+        <div className="flex gap-2  w-full items-center px-3 my-2 bg-white z-40">
+          <button
+            onClick={() => handleFileIconClick('image')}
+            className={` ${fileType === 'image' ? 'selected' : ''}`}
+          >
+            <FaFileImage className="mr-2 text-gray-400 cursor-pointer"></FaFileImage>
+          </button>
+          <button
+            onClick={() => handleFileIconClick('video')}
+            className={` ${fileType === 'video' ? 'selected' : 'image'}`}
+          >
+            <MdOndemandVideo className="mr-2 text-gray-400 text-xl cursor-pointer"></MdOndemandVideo>
+          </button>
 
-        <input
-          id="fileInput"
-          type="file"
-          accept={fileType === 'image' ? 'image/*' : 'video/*'}
-          onChange={handleFileChange}
-          multiple
-          className="hidden"
-        />
+          <input
+            id="fileInput"
+            type="file"
+            accept={fileType === 'image' ? 'image/*' : 'video/*'}
+            onChange={handleFileChange}
+            multiple
+            className="hidden"
+          />
 
-        <input
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          onKeyDown={handleKeyDown} 
-          placeholder="Type your message..."
-          className=" relative w-9/12 md:w-8/12 lg:9/12 py-1 px-2 rounded-md  bg-cyan-200"
-        />
-        <button className="flex items-center absolute right-[55px] lg:right-[95px] " type="submit">
-          <AiOutlineSend className=" cursor-pointer"></AiOutlineSend>
-        </button>
-      </div>
+          <textarea
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Type your message..."
+            className=" relative w-9/12 md:w-8/12 lg:9/12 py-1 px-2 rounded-md bg-cyan-200"
+          />
+          <button className="flex items-center absolute right-[55px] lg:right-[95px] " type="submit">
+            <AiOutlineSend className=" cursor-pointer"></AiOutlineSend>
+          </button>
+        </div>
 
-      <div className="mt-2">
-        {selectedFiles.map((file, index) => (
-          <div key={index} className="flex items-center bg-gray-300 p-2 w-10/12">
-            <span className="mr-2">{file.name}</span>
-            <button
-              type="button"
-              onClick={() => handleRemoveFile(index)}
-              className="text-red-600 font-bold cursor-pointer"
-            >
-              X
-            </button>
-          </div>
-        ))}
-      </div>
-    </form>
+        <div className="mt-2">
+          {selectedFiles.map((file, index) => (
+            <div key={index} className="flex items-center bg-gray-300 p-2 w-10/12">
+              <span className="mr-2">{file.name}</span>
+              <button
+                type="button"
+                onClick={() => handleRemoveFile(index)}
+                className="text-red-600 font-bold cursor-pointer"
+              >
+                X
+              </button>
+            </div>
+          ))}
+        </div>
+      </form>
     </div>
   );
 };

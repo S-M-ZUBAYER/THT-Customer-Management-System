@@ -23,7 +23,7 @@ import BtnSpinner from '../../Shared/Loading/BtnSpinner';
 
 
 const Register = () => {
-    const { setUser,setChattingUser } = useContext(AuthContext)
+    const { setUser, setChattingUser } = useContext(AuthContext)
     const [loading, setLoading] = useState(false)
     //create different kind of state to get the current value
     const [email, setEmail] = useState('');
@@ -166,7 +166,7 @@ const Register = () => {
         }
 
 
-        if (name === "" || image === "" || phone === "" || country === "" || language === "" || email === "" || designation === "") {
+        if (name === "" ||image==="" || phone === "" || country === "" || language === "" || email === "" || designation === "") {
             toast.error("Please provide all the information");
             return;
         }
@@ -194,6 +194,8 @@ const Register = () => {
             .then((data) => {
                 const userExists = data.exists;
                 console.log(userExists);
+                console.log("over checker");
+                
 
                 if (userExists === false) {
                     // Validate password length
@@ -231,6 +233,7 @@ const Register = () => {
                         .then(async (data) => {
                             if (data) {
                                 localStorage.setItem('user', JSON.stringify(user));
+                                console.log("over added");
                                 setUser(user);
                                 // setLoading(false);
                                 //         toast.success("Registration complete Successfully");
@@ -241,21 +244,26 @@ const Register = () => {
                                         'http://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/api/dev/user/signUp',
                                         chatRegistration
                                     );
-                        
+
                                     if (response) {
-                                        localStorage.setItem('chattingUser', JSON.stringify({ userName: name,
+                                        localStorage.setItem('chattingUser', JSON.stringify({
+                                            userName: name,
+                                            userId: response?.data?.userId,
                                             userEmail: email,
                                             role: "customer_service",
                                             designation: designation,
-                                            country: country}));
-                                            setChattingUser({ userName: name,
-                                                userEmail: email,
-                                                role: "customer_service",
-                                                designation: designation,
-                                                country: country});
-                                        toast.success("Chatting Registration complete");
+                                            country: country
+                                        }));
+                                        setChattingUser({
+                                            userName: name,
+                                            userId: response?.data?.userId,
+                                            userEmail: email,
+                                            role: "customer_service",
+                                            designation: designation,
+                                            country: country
+                                        });
+                                        console.log(response?.data)
                                         setLoading(false);
-                                        toast.success("Registration complete Successfully");
                                         form.reset();
                                         navigate("/");
                                     } else {

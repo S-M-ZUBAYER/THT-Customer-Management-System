@@ -17,7 +17,7 @@ import axios from 'axios';
 
 
 const Login = () => {
-  const { user, setUser, DUser, setDUser } = useContext(AuthContext);
+  const { user, setUser, DUser, setDUser, setChattingUser } = useContext(AuthContext);
   const [email, setEmail] = useState(DUser?.email);
   const [password, setPassword] = useState(DUser?.password);
   const location = useLocation();
@@ -38,7 +38,7 @@ const Login = () => {
     '京东格志旗舰店/GROZZIIE JDPOP FlagShop',
     '京东格志自营旗舰店/GROZZIIE JD FlagShop',
     "维庭数码专营店/WEITING  Digital PinDuoDuo Shop",
-  
+
   ];
 
   // const handleSelectChange = (event) => {
@@ -85,16 +85,7 @@ const Login = () => {
     })
       .then(res => res.json())
       .then(async data => {
-        //     if (data?.message!=="Wrong email/password combination!"|| data?.message!=="User doesn't exist") {
-        //       console.log(data)
-        //     setUser(data[0])
-        //     localStorage.setItem('user', JSON.stringify(data[0]));
-        // setLoading(false);
-        // navigate(from,{replace:true})
-        // form.reset();
-        //         toast.success('User Login Successfully');
-
-        //     }
+      
         if (data?.message === "Wrong email/password combination!") {
           toast.error(data.message);
           setLoading(false);
@@ -108,42 +99,46 @@ const Login = () => {
           localStorage.setItem('user', JSON.stringify(data[0]));
           localStorage.setItem('DUser', JSON.stringify({ email, password, selectedShops }));
           setDUser({ email, password, selectedShops })
+   
 
           try {
             const response = await axios.post(
-                'http://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/api/dev/user/signUp',
-                {
-                  userEmail: email,
-                  userPassword:password
-                  }
+              'http://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/api/dev/user/signIn',
+              {
+                userEmail: email,
+                userPassword: password
+              }
             );
 
-            if (response) {
-                // localStorage.setItem('chattingUser', JSON.stringify({ userName: name,
-                //     userEmail: email,
-                //     role: "customer_service",
-                //     designation: designation,
-                //     country: country}));
-                //     setChattingUser({ userName: name,
-                //         userEmail: email,
-                //         role: "customer_service",
-                //         designation: designation,
-                //         country: country});
-                console.log(response)
-                toast.success("Chatting Registration complete");
-                setLoading(false);
-                toast.success("Registration complete Successfully");
-                form.reset();
-                navigate("/");
+            if (response.status === 200) {
+              localStorage.setItem('chattingUser', JSON.stringify({
+                userName: response?.data?.userName,
+                userId: response?.data?.userId,
+                userEmail: response?.data?.userEmail,
+                role: "customer_service",
+                designation: response?.data?.designation,
+                country: response?.data?.country
+              }));
+              setChattingUser({
+                userName: response?.data?.userName,
+                userId: response?.data?.userId,
+                userEmail: response?.data?.userEmail,
+                role: "customer_service",
+                designation: response?.data?.designation,
+                country: response?.data?.country
+              });
+              setLoading(false);
+              form.reset();
+              navigate("/");
             } else {
-                toast.error(response.data.message);
-                setLoading(false);
+              toast.error(response.data.message);
+              setLoading(false);
             }
-        } catch (error) {
+          } catch (error) {
             console.error("Chatting Registration Error", error);
             toast.error("Chatting Registration failed");
             setLoading(false);
-        }
+          }
 
 
           setLoading(false);
@@ -221,7 +216,6 @@ const Login = () => {
       .then((response) => response.json())
       .then((data) => {
         // Handle the response data
-        console.log(data);
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -229,9 +223,7 @@ const Login = () => {
   };
 
   const openModal = () => {
-    console.log("click")
     setModalOpen(true);
-    console.log(modalOpen)
   };
 
   const closeModal = () => {

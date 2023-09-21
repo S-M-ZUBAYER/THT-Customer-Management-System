@@ -6,8 +6,8 @@ import BtnSpinner from '../../Shared/Loading/BtnSpinner';
 import DisplaySpinner from '../../Shared/Loading/DisplaySpinner';
 
 const CustomerServicePart = () => {
-    const { user, DUser, setDUser, loading, setLoading, totalQuestions, setTotalQuestions, setTotalQuestionLan, unknownQuestions, totalQuestionsLan, unknownQuestionsLan, setUnknownQuestions, setUnknownQuestionsLan, translationQuestions, setTranslationQuestions, setTranslationQuestionsLan, handleToStoreAllData, handleToDeleteAllData, setTranslationPercent, translationPercent, translateCalculatePercentage, unknownCalculatePercentage, setUnknownPercent, unknownPercent } = useContext(AuthContext)
-
+    const { user, DUser,chattingUser, setDUser, loading, setLoading, totalQuestions, setTotalQuestions, setTotalQuestionLan, unknownQuestions, totalQuestionsLan, unknownQuestionsLan, setUnknownQuestions, setUnknownQuestionsLan, translationQuestions, setTranslationQuestions, setTranslationQuestionsLan, handleToStoreAllData, handleToDeleteAllData, setTranslationPercent, translationPercent, translateCalculatePercentage, unknownCalculatePercentage, setUnknownPercent, unknownPercent } = useContext(AuthContext)
+console.log(chattingUser,"chatting user")
     //create this part to send data to the backend to got data
     const formData = new FormData();
 
@@ -769,16 +769,16 @@ console.log(selectedPrinter,bengaliAnswer)
                         <div className="text-base font-semibold text-black " id="answerPart">
 
                             {chineseAnswer?.length ?
-                                chineseAnswer.map((element, index) => <div key={index} className="common border-2 bg-lime-200 my-5 ml-10  p-3 rounded-tl-xl rounded-br-xl">
+                                chineseAnswer.map((element, index) => <div key={index}   className=" cursor-pointer common border-2 bg-lime-200 my-5 ml-10  p-3 rounded-tl-xl rounded-br-xl">
 
-                                    <p onClick={(e) => handleToCopy(e, element[1])} className=" shadow-2xl common text-base rounded-md px-2 mb-2 py-2" id="text-to-copy">
+                                    <p onClick={(e) => handleToCopy(e, element[1],index)} id={`allAnswer${index}`} className="allColor shadow-2xl common text-base rounded-md px-2 mb-2 py-2">
                                         <span className="text-lg font-bold text-indigo-700">Customer</span>:- {element[1]}
                                     </p>
 
-                                    <p onClick={(e) => handleToCopy(e, element[1])} id="text-to-copy" className="common text-base  shadow-2xl rounded-md mb-2 p-2">
+                                    <p onClick={(e) => handleToCopy(e, element[1],index)} id={`allAnswer${index}`} className="allColor common text-base  shadow-2xl rounded-md mb-2 p-2">
                                         <span className="text-lg font-bold text-amber-800">Customer Service</span>:- {bengaliAnswer[index][1]}
                                     </p>
-                                    <p onClick={(e) => handleToCopy(e, element[1])} id="text-to-copy" className="common text-base  shadow-2xl  rounded-md p-2">
+                                    <p onClick={(e) => handleToCopy(e, element[1],index)} id={`allAnswer${index}`} className="allColor common text-base  shadow-2xl  rounded-md p-2">
                                         <span className="text-lg font-bold text-fuchsia-700">Customer Service</span>:- {englishAnswer[index][1]}
                                     </p>
                                 </div>)

@@ -1,28 +1,55 @@
-import React, { useContext, useEffect, useState } from 'react';
-import img from "../../../Assets/Images/messi.jpg"
-import { FaFileImage } from "react-icons/fa";
-import { AiOutlineSend } from "react-icons/ai";
-import { MdOndemandVideo } from "react-icons/md";
+import React, { useContext, useEffect, useRef, useState } from 'react';
+
+
+//<-----web socket
+
+// import { connectWebSocket, disconnectWebSocket, subscribeToChat } from '../Chat/WebSocketService';
+
+// ------>web socket
 
 import CustomerServicePart from './CustomerServicePart';
 import { AuthContext } from '../../../context/UserContext';
 import axios from 'axios';
 import MessageInput from '../Chat/MessegeInput';
 import Message from './Message';
-import ConversationView from '../Chat/ConversationView';
 
 const CustomerService_1 = () => {
 
-    const { user } = useContext(AuthContext);
+    const { user, chattingUser } = useContext(AuthContext);
     const [currentUser, setCurrentUser] = useState(null)
     const [selectedCustomerChat, setSelectedCustomerChat] = useState(null)
+    const [currentCustomer, setCurrentCustomer] = useState([]);
+    const [allChat, setAllChat] = useState([])
+    const [showHistory,SetShowHistory]=useState(false);
+    const scrollableDivRef = useRef(null);
 
-    //got the current user data from database  
-    useEffect(() => {
-        if (user?.email) {
-            fetchUserByEmail();
-        }
-    }, [user?.email]);
+    // //<-------web socket
+
+
+    // const [receivedMessage, setReceivedMessage] = useState('');
+    // const [sendMessage, setSendMessage] = useState('');
+
+    // useEffect(() => {
+    //     // Establish a WebSocket connection when the component mounts
+    //     connectWebSocket();
+
+    //     // Subscribe to a topic (replace 'userId' with your actual user ID)
+    //     subscribeToChat(selectedCustomerChat?.userId, (newMessage) => {
+    //         setAllChat((prevMessages) => [...prevMessages, newMessage]);
+    //     });
+
+    //     // Clean up the WebSocket connection when the component unmounts
+    //     return () => {
+    //       disconnectWebSocket();
+    //     };
+    //   }, []);
+
+
+    //------->web socket
+
+
+ 
+  
 
 
     const fetchUserByEmail = async () => {
@@ -38,110 +65,159 @@ const CustomerService_1 = () => {
         }
     };
 
-    const customerName = [
-        {
-            id: 10,
-            name: "S M ZUBAYER",
-            time: "3:22 pm",
-            online: true
-        },
-        {
-            id: 11,
-            name: "S M SABIT",
-            time: "3:54 pm",
-            online: false
-        },
-        {
-            id: 12,
-            name: "ABU SAYED",
-            time: "4:34 am",
-            online: true
-        },
-        {
-            id: 13,
-            name: "ABU SAYED",
-            time: "3:33 pm",
-            online: true
-        },
-        {
-            id: 14,
-            name: "S M SABIT",
-            time: "3:54 pm",
-            online: false
-        },
-        {
-            id: 15,
-            name: "ABU SAYED",
-            time: "3:33 am",
-            online: false
-        },
-        {
-            id: 16,
-            name: "ABU SAYED",
-            time: "7:83 pm",
-            online: true
-        },
-        {
-            id: 17,
-            name: "S M SABIT",
-            time: "4:53 am",
-            online: false
-        },
-        {
-            id: 18,
-            name: "ABU SAYED",
-            time: "3:40 pm",
-            online: true
+    useEffect(() => {
+        if (user?.email) {
+            fetchUserByEmail();
         }
+    }, [user?.email]);
 
-    ]
+
+console.log(chattingUser,"chatting user")
+
+
+    const fetchUserByChatId = async () => {
+        try {
+            const response = await axios.get(`http://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/api/dev/messages/${selectedCustomerChat?.chatId}`);
+            if (response.status === 200) {
+                const userData = response.data;
+                setAllChat(userData);
+            } else {
+                // Handle unexpected status codes
+                console.error('Unexpected status code:', response.status);
+            }
+        } catch (error) {
+            // Handle network or other errors
+            console.error('Error fetching user data:', error);
+        }
+    };
+
+    
+    const fetchUserByUserId = async () => {
+        try {
+            const response = await axios.get(`http://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/api/dev/chatlist/customer_service/${chattingUser?.userId}`);
+
+            if (response.status === 200) {
+                // Request was successful
+
+                const userData = response.data;
+                console.log(userData)
+               const  updateCustomerData=(userData.sort((a, b) => {
+                    const timestampA = new Date(a.timestamp);
+                    const timestampB = new Date(b.timestamp);
+                    return timestampB - timestampA;
+                  }));
+                  setCurrentCustomer(getUniqueCustomers(updateCustomerData))
+            } else {
+                // Handle unexpected status codes
+                console.error('Unexpected status code:', response.status);
+            }
+        } catch (error) {
+            // Handle network or other errors
+            console.error('Error fetching user data:', error);
+        }
+    };
+
+
+    useEffect(() => {
+        fetchUserByChatId();
+        fetchUserByUserId();
+    }, [selectedCustomerChat?.chatId]);
+
+
+
+
+  
+    useEffect(() => {
+        // Scroll to the bottom when component mounts or when content changes
+        scrollableDivRef.current.scrollTop = scrollableDivRef.current.scrollHeight;
+    }, [allChat, selectedCustomerChat]);
+
+
+
+
+    function getUniqueCustomers(currentCustomer) {
+        const uniqueCustomers = currentCustomer.reduce((accumulator, customer) => {
+          const userId = customer.userId;
+          if (!accumulator.has(userId)) {
+            accumulator.set(userId, customer);
+          }
+          return accumulator;
+        }, new Map());
+    
+        return (Array.from(uniqueCustomers.values()));
+      }
+    
+     
+   
+
+ 
 
     const handleToSelectCustomer = (customer) => {
-        setCurrentUser(customer)
-        setSelectedCustomerChat((chatSms.filter(eachChat => eachChat.myId === customer?.id))[0])
+        setCurrentUser(customer);
+        SetShowHistory(false)
+        // connectWebSocket();
+        // setSelectedCustomerChat((chatSms.filter(eachChat => eachChat.myId === customer?.id))[0])
+        setSelectedCustomerChat(customer)
     }
 
+    
+      
+      
+ ;
 
-    const chatSms = [
-        {
-            name: "S M ZUBAYER",
-            myId: 10,
-            userId: 78126321,
-            sms: [
-                { user: "you", msg: "hi.. What up bro...?", time: "8:30 PM" },
-                { user: "I", msg: "Hello.. I am File...?", time: "8:33 PM" },
-                { user: "I", msg: "Thank you...What about you...?", time: "8:33 PM" },
-                { user: "you", msg: "I am good.. What are your doing now...?", time: "8:34 PM" },
-                { user: "you", msg: "And.. Why are you now...?", time: "8:34 PM" },
-                { user: "I", msg: "Good.. I am in office now...?", time: "8:35 PM" },
-                { user: "I", msg: "Good.. I am doing my work in office...?", time: "8:36 PM" },
-                { user: "I", msg: "what are your now and where are you...?", time: "8:36 PM" },
-            ]
 
-        },
-        {
-            name: "S M SABIT",
-            userId: 98327458,
-            myId: 11,
-            sms: [
-                { user: "you", msg: "How are you my friend?", time: "2:30 PM" },
-                { user: "I", msg: "Hello.. I am File?", time: "2:33 PM" },
-                { user: "I", msg: "What about your current condition?", time: "2:33 PM" },
-                { user: "you", msg: "I am good.. When you will come to dhaka?", time: "2:34 PM" },
-                { user: "you", msg: "I am still waiting for you?", time: "2:34 PM" },
-                { user: "I", msg: "may be with in 2 days.. i will come?", time: "8:35 PM" },
-                { user: "I", msg: "Do't wait for me . you should start your project?", time: "2:36 PM" },
-                { user: "I", msg: "I will join after coming", time: "2:36 PM" }
-            ]
 
-        },
+    //<---------web socket
 
-    ]
+
+    // const serverUrl = 'http://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/websocket';
+    // const ws = new SockJS(serverUrl);
+    // const stompClient = Stomp.over(ws);
+
+    // function connect() {
+    //     stompClient.connect({}, () => {
+    //         console.log('WebSocket connected');
+    //     });
+    // }
+
+    // function disconnect() {
+    //     if (stompClient.connected) {
+    //         stompClient.disconnect(() => {
+    //             console.log('WebSocket disconnected');
+    //         });
+    //     }
+    // }
+
+
+    // useEffect(() => {
+    //     // Connect to WebSocket when the component mounts
+    //     connect();
+
+    //     // Subscribe to the topic where you expect to receive messages
+    //     stompClient.subscribe('/topic/{UserId}', (message) => {
+    //         setReceivedMessage(message.body);
+    //     });
+
+    //     return () => {
+    //         // Disconnect from WebSocket when the component unmounts
+    //         disconnect();
+    //     };
+    // }, []);
+
+    // const handleSendMessage = () => {
+    //     // Send a message to the specified destination
+    //     stompClient.send('/app/messages', {}, JSON.stringify({ message: sendMessage }));
+    // };
+
+
+    //-------->web socket
+
 
 
 
     return (
         <div>
+
             <div className="  grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 md:gap-8 mx-3 md:mx-12 my-12 text-gray-600 bg-white" >
 
 
@@ -166,23 +242,29 @@ const CustomerService_1 = () => {
                     </div>
 
                     <div className=" overflow-y-scroll h-[60vh]">
+                       
+
                         {
-                            customerName.map((element, index) => {
-                                return <div key={index} className="text-sm  ml-2 px-3">
+                            currentCustomer.map((element, index) => {
+                                return <div key={index} className="text-sm  ml-2 px-3 cursor-pointer">
                                     <div onClick={() => handleToSelectCustomer(element)} className="flex justify-between items-center mx-1 my-1">
                                         <div className="text-start">
-                                            <p>{element?.name}</p>
-                                            <p className="">This is message</p>
+                                            {/* <p>ID: {element?.chatId}</p> */}
+                                           
+                                            <p cl>User Id: {element?.userId}</p>
+                                            <p>Chat Id: {element?.chatId}</p>
+                                               
+                                            
                                         </div>
                                         <div className="">
-                                            {element.online ?
+                                            {element.status === "running" ?
                                                 <p className=" flex ml-auto bg-green-400 w-2 h-2 mb-1 rounded-full"></p>
                                                 :
                                                 // <p className=" flex ml-auto bg-slate-400 w-2 h-2 mb-1 rounded-full"></p> 
                                                 ""
 
                                             }
-                                            <p>{element?.time}</p>
+                                            <p>{(element?.timestamp).split(" ")[1].split(".")[0]}</p>
                                         </div>
 
                                     </div>
@@ -191,27 +273,6 @@ const CustomerService_1 = () => {
                             })
                         }
 
-                        {/* <div className="text-sm mx-2">
-                        <div className="flex justify-between items-center mx-1 my-1">
-                            <p>Customer Name</p>
-                            <p>Text time</p>
-                        </div>
-                        <hr></hr>
-                    </div>
-                    <div className="text-sm mx-2">
-                        <div className="flex justify-between items-center mx-1 my-1">
-                            <p>Customer Name</p>
-                            <p>Text time</p>
-                        </div>
-                        <hr></hr>
-                    </div>
-                    <div className="text-sm mx-2">
-                        <div className="flex justify-between items-center mx-1 my-1">
-                            <p>Customer Name</p>
-                            <p>Text time</p>
-                        </div>
-                        <hr></hr>
-                    </div> */}
                     </div>
 
                 </div>
@@ -224,6 +285,7 @@ const CustomerService_1 = () => {
 
 
                     <div className="flex justify-around ">
+                        <p className="font-semibold">{selectedCustomerChat?.userId}</p>
                         <p className="bg-[#004368] text-gray-200 px-2 rounded-b-lg py-1">Text from app</p>
                         <p className="font-semibold">{user?.name}</p>
                     </div>
@@ -235,39 +297,23 @@ const CustomerService_1 = () => {
                         <hr className="text-black font-bold my-1 mx-1"></hr>
                     </div>
 
-                    <div className=" overflow-y-scroll h-[60vh] mb-10 text-start">
+                    <div className=" overflow-y-scroll h-[60vh] mb-10 text-start" ref={scrollableDivRef}>
                         <Message
-                            chatSms={chatSms}
+                            allChat={allChat}
+                            setAllChat={setAllChat}
                             selectedCustomerChat={selectedCustomerChat}
+                            showHistory={showHistory}
+                            SetShowHistory={SetShowHistory}
                         ></Message>
 
                     </div>
 
-                    {/* <div className=" absolute rounded-b-lg z-40 bg-white pt-1 w-full bottom-0 ">
-                        <div className="flex justify-around text-sm">
-                            <button className="bg-[#004368] text-white ml-8 hover:bg-blue-700                                                          px-2 py-1 rounded-md mr-3">
-                                Auto Reply
-                            </button>
-                            <button className="">
-                                Select & Reply
-                            </button>
-                            <button className="mr-10">
-                                Typically
-                            </button>
-                        </div>
-
-                        <div className="flex relative w-full items-center px-3 my-2 bg-white z-40">
-                            <MdOndemandVideo className="mr-2 text-gray-400 text-xl cursor-pointer"></MdOndemandVideo>
-                            <FaFileImage className="mr-2 text-gray-400 cursor-pointer"></FaFileImage>
-                            <input className="w-9/12 py-1 px-2 rounded-md  bg-cyan-200"></input>
-                            <AiOutlineSend className=" absolute right-[55px] lg:right-[95px] cursor-pointer"></AiOutlineSend>
-                        </div>
-
-
-                    </div> */}
+                    
                     <MessageInput
                         selectedCustomerChat={selectedCustomerChat}
                         setSelectedCustomerChat={setSelectedCustomerChat}
+                        allChat={allChat}
+                        setAllChat={setAllChat}
                     ></MessageInput>
 
                 </div>
@@ -275,10 +321,9 @@ const CustomerService_1 = () => {
 
                 {/* Manually chatting for online shopping application for customer service ************************************       */}
 
-
-
-
             </div>
+
+
             <div className="shadow-lg rounded-lg  mt-10 mb-20 md:mt-20 md:mx-10 px-3 md:px-10 md:py-10">
 
                 <div className="flex justify-around ">
@@ -292,6 +337,8 @@ const CustomerService_1 = () => {
                     </h1>
                     <hr className="text-black font-bold my-1 mx-1"></hr>
                 </div>
+
+
                 <div className="mb-5 mx-1">
                     <CustomerServicePart></CustomerServicePart>
                 </div>

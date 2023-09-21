@@ -17,7 +17,7 @@ const UserContext = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
 
-  
+
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
@@ -58,7 +58,7 @@ const UserContext = ({ children }) => {
   const [unknownQuestions, setUnknownQuestions] = useState([]);
 
   
-   
+
 
   function unknownCalculatePercentage(totalQuestions, currentQuestions) {
     let currentQuestionsLan;
@@ -143,6 +143,8 @@ const UserContext = ({ children }) => {
     setCategory,
     categories,
     setCategories,
+    chattingUser, 
+    setChattingUser
   };
 
   return (
