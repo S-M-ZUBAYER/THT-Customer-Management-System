@@ -132,7 +132,7 @@ function Translator() {
       
 
         // let apiUrlEng = `http://localhost:5000/tht/translate`;
-        let apiUrlEng = `https://grozziie.zjweiting.com:8033/tht/translate`;
+        let apiUrlEng = `https://grozziie.zjweiting.com:8035/tht/translate`;
 
         fetch(apiUrlEng, {
             method: "POST",
@@ -159,7 +159,7 @@ function Translator() {
 
 
         // let apiUrl = `http://localhost:5000/tht/translate`;
-        let apiUrl = `https://grozziie.zjweiting.com:8033/tht/translate`;
+        let apiUrl = `https://grozziie.zjweiting.com:8035/tht/translate`;
         if (!targetLan) {
             notify();
         }

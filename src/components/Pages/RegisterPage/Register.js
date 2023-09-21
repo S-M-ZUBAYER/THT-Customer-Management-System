@@ -49,15 +49,15 @@ const Register = () => {
 
 
 
-    axios.get('https://grozziie.zjweiting.com:8033/tht/allUsers')
-        .then(response => {
-            setAllUsers(response.data);
+    // axios.get('https://grozziie.zjweiting.com:8033/tht/allUsers')
+    //     .then(response => {
+    //         setAllUsers(response.data);
 
-        })
-        .catch(error => {
-            console.log(error);
+    //     })
+    //     .catch(error => {
+    //         console.log(error);
 
-        });
+    //     });
 
 
 
@@ -155,6 +155,7 @@ const Register = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        console.log("Click")
 
         const chatRegistration = {
             userName: name,
@@ -166,7 +167,7 @@ const Register = () => {
         }
 
 
-        if (name === "" ||image==="" || phone === "" || country === "" || language === "" || email === "" || designation === "") {
+        if (name === ""  || phone === "" || country === "" || language === "" || email === "" || designation === "") {
             toast.error("Please provide all the information");
             return;
         }
@@ -182,6 +183,7 @@ const Register = () => {
         };
 
         const form = event.target;
+        console.log("existing?")
 
         fetch('https://grozziie.zjweiting.com:8033/tht/check-user', {
             method: 'POST',
@@ -241,7 +243,7 @@ const Register = () => {
                                 //         navigate("/");
                                 try {
                                     const response = await axios.post(
-                                        'http://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/api/dev/user/signUp',
+                                        'https://grozziie.zjweiting.com:3091/CustomerService-Chat/api/dev/user/signUp',
                                         chatRegistration
                                     );
 

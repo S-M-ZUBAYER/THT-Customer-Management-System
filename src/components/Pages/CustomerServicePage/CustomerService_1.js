@@ -77,7 +77,7 @@ console.log(chattingUser,"chatting user")
 
     const fetchUserByChatId = async () => {
         try {
-            const response = await axios.get(`http://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/api/dev/messages/${selectedCustomerChat?.chatId}`);
+            const response = await axios.get(`https://grozziie.zjweiting.com:3091/CustomerService-Chat/api/dev/messages/${selectedCustomerChat?.chatId}`);
             if (response.status === 200) {
                 const userData = response.data;
                 setAllChat(userData);
@@ -94,7 +94,7 @@ console.log(chattingUser,"chatting user")
     
     const fetchUserByUserId = async () => {
         try {
-            const response = await axios.get(`http://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/api/dev/chatlist/customer_service/${chattingUser?.userId}`);
+            const response = await axios.get(`https://grozziie.zjweiting.com:3091/CustomerService-Chat/api/dev/chatlist/customer_service/${chattingUser?.userId}`);
 
             if (response.status === 200) {
                 // Request was successful

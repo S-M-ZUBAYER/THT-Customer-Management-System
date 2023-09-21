@@ -70,7 +70,7 @@ const MessageInput = ({
         try {
           console.log(allMessages, "messages all post")
           const response = await axios.post(
-            'http://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/api/dev/messages',
+            'https://grozziie.zjweiting.com:3091/CustomerService-Chat/api/dev/messages',
             allMessages[0]
           );
 
@@ -117,7 +117,7 @@ const MessageInput = ({
           try {
             console.log(allMessages, "messages all post")
             const response = await axios.post(
-              'http://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/api/dev/messages',
+              'https://grozziie.zjweiting.com:3091/CustomerService-Chat/api/dev/messages',
               allMessages[0]
             );
 

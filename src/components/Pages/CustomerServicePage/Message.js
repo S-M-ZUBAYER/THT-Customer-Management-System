@@ -47,7 +47,7 @@ const Message = ({ allChat,selectedCustomerChat, showHistory,SetShowHistory,setA
       if (showHistory) {
         const fetchUserByUserId = async () => {
           try {
-            const response = await axios.get(`http://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/api/dev/messages/${selectedCustomerChat?.userId}`);
+            const response = await axios.get(`https://grozziie.zjweiting.com:3091/CustomerService-Chat/api/dev/messages/${selectedCustomerChat?.userId}`);
             if (response.status === 200) {
               const userData = response.data;
               console.log(response.data)

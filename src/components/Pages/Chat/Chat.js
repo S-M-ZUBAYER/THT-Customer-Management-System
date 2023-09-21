@@ -32,7 +32,7 @@
   
 // //       // Make the POST request to the API
 // //       const response = await axios.post(
-// //         'http://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/api/dev/messages',
+// //         'https://grozziie.zjweiting.com:3091/CustomerService-Chat/api/dev/messages',
 // //         text // Wrap the text object in an array to match your API's expected format
 // //       );
   
