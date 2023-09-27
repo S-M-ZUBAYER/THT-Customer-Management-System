@@ -212,3 +212,65 @@
 
 // export default Chat;
 
+import React, { useEffect, useState } from 'react';
+import { connectWebSocket, disconnectWebSocket, sendMessage } from './WebSocketService';
+
+const Chat = ({ userId }) => {
+  const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState('');
+
+  useEffect(() => {
+    // Connect to WebSocket when the component mounts
+    connectWebSocket(userId, onMessageReceived);
+
+    // Disconnect from WebSocket when the component unmounts
+    return () => {
+      disconnectWebSocket();
+    };
+  }, [userId]);
+
+  const onMessageReceived = (message) => {
+    setMessages((prevMessages) => [...prevMessages, message]);
+  };
+
+  const handleSendMessage = () => {
+    if (newMessage.trim() !== '') {
+      const message = {
+        chatId: '',
+        message: newMessage,
+        msgType: 'text',
+        sentBy: userId,
+        sentTo: '', // Add recipient ID if needed
+        timestamp: new Date().toISOString(),
+      };
+      sendMessage(message);
+      setNewMessage('');
+    }
+  };
+
+  return (
+    <div>
+      <h1>Chat</h1>
+      <div>
+        <div style={{ height: '300px', border: '1px solid #ccc', overflowY: 'scroll' }}>
+          {messages.map((message, index) => (
+            <div key={index}>
+              <strong>{message.sentBy}:</strong> {message.message}
+            </div>
+          ))}
+        </div>
+        <div>
+          <input
+            type="text"
+            placeholder="Type your message..."
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+          />
+          <button onClick={handleSendMessage}>Send</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Chat;

@@ -8,6 +8,7 @@ import { AuthContext } from "../../../../../context/UserContext";
 // import IconsCategoryList from "../IconsCategory/IconsCategoryList";
 import AddBackgroundCategory from "./AddBackgroundCategory";
 import BackgroundCategoryList from "./BackgroundCategoryList";
+import ShowingVideo from "../ShowingVideoPage.js/ShowingVideo";
 
 function AddBackgroundImg() {
   const [selectedImages, setSelectedImages] = useState([]);
@@ -68,7 +69,7 @@ useEffect(() => {
   
     // Send formData to the server-side script for processing
     // axios.post('https://grozziie.zjweiting.com:8033/tht/backgroundImgs/add', formData)
-    axios.post('http://localhost:2000/tht/backgroundImgs/add', formData)
+    axios.post('https://grozziie.zjweiting.com:8033/tht/backgroundImgs/add', formData)
       .then(res => {
         if (res.data.status === "success") {
           toast.success("Images uploaded successfully");
@@ -155,6 +156,8 @@ useEffect(() => {
       <BackgroundCategoryList
         categories={categories}
       ></BackgroundCategoryList>
+
+      <ShowingVideo></ShowingVideo>
 
     </div>
 

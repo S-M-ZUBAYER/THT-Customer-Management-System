@@ -99,7 +99,7 @@ const Message = ({ allChat,selectedCustomerChat, showHistory,SetShowHistory,setA
                     <div className="max-w-10/12 pt-3">
                       {chat?.msgType === "image" ? (
                         <img
-                          className="max-w-full h-auto"
+                          className="w-12 h-auto"
                           src={`data:image/png;base64,${chat?.message}`}
                           alt={`Image ${index}`}
                         />
