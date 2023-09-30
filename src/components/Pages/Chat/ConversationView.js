@@ -1,7 +1,6 @@
 import React from 'react';
 
 const ConversationView = ({ messages, selectedCustomer }) => {
-  console.log(messages, selectedCustomer);
 
   return (
     <div className="flex-1 p-4 bg-white">

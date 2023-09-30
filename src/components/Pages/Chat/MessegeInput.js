@@ -68,7 +68,6 @@ const MessageInput = ({
         allMessages.push(textMessage);
 
         try {
-          console.log(allMessages, "messages all post")
           const response = await axios.post(
             'https://grozziie.zjweiting.com:3091/CustomerService-Chat/api/dev/messages',
             allMessages[0]

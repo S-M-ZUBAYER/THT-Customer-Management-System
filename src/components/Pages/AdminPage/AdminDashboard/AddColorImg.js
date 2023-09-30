@@ -54,7 +54,6 @@ const AddColorImg = ({ Product }) => {
         formData.append('productPrice', productPrice);
         formData.append('stockQuantity', stockQuantity);
         formData.append('productDescription', productDescription);
-        console.log(formData,selectedColorImage[0])
         // Make a POST request to your server
         axios.post('https://grozziie.zjweiting.com:8033/tht/colorImg/add', formData)
             .then(response => {

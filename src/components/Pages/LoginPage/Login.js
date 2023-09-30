@@ -233,7 +233,6 @@ const Login = () => {
   // const handleToResetPassword = () => {
   //     resetPassword(email)
   //         .then(() => {
-  //             console.log(email)
   //             toast.success('Please check your email to reset')
   //             // setLoading(false);
   //         })

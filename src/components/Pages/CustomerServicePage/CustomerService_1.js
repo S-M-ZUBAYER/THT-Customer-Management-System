@@ -72,7 +72,6 @@ const CustomerService_1 = () => {
     }, [user?.email]);
 
 
-console.log(chattingUser,"chatting user")
 
 
     const fetchUserByChatId = async () => {
@@ -100,7 +99,6 @@ console.log(chattingUser,"chatting user")
                 // Request was successful
 
                 const userData = response.data;
-                console.log(userData)
                const  updateCustomerData=(userData.sort((a, b) => {
                     const timestampA = new Date(a.timestamp);
                     const timestampB = new Date(b.timestamp);

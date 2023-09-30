@@ -18,7 +18,6 @@ function AddIconImg () {
   const [categories, setCategories] = useState([]);
 
   const { user } = useContext(AuthContext);
-console.log(user)
 useEffect(() => {
   axios.get("https://grozziie.zjweiting.com:8033/tht/icons")
     .then(res => {
@@ -59,14 +58,12 @@ useEffect(() => {
   
     formData.append('email', user?.email);
     formData.append('categoryName', selectedCategory);
-  console.log(selectedImages)
     // TODO: Send formData to server-side script for processing
     axios
   .post('https://grozziie.zjweiting.com:8033/tht/icons/add', formData)
   .then((res) => {
     if (res.data.status === "success") {
       toast.success("Images uploaded successfully");
-      console.log("success");
     } else {
       console.log("image failed");
       toast.error("Images uploaded failed");

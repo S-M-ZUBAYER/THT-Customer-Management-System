@@ -18,11 +18,9 @@ const Message = ({ allChat,selectedCustomerChat, showHistory,SetShowHistory,setA
 //   useEffect(() => {
 //     // Establish a WebSocket connection when the component mounts
 //     connectWebSocket();
-// console.log("into websocket use effect")
 //     // Replace 'user.id' with your actual user ID or identifier
 //     subscribeToChat(selectedCustomerChat?.chatId, (newMessage) => {
 //         setAllChat((prevMessages) => [...prevMessages, newMessage]);
-//         console.log(allChat,"web Socket")
 //     });
 
 //     // Clean up the WebSocket connection when the component unmounts
@@ -50,7 +48,6 @@ const Message = ({ allChat,selectedCustomerChat, showHistory,SetShowHistory,setA
             const response = await axios.get(`https://grozziie.zjweiting.com:3091/CustomerService-Chat/api/dev/messages/${selectedCustomerChat?.userId}`);
             if (response.status === 200) {
               const userData = response.data;
-              console.log(response.data)
               SetUserIdAllChat(userData);
               toast.success("click show the chat history");
             } else {
@@ -67,7 +64,6 @@ const Message = ({ allChat,selectedCustomerChat, showHistory,SetShowHistory,setA
       }
     }, [selectedCustomerChat?.userId, showHistory]); // Include userId and showHistory in the dependency array
     
-    console.log(userIdAllChat,  showHistory,"userId")
     
     
     

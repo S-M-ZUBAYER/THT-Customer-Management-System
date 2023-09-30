@@ -49,6 +49,7 @@ const Admin = () => {
     isAdmin && <> */}
                         <li><Link to='/admin/users' className="sm:text-xs md:text-base text-gray-700">All Users</Link></li>
                         <li><Link to='/admin/questionAnswer' className="sm:text-xs md:text-base text-gray-700">Add Q & A</Link></li>
+                        <li><Link to='/admin/warehouse&cities' className="sm:text-xs md:text-base text-gray-700">Add Warehouse&Cities</Link></li>
                         <li><Link to='/admin/icon' className="sm:text-xs md:text-base text-gray-700">Add Icons</Link></li>
                         <li><Link to='/admin/backgroundImg' className="sm:text-xs md:text-base text-gray-700">Add Background Image</Link></li>
                         <li><Link to='/admin/mallProduct' className="sm:text-xs md:text-base text-gray-700">Add Mall Products</Link></li>

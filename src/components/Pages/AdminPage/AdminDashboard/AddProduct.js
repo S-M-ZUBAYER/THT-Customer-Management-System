@@ -53,7 +53,7 @@ function AddProduct({ product }) {
   //     formData.append('videos', selectedVideos[i]);
   //   }
 
-  //   console.log(selectedImages)
+
 
   //   // try {
   //   //   const response = await axios.post('/upload', formData, {
@@ -61,7 +61,6 @@ function AddProduct({ product }) {
   //   //       'Content-Type': 'multipart/form-data'
   //   //     }
   //   //   });
-  //   //   console.log(response.data); // Response from the server
   //   // } catch (error) {
   //   //   console.error('Error uploading files:', error);
   //   // }
@@ -195,7 +194,6 @@ function AddProduct({ product }) {
     const time = now.toLocaleTimeString();
     const formData = new FormData();
     formData.append('productImg', productImg);
-    console.log(loading)
     // formData.append('invoiceFile', invoiceFile);
     formData.append('productCountryName', productCountryName);
     formData.append('productName', productName);
@@ -217,7 +215,6 @@ function AddProduct({ product }) {
     formData.append('inventoryText', inventoryText);
     formData.append('date', date);
     formData.append('time', time);
-console.log(formData)
     // Append selected invoice files to the form data
     for (let i = 0; i < invoiceFiles.length; i++) {
       formData.append('invoiceFiles', invoiceFiles[i]);
@@ -280,7 +277,6 @@ console.log(formData)
       setInventoryText('');
       setProductImg([]);
       setInvoiceFiles([]);
-      console.log(loading)
 
     } catch (error) {
       console.error('Error creating product:', error);

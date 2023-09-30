@@ -7,7 +7,7 @@ import DisplaySpinner from '../../Shared/Loading/DisplaySpinner';
 
 const CustomerServicePart = () => {
     const { user, DUser,chattingUser, setDUser, loading, setLoading, totalQuestions, setTotalQuestions, setTotalQuestionLan, unknownQuestions, totalQuestionsLan, unknownQuestionsLan, setUnknownQuestions, setUnknownQuestionsLan, translationQuestions, setTranslationQuestions, setTranslationQuestionsLan, handleToStoreAllData, handleToDeleteAllData, setTranslationPercent, translationPercent, translateCalculatePercentage, unknownCalculatePercentage, setUnknownPercent, unknownPercent } = useContext(AuthContext)
-console.log(chattingUser,"chatting user")
+
     //create this part to send data to the backend to got data
     const formData = new FormData();
 
@@ -118,7 +118,7 @@ console.log(chattingUser,"chatting user")
 
 
         //create an object to send backend and start the process for Bengali translations
-console.log(selectedPrinter,bengaliAnswer)
+
         const customerInput = {
             target: "Bengali",
             text: text
@@ -232,7 +232,6 @@ console.log(selectedPrinter,bengaliAnswer)
                             }
                             else {
                                 toast.error(data.message);
-                                // console.log(data.message)
                             }
 
                         })
@@ -254,7 +253,6 @@ console.log(selectedPrinter,bengaliAnswer)
 
     // create a function for all check box filtering ans
     const handleToShowShopAns = async () => {
-        // console.log("click", selectedShops);
         setChineseAnswer([]);
         setBengaliAnswer([]);
         setEnglishAnswer([]);
@@ -272,7 +270,7 @@ console.log(selectedPrinter,bengaliAnswer)
 
         setSendLoading(false);
 
-        // console.log(bengaliAnswer)
+       
     };
 
 
@@ -542,7 +540,6 @@ console.log(selectedPrinter,bengaliAnswer)
             // // Add a new element to the array
             // const newElement = { question: text, english: engText, bangla: inputField2?.value, date, time };
             // storedArray.push(newElement);
-            // console.log(newElement)
 
             // setTranslationQuestions(storedArray)
 

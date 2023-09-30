@@ -13,7 +13,6 @@ function ProductDetails() {
     const url = window.location.href;
     const productCategory = url.split('/')[4];
 
-    console.log(Product, "product")
     const [selectedImage, setSelectedImage] = useState(null);
     const [selectedColorImage, setSelectedColorImage] = useState(null);
     const [selectedInstructionImage, setSelectedInstructionImage] = useState(null);
@@ -166,7 +165,7 @@ function ProductDetails() {
                                             key={index}
                                             src={`https://grozziie.zjweiting.com:8033/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${image}`}
                                             alt={`Image ${index + 1}`}
-                                            onClick={() => handleColorImageClick(`https://grozziie.zjweiting.com:8033/tht/mallProductImages/${image}`)}
+                                            onClick={() => handleColorImageClick(`https://grozziie.zjweiting.com:8033/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${image}`)}
                                             className="w-24 h-24 object-cover cursor-pointer mx-4 my-2 rounded-lg"
                                         />
                                     ))}
@@ -199,7 +198,7 @@ function ProductDetails() {
                                             key={index}
                                             src={`https://grozziie.zjweiting.com:8033/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${image}`}
                                             alt={`Image ${index + 1}`}
-                                            onClick={() => handleImageClick(`https://grozziie.zjweiting.com:8033/tht/mallProductImages/${image}`)}
+                                            onClick={() => handleImageClick(`https://grozziie.zjweiting.com:8033/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${image}`)}
                                             className="w-24 h-24 object-cover cursor-pointer mx-4 my-2 rounded-lg"
                                         />
                                     ))}
@@ -288,7 +287,7 @@ function ProductDetails() {
                                             key={index}
                                             src={`https://grozziie.zjweiting.com:8033/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${image}`}
                                             alt={`Image ${index + 1}`}
-                                            onClick={() => handleInstructionImageClick(`https://grozziie.zjweiting.com:8033/tht/mallProductImages/${image}`)}
+                                            onClick={() => handleInstructionImageClick(`https://grozziie.zjweiting.com:8033/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${image}`)}
                                             className="w-24 h-24 object-cover cursor-pointer mx-4 my-2 rounded-lg"
                                         />
                                     ))}

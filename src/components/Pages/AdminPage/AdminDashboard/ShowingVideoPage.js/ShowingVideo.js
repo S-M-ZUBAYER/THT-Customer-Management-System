@@ -18,7 +18,6 @@ function ShowingVideo() {
       .then(response => {
         // Handle the successful response here
         setAllVideo((response?.data)?.data);
-        console.log('Showing videos:', (response?.data)?.data);
       })
       .catch(error => {
         // Handle any errors here

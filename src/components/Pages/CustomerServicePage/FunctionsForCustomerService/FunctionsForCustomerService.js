@@ -6,7 +6,6 @@ import { AuthContext } from '../../../../context/UserContext';
 
 
 export const handleToCopy = (e, element, index) => {
-    console.log(element, e, index);
 
     const containerId = `allAnswer${index}`;
     const containerClass = document.getElementsByClassName("allColor");

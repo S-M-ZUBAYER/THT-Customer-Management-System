@@ -37,7 +37,6 @@
 // //       );
   
 // //       // Handle the response as needed
-// //       console.log('Message sent successfully:', response.data);
 // //       toast.success('Message sent successfully:', response.data);
   
 // //       // You can also update your chat state here if needed
@@ -69,7 +68,6 @@
 // //     setMessages([...messages, newMessageObj]);
 // //   };
 
-// //   // console.log(users ,setSelectedCustomer,selectedCustomer,setMessages,customerMessages)
 
 
 // //   return (

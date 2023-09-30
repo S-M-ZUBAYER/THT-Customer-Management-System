@@ -45,6 +45,7 @@ const Navbar = () => {
                       user?.isAdmin === "true" && <>
                         <li><Link to='/admin/users' className="sm:text-xs md:text-base text-gray-700">All Users</Link></li>
                         <li><Link to='/admin/questionAnswer' className="sm:text-xs md:text-base text-gray-700">Add Q & A</Link></li>
+                        <li><Link to='/admin/warehouse&cities' className="sm:text-xs md:text-base text-gray-700">Add warehouse&cities</Link></li>
                         <li><Link to='/admin/backgroundImg' className="sm:text-xs md:text-base text-gray-700">Add Icons</Link></li>
                         <li><Link to='/admin/icon' className="sm:text-xs md:text-base text-gray-700">Add BackGround Image</Link></li>
                         <li><Link to='/admin/mallProduct' className="sm:text-xs md:text-base text-gray-700">Add Mall Products</Link></li>

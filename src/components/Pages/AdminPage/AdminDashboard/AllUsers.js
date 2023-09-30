@@ -24,12 +24,12 @@ useEffect(() => {
       setLoading(false);
     })
     .catch(error => {
-      console.log(error);
+      console.error(error);
       setLoading(false);
     });
 }, []); 
 
-console.log(users)
+
 //create a function to delete a user from the frontend and database both side 
   const deleteUser = async (userId) => {
     try {
@@ -45,7 +45,6 @@ console.log(users)
     setEditingUser(user);
   };
 
-console.log(users)
 
   //create a function to update a user from the frontend and database both side 
   const updateUser = async (userId, editingUser) => {
@@ -71,16 +70,14 @@ console.log(users)
     
     try {
       const response = await axios.put(`https://grozziie.zjweiting.com:8033/tht/users/update/admin/${userId}`, isAdmin);
-      console.log(users)
       setUsers(users.map((user)=>{
-        console.log(users)
         if(user?.id===userId){
           user.isAdmin="true";
         }
         return user;
       }))
       
-      console.log(users)
+  
    
       
       response?.statusText && toast.success("Make admin successfully");

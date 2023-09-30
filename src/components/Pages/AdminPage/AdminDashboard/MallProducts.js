@@ -56,7 +56,6 @@ const AddMallProducts = () => {
         );
         // update products state with filtered products
         setMallProduct(filteredProducts);
-        console.log(mallProduct, filteredProducts)
     };
 
 
@@ -154,14 +153,12 @@ const AddMallProducts = () => {
     //     for (let i = 0; i < selectedVideos.length; i++) {
     //       formData.append('videos', selectedVideos[i]);
     //     }
-    //     console.log(formData);
     //     try {
     //       await axios.put(`https://grozziie.zjweiting.com:8033/tht/mallProducts/update/${product?.id}`, formData, {
     //         headers: {
     //           'Content-Type': 'multipart/form-data'
     //         }
     //       });
-    //       console.log('Product created successfully!');
     //       toast.success('Product created successfully!');
     //       // Reset form fields
     //       setProductName('');

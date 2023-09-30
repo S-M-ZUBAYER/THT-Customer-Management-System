@@ -155,7 +155,6 @@ const Register = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log("Click")
 
         const chatRegistration = {
             userName: name,
@@ -183,7 +182,6 @@ const Register = () => {
         };
 
         const form = event.target;
-        console.log("existing?")
 
         fetch('https://grozziie.zjweiting.com:8033/tht/check-user', {
             method: 'POST',
@@ -195,8 +193,6 @@ const Register = () => {
             .then((response) => response.json())
             .then((data) => {
                 const userExists = data.exists;
-                console.log(userExists);
-                console.log("over checker");
                 
 
                 if (userExists === false) {
@@ -235,7 +231,6 @@ const Register = () => {
                         .then(async (data) => {
                             if (data) {
                                 localStorage.setItem('user', JSON.stringify(user));
-                                console.log("over added");
                                 setUser(user);
                                 // setLoading(false);
                                 //         toast.success("Registration complete Successfully");
@@ -264,7 +259,6 @@ const Register = () => {
                                             designation: designation,
                                             country: country
                                         });
-                                        console.log(response?.data)
                                         setLoading(false);
                                         form.reset();
                                         navigate("/");

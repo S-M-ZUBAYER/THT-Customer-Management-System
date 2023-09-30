@@ -83,7 +83,6 @@ const updateUser = async (userId, editingUser) => {
  // extract the current date and time components
  const date = now.toLocaleDateString();
  const time = now.toLocaleTimeString();
- console.log(user?.email,question,answer,date,time)
       //load current user data from database
       fetch('https://grozziie.zjweiting.com:8033/tht/QandAnswers/add', {
           method: 'POST',

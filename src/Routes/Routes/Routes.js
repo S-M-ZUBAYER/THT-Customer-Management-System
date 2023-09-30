@@ -28,6 +28,8 @@ import AddBackgroundImg from "../../components/Pages/AdminPage/AdminDashboard/Ba
 import ShowBackgroundImg from "../../components/Pages/AdminPage/AdminDashboard/BackgroundImgPage/ShowBackgroundImg";
 import AddIconImg from "../../components/Pages/AdminPage/AdminDashboard/IconImgPage/AddIconImg";
 import ShowIconImg from "../../components/Pages/AdminPage/AdminDashboard/IconImgPage/ShowIconImg";
+import WarehouseAndCities from "../../components/Pages/AdminPage/AdminDashboard/Warehouse&Cities.js/WarehouseAndCities";
+import ShowCityList from "../../components/Pages/AdminPage/AdminDashboard/Warehouse&Cities.js/ShowCityList";
 
 
 export const routes = createBrowserRouter([
@@ -104,12 +106,20 @@ export const routes = createBrowserRouter([
                 element: <PrivateRoute><QandA></QandA></PrivateRoute>
             },
             {
+                path: "/admin/warehouse&cities",
+                element: <PrivateRoute><WarehouseAndCities></WarehouseAndCities></PrivateRoute>
+            },
+            {
                 path: "/admin/icon",
                 element: <PrivateRoute><AddIconImg></AddIconImg></PrivateRoute>
             },
             {
                 path: "/admin/icon/:name",
                 element: <PrivateRoute><ShowIconImg></ShowIconImg></PrivateRoute>
+            },
+            {
+                path: "/admin/cityName/:name",
+                element: <PrivateRoute><ShowCityList></ShowCityList></PrivateRoute>
             },
             {
                 path: "/admin/backgroundImg",

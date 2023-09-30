@@ -125,7 +125,7 @@ useEffect(() => {
           <input
             type="number"
             id="height"
-            className="border-2 ml-3"
+            className="border-2 ml-3 bg-white"
             value={height}
             onChange={handleHeightChange}
           />
@@ -136,7 +136,7 @@ useEffect(() => {
             type="number"
             id="width"
             value={width}
-            className="border-2 ml-3"
+            className="border-2 ml-3 bg-white"
             onChange={handleWidthChange}
           />
         </div>

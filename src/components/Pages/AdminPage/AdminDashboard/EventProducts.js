@@ -48,13 +48,9 @@ useEffect(() => {
     );
     // update products state with filtered products
     setEventProduct(filteredProducts);
-    console.log(eventProduct, filteredProducts)
 };
 
-    const handleToEdit = () => {
-        console.log("edit")
-
-    }
+   
 
 
      //create a function to delete  any specific product

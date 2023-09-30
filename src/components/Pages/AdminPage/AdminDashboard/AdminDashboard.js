@@ -66,7 +66,7 @@ const AdminDashboard = () => {
       setUserLoading(false)
     })
     .catch(error => {
-      console.log(error);
+      console.error(error);
     });
 
   // use useEffect to load the all mall product from data base
