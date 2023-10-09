@@ -27,7 +27,7 @@ function WarehouseAndCities() {
 
 
   useEffect(() => {
-    fetch('http://localhost:2000/tht/warehouseNameList')
+    fetch('https://grozziie.zjweiting.com:8033/tht/warehouseNameList')
       .then(response => response.json())
       .then(data => {
 
@@ -35,12 +35,7 @@ function WarehouseAndCities() {
 
       });
   }, []);
-  const handleImageChange = (e) => {
-    const files = e.target.files;
-    setSelectedImages(files);
-    toast.success("Icon has already prepare to store")
-  }
-
+  
 
 
   // Function to handle changes in the city name input field
@@ -55,7 +50,7 @@ function WarehouseAndCities() {
     event.preventDefault();
 
     axios
-      .post('http://localhost:2000/tht/cities/add', { cityName, warehouseName: selectedWarehouse })
+      .post('https://grozziie.zjweiting.com:8033/tht/cities/add', { cityName, warehouseName: selectedWarehouse })
       .then((res) => {
         if (res.data.status === "success") {
           toast.success("City Name uploaded successfully");

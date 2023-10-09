@@ -15,7 +15,7 @@ const AddWarehouseName = ({allWarehouseNameList, setAllWarehouseNameList}) => {
   const handleAddWarehouse = () => {
     if (warehouseName.trim() !== '') {
       setAllWarehouseNameList([...allWarehouseNameList,warehouseName]);
-      axios.post('http://localhost:2000/tht/warehouseName/add', {
+      axios.post('https://grozziie.zjweiting.com:8033/tht/warehouseName/add', {
         warehouseName: warehouseName,
       })
       .then((response) => {

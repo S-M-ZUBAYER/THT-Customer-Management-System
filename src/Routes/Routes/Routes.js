@@ -30,6 +30,9 @@ import AddIconImg from "../../components/Pages/AdminPage/AdminDashboard/IconImgP
 import ShowIconImg from "../../components/Pages/AdminPage/AdminDashboard/IconImgPage/ShowIconImg";
 import WarehouseAndCities from "../../components/Pages/AdminPage/AdminDashboard/Warehouse&Cities.js/WarehouseAndCities";
 import ShowCityList from "../../components/Pages/AdminPage/AdminDashboard/Warehouse&Cities.js/ShowCityList";
+import ModelHightWidth from "../../components/Pages/AdminPage/AdminDashboard/ModelHightWidth/ModelHightWidth";
+import ShowHightWidth from "../../components/Pages/AdminPage/AdminDashboard/ModelHightWidth/ShowHightWidth";
+import AutomaticChat from "../../components/Pages/CustomerServicePage/AutomaticChat";
 
 
 export const routes = createBrowserRouter([
@@ -48,7 +51,7 @@ export const routes = createBrowserRouter([
             },
             {
                 path: "/customer-1",
-                element: <PrivateRoute><CustomerService_1></CustomerService_1></PrivateRoute>
+                element: <PrivateRoute><AutomaticChat></AutomaticChat></PrivateRoute>
             },
             {
                 path: "/customer-2",
@@ -82,6 +85,7 @@ export const routes = createBrowserRouter([
                 path: "chat",
                 element: <Chat></Chat>
             },
+          
             {
                 path: "register",
                 element: <Register></Register>
@@ -108,6 +112,14 @@ export const routes = createBrowserRouter([
             {
                 path: "/admin/warehouse&cities",
                 element: <PrivateRoute><WarehouseAndCities></WarehouseAndCities></PrivateRoute>
+            },
+            {
+                path: "/admin/modelHightWidth",
+                element: <PrivateRoute><ModelHightWidth></ModelHightWidth></PrivateRoute>
+            },
+            {
+                path: "/admin/modelInfo/:modelNo",
+                element: <PrivateRoute><ShowHightWidth></ShowHightWidth></PrivateRoute>
             },
             {
                 path: "/admin/icon",

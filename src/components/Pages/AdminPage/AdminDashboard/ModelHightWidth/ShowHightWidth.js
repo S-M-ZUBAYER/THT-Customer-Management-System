@@ -8,10 +8,11 @@ import { AuthContext } from '../../../../../context/UserContext';
 import DisplaySpinner from '../../../../Shared/Loading/DisplaySpinner';
 
 
-const ShowCityList = () => {
-    const [allCities, setAllCities] = useState([]);
+
+const ShowHightWidth = () => {
+    const [allModelInfo, setAllModelInfo] = useState([]);
     const location = useLocation();
-    const warehouseName = location.pathname.split('/').pop().replace(/%20/g, ' ');
+    const modelNo = location.pathname.split('/').pop().replace(/%20/g, ' ');
 
     const { loading, setLoading } = useContext(AuthContext)
 
@@ -19,19 +20,19 @@ const ShowCityList = () => {
 
     useEffect(() => {
         // Define the URL for your backend route with the categoryName parameter
-        const apiUrl = `https://grozziie.zjweiting.com:8033/tht/cityNameList/${warehouseName}`;
+        const apiUrl = ` https://grozziie.zjweiting.com:8033/tht/modelInfo/${modelNo}`;
 
         // Make a GET request to fetch data for the specified category
         axios.get(apiUrl)
             .then((response) => {
-                setAllCities(response.data);
+                setAllModelInfo(response.data);
                 setLoading(false);
             })
             .catch((error) => {
                 console.error('Error fetching data:', error);
                 setLoading(false);
             });
-    }, [warehouseName]);
+    }, [modelNo]);
     //create a function to delete icon from the frontend and database both side 
     const handleToDelete = async (id) => {
         const confirmed = window.confirm('Are you sure you want to delete all questions?');
@@ -39,9 +40,9 @@ const ShowCityList = () => {
         return; 
       }
         try {
-            await axios.delete(`https://grozziie.zjweiting.com:8033/tht/city/delete/${id}`);
-            toast.success('city deleted successfully');
-            setAllCities(allCities.filter((city) => city.id !== id));
+            await axios.delete(`https://grozziie.zjweiting.com:8033/tht/modelInfo/delete/${id}`);
+            toast.success('Model Information deleted successfully');
+            setAllModelInfo(allModelInfo.filter((city) => city.id !== id));
         } catch (error) {
             console.error('Error deleting city:', error);
             toast.error('Failed to delete city');
@@ -54,31 +55,41 @@ const ShowCityList = () => {
     return (
         <div className=" min-h-screen">
             <h1 className="text-3xl font-bold text-yellow-400 my-10">
-                Available Cities for <span className="text-teal-400">{warehouseName}</span> warehouse
+                Available Hight Width for <span className="text-teal-400">{modelNo}</span> Model
             </h1>
             {
                 loading ?
                     <DisplaySpinner></DisplaySpinner>
                     :
-                    allCities && allCities?.length === 0 ? <p className="text-2xl font-semibold text-amber-500">No Cities Available for this warehouse !!!</p>
+                    allModelInfo && allModelInfo?.length === 0 ? <p className="text-2xl font-semibold text-amber-500">No Model Information Available For This Model !!!</p>
                         :
                         <div className="grid grid-cols-1 mx-1 md:mx-5  gap-4 text-center">
                             {
                                    <table className="border-collapse w-full">
                                    <thead>
                                      <tr className="bg-gradient-to-r from-teal-400 to-purple-400">
-                                       <th className="border border-gray-400 px-4 py-2 text-white">City Name</th>
+                                       <th className="border border-gray-400 px-4 py-2 text-white">Model Name</th>
+                                       <th className="border border-gray-400 px-4 py-2 text-white">Default Hight</th>
+                                       <th className="border border-gray-400 px-4 py-2 text-white">Default Width</th>
+                                       <th className="border border-gray-400 px-4 py-2 text-white">Max Hight</th>
+                                       <th className="border border-gray-400 px-4 py-2 text-white">Max Width</th>
+                                       <th className="border border-gray-400 px-4 py-2 text-white">command</th>
                                        <th className="border border-gray-400 px-4 py-2 text-white">Actions</th>
                                      </tr>
                                    </thead>
                                    <tbody>
-                                     {allCities && allCities.length > 0 ? (
-                                       allCities.map((element) => (
+                                     {allModelInfo && allModelInfo.length > 0 ? (
+                                       allModelInfo.map((element) => (
                                          <tr
                                            className="border hover:bg-gradient-to-r hover:from-blue-100 hover:to-purple-100"
                                            key={element.id}
                                          >
-                                           <td className="px-4 py-2 border">{element.cityName}</td>
+                                           <td className="px-4 py-2 border">{element.modelNo}</td>
+                                           <td className="px-4 py-2 border">{element.defaultHight}</td>
+                                           <td className="px-4 py-2 border">{element.defaultWidth}</td>
+                                           <td className="px-4 py-2 border">{element.maxHight}</td>
+                                           <td className="px-4 py-2 border">{element.maxWidth}</td>
+                                           <td className="px-4 py-2 border">{element.command}</td>
                                            <td className="px-4 py-2 border-r flex justify-center">
                                              <MdDelete
                                                onClick={() => handleToDelete(element.id)}
@@ -90,7 +101,7 @@ const ShowCityList = () => {
                                      ) : (
                                        <tr>
                                          <td colSpan="2" className="text-center py-4">
-                                           No cities found.
+                                           No Model information found.
                                          </td>
                                        </tr>
                                      )}
@@ -110,4 +121,4 @@ const ShowCityList = () => {
     );
 };
 
-export default ShowCityList;
+export default ShowHightWidth;

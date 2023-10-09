@@ -17,7 +17,10 @@ root.render(
     <UserContext>
       <ProductContextProvider>
         <Toaster></Toaster>
-    <App />
+       
+      <App />    
+       
+    
     </ProductContextProvider>
     </UserContext>
   </React.StrictMode>

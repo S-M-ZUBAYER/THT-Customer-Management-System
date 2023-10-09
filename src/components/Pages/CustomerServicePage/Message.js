@@ -3,34 +3,16 @@ import UserContext, { AuthContext } from '../../../context/UserContext';
 import axios from 'axios';
 import { AiOutlineArrowUp } from 'react-icons/ai';
 import { HiChevronDoubleUp } from 'react-icons/hi2';
-import { connectWebSocket, disconnectWebSocket, subscribeToChat } from '../Chat/WebSocketService';
 import toast from 'react-hot-toast';
 
-const Message = ({ allChat,selectedCustomerChat, showHistory,SetShowHistory,setAllChat,}) => {
+const Message = ({ allChat,selectedCustomerChat, showHistory,SetShowHistory,setAllChat,sendMessage}) => {
 
 
   const [userIdAllChat,SetUserIdAllChat]=useState([]);
-  const { user } = useContext(AuthContext)
+  const { user,chattingUser } = useContext(AuthContext)
 
 
-  // <-------web socket
 
-//   useEffect(() => {
-//     // Establish a WebSocket connection when the component mounts
-//     connectWebSocket();
-//     // Replace 'user.id' with your actual user ID or identifier
-//     subscribeToChat(selectedCustomerChat?.chatId, (newMessage) => {
-//         setAllChat((prevMessages) => [...prevMessages, newMessage]);
-//     });
-
-//     // Clean up the WebSocket connection when the component unmounts
-//     return () => {
-//       disconnectWebSocket();
-//     };
-//   }, [user.id]);
-
-
-    //<-------web socket
 
 
     
@@ -142,7 +124,7 @@ const Message = ({ allChat,selectedCustomerChat, showHistory,SetShowHistory,setA
                       <img
                         className="w-6 h-6 rounded-full"
                         // src="https://media.istockphoto.com/id/1244527145/photo/happy-smiling-woman-working-in-call-center.jpg?s=612x612&w=0&k=20&c=3q7ImqhEDOdYptyaZLYmjqtJgMBoY42lGDkzUi0NGBo="
-                        src={user?.image}
+                        src={user?.image ? user?.image : "https://img.freepik.com/premium-vector/anonymous-user-circle-icon-vector-illustration-flat-style-with-long-shadow_520826-1931.jpg" }
                         alt="User Avatar"
                       />
                     </div>

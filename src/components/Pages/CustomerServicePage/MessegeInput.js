@@ -1,26 +1,159 @@
 
 
 
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { FaFileImage } from 'react-icons/fa';
 import { AiOutlineSend } from 'react-icons/ai';
 import { MdOndemandVideo } from 'react-icons/md';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { AuthContext } from '../../../context/UserContext';
 // import {  sendMessage } from '../Chat/WebSocketService';
+import { Client } from '@stomp/stompjs';
 
 const MessageInput = ({
   setAllChat,
   selectedCustomerChat,
   allChat,
-  sendMessage
+  
 }) => {
   const [message, setMessage] = useState('');
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [fileType, setFileType] = useState(null); // Default to 'image'
 
+  const {chattingUser}=useContext(AuthContext);
 
-  console.log(sendMessage, "function")
+
+
+
+   // <---------------------------Final Web Socket------------------------------------>
+
+   const [connected, setConnected] = useState(false);
+
+   const stompClient = new Client({
+       brokerURL: 'wss://grozziie.zjweiting.com:3091/CustomerService-Chat/websocket',
+   });
+
+   useEffect(() => {
+       
+       const connect = () => {
+           stompClient.onConnect = (frame) => {
+               setConnected(true);
+               console.log('Connected: ' + frame);
+               stompClient.subscribe(`/topic/${chattingUser?.userId}`, (message) => {
+                   const newSMS=JSON.parse(message.body);
+                   showGreeting(message.body,newSMS);
+           
+               });
+           };
+
+           stompClient.onWebSocketError = (error) => {
+               console.error('Error with websocket', error);
+               // Handle error here, you can update state or show an error message to the user.
+           };
+
+           stompClient.activate();
+       };
+
+       // Try to connect
+       connect();
+
+       // Retry every 5 seconds if not connected
+       const retryInterval = setInterval(() => {
+           if (!connected) {
+               console.log('Reconnecting to WebSocket...');
+               connect();
+           } else {
+               clearInterval(retryInterval);
+           }
+       }, 5000);
+
+       // Cleanup on unmount
+       return () => {
+           clearInterval(retryInterval);
+           stompClient.deactivate();
+       };
+   }, [connected]);
+
+   const showGreeting = (message,sms) => {
+       // Handle received messages here
+       console.log('Received message:', message);
+       console.log(allChat,"1",sms,"2")
+       setAllChat((prevChat) => [...prevChat, sms]);
+
+   };
+
+   // const sendMessage = async (message) => {
+   //     console.log(message,"from sms")
+   //     if (connected) {
+   //         const response = await new Promise((resolve) => {
+   //             stompClient.publish({
+   //                 destination: '/app/messages',
+   //                 body: JSON.stringify(message),
+   //             }, {}, (response) => {
+   //                 resolve(response); // Resolve the Promise with the response
+   //                 console.log(response)
+   //             });
+   //         });
+
+   //         console.log('Message sent. Server response:', response);
+   //         // Handle the response here
+   //     } else {
+   //         console.error('STOMP client is not connected.');
+   //         // You can show an error message to the user here.
+   //     }
+   // };
+
+//for try..........
+   
+   if (stompClient.connected) {
+       toast.success("stomp Connected")
+   }
+   if (!stompClient.connected) {
+       toast.error("try to connect again")
+       stompClient.onConnect = (frame) => {
+           // Connection established
+           setConnected(true);
+           console.log('Connected: ' + frame);
+           toast.success("connected again")
+         };
+   }
+
+//...............
+
+
+   const sendMessage = async (message) => {
+       if (stompClient.connected) {
+         const response = await new Promise((resolve) => {
+           stompClient.publish({
+             destination: '/app/messages',
+             body: JSON.stringify(message),
+           }, {}, (response) => {
+             resolve(response); // Resolve the Promise with the response
+             console.log(response);
+           });
+         });
+     
+         console.log('Message sent. Server response:', response);
+         // Handle the response here
+       } else {
+         console.error('STOMP client is not connected.');
+         // You can show an error message to the user here.
+       }
+     };
+     
+ 
+
+   // <---------------------------Final Web Socket------------------------------------>
+    
+
+ 
+   
+//webSocket----------------->
+
+
+
+
 
   const handleFileChange = (e) => {
     const files = e.target.files;
@@ -50,7 +183,7 @@ const MessageInput = ({
     setSelectedFiles(updatedFiles);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit =async (e) => {
     e.preventDefault();
 
     if (message.trim() !== '' || selectedFiles.length > 0) {
@@ -63,24 +196,21 @@ const MessageInput = ({
           chatId: selectedCustomerChat?.chatId,
           sentBy: selectedCustomerChat?.customerServiceId,
           sentTo: selectedCustomerChat?.userId,
-          sentId: "66",
+          sentId: "S M Zubayer",
           message: message,
           msgType: "text",
           timestmp: getCurrentTime(),
         };
         allMessages.push(textMessage);
-        sendMessage(textMessage);
+        sendMessage(textMessage)
         // try {
         //   const response = await axios.post(
         //     'https://grozziie.zjweiting.com:3091/CustomerService-Chat/api/dev/messages',
         //     allMessages[0]
         //   );
 
-        //   // sendMessage(allMessages, 'ws://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/websocket/app/messages');
-
-        //   // Handle the response as needed
         //   if (response?.status === 201) {
-        //     sendMessage(textMessage);
+        //     sendMessage(textMessage)
         //     toast.success("Message(s) sent successfully");
         //   }
 
@@ -91,7 +221,7 @@ const MessageInput = ({
         //   toast.error('Error sending message(s):', error)
         //   console.error('Error sending message(s):', error);
         // }
-        console.log(allMessages, "text trial")
+        console.log(allMessages,"text trial")
       }
 
       // If there are selected files (images or videos), add them as messages
@@ -114,28 +244,28 @@ const MessageInput = ({
 
 
           console.log(allMessages[0], "Image trail")
+          
 
+          try {
+            console.log(allMessages, "messages all post")
+            const response = await axios.post(
+              'https://grozziie.zjweiting.com:3091/CustomerService-Chat/api/dev/messages',
+              allMessages[0]
+            );
 
-          // try {
-          //   console.log(allMessages, "messages all post")
-          //   const response = await axios.post(
-          //     'https://grozziie.zjweiting.com:3091/CustomerService-Chat/api/dev/messages',
-          //     allMessages[0]
-          //   );
+            // Handle the response as needed
+            if (response?.status === 201) {
 
-          //   // Handle the response as needed
-          //   if (response?.status === 201) {
+              toast.success("Message(s) sent successfully");
+            }
 
-          //     toast.success("Message(s) sent successfully");
-          //   }
-
-          //   // Update the chat state with all messages
-          //   setAllChat([...allChat, ...allMessages]);
-          // } catch (error) {
-          //   // Handle errors from the API request
-          //   toast.error('Error sending message(s):', error)
-          //   console.error('Error sending message(s):', error);
-          // }
+            // Update the chat state with all messages
+            setAllChat([...allChat, ...allMessages]);
+          } catch (error) {
+            // Handle errors from the API request
+            toast.error('Error sending message(s):', error)
+            console.error('Error sending message(s):', error);
+          }
 
           // Clear the 'text' and 'selectedFiles' variables if needed
           setMessage('');
@@ -178,9 +308,6 @@ const MessageInput = ({
       handleSubmit(e);
     }
   };
-
-
-
 
   return (
     <div className=" absolute rounded-b-lg z-40 bg-white pt-1 w-full bottom-0 ">

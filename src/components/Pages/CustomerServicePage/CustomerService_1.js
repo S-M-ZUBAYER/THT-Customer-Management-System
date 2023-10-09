@@ -1,55 +1,157 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 
-
-//<-----web socket
-
-// import { connectWebSocket, disconnectWebSocket, subscribeToChat } from '../Chat/WebSocketService';
-
-// ------>web socket
-
 import CustomerServicePart from './CustomerServicePart';
 import { AuthContext } from '../../../context/UserContext';
 import axios from 'axios';
-import MessageInput from '../Chat/MessegeInput';
+import { Client } from '@stomp/stompjs';
+
 import Message from './Message';
+import MessageInput from './MessegeInput';
+import toast from 'react-hot-toast';
+import { SiSocketdotio } from 'react-icons/si';
+import BtnSpinner from '../../Shared/Loading/BtnSpinner';
+
+
+
+
 
 const CustomerService_1 = () => {
 
     const { user, chattingUser } = useContext(AuthContext);
     const [currentUser, setCurrentUser] = useState(null)
-    const [selectedCustomerChat, setSelectedCustomerChat] = useState(null)
+    const [selectedCustomerChat, setSelectedCustomerChat] = useState()
     const [currentCustomer, setCurrentCustomer] = useState([]);
     const [allChat, setAllChat] = useState([])
-    const [showHistory,SetShowHistory]=useState(false);
+    const [showHistory, SetShowHistory] = useState(false);
     const scrollableDivRef = useRef(null);
 
-    // //<-------web socket
+
+    // <---------------------------Final Web Socket------------------------------------>
+
+    const [connected, setConnected] = useState(false);
+
+    const stompClient = new Client({
+        brokerURL: 'wss://grozziie.zjweiting.com:3091/CustomerService-Chat/websocket',
+    });
+
+    useEffect(() => {
+        
+        const connect = () => {
+            stompClient.onConnect = (frame) => {
+                setConnected(true);
+                console.log('Connected: ' + frame);
+                stompClient.subscribe(`/topic/${chattingUser?.userId}`, (message) => {
+                    const newSMS=JSON.parse(message.body);
+                    showGreeting(message.body,newSMS);
+            
+                });
+            };
+
+            stompClient.onWebSocketError = (error) => {
+                console.error('Error with websocket', error);
+                // Handle error here, you can update state or show an error message to the user.
+            };
+
+            stompClient.activate();
+        };
+
+        // Try to connect
+        connect();
+
+        // Retry every 5 seconds if not connected
+        const retryInterval = setInterval(() => {
+            if (!connected) {
+                console.log('Reconnecting to WebSocket...');
+                connect();
+            } else {
+                clearInterval(retryInterval);
+            }
+        }, 5000);
+
+        // Cleanup on unmount
+        return () => {
+            clearInterval(retryInterval);
+            stompClient.deactivate();
+        };
+    }, [connected]);
+
+    const showGreeting = (message,sms) => {
+        // Handle received messages here
+        console.log('Received message:', message);
+        console.log(allChat,"1",sms,"2")
+        setAllChat((prevChat) => [...prevChat, sms]);
+
+    };
+
+    // const sendMessage = async (message) => {
+    //     console.log(message,"from sms")
+    //     if (connected) {
+    //         const response = await new Promise((resolve) => {
+    //             stompClient.publish({
+    //                 destination: '/app/messages',
+    //                 body: JSON.stringify(message),
+    //             }, {}, (response) => {
+    //                 resolve(response); // Resolve the Promise with the response
+    //                 console.log(response)
+    //             });
+    //         });
+
+    //         console.log('Message sent. Server response:', response);
+    //         // Handle the response here
+    //     } else {
+    //         console.error('STOMP client is not connected.');
+    //         // You can show an error message to the user here.
+    //     }
+    // };
+
+//for try..........
+    
+    if (stompClient.connected) {
+        toast.success("stomp Connected")
+    }
+    if (!stompClient.connected) {
+        toast.error("try to connect again")
+        stompClient.onConnect = (frame) => {
+            // Connection established
+            setConnected(true);
+            console.log('Connected: ' + frame);
+            toast.success("connected again")
+          };
+    }
+
+//...............
 
 
-    // const [receivedMessage, setReceivedMessage] = useState('');
-    // const [sendMessage, setSendMessage] = useState('');
-
-    // useEffect(() => {
-    //     // Establish a WebSocket connection when the component mounts
-    //     connectWebSocket();
-
-    //     // Subscribe to a topic (replace 'userId' with your actual user ID)
-    //     subscribeToChat(selectedCustomerChat?.userId, (newMessage) => {
-    //         setAllChat((prevMessages) => [...prevMessages, newMessage]);
-    //     });
-
-    //     // Clean up the WebSocket connection when the component unmounts
-    //     return () => {
-    //       disconnectWebSocket();
-    //     };
-    //   }, []);
-
-
-    //------->web socket
-
-
- 
+    const sendMessage = async (message) => {
+        if (stompClient.connected) {
+          const response = await new Promise((resolve) => {
+            stompClient.publish({
+              destination: '/app/messages',
+              body: JSON.stringify(message),
+            }, {}, (response) => {
+              resolve(response); // Resolve the Promise with the response
+              console.log(response);
+            });
+          });
+      
+          console.log('Message sent. Server response:', response);
+          // Handle the response here
+        } else {
+          console.error('STOMP client is not connected.');
+          // You can show an error message to the user here.
+        }
+      };
+      
   
+
+    // <---------------------------Final Web Socket------------------------------------>
+
+
+
+
+
+
+
 
 
     const fetchUserByEmail = async () => {
@@ -90,7 +192,7 @@ const CustomerService_1 = () => {
         }
     };
 
-    
+
     const fetchUserByUserId = async () => {
         try {
             const response = await axios.get(`https://grozziie.zjweiting.com:3091/CustomerService-Chat/api/dev/chatlist/customer_service/${chattingUser?.userId}`);
@@ -99,12 +201,12 @@ const CustomerService_1 = () => {
                 // Request was successful
 
                 const userData = response.data;
-               const  updateCustomerData=(userData.sort((a, b) => {
+                const updateCustomerData = (userData.sort((a, b) => {
                     const timestampA = new Date(a.timestamp);
                     const timestampB = new Date(b.timestamp);
                     return timestampB - timestampA;
-                  }));
-                  setCurrentCustomer(getUniqueCustomers(updateCustomerData))
+                }));
+                setCurrentCustomer(getUniqueCustomers(updateCustomerData))
             } else {
                 // Handle unexpected status codes
                 console.error('Unexpected status code:', response.status);
@@ -124,7 +226,7 @@ const CustomerService_1 = () => {
 
 
 
-  
+
     useEffect(() => {
         // Scroll to the bottom when component mounts or when content changes
         scrollableDivRef.current.scrollTop = scrollableDivRef.current.scrollHeight;
@@ -135,20 +237,20 @@ const CustomerService_1 = () => {
 
     function getUniqueCustomers(currentCustomer) {
         const uniqueCustomers = currentCustomer.reduce((accumulator, customer) => {
-          const userId = customer.userId;
-          if (!accumulator.has(userId)) {
-            accumulator.set(userId, customer);
-          }
-          return accumulator;
+            const userId = customer.userId;
+            if (!accumulator.has(userId)) {
+                accumulator.set(userId, customer);
+            }
+            return accumulator;
         }, new Map());
-    
-        return (Array.from(uniqueCustomers.values()));
-      }
-    
-     
-   
 
- 
+        return (Array.from(uniqueCustomers.values()));
+    }
+
+
+
+
+
 
     const handleToSelectCustomer = (customer) => {
         setCurrentUser(customer);
@@ -156,59 +258,9 @@ const CustomerService_1 = () => {
         // connectWebSocket();
         // setSelectedCustomerChat((chatSms.filter(eachChat => eachChat.myId === customer?.id))[0])
         setSelectedCustomerChat(customer)
-    }
-
-    
-      
-      
- ;
+    };
 
 
-
-    //<---------web socket
-
-
-    // const serverUrl = 'http://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/websocket';
-    // const ws = new SockJS(serverUrl);
-    // const stompClient = Stomp.over(ws);
-
-    // function connect() {
-    //     stompClient.connect({}, () => {
-    //         console.log('WebSocket connected');
-    //     });
-    // }
-
-    // function disconnect() {
-    //     if (stompClient.connected) {
-    //         stompClient.disconnect(() => {
-    //             console.log('WebSocket disconnected');
-    //         });
-    //     }
-    // }
-
-
-    // useEffect(() => {
-    //     // Connect to WebSocket when the component mounts
-    //     connect();
-
-    //     // Subscribe to the topic where you expect to receive messages
-    //     stompClient.subscribe('/topic/{UserId}', (message) => {
-    //         setReceivedMessage(message.body);
-    //     });
-
-    //     return () => {
-    //         // Disconnect from WebSocket when the component unmounts
-    //         disconnect();
-    //     };
-    // }, []);
-
-    // const handleSendMessage = () => {
-    //     // Send a message to the specified destination
-    //     stompClient.send('/app/messages', {}, JSON.stringify({ message: sendMessage }));
-    // };
-
-
-    //-------->web socket
 
 
 
@@ -226,11 +278,19 @@ const CustomerService_1 = () => {
 
                 <div className=" h-[80vh] shadow-lg rounded-lg py-5 md:px-10">
 
-                    <div className="flex items-center justify-start">
-                        <img className="h-8 w-8 ml-3 rounded-full  shadow-slate-900" src={user?.image} alt="" />
-                        <h1 className=" font-semibold ml-3">
-                            {user?.name}
-                        </h1>
+                    <div className="flex items-center justify-between">
+                        <div className="flex justify-start">
+                            <img className="h-8 w-8 ml-3 rounded-full  shadow-slate-900" src={user?.image ? user?.image : "https://img.freepik.com/premium-vector/anonymous-user-circle-icon-vector-illustration-flat-style-with-long-shadow_520826-1931.jpg"} alt="" />
+                            <h1 className=" font-semibold ml-3">
+                                {user?.name}
+                            </h1>
+                        </div>
+                        <div className=" bg-red-900 rounded-full">
+                            { connected ?
+                               <SiSocketdotio className="bg-green-400 text-lg rounded-full"></SiSocketdotio> :<BtnSpinner></BtnSpinner>
+                            }
+                            </div>
+
                     </div>
 
                     <div className="mt-6 mx-2 ">
@@ -240,7 +300,7 @@ const CustomerService_1 = () => {
                     </div>
 
                     <div className=" overflow-y-scroll h-[60vh]">
-                       
+
 
                         {
                             currentCustomer.map((element, index) => {
@@ -248,11 +308,11 @@ const CustomerService_1 = () => {
                                     <div onClick={() => handleToSelectCustomer(element)} className="flex justify-between items-center mx-1 my-1">
                                         <div className="text-start">
                                             {/* <p>ID: {element?.chatId}</p> */}
-                                           
+
                                             <p cl>User Id: {element?.userId}</p>
                                             <p>Chat Id: {element?.chatId}</p>
-                                               
-                                            
+
+
                                         </div>
                                         <div className="">
                                             {element.status === "running" ?
@@ -306,12 +366,13 @@ const CustomerService_1 = () => {
 
                     </div>
 
-                    
+
                     <MessageInput
                         selectedCustomerChat={selectedCustomerChat}
                         setSelectedCustomerChat={setSelectedCustomerChat}
                         allChat={allChat}
                         setAllChat={setAllChat}
+                        sendMessage={sendMessage}
                     ></MessageInput>
 
                 </div>
