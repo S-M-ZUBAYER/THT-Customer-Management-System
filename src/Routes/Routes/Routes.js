@@ -23,7 +23,6 @@ import Invoice from "../../components/Pages/AdminPage/AdminDashboard/ProductDeta
 import AdminDashboard from "../../components/Pages/AdminPage/AdminDashboard/AdminDashboard";
 import Translator from "../../components/Pages/Translator/Translator";
 import Detect from "../../components/Pages/Detect/Detect";
-import Chat from "../../components/Pages/Chat/Chat";
 import AddBackgroundImg from "../../components/Pages/AdminPage/AdminDashboard/BackgroundImgPage/AddBackgroundImg";
 import ShowBackgroundImg from "../../components/Pages/AdminPage/AdminDashboard/BackgroundImgPage/ShowBackgroundImg";
 import AddIconImg from "../../components/Pages/AdminPage/AdminDashboard/IconImgPage/AddIconImg";
@@ -81,10 +80,7 @@ export const routes = createBrowserRouter([
                 path: "login",
                 element: <Login></Login>
             },
-            {
-                path: "chat",
-                element: <Chat></Chat>
-            },
+           
           
             {
                 path: "register",

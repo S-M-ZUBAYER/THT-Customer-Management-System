@@ -4,13 +4,16 @@ import axios from 'axios';
 import { AiOutlineArrowUp } from 'react-icons/ai';
 import { HiChevronDoubleUp } from 'react-icons/hi2';
 import toast from 'react-hot-toast';
+import BtnSpinner from '../Translator/BtnSpinner';
+import DisplaySpinner from '../../Shared/Loading/DisplaySpinner';
+import ShowChatHistory from './ShowChatHistory';
 
-const Message = ({ allChat,selectedCustomerChat, showHistory,SetShowHistory,setAllChat,sendMessage}) => {
+const Message = ({ allChat,selectedCustomerChat, showHistory,SetShowHistory,setAllChat,sendMessage,Loading}) => {
 
 
   const [userIdAllChat,SetUserIdAllChat]=useState([]);
   const { user,chattingUser } = useContext(AuthContext)
-
+const [historyLoading,setHistoryLoading]=useState(false);
 
 
 
@@ -19,6 +22,7 @@ const Message = ({ allChat,selectedCustomerChat, showHistory,SetShowHistory,setA
 
     const handleToShowHistory = () => {
       SetShowHistory(!showHistory);
+     
     
     };
     
@@ -26,19 +30,23 @@ const Message = ({ allChat,selectedCustomerChat, showHistory,SetShowHistory,setA
       // Fetch user data when showHistory is true and userId changes
       if (showHistory) {
         const fetchUserByUserId = async () => {
+          setHistoryLoading(true);
           try {
-            const response = await axios.get(`https://grozziie.zjweiting.com:3091/CustomerService-Chat/api/dev/messages/${selectedCustomerChat?.userId}`);
+            // const response = await axios.get(`https://grozziie.zjweiting.com:3091/CustomerService-Chat/api/dev/messages/${selectedCustomerChat?.userId}`);
+            const response = await axios.get(`https://grozziie.zjweiting.com:3091/CustomerService-Chat/api/dev/messages/userMessages/${selectedCustomerChat?.userId}`);
             if (response.status === 200) {
-              const userData = response.data;
-              SetUserIdAllChat(userData);
+              SetUserIdAllChat(response.data?.filter(data=>data?.chatId!==selectedCustomerChat?.chatId));
+              setHistoryLoading(false);
               toast.success("click show the chat history");
             } else {
               // Handle unexpected status codes
               console.error('Unexpected status code:', response.status);
+              setHistoryLoading(false);
             }
           } catch (error) {
             // Handle network or other errors
             console.error('Error fetching user data:', error);
+            setHistoryLoading(false);
           }
         };
     
@@ -47,17 +55,26 @@ const Message = ({ allChat,selectedCustomerChat, showHistory,SetShowHistory,setA
     }, [selectedCustomerChat?.userId, showHistory]); // Include userId and showHistory in the dependency array
     
     
-    
+    console.log(userIdAllChat,"chat without last chat id")
     
 
   return (
     <div className="mb-10">
+      {
+       showHistory ?( historyLoading? <BtnSpinner></BtnSpinner> :userIdAllChat && userIdAllChat?.length>0 ?
+        <ShowChatHistory
+        userIdAllChat={userIdAllChat}
+        customerUserId={selectedCustomerChat?.userId}
+        ></ShowChatHistory>
+        : <div className=" text-lg text-center font-semibold text-orange-400">No sms available</div> ):""
+      }
       {selectedCustomerChat && 
       <div onClick={handleToShowHistory} className="flex justify-center cursor-pointer">
       < HiChevronDoubleUp className="text-green-400 font-bold text-3xl" />
     </div>
       }
-      {allChat &&
+      
+      {Loading ? <DisplaySpinner></DisplaySpinner> : allChat &&
         allChat.map((chat, index) => {
        
           return (

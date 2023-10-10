@@ -15,6 +15,7 @@ import BtnSpinner from '../../Shared/Loading/BtnSpinner';
 
 
 
+
 const CustomerService_1 = () => {
 
     const { user, chattingUser } = useContext(AuthContext);
@@ -24,6 +25,7 @@ const CustomerService_1 = () => {
     const [allChat, setAllChat] = useState([])
     const [showHistory, SetShowHistory] = useState(false);
     const scrollableDivRef = useRef(null);
+    const [Loading,setLoading]=useState(false);
 
 
     // <---------------------------Final Web Socket------------------------------------>
@@ -31,19 +33,20 @@ const CustomerService_1 = () => {
     const [connected, setConnected] = useState(false);
 
     const stompClient = new Client({
-        brokerURL: 'wss://grozziie.zjweiting.com:3091/CustomerService-Chat/websocket',
+        // brokerURL: 'wss://grozziie.zjweiting.com:3091/CustomerService-Chat/websocket',
+        brokerURL: 'ws://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/websocket',
     });
 
     useEffect(() => {
-        
+
         const connect = () => {
             stompClient.onConnect = (frame) => {
                 setConnected(true);
                 console.log('Connected: ' + frame);
                 stompClient.subscribe(`/topic/${chattingUser?.userId}`, (message) => {
-                    const newSMS=JSON.parse(message.body);
-                    showGreeting(message.body,newSMS);
-            
+                    const newSMS = JSON.parse(message.body);
+                    showGreeting(message.body, newSMS);
+
                 });
             };
 
@@ -53,6 +56,20 @@ const CustomerService_1 = () => {
             };
 
             stompClient.activate();
+            if (stompClient.connected) {
+                toast.success("stomp Connected")
+            }
+
+            if (!stompClient.connected) {
+        toast.error("try to connect again")
+        console.log("try to connect again")
+        stompClient.onConnect = (frame) => {
+            // Connection established
+            setConnected(true);
+            console.log('Connected: ' + frame);
+            toast.success("connected again")
+        };
+    }
         };
 
         // Try to connect
@@ -75,10 +92,10 @@ const CustomerService_1 = () => {
         };
     }, [connected]);
 
-    const showGreeting = (message,sms) => {
+    const showGreeting = (message, sms) => {
         // Handle received messages here
         console.log('Received message:', message);
-        console.log(allChat,"1",sms,"2")
+        console.log(allChat, "1", sms, "2")
         setAllChat((prevChat) => [...prevChat, sms]);
 
     };
@@ -104,45 +121,46 @@ const CustomerService_1 = () => {
     //     }
     // };
 
-//for try..........
-    
-    if (stompClient.connected) {
-        toast.success("stomp Connected")
-    }
-    if (!stompClient.connected) {
-        toast.error("try to connect again")
-        stompClient.onConnect = (frame) => {
-            // Connection established
-            setConnected(true);
-            console.log('Connected: ' + frame);
-            toast.success("connected again")
-          };
-    }
+    //for try..........
 
-//...............
+    // if (stompClient.connected) {
+    //     toast.success("stomp Connected")
+    // }
+    // if (!stompClient.connected) {
+    //     toast.error("try to connect again")
+    //     stompClient.onConnect = (frame) => {
+    //         // Connection established
+    //         setConnected(true);
+    //         console.log('Connected: ' + frame);
+    //         toast.success("connected again")
+    //     };
+    // }
+
+    //...............
 
 
     const sendMessage = async (message) => {
+        
         if (stompClient.connected) {
-          const response = await new Promise((resolve) => {
-            stompClient.publish({
-              destination: '/app/messages',
-              body: JSON.stringify(message),
-            }, {}, (response) => {
-              resolve(response); // Resolve the Promise with the response
-              console.log(response);
+            const response = await new Promise((resolve) => {
+                stompClient.publish({
+                    destination: '/app/messages',
+                    body: JSON.stringify(message),
+                }, {}, (response) => {
+                    resolve(response); // Resolve the Promise with the response
+                    console.log(response);
+                });
             });
-          });
-      
-          console.log('Message sent. Server response:', response);
-          // Handle the response here
+
+            console.log('Message sent. Server response:', response);
+            // Handle the response here
         } else {
-          console.error('STOMP client is not connected.');
-          // You can show an error message to the user here.
+            console.error('STOMP client is not connected.');
+            // You can show an error message to the user here.
         }
-      };
-      
-  
+    };
+
+
 
     // <---------------------------Final Web Socket------------------------------------>
 
@@ -177,18 +195,22 @@ const CustomerService_1 = () => {
 
 
     const fetchUserByChatId = async () => {
+        setLoading(true);
         try {
             const response = await axios.get(`https://grozziie.zjweiting.com:3091/CustomerService-Chat/api/dev/messages/${selectedCustomerChat?.chatId}`);
             if (response.status === 200) {
                 const userData = response.data;
                 setAllChat(userData);
+                setLoading(false);
             } else {
                 // Handle unexpected status codes
                 console.error('Unexpected status code:', response.status);
+                setLoading(false);
             }
         } catch (error) {
             // Handle network or other errors
             console.error('Error fetching user data:', error);
+            setLoading(false);
         }
     };
 
@@ -253,8 +275,8 @@ const CustomerService_1 = () => {
 
 
     const handleToSelectCustomer = (customer) => {
-        setCurrentUser(customer);
         SetShowHistory(false)
+        setCurrentUser(customer);
         // connectWebSocket();
         // setSelectedCustomerChat((chatSms.filter(eachChat => eachChat.myId === customer?.id))[0])
         setSelectedCustomerChat(customer)
@@ -286,10 +308,10 @@ const CustomerService_1 = () => {
                             </h1>
                         </div>
                         <div className=" bg-red-900 rounded-full">
-                            { connected ?
-                               <SiSocketdotio className="bg-green-400 text-lg rounded-full"></SiSocketdotio> :<BtnSpinner></BtnSpinner>
+                            {connected ?
+                                <SiSocketdotio className="bg-green-400 text-lg rounded-full"></SiSocketdotio> : <BtnSpinner></BtnSpinner>
                             }
-                            </div>
+                        </div>
 
                     </div>
 
@@ -358,6 +380,7 @@ const CustomerService_1 = () => {
                     <div className=" overflow-y-scroll h-[60vh] mb-10 text-start" ref={scrollableDivRef}>
                         <Message
                             allChat={allChat}
+                            Loading={Loading}
                             setAllChat={setAllChat}
                             selectedCustomerChat={selectedCustomerChat}
                             showHistory={showHistory}
@@ -374,6 +397,8 @@ const CustomerService_1 = () => {
                         setAllChat={setAllChat}
                         sendMessage={sendMessage}
                     ></MessageInput>
+
+
 
                 </div>
 
@@ -404,6 +429,7 @@ const CustomerService_1 = () => {
 
 
             </div>
+          
         </div>
     );
 };

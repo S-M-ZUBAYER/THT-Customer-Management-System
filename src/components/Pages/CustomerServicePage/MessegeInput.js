@@ -10,6 +10,7 @@ import toast from 'react-hot-toast';
 import { AuthContext } from '../../../context/UserContext';
 // import {  sendMessage } from '../Chat/WebSocketService';
 import { Client } from '@stomp/stompjs';
+import { sendChatMessage } from './SendMessageFunction';
 
 const MessageInput = ({
   setAllChat,
@@ -32,6 +33,7 @@ const MessageInput = ({
 
    const stompClient = new Client({
        brokerURL: 'wss://grozziie.zjweiting.com:3091/CustomerService-Chat/websocket',
+      //  brokerURL: 'ws://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/websocket',
    });
 
    useEffect(() => {
@@ -106,41 +108,41 @@ const MessageInput = ({
 
 //for try..........
    
-   if (stompClient.connected) {
-       toast.success("stomp Connected")
-   }
-   if (!stompClient.connected) {
-       toast.error("try to connect again")
-       stompClient.onConnect = (frame) => {
-           // Connection established
-           setConnected(true);
-           console.log('Connected: ' + frame);
-           toast.success("connected again")
-         };
-   }
+  //  if (stompClient.connected) {
+  //      toast.success("stomp Connected")
+  //  }
+  //  if (!stompClient.connected) {
+  //      toast.error("try to connect again")
+  //      stompClient.onConnect = (frame) => {
+  //          // Connection established
+  //          setConnected(true);
+  //          console.log('Connected: ' + frame);
+  //          toast.success("connected again")
+  //        };
+  //  }
 
 //...............
 
 
-   const sendMessage = async (message) => {
-       if (stompClient.connected) {
-         const response = await new Promise((resolve) => {
-           stompClient.publish({
-             destination: '/app/messages',
-             body: JSON.stringify(message),
-           }, {}, (response) => {
-             resolve(response); // Resolve the Promise with the response
-             console.log(response);
-           });
-         });
+  //  const sendMessage = async (message) => {
+  //      if (stompClient.connected) {
+  //        const response = await new Promise((resolve) => {
+  //          stompClient.publish({
+  //            destination: '/app/messages',
+  //            body: JSON.stringify(message),
+  //          }, {}, (response) => {
+  //            resolve(response); // Resolve the Promise with the response
+  //            console.log(response);
+  //          });
+  //        });
      
-         console.log('Message sent. Server response:', response);
-         // Handle the response here
-       } else {
-         console.error('STOMP client is not connected.');
-         // You can show an error message to the user here.
-       }
-     };
+  //        console.log('Message sent. Server response:', response);
+  //        // Handle the response here
+  //      } else {
+  //        console.error('STOMP client is not connected.');
+  //        // You can show an error message to the user here.
+  //      }
+  //    };
      
  
 
@@ -196,13 +198,13 @@ const MessageInput = ({
           chatId: selectedCustomerChat?.chatId,
           sentBy: selectedCustomerChat?.customerServiceId,
           sentTo: selectedCustomerChat?.userId,
-          sentId: "S M Zubayer",
+          sentId: 66,
           message: message,
           msgType: "text",
           timestmp: getCurrentTime(),
         };
         allMessages.push(textMessage);
-        sendMessage(textMessage)
+        sendChatMessage(textMessage)
         // try {
         //   const response = await axios.post(
         //     'https://grozziie.zjweiting.com:3091/CustomerService-Chat/api/dev/messages',

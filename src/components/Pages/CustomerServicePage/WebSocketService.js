@@ -2,6 +2,7 @@
 // import { Stomp } from '@stomp/stompjs';
 
 // const SOCKET_URL = 'wss://grozziie.zjweiting.com:3091/CustomerService-Chat/websocket';
+// const SOCKET_URL = 'ws://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/websocket';
 // const MESSAGE_API = '/topic/chat'; // This is where you'll receive messages
 
 // let stompClient = null;
