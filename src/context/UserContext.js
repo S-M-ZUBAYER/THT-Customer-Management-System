@@ -15,6 +15,7 @@ const UserContext = ({ children }) => {
   const [chattingUser, setChattingUser] = useState(null);
   const [DUser, setDUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [comingSMS,setComingSMS]=useState(null)
 
 
 
@@ -144,7 +145,9 @@ const UserContext = ({ children }) => {
     categories,
     setCategories,
     chattingUser, 
-    setChattingUser
+    setChattingUser,
+    comingSMS,
+    setComingSMS
   };
 
   return (

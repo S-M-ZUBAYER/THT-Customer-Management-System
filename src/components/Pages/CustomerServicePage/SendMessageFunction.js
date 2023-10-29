@@ -1,6 +1,9 @@
 // sendChatMessage.js
 import { Client } from '@stomp/stompjs';
+import { useContext } from 'react';
 import toast from 'react-hot-toast';
+
+
 
 const stompClient = new Client({
     brokerURL: 'wss://grozziie.zjweiting.com:3091/CustomerService-Chat/websocket',
@@ -9,20 +12,24 @@ const stompClient = new Client({
 
 stompClient.activate();
 
+
 const sendChatMessage = async (message) => {
+console.log(message,"function send");
+
+   
     if (stompClient.connected) {
-    toast.success("stomp connected");
-    console.log(message,"function ");
+    console.log("stomp connected");
     }
     if (!stompClient.connected) {
     toast.error("stomp not connected")
     }
     if (stompClient.connected) {
         const response = await new Promise((resolve) => {
-            console.log(message,"into function")
             stompClient.publish({
                 destination: '/app/messages',
                 body: JSON.stringify(message),
+               
+                
             }, {}, (response) => {
                 resolve(response);
                 console.log(response);

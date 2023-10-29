@@ -32,6 +32,11 @@ const ShowColorImgList = ({ modelNumber }) => {
     }, [modelNumber]);
 
     const handleToDeleteColorInfo = (id) => {
+
+        const confirmed = window.confirm('Are you sure you want to delete this color image information?');
+        if (!confirmed) {
+          return; // Cancel the deletion if the user clicks Cancel or closes the modal
+        }
         axios.delete(`https://grozziie.zjweiting.com:8033/tht/colorInfo/delete/${id}`)
             .then(response => {
                 if (response.data) {

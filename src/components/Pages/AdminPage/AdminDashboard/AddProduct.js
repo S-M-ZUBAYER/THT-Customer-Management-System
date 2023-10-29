@@ -5,6 +5,7 @@ import addImg from "../../../../Assets/Images/Admin/Vector.jpg"
 import { toast } from 'react-hot-toast';
 import { AuthContext } from '../../../../context/UserContext';
 import BtnSpinner from '../../../Shared/Loading/BtnSpinner';
+import { reduceImageResolution, reduceImagesResolution } from './Warehouse&Cities.js/functionForImageResulation';
 
 function AddProduct({ product }) {
   const [loading, setLoading] = useState(false);
@@ -76,15 +77,29 @@ function AddProduct({ product }) {
 
 
   const handleImageChange = (e) => {
-    setSelectedImages(e.target.files);
+    const relatedImages = Array.from(e.target.files);
+    const resizePromises = relatedImages.map((image) => reduceImageResolution(image, 1000));
+  
+    Promise.all(resizePromises)
+      .then((resizedImages) => {
+        setSelectedImages(resizedImages);
+      });
   };
+  
 
   const handleVideoChange = (e) => {
     setSelectedVideos(e.target.files);
   };
   const handleInstructionsImageChange = (e) => {
-    setSelectedInstructionsImages(e.target.files);
+    const instructionsImages = Array.from(e.target.files);
+    const resizePromises = instructionsImages.map((image) => reduceImageResolution(image, 1000));
+  
+    Promise.all(resizePromises)
+      .then((resizedImages) => {
+        setSelectedInstructionsImages(resizedImages);
+      });
   };
+  
 
   const handleInstructionsVideoChange = (e) => {
     setSelectedInstructionsVideos(e.target.files);
@@ -161,8 +176,17 @@ function AddProduct({ product }) {
   }
 
   const handleDescriptionImageChange = (e) => {
-    setSelectedDescriptionImages(e.target.files);
+    const images = Array.from(e.target.files);
+    const updateImagesPromises = images.map((image) => reduceImageResolution(image, 1000));
+  
+    Promise.all(updateImagesPromises)
+      .then((reducedImages) => {
+        setSelectedDescriptionImages(reducedImages);
+      });
   };
+  
+
+  
   const handleDescriptionImageRemark = (e) => {
     setDescriptionImgRemark(e.target.value);
 
@@ -171,8 +195,14 @@ function AddProduct({ product }) {
 
   const handleProductImgUpload = (event) => {
     // extract the current date and time components
-    const file = event.target.files[0];
-    setProductImg(file);
+    const preFile = event.target.files[0];
+   const file= reduceImageResolution(preFile,1000);
+   file.then((fileObject) => {
+    console.log('Fulfilled File:', fileObject);
+    setProductImg(fileObject);
+  });
+
+    
   };
 
   // const handleInvoiceFileUpload = (event) => {
@@ -193,6 +223,7 @@ function AddProduct({ product }) {
     const date = now.toLocaleDateString();
     const time = now.toLocaleTimeString();
     const formData = new FormData();
+    console.log(productImg,"productImg")
     formData.append('productImg', productImg);
     // formData.append('invoiceFile', invoiceFile);
     formData.append('productCountryName', productCountryName);
@@ -280,7 +311,7 @@ function AddProduct({ product }) {
 
     } catch (error) {
       console.error('Error creating product:', error);
-      toast.error("Failed to upload, Please input every data properly");
+      toast.error('Error creating product:', error);
       setLoading(false)
     }
   };

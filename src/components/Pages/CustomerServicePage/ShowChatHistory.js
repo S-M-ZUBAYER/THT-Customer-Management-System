@@ -48,6 +48,7 @@ const ShowChatHistory = ({ userIdAllChat, customerUserId }) => {
                     <div className="my-2 flex justify-end w-full">
                     
                         {String(chat?.sentBy).trim() !== String(customerUserId).trim() && (
+                            
                             <>
                                 
                                 <div className="max-w-10/12 pt-3">

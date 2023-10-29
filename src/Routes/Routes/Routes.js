@@ -32,6 +32,7 @@ import ShowCityList from "../../components/Pages/AdminPage/AdminDashboard/Wareho
 import ModelHightWidth from "../../components/Pages/AdminPage/AdminDashboard/ModelHightWidth/ModelHightWidth";
 import ShowHightWidth from "../../components/Pages/AdminPage/AdminDashboard/ModelHightWidth/ShowHightWidth";
 import AutomaticChat from "../../components/Pages/CustomerServicePage/AutomaticChat";
+import ImageResize from "../../components/Pages/AdminPage/AdminDashboard/ImageResize";
 
 
 export const routes = createBrowserRouter([
@@ -75,6 +76,10 @@ export const routes = createBrowserRouter([
             {
                 path: "contact",
                 element: <Contact></Contact>
+            },
+            {
+                path: "image",
+                element: <ImageResize></ImageResize>
             },
             {
                 path: "login",

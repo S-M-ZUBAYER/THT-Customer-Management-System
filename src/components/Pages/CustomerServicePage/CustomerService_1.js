@@ -25,16 +25,19 @@ const CustomerService_1 = () => {
     const [allChat, setAllChat] = useState([])
     const [showHistory, SetShowHistory] = useState(false);
     const scrollableDivRef = useRef(null);
-    const [Loading,setLoading]=useState(false);
+    const [Loading, setLoading] = useState(false);
+    const [newMessagesList,setNewMessagesList] = useState([]);
+
+
 
 
     // <---------------------------Final Web Socket------------------------------------>
 
     const [connected, setConnected] = useState(false);
-
+    let disconnectTimer;
     const stompClient = new Client({
-        // brokerURL: 'wss://grozziie.zjweiting.com:3091/CustomerService-Chat/websocket',
-        brokerURL: 'ws://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/websocket',
+        brokerURL: 'wss://grozziie.zjweiting.com:3091/CustomerService-Chat/websocket',
+        // brokerURL: 'ws://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/websocket',
     });
 
     useEffect(() => {
@@ -44,8 +47,17 @@ const CustomerService_1 = () => {
                 setConnected(true);
                 console.log('Connected: ' + frame);
                 stompClient.subscribe(`/topic/${chattingUser?.userId}`, (message) => {
-                    const newSMS = JSON.parse(message.body);
-                    showGreeting(message.body, newSMS);
+                    // console.log(message,"send")
+                    // const newSMS = JSON.parse(message.body);
+                    // showGreeting(message.body, newSMS);
+
+                    // Reset the disconnect timer whenever a new message is received
+                    clearTimeout(disconnectTimer);
+
+                    // Set a new timer to disconnect if no new messages in 5 minutes (300,000 milliseconds)
+                    disconnectTimer = setTimeout(() => {
+                        disconnectAndClearCache();
+                    }, 300000);
 
                 });
             };
@@ -61,15 +73,15 @@ const CustomerService_1 = () => {
             }
 
             if (!stompClient.connected) {
-        toast.error("try to connect again")
-        console.log("try to connect again")
-        stompClient.onConnect = (frame) => {
-            // Connection established
-            setConnected(true);
-            console.log('Connected: ' + frame);
-            toast.success("connected again")
-        };
-    }
+                toast.error("try to connect again")
+                console.log("try to connect again")
+                stompClient.onConnect = (frame) => {
+                    // Connection established
+                    setConnected(true);
+                    console.log('Connected: ' + frame);
+                    toast.success("connected again")
+                };
+            }
         };
 
         // Try to connect
@@ -92,74 +104,38 @@ const CustomerService_1 = () => {
         };
     }, [connected]);
 
+
+
+
     const showGreeting = (message, sms) => {
-        // Handle received messages here
-        console.log('Received message:', message);
-        console.log(allChat, "1", sms, "2")
+        console.log("S M SSS")
+        
         setAllChat((prevChat) => [...prevChat, sms]);
 
     };
 
-    // const sendMessage = async (message) => {
-    //     console.log(message,"from sms")
-    //     if (connected) {
-    //         const response = await new Promise((resolve) => {
-    //             stompClient.publish({
-    //                 destination: '/app/messages',
-    //                 body: JSON.stringify(message),
-    //             }, {}, (response) => {
-    //                 resolve(response); // Resolve the Promise with the response
-    //                 console.log(response)
-    //             });
-    //         });
 
-    //         console.log('Message sent. Server response:', response);
-    //         // Handle the response here
-    //     } else {
-    //         console.error('STOMP client is not connected.');
-    //         // You can show an error message to the user here.
-    //     }
-    // };
+    const disconnectAndClearCache = () => {
+        if (connected) {
+            // Disconnect from the WebSocket
+            stompClient.deactivate();
 
-    //for try..........
+            // Clear the cache or reset any relevant state
+            // You can add code here to clear specific caches or reset state
+            // For example, you can clear the chat history or reset the chatMessage state.
 
-    // if (stompClient.connected) {
-    //     toast.success("stomp Connected")
-    // }
-    // if (!stompClient.connected) {
-    //     toast.error("try to connect again")
-    //     stompClient.onConnect = (frame) => {
-    //         // Connection established
-    //         setConnected(true);
-    //         console.log('Connected: ' + frame);
-    //         toast.success("connected again")
-    //     };
-    // }
-
-    //...............
-
-
-    const sendMessage = async (message) => {
-        
-        if (stompClient.connected) {
-            const response = await new Promise((resolve) => {
-                stompClient.publish({
-                    destination: '/app/messages',
-                    body: JSON.stringify(message),
-                }, {}, (response) => {
-                    resolve(response); // Resolve the Promise with the response
-                    console.log(response);
-                });
-            });
-
-            console.log('Message sent. Server response:', response);
-            // Handle the response here
-        } else {
-            console.error('STOMP client is not connected.');
-            // You can show an error message to the user here.
+            // Clear the disconnect timer if it's set
+            if (disconnectTimer) {
+                toast.success("Disconnected successfully")
+                clearTimeout(disconnectTimer);
+            }
         }
     };
 
+
+
+
+  
 
 
     // <---------------------------Final Web Socket------------------------------------>
@@ -285,6 +261,7 @@ const CustomerService_1 = () => {
 
 
 
+  
 
 
     return (
@@ -335,6 +312,9 @@ const CustomerService_1 = () => {
                                             <p>Chat Id: {element?.chatId}</p>
 
 
+                                        </div>
+                                        <div>
+                                            {(newMessagesList?.filter(sms=>sms?.sentBy===element?.userId))?.length>0 && <div  className="bg-yellow-400 px-2 rounded-full border-2 text-black font-semibold"> {(newMessagesList?.filter(sms=>sms?.sentBy===element?.userId))?.length}</div> }
                                         </div>
                                         <div className="">
                                             {element.status === "running" ?
@@ -395,7 +375,8 @@ const CustomerService_1 = () => {
                         setSelectedCustomerChat={setSelectedCustomerChat}
                         allChat={allChat}
                         setAllChat={setAllChat}
-                        sendMessage={sendMessage}
+                        newMessagesList={newMessagesList}
+                        setNewMessagesList={setNewMessagesList}
                     ></MessageInput>
 
 
@@ -429,7 +410,7 @@ const CustomerService_1 = () => {
 
 
             </div>
-          
+
         </div>
     );
 };

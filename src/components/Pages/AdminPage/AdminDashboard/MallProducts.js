@@ -85,6 +85,10 @@ const AddMallProducts = () => {
 
     //create a function to delete  any specific product
     const handleToDelete = async (productId) => {
+        const confirmed = window.confirm('Are you sure you want to delete this product information?');
+        if (!confirmed) {
+          return; // Cancel the deletion if the user clicks Cancel or closes the modal
+        }
         try {
             await axios.delete(`https://grozziie.zjweiting.com:8033/tht/mallProducts/delete/${productId}`);
             toast.success(`One MallProduct deleted successfully`);
