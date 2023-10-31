@@ -25,12 +25,13 @@ const MessageInput = ({
   const [newOne, setNewOne] = useState({});
   const [newAllMessage, setNewAllMessage] = useState([]);
   const [newCome, setNewCome] = useState({});
-  const [newSentId,setNewSentId]=useState(getCurrentTimestampInSeconds());
+  const [newResponseCome, setNewResponseCome] = useState({});
+  const [newSentId, setNewSentId] = useState(getCurrentTimestampInSeconds());
 
 
-  console.log(newMessagesList,"allNewMessagesList")
 
-  const showList=()=>{
+
+  const showList = () => {
     if (newCome && newMessagesList && newMessagesList.length > 0) {
       const updatedData = newMessagesList.filter((data) => data.sentBy !== selectedCustomerChat?.userId);
       if (newCome.sentBy !== selectedCustomerChat?.userId) {
@@ -45,45 +46,94 @@ const MessageInput = ({
 
 
   useEffect(() => {
-    if(newCome.totalPart===1){
-      // if (newCome && newMessagesList && newMessagesList.length > 0) {
-      //   const updatedData = newMessagesList.filter((data) => data.sentBy !== selectedCustomerChat?.userId);
-      //   if (newCome.sentBy !== selectedCustomerChat?.userId) {
-      //     setNewMessagesList([...updatedData, newCome]);
-      //   } else {
-      //     setNewMessagesList(updatedData);
-      //   }
-      // } else if (newCome && newCome.sentBy !== selectedCustomerChat?.userId) {
-      //   setNewMessagesList([newCome]);
-      // }
-      showList();
+
+
+    if (newCome.totalPart === 1) {
+      if (newCome && newMessagesList && newMessagesList.length > 0) {
+        const updatedData = newMessagesList.filter((data) => data.sentBy !== selectedCustomerChat?.userId);
+        if (newCome.sentBy !== selectedCustomerChat?.userId) {
+          setNewMessagesList([...updatedData, newCome]);
+        } else {
+          setNewMessagesList(updatedData);
+        }
+      } else if (newCome && newCome.sentBy !== selectedCustomerChat?.userId) {
+        setNewMessagesList([newCome]);
+      }
+      // showList();
     }
-    else if(newCome.totalPart>1 && newCome.partNo===1){
-      // if (newCome && newMessagesList && newMessagesList.length > 0) {
-      //   const updatedData = newMessagesList.filter((data) => data.sentBy !== selectedCustomerChat?.userId);
-      //   if (newCome.sentBy !== selectedCustomerChat?.userId) {
-      //     setNewMessagesList([...updatedData, newCome]);
-      //   } else {
-      //     setNewMessagesList(updatedData);
-      //   }
-      // } else if (newCome && newCome.sentBy !== selectedCustomerChat?.userId) {
-      //   setNewMessagesList([newCome]);
-      // }
-      showList();
+    else if (newCome.totalPart > 1 && newCome.partNo === 1) {
+      if (newCome && newMessagesList && newMessagesList.length > 0) {
+        const updatedData = newMessagesList.filter((data) => data.sentBy !== selectedCustomerChat?.userId);
+        if (newCome.sentBy !== selectedCustomerChat?.userId) {
+          setNewMessagesList([...updatedData, newCome]);
+        } else {
+          setNewMessagesList(updatedData);
+        }
+      } else if (newCome && newCome.sentBy !== selectedCustomerChat?.userId) {
+        setNewMessagesList([newCome]);
+      }
+      // showList();
     }
-   
+
   }, [newCome, selectedCustomerChat]);
 
 
- 
+
+
+  useEffect(() => {
+    if (newResponseCome.totalPart === newResponseCome.partNo) {
+      setAllChat((prevAllChat) => {
+        return prevAllChat.map((chat, index) => {
+          if (chat.sentId === newResponseCome.sentId && newResponseCome.totalPart === newResponseCome.partNo) {
+            // Create a new object with smsLoading set to false
+            return { ...chat, smsLoading: false };
+          }
+          // For other objects, return them as they are
+          return chat;
+        });
+      });
+    }
+  }, [newResponseCome]);
   
+
+
+  const handleToView = () => {
+    if (newCome.totalPart === 1) {
+      if (newCome && newMessagesList && newMessagesList.length > 0) {
+        const updatedData = newMessagesList.filter((data) => data.sentBy !== selectedCustomerChat?.userId);
+        if (newCome.sentBy !== selectedCustomerChat?.userId) {
+          setNewMessagesList([...updatedData, newCome]);
+        } else {
+          setNewMessagesList(updatedData);
+        }
+      } else if (newCome && newCome.sentBy !== selectedCustomerChat?.userId) {
+        setNewMessagesList([newCome]);
+      }
+      // showList();
+    }
+    else if (newCome.totalPart > 1 && newCome.partNo === 1) {
+      if (newCome && newMessagesList && newMessagesList.length > 0) {
+        const updatedData = newMessagesList.filter((data) => data.sentBy !== selectedCustomerChat?.userId);
+        if (newCome.sentBy !== selectedCustomerChat?.userId) {
+          setNewMessagesList([...updatedData, newCome]);
+        } else {
+          setNewMessagesList(updatedData);
+        }
+      } else if (newCome && newCome.sentBy !== selectedCustomerChat?.userId) {
+        setNewMessagesList([newCome]);
+      }
+    }
+  }
+
+
+
+
   // Move setNewCome({}) outside of the useEffect
   useEffect(() => {
     setNewCome({});
   }, [selectedCustomerChat]);
-  
-  
-  console.log(newMessagesList,"newMessageList")
+
+
 
 
   function getCurrentTimestampInSeconds() {
@@ -101,9 +151,9 @@ const MessageInput = ({
   });
 
 
-  
 
-  
+
+
 
 
 
@@ -115,10 +165,11 @@ const MessageInput = ({
         stompClient.subscribe(`/topic/${chattingUser?.userId}`, (message) => {
           console.log(message?.body, "coming sms")
           const newSMS = JSON.parse(message.body);
+          if (newSMS && newSMS.msgType === "ans") {
+            setNewResponseCome(newSMS);
+          }
           showGreeting(newSMS)
-          toast.success(`Sms send from Name:${chattingUser?.userName} Id:${chattingUser?.userId}`, {
-            position: "top-right"
-          })
+
         });
       };
 
@@ -147,41 +198,21 @@ const MessageInput = ({
       clearInterval(retryInterval);
       stompClient.deactivate();
     };
-  }, [connected,newAllMessage]);
-  
-  // useEffect(() => {
-  //       // if(connected){
-  //         stompClient.subscribe(`/topic/${chattingUser?.userId}`, (message) => {
-  //         console.log(message?.body, "coming sms")
-  //         const newSMS = JSON.parse(message.body);
-  //         showGreeting(newSMS)
-  //         toast.success(`Sms send from Name:${chattingUser?.userName} Id:${chattingUser?.userId}`, {
-  //           position: "top-right"
-  //         })
-  //       });
-  //       // }
-  // }, [connected,newAllMessage]);
+  }, [connected, newAllMessage]);
+
+ 
 
 
 
 
   const getAnswer = (sms) => {
-// if(!sms){
-//   console.log(newAllMessage,"testingggggg");
- 
-// }
-
-    console.log("ddddd", newAllMessage);
-    // console.log(newAllMessage[0], Array.isArray(newAllMessage), newAllMessage, "new all message");
-
-
-    //console.log(((newAllMessage[sms.part]).totalPart), "from  total part")// part ==newallmessage.length
+  
     if (sms && sms.totalPart === 1) {
       //show your message/video/file/image
-      //console.log((newAllMessage)[sms.part].totalPart, "totalPart-1")
+  
     }
     else {
-      if (sms && sms.partNo === sms.totalPart ) {//get partNo
+      if (sms && sms.partNo === sms.totalPart) {//get partNo
 
         // setNewAllMessage([]);
         setSelectedFiles([]);
@@ -190,10 +221,6 @@ const MessageInput = ({
       }
       else {
         //sent next part
-
-        console.log("ssss")
-        console.log(sms.partNo)
-        console.log(newAllMessage);
         sendChatMessage((newAllMessage)[sms.partNo]);
 
       }
@@ -202,20 +229,15 @@ const MessageInput = ({
 
   //===========================
 
-  
+
   const showGreeting = async (sms) => {
 
     if (sms.msgType === "ans") {
-      //setResponse(sms);
-      console.log(newAllMessage, "newAllMessage from response");
       getAnswer(sms);
       return;
 
     }
-// console.log(sms.sentBy,selectedCustomerChat?.userId,"same or not")
-//     if(sms.sentBy!==selectedCustomerChat?.userId){
-//       console.log(sms,"from another user")
-//     }
+  
 
     //Add New response
     const textMessage = {
@@ -230,22 +252,24 @@ const MessageInput = ({
       timestamp: getCurrentTime(),
     };
 
-   
+
 
     sendChatMessage(textMessage);
-    if(sms && sms.msgType !== "ans"){
-     setNewCome(sms); 
+    if (sms && sms.msgType !== "ans") {
+      setNewCome(sms);
     }
 
-    console.log(sms.totalPart);
-    console.log(sms.message);
-    /*
-   in here start angeln code 
-   
-
-    
-   in here end angeln code 
-    */
+    if (sms?.totalPart === 1) {
+      toast.success(`${sms?.msgType} come from  Id:${sms?.sentBy}`, {
+        position: "top-right"
+      })
+    }
+    else if (sms?.totalPart > 1 && sms?.partNo === sms?.totalPart) {
+      toast.success(`${sms?.msgType} come from  Id:${sms?.sentBy}`, {
+        position: "top-right"
+      })
+    }
+  
 
 
 
@@ -257,7 +281,6 @@ const MessageInput = ({
   };
 
   const handleFileChange = async (e) => {
-    console.log(e.target.files);
     const files = e.target.files;
     const fileArray = Array.from(files);
     setSelectedFiles(fileArray);
@@ -266,12 +289,12 @@ const MessageInput = ({
     // new 
     const base64Data = await readAsBase64(fileArray[0]);
     const stringParts = splitBase64String(base64Data, 45000);
-   
-    
-    
+
+
+
 
     const newMessages = stringParts.map((part, index) => {
-     
+
       if (fileType === 'video' || fileType === 'image') {
         return {
           chatId: selectedCustomerChat?.chatId,
@@ -292,7 +315,7 @@ const MessageInput = ({
           sentId: newSentId,
           message: fileType === 'file' ? part : part,
           msgType: fileType === 'file' ? 'file' : 'text',
-          fileName:(fileArray[0]?.name),
+          fileName: (fileArray[0]?.name),
           totalPart: stringParts.length,
           partNo: index + 1,
           timestamp: getCurrentTime(),
@@ -302,11 +325,11 @@ const MessageInput = ({
 
     setNewAllMessage(newMessages);
 
-    // Update newAllMessage with the latest messages
+   
 
   };
 
-  console.log(newAllMessage, 'outside')
+
 
   function getCurrentTime() {
     const now = new Date();
@@ -386,9 +409,9 @@ const MessageInput = ({
   // function to send the sms part by part
 
   const handleSubmit = async (e) => {
-          setNewSentId(getCurrentTimestampInSeconds());
+    setNewSentId(getCurrentTimestampInSeconds());
     e.preventDefault();
-   
+
 
     if (message.trim() !== '' || selectedFiles.length > 0) {
       const allMessages = [];
@@ -399,8 +422,9 @@ const MessageInput = ({
           chatId: selectedCustomerChat?.chatId,
           sentBy: selectedCustomerChat?.customerServiceId,
           sentTo: selectedCustomerChat?.userId,
-          sentId:newSentId,
+          sentId: newSentId,
           message: message,
+          smsLoading: true,
           msgType: "text",
           totalPart: 1,
           partNo: 1,
@@ -408,9 +432,32 @@ const MessageInput = ({
         };
         allMessages.push(textMessage);
 
-        setAllChat([...allChat, ...allMessages]);
+
+        setAllChat([...allChat, {
+          chatId: selectedCustomerChat?.chatId,
+          sentBy: selectedCustomerChat?.customerServiceId,
+          sentTo: selectedCustomerChat?.userId,
+          sentId: newSentId,
+          smsLoading: true,
+          message: message,
+          msgType: "text",
+          totalPart: 1,
+          partNo: 1,
+          timestamp: getCurrentTime(),
+        }]);
         setResponse({});
-        sendChatMessage(textMessage);
+        // sendChatMessage(textMessage);
+        sendChatMessage({
+          chatId: selectedCustomerChat?.chatId,
+          sentBy: selectedCustomerChat?.customerServiceId,
+          sentTo: selectedCustomerChat?.userId,
+          sentId: newSentId,
+          message: message,
+          msgType: "text",
+          totalPart: 1,
+          partNo: 1,
+          timestamp: getCurrentTime(),
+        });
 
       }
 
@@ -420,15 +467,16 @@ const MessageInput = ({
         const base64Data = await readAsBase64(file);
         const stringParts = splitBase64String(base64Data, 45000);
         // const fileType = /* determine fileType */;
-      
 
-        if (fileType === 'video' || fileType === 'image'){
+
+        if (fileType === 'video' || fileType === 'image') {
           setAllChat((prevChat) => [...prevChat, {
             chatId: selectedCustomerChat?.chatId,
             sentBy: selectedCustomerChat?.customerServiceId,
             sentTo: selectedCustomerChat?.userId,
             sentId: newSentId,
-            initialShow:true,
+            smsLoading: true,
+            initialShow: true,
             message: fileType === 'video' ? base64Data : base64Data,
             msgType: fileType === 'video' ? 'video' : 'image',
             totalPart: stringParts.length,
@@ -436,16 +484,17 @@ const MessageInput = ({
             timestamp: getCurrentTime(),
           }]);
         }
-        else{
+        else {
           setAllChat((prevChat) => [...prevChat, {
             chatId: selectedCustomerChat?.chatId,
             sentBy: selectedCustomerChat?.customerServiceId,
             sentTo: selectedCustomerChat?.userId,
             sentId: newSentId,
-            initialShow:true,
+            smsLoading: true,
+            initialShow: true,
             message: fileType === 'file' ? base64Data : base64Data,
             msgType: fileType === 'file' ? 'file' : 'text',
-            fileName:(file?.name),
+            fileName: (file?.name),
             totalPart: stringParts.length,
             partNo: stringParts.length,
             timestamp: getCurrentTime(),
@@ -473,7 +522,7 @@ const MessageInput = ({
               sentId: newSentId,
               message: fileType === 'file' ? part : part,
               msgType: fileType === 'file' ? 'file' : 'text',
-              fileName:(file?.name),
+              fileName: (file?.name),
               totalPart: stringParts.length,
               partNo: index + 1,
               timestamp: getCurrentTime(),
@@ -481,10 +530,10 @@ const MessageInput = ({
           }
         });
 
-        
-        console.log(newMessages, "newmesseges")
 
-      
+
+
+
         // Send the first message in the newMessages array
         sendChatMessage(newMessages[0]);
       }

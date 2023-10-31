@@ -10,6 +10,7 @@ import axios from 'axios';
 import { HiChevronDoubleUp } from 'react-icons/hi2';
 import toast from 'react-hot-toast';
 import BtnSpinner from '../Translator/BtnSpinner';
+import Spinner from '../../Shared/Loading/Spinner';
 import DisplaySpinner from '../../Shared/Loading/DisplaySpinner';
 import ShowChatHistory from './ShowChatHistory';
 import ImageModal from './ImageModal';
@@ -34,44 +35,42 @@ const Message = ({ allChat, setAllChat, selectedCustomerChat, showHistory, SetSh
   }
 
 
-
- 
-
   useEffect(() => {
     if (!allChat) return;
-  
+
     const mergedMessages = [];
     let currentMerging = null;
-  
+
     for (let i = 0; i < allChat.length; i++) {
       const sms = allChat[i];
-  
-       if(sms?.initialShow===true){
-        mergedMessages.push(sms)
-        }
-        else  if (sms.totalPart > 1) {
+
+      if (sms?.initialShow === true) {
+        mergedMessages.push(sms);
+      } else if (sms.totalPart > 1) {
         if (sms.partNo === 1) {
           currentMerging = { ...sms, message: sms.message };
         } else if (sms.partNo === sms.totalPart && currentMerging && sms.sentId === currentMerging.sentId) {
           currentMerging.message += sms.message;
-          mergedMessages.push(currentMerging);
-          currentMerging = null;
+          currentMerging.totalPart = sms.totalPart;
+          if (sms.partNo === sms.totalPart) {
+            // If it's the last part, push the merged message
+            mergedMessages.push(currentMerging);
+            currentMerging = null;
+          }
         } else if (sms.partNo > 1 && sms.partNo < sms.totalPart && currentMerging && sms.sentId === currentMerging.sentId) {
           currentMerging.message += sms.message;
+          currentMerging.totalPart = sms.totalPart;
         }
-       
       } else {
         mergedMessages.push(sms);
       }
     }
-  
-    if (currentMerging) {
-      mergedMessages.push(currentMerging);
-    }
-  
+
     setNewAllChat(mergedMessages);
   }, [allChat]);
-  
+
+
+
 
   const handleToShowHistory = () => {
     SetShowHistory(!showHistory);
@@ -102,15 +101,14 @@ const Message = ({ allChat, setAllChat, selectedCustomerChat, showHistory, SetSh
     }
   }, [selectedCustomerChat?.userId, showHistory]);
 
- 
-  console.log(allChat,"from message component")
+
 
 
 
 
 
   return (
-    <div className="mb-10">
+    <div className="mb-20">
       {showHistory ? (historyLoading ? <BtnSpinner /> : userIdAllChat && userIdAllChat?.length > 0 ? (
         <ShowChatHistory userIdAllChat={userIdAllChat} customerUserId={selectedCustomerChat?.userId} />
       ) : (
@@ -139,168 +137,156 @@ const Message = ({ allChat, setAllChat, selectedCustomerChat, showHistory, SetSh
                   </div>
                   <div className="max-w-10/12 pt-3">
                     {chat?.msgType === "image" ? (
-                      <img
-                        className="w-48 h-auto"
-                        src={`data:image/png;base64,${chat?.message}`}
-                        alt={`Image ${index}`}
-                      />
+                      <div>
+                        <img
+                          className="w-48 h-auto"
+                          src={`data:image/png;base64,${chat?.message}`}
+                          alt={`Image ${index}`}
+                        />
+                        <div className="flex justify-end pt-3"><small className=" text-right text-xs">{chat?.timestamp}</small> </div>
+
+                      </div>
+
+
                     ) : chat?.msgType === "video" ? (
-                      <video
-                        className="max-w-full h-auto"
-                        controls
-                        src={`data:video/mp4;base64,${chat?.message}`}
-                      />
+                      <div>
+                        <video
+                          className="max-w-full h-auto"
+                          controls
+                          src={`data:video/mp4;base64,${chat?.message}`}
+                        />
+                        <div className="flex justify-end pt-3"><small className=" text-right text-xs">{chat?.timestamp}</small> </div>
+                      </div>
+
                     ) : chat?.msgType === "file" ?
-                    
-                    // (
-                    //   <a
-                    //     href={`data:application/pdf;base64,${chat?.message}`}
-                    //     target="_blank"
-                    //     rel="noreferrer"
-                    //   >
-                    //     View File
-                    //   </a>
-                    // ) 
-                    <div className="max-w-10/12 pt-3">
-                    {(() => {
-                      // Function to determine file type based on the message
-                      const getFileType = (message) => {
-                        console.log(message,"message to check the file name")
-                        if (message.endsWith('.pdf')) {
-                          return 'pdf';
-                        } else if (message.endsWith('.xlsx')) {
-                          return 'xls';
-                        } else if (message.endsWith('.xls')) {
-                          return 'xls';
-                        } else if (message.endsWith('.txt')) {
-                          return 'txt';
-                        } else if (message.endsWith('.doc')) {
-                          return 'docx';
-                        } else if (message.endsWith('.docx')) {
-                          return 'docx';
-                        } else if (message.endsWith('.csv')) {
-                          return 'csv';
-                        } else if (message.endsWith('.zip')) {
-                          return 'zip';
-                        } else if (message.endsWith('.rar')) {
-                          return 'rar';
-                        } else {
-                          return 'unknown'; // You can handle other formats as needed
-                        }
-                      };
 
-                      // Determine the file type
-                      console.log(chat,"check for file name")
-                      console.log(chat.FileName, "fileType",)
-                      const fileType = getFileType(chat?.fileName);
+                      <div className="max-w-10/12 pt-3">
+                        {(() => {
+                          // Function to determine file type based on the message
+                          const getFileType = (message) => {
+                            if (message?.endsWith('.pdf')) {
+                              return 'pdf';
+                            } else if (message?.endsWith('.xlsx')) {
+                              return 'xls';
+                            } else if (message?.endsWith('.xls')) {
+                              return 'xlsx';
+                            } else if (message?.endsWith('.txt')) {
+                              return 'txt';
+                            } else if (message?.endsWith('.doc')) {
+                              return 'docx';
+                            } else if (message?.endsWith('.docx')) {
+                              return 'docx';
+                            } else if (message?.endsWith('.csv')) {
+                              return 'csv';
+                            } else if (message?.endsWith('.zip')) {
+                              return 'zip';
+                            } else if (message?.endsWith('.rar')) {
+                              return 'rar';
+                            } else {
+                              return 'unknown'; // You can handle other formats as needed
+                            }
+                          };
 
-                      // Render the file based on its type
-                      const getFileViewer = (fileType, message) => {
-                        switch (fileType) {
-                          case 'pdf':
-                            return (
-                              // Use a PDF viewer library or iframe to display the PDF
-                              <a
-                                href={`data:application/zip;base64,${message}`}
-                                download={`${chat?.fileName}`}
-                              >
-                                {/* <iframe
-                                  src={`data:application/pdf;base64,${message}`}
-                                  width="100%"
-                                  height="500px"
-                                /> */}
-                                <ImFilePdf className="text-red-500 font-bold text-7xl"></ImFilePdf>
-                              </a>
-                            );
-                          case 'xlsx':
-                            return (
-                              // Use an Excel viewer library or iframe to display the Excel file
-                              // Be sure to choose a library that can handle XLSX files
-                              <a
-                                href={`data:application/zip;base64,${message}`}
-                                download={`${chat?.fileName}`}
-                              >
-                                {/* <iframe
-                                  src={`data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${message}`}
-                                  width="100%"
-                                  height="500px"
-                                /> */}
-                                <BsFiletypeXlsx className="text-green-700 font-bold text-7xl"></BsFiletypeXlsx>
-                              </a>
-                            );
-                          case 'docx':
-                            return (
-                              // Use a document viewer library or iframe to display the document
-                              // You'll need a library that can handle DOCX files
-                              <a
-                                href={`data:application/zip;base64,${message}`}
-                                download={`${chat?.fileName}`}
-                              >
-                                {/* <iframe
-                                  src={`data:application/msword;base64,${message}`}
-                                  width="100%"
-                                  height="500px"
-                                /> */}
-                                <BsFiletypeDocx className="text-blue-700 font-bold text-7xl"></BsFiletypeDocx>
-                              </a>
-                            );
-                          case 'csv':
-                            return (
-                              // Render CSV content or use a CSV viewer if available
-                              <a
-                              href={`data:application/zip;base64,${message}`}
-                              download={`${chat?.fileName}`}
-                            >
-                              <FaFileCsv className="text-green-700 font-bold text-7xl"></FaFileCsv>
-                            </a>
-                            );
-                          case 'txt':
-                            return (
-                              // Render CSV content or use a CSV viewer if available
-                              <a
-                              href={`data:application/txt;base64,${message}`}
-                              download={`${chat?.fileName}`}
-                            >
-                              <FiFileText className="text-black font-bold text-7xl"></FiFileText>
-                            </a>
-                            );
-                          case 'zip':
-                            return (
-                              // Render a link to download the ZIP file
-                              <a
-                                href={`data:application/zip;base64,${message}`}
-                                download={`${chat?.fileName}`}
-                              >
-                               <AiFillFileZip className="text-yellow-700 font-bold text-7xl"></AiFillFileZip>
-                              </a>
-                            );
-                          case 'rar':
-                            return (
-                              // Render a link to download the rar file
-                              <a
-                                href={`data:application/rar;base64,${message}`}
-                                download={`${chat?.fileName}`}
-                              >
-                                <AiFillFileZip className="text-yellow-700 font-bold text-7xl"></AiFillFileZip>
-                              </a>
-                            );
-                          default:
-                            // Handle unknown or unsupported formats
-                            return <p>Unsupported File Format</p>;
-                        }
-                      };
+                          // Determine the file type
+                          const fileType = getFileType(chat?.fileName);
 
-                      // Usage in your component
-                      const fileViewer = getFileViewer(fileType, chat?.message);
-                      return <div>{fileViewer}</div>;
+                          // Render the file based on its type
+                          const getFileViewer = (fileType, message) => {
+                            switch (fileType) {
+                              case 'pdf':
+                                return (
+                                  // Use a PDF viewer library or iframe to display the PDF
+                                  <a
+                                    href={`data:application/zip;base64,${message}`}
+                                    download={`${chat?.fileName}`}
+                                  >
+                                    
+                                    <ImFilePdf className="text-red-500 font-bold text-7xl"></ImFilePdf>
+                                  </a>
+                                );
+                              case 'xlsx':
+                                return (
+                                  // Use an Excel viewer library or iframe to display the Excel file
+                                  // Be sure to choose a library that can handle XLSX files
+                                  <a
+                                    href={`data:application/zip;base64,${message}`}
+                                    download={`${chat?.fileName}`}
+                                  >
+                                  
+                                    <BsFiletypeXlsx className="text-green-700 font-bold text-7xl"></BsFiletypeXlsx>
+                                  </a>
+                                );
+                              case 'docx':
+                                return (
+                                 
+                                  <a
+                                    href={`data:application/zip;base64,${message}`}
+                                    download={`${chat?.fileName}`}
+                                  >
+                                   
+                                    <BsFiletypeDocx className="text-blue-700 font-bold text-7xl"></BsFiletypeDocx>
+                                  </a>
+                                );
+                              case 'csv':
+                                return (
+                                  // Render CSV content or use a CSV viewer if available
+                                  <a
+                                    href={`data:application/zip;base64,${message}`}
+                                    download={`${chat?.fileName}`}
+                                  >
+                                    <FaFileCsv className="text-green-700 font-bold text-7xl"></FaFileCsv>
+                                  </a>
+                                );
+                              case 'txt':
+                                return (
+                                  // Render CSV content or use a CSV viewer if available
+                                  <a
+                                    href={`data:application/txt;base64,${message}`}
+                                    download={`${chat?.fileName}`}
+                                  >
+                                    <FiFileText className="text-black font-bold text-7xl"></FiFileText>
+                                  </a>
+                                );
+                              case 'zip':
+                                return (
+                                  // Render a link to download the ZIP file
+                                  <a
+                                    href={`data:application/zip;base64,${message}`}
+                                    download={`${chat?.fileName}`}
+                                  >
+                                    <AiFillFileZip className="text-yellow-700 font-bold text-7xl"></AiFillFileZip>
+                                  </a>
+                                );
+                              case 'rar':
+                                return (
+                                  // Render a link to download the rar file
+                                  <a
+                                    href={`data:application/rar;base64,${message}`}
+                                    download={`${chat?.fileName}`}
+                                  >
+                                    <AiFillFileZip className="text-yellow-700 font-bold text-7xl"></AiFillFileZip>
+                                  </a>
+                                );
+                              default:
+                                // Handle unknown or unsupported formats
+                                return <p>Unsupported File Format</p>;
+                            }
+                          };
 
-                    })()}
-                  </div>
-                    : (
-                      <p className="bg-fuchsia-200 px-2 py-1 rounded-b-lg rounded-tr-lg text-black">
-                        {chat?.message}
-                      </p>
-                    )}
+                          // Usage in your component
+                          const fileViewer = getFileViewer(fileType, chat?.message);
+                          return <div>{fileViewer}</div>;
+
+                        })()}
+                        <div className="flex justify-end pt-3"><small className=" text-right text-xs">{chat?.timestamp}</small> </div>
+                      </div>
+                      : (
+                        <div className="bg-fuchsia-200 px-2 py-1  rounded-b-lg rounded-tr-lg text-black">
+                          <p className="px-2 py-1 font-normal text-black">{chat?.message}</p>
+                          <div className="flex justify-end"><small className=" text-right text-slate-500">{chat?.timestamp}</small> </div>
+
+                        </div>
+                      )}
                   </div>
 
                 </>
@@ -312,25 +298,46 @@ const Message = ({ allChat, setAllChat, selectedCustomerChat, showHistory, SetSh
                 <>
                   <div className="max-w-10/12 pt-3">
                     {chat?.msgType === "image" ? (
-                      <img
-                        className=" w-48 h-auto"
-                        src={`data:image/png;base64,${chat?.message}`}
-                        alt={`Image ${index}`}
-                        onClick={() => openImageModal(`data:image/png;base64,${chat?.message}`)}
-                      />
+                      <div>
+                        <img
+                          className=" w-48 h-auto"
+                          src={`data:image/png;base64,${chat?.message}`}
+                          alt={`Image ${index}`}
+                          onClick={() => openImageModal(`data:image/png;base64,${chat?.message}`)}
+                        />
+                        <div className="flex justify-start mt-2">
+                            <small className="text-end  text-slate-500 text-xs mr-4">{chat?.timestamp}</small>
+                            {
+                              chat?.smsLoading &&
+                              <Spinner></Spinner>
+                            }
+                          </div>
+
+                      </div>
+
                     ) : chat?.msgType === "video" ? (
-                      <video
-                        className="max-w-full h-auto"
-                        controls
-                        src={`data:video/mp4;base64,${chat?.message}`}
-                      />
+                      <div>
+                        <video
+                          className="max-w-full h-auto"
+                          controls
+                          src={`data:video/mp4;base64,${chat?.message}`}
+                        />
+                       <div className="flex justify-start mt-2">
+                            <small className="text-end  text-slate-500 text-xs mr-4">{chat?.timestamp}</small>
+                            {
+                              chat?.smsLoading &&
+                              <Spinner></Spinner>
+                            }
+                          </div>
+
+                      </div>
+
                     ) : chat?.msgType === "file" ?
-                  
+
                       <div className="max-w-10/12 pt-3">
                         {(() => {
                           // Function to determine file type based on the message
                           const getFileType = (message) => {
-                            console.log(message,"message to check the file name")
                             if (message.endsWith('.pdf')) {
                               return 'pdf';
                             } else if (message.endsWith('.xlsx')) {
@@ -367,11 +374,7 @@ const Message = ({ allChat, setAllChat, selectedCustomerChat, showHistory, SetSh
                                     href={`data:application/zip;base64,${message}`}
                                     download={`${chat?.fileName}`}
                                   >
-                                    {/* <iframe
-                                      src={`data:application/pdf;base64,${message}`}
-                                      width="100%"
-                                      height="500px"
-                                    /> */}
+                                    
                                     <ImFilePdf className="text-red-500 font-bold text-7xl"></ImFilePdf>
                                   </a>
                                 );
@@ -383,11 +386,7 @@ const Message = ({ allChat, setAllChat, selectedCustomerChat, showHistory, SetSh
                                     href={`data:application/zip;base64,${message}`}
                                     download={`${chat?.fileName}`}
                                   >
-                                    {/* <iframe
-                                      src={`data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${message}`}
-                                      width="100%"
-                                      height="500px"
-                                    /> */}
+                                    
                                     <BsFiletypeXlsx className="text-green-700 font-bold text-7xl"></BsFiletypeXlsx>
                                   </a>
                                 );
@@ -399,11 +398,7 @@ const Message = ({ allChat, setAllChat, selectedCustomerChat, showHistory, SetSh
                                     href={`data:application/zip;base64,${message}`}
                                     download={`${chat?.fileName}`}
                                   >
-                                    {/* <iframe
-                                      src={`data:application/msword;base64,${message}`}
-                                      width="100%"
-                                      height="500px"
-                                    /> */}
+                                   
                                     <BsFiletypeDocx className="text-blue-700 font-bold text-7xl"></BsFiletypeDocx>
                                   </a>
                                 );
@@ -411,21 +406,21 @@ const Message = ({ allChat, setAllChat, selectedCustomerChat, showHistory, SetSh
                                 return (
                                   // Render CSV content or use a CSV viewer if available
                                   <a
-                                  href={`data:application/zip;base64,${message}`}
-                                  download={`${chat?.fileName}`}
-                                >
-                                  <FaFileCsv className="text-green-700 font-bold text-7xl"></FaFileCsv>
-                                </a>
+                                    href={`data:application/zip;base64,${message}`}
+                                    download={`${chat?.fileName}`}
+                                  >
+                                    <FaFileCsv className="text-green-700 font-bold text-7xl"></FaFileCsv>
+                                  </a>
                                 );
                               case 'txt':
                                 return (
                                   // Render CSV content or use a CSV viewer if available
                                   <a
-                                  href={`data:application/txt;base64,${message}`}
-                                  download={`${chat?.fileName}`}
-                                >
-                                  <FiFileText className="text-black font-bold text-7xl"></FiFileText>
-                                </a>
+                                    href={`data:application/txt;base64,${message}`}
+                                    download={`${chat?.fileName}`}
+                                  >
+                                    <FiFileText className="text-black font-bold text-7xl"></FiFileText>
+                                  </a>
                                 );
                               case 'zip':
                                 return (
@@ -434,7 +429,7 @@ const Message = ({ allChat, setAllChat, selectedCustomerChat, showHistory, SetSh
                                     href={`data:application/zip;base64,${message}`}
                                     download={`${chat?.fileName}`}
                                   >
-                                   <AiFillFileZip className="text-yellow-700 font-bold text-7xl"></AiFillFileZip>
+                                    <AiFillFileZip className="text-yellow-700 font-bold text-7xl"></AiFillFileZip>
                                   </a>
                                 );
                               case 'rar':
@@ -458,13 +453,31 @@ const Message = ({ allChat, setAllChat, selectedCustomerChat, showHistory, SetSh
                           return <div>{fileViewer}</div>;
 
                         })()}
+                        <div className="flex justify-start mt-2">
+                            <small className="text-end  text-slate-500 text-xs mr-4">{chat?.timestamp}</small>
+                            {
+                              chat?.smsLoading &&
+                              <Spinner></Spinner>
+                            }
+                          </div>
                       </div>
 
 
                       : (
-                        <p className="bg-fuchsia-200 px-2 py-1 rounded-b-lg rounded-tr-lg text-black">
-                          {chat?.message}
-                        </p>
+                       
+                        <div className="bg-fuchsia-200 px-2 py-1 rounded-b-lg rounded-tl-lg text-black">
+                          <p className="px-2 py-1 font-normal text-black">{chat?.message}</p>
+                          <div className="flex justify-start">
+                            <small className="text-end  text-slate-500 text-xs mr-4">{chat?.timestamp}</small>
+                            {
+                              chat?.smsLoading &&
+                              <Spinner></Spinner>
+                            }
+                          </div>
+
+
+
+                        </div>
                       )}
                   </div>
 
