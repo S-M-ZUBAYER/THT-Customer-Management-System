@@ -110,7 +110,7 @@ const Message = ({ allChat, setAllChat, selectedCustomerChat, showHistory, SetSh
   return (
     <div className="mb-20">
       {showHistory ? (historyLoading ? <BtnSpinner /> : userIdAllChat && userIdAllChat?.length > 0 ? (
-        <ShowChatHistory userIdAllChat={userIdAllChat} customerUserId={selectedCustomerChat?.userId} />
+        <ShowChatHistory userIdAllChat={userIdAllChat} customerUserId={selectedCustomerChat?.userId} SetUserIdAllChat={SetUserIdAllChat} />
       ) : (
         <div className="text-lg text-center font-semibold text-orange-400">No SMS available</div>
       )) : (

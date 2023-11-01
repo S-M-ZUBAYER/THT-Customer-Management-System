@@ -47,9 +47,7 @@ const CustomerService_1 = () => {
                 setConnected(true);
                 console.log('Connected: ' + frame);
                 stompClient.subscribe(`/topic/${chattingUser?.userId}`, (message) => {
-                    // console.log(message,"send")
-                    // const newSMS = JSON.parse(message.body);
-                    // showGreeting(message.body, newSMS);
+                  
 
                     // Reset the disconnect timer whenever a new message is received
                     clearTimeout(disconnectTimer);
