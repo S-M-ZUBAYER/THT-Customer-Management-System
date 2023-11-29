@@ -7,29 +7,61 @@ import toast from 'react-hot-toast';
 import { AuthContext } from '../../../context/UserContext';
 import { Client } from '@stomp/stompjs';
 import { sendChatMessage } from './SendMessageFunction';
+import axios from 'axios';
+
 
 
 const MessageInput = ({
-  setAllChat,
   selectedCustomerChat,
-  allChat,
   newMessagesList,
   setNewMessagesList
 }) => {
 
   const [message, setMessage] = useState('');
-  const [selectedFiles, setSelectedFiles] = useState([]);
+  // const [selectedFiles, setSelectedFiles] = useState([]);
   const [fileType, setFileType] = useState(null); // Default to 'image'
-  const { chattingUser } = useContext(AuthContext);
+  const { chattingUser,connected, setConnected,selectedFiles, setSelectedFiles,allChat, setAllChat,newCome, setNewCome,newAllMessage, setNewAllMessage,newResponseCome, setNewResponseCome} = useContext(AuthContext);
   const [response, setResponse] = useState({});
-  const [newOne, setNewOne] = useState({});
-  const [newAllMessage, setNewAllMessage] = useState([]);
-  const [newCome, setNewCome] = useState({});
-  const [newResponseCome, setNewResponseCome] = useState({});
+  // const [newOne, setNewOne] = useState({});
+  // const [newAllMessage, setNewAllMessage] = useState([]);
+  // const [newCome, setNewCome] = useState({});
+  const [deviceId, setDeviceId] = useState(null);
+  // const [newResponseCome, setNewResponseCome] = useState({});
   const [newSentId, setNewSentId] = useState(getCurrentTimestampInSeconds());
+  
 
 
+ 
 
+  
+  // const pc = new RTCPeerConnection();
+
+  // function getIPAddresses(pc) {
+  //   pc.createDataChannel('');
+  //   pc.createOffer()
+  //     .then(offer => pc.setLocalDescription(offer))
+  //     .catch(error => console.error('Error creating offer:', error));
+  
+  //   pc.onicecandidate = (e) => {
+  //     if (e.candidate) {
+  //       const ipAddressMatch = e.candidate.candidate.match(/([0-9.]{7,15})/);
+  //       if (ipAddressMatch) {
+  //         const ipAddress = ipAddressMatch[1];
+  //         setDeviceId(ipAddressMatch[1]);
+  //         console.log('Your IP address:', ipAddress);
+  //       } else {
+  //         console.log('IP address not found in candidate:', e.candidate.candidate);
+  //       }
+  //     } else {
+  //       console.log('No IP address found.');
+  //     }
+  
+  //     pc.onicecandidate = null; // Stop listening for ice candidates
+  //   };
+  // }
+  
+  // getIPAddresses(pc);
+  
 
   const showList = () => {
     if (newCome && newMessagesList && newMessagesList.length > 0) {
@@ -75,7 +107,7 @@ const MessageInput = ({
       // showList();
     }
 
-  }, [newCome, selectedCustomerChat]);
+  }, [newCome]);
 
 
 
@@ -143,10 +175,10 @@ const MessageInput = ({
   }
   // <---------------------------Final Web Socket------------------------------------>
 
-  const [connected, setConnected] = useState(false);
+  // const [connected, setConnected] = useState(false);
 
   const stompClient = new Client({
-    brokerURL: 'wss://grozziie.zjweiting.com:3091/CustomerService-Chat/websocket',
+    brokerURL: 'wss://grozziieget.zjweiting.com:3091/CustomerService-Chat/websocket',
     //  brokerURL: 'ws://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/websocket',
   });
 
@@ -154,7 +186,7 @@ const MessageInput = ({
 
 
 
-
+//After solve the chatting app backend i need to comment out again...
 
 
   useEffect(() => {
@@ -162,6 +194,32 @@ const MessageInput = ({
       stompClient.onConnect = (frame) => {
         setConnected(true);
         console.log('Connected: ' + frame);
+
+        const response = new Promise((resolve) => {
+          stompClient.publish(
+            {
+              destination: '/app/connectStatus',
+              body: JSON.stringify({
+                userId: chattingUser?.userId,
+                deviceId: deviceId,
+              }),
+            },
+            {},
+            (response) => {
+              resolve(response);
+              console.log(response, "device id");
+            }
+          );
+        });
+        
+        response.then((resolvedValue) => {
+          // You can now use the resolved value here
+          console.log('Promise resolved:', resolvedValue);
+        });
+        
+
+
+
         stompClient.subscribe(`/topic/${chattingUser?.userId}`, (message) => {
           console.log(message?.body, "coming sms")
           const newSMS = JSON.parse(message.body);
@@ -274,7 +332,7 @@ const MessageInput = ({
 
 
 
-    //==============================================
+  //   //==============================================
 
     setAllChat((prevChat) => [...prevChat, sms]);
 

@@ -13,6 +13,9 @@ function ProductDetails() {
     const url = window.location.href;
     const productCategory = url.split('/')[4];
 
+    console.log(Product,"main product")
+    
+
     const [selectedImage, setSelectedImage] = useState(null);
     const [selectedColorImage, setSelectedColorImage] = useState(null);
     const [selectedInstructionImage, setSelectedInstructionImage] = useState(null);
@@ -192,7 +195,8 @@ function ProductDetails() {
 
                             <div className="container">
                                 <h1 className="text-2xl font-bold mt-8 mb-5">Related Image Gallery Of <span className="text-amber-400">{Product?.productName}</span></h1>
-                                <div title={`Link: ${Product?.relatedImgLink}\nRemark: ${Product?.relatedImgRemark}`} className="grid grid-cols-3 gap-3">
+                               {
+                                Product  && <div title={`Link: ${Product?.relatedImgLink}\nRemark: ${Product?.relatedImgRemark}`} className="grid grid-cols-3 gap-3">
                                     {(Product.allImages)?.split(",")?.map((image, index) => (
                                         <img
                                             key={index}
@@ -203,6 +207,8 @@ function ProductDetails() {
                                         />
                                     ))}
                                 </div>
+                               }
+                                
                                 {selectedImage && (
                                     <div className="fixed inset-0 flex items-center justify-center mx-auto my-auto w-3/4 h-3/4 bg-black bg-opacity-75 z-40 overflow-scroll">
                                         <div className="max-w-3xl max-h-3xl ">

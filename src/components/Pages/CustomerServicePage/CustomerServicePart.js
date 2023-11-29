@@ -110,20 +110,28 @@ const CustomerServicePart = () => {
             },
             body: JSON.stringify(engInput)
         })
-            .then((res) => res.json())
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error(`Error: ${res.status} - ${res.statusText}`);
+                }
+                return res.json();
+            })
             .then((data) => {
-                setEngText(data?.data)
+                setEngText(data?.data);
                 e.target.outputField2.value = data?.data;
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                inputField3.value="Fail to translate please try again"
+                // Handle the error, show a message to the user, etc.
             });
-
-
-        //create an object to send backend and start the process for Bengali translations
-
+        
+        // Create an object to send to the backend and start the process for Bengali translations
         const customerInput = {
             target: "Bengali",
             text: text
-        }
-
+        };
+        
         fetch(apiUrl, {
             method: "POST",
             headers: {
@@ -131,10 +139,20 @@ const CustomerServicePart = () => {
             },
             body: JSON.stringify(customerInput)
         })
-            .then((res) => res.json())
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error(`Error: ${res.status} - ${res.statusText}`);
+                }
+                return res.json();
+            })
             .then((data) => {
                 setCustomerTranslation(data?.data);
                 inputField2.value = data?.data;
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                inputField2.value="Fail to translate please try again"
+                // Handle the error, show a message to the user, etc.
             });
 
         fetch('https://grozziie.zjweiting.com:8032/get_response', {

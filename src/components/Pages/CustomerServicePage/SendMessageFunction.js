@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 
 
 const stompClient = new Client({
-    brokerURL: 'wss://grozziie.zjweiting.com:3091/CustomerService-Chat/websocket',
+    brokerURL: 'wss://grozziieget.zjweiting.com:3091/CustomerService-Chat/websocket',
     // brokerURL: 'ws://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/websocket',
 });
 

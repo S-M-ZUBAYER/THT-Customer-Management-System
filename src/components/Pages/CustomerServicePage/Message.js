@@ -14,12 +14,13 @@ import Spinner from '../../Shared/Loading/Spinner';
 import DisplaySpinner from '../../Shared/Loading/DisplaySpinner';
 import ShowChatHistory from './ShowChatHistory';
 import ImageModal from './ImageModal';
+import ReactEmoji from 'react-emoji-render';
 
-const Message = ({ allChat, setAllChat, selectedCustomerChat, showHistory, SetShowHistory, Loading }) => {
+const Message = ({selectedCustomerChat, showHistory, SetShowHistory, Loading }) => {
   const [userIdAllChat, SetUserIdAllChat] = useState([]);
-  const { user, chattingUser } = useContext(AuthContext);
+  const { user, chattingUser,allChat } = useContext(AuthContext);
   const [historyLoading, setHistoryLoading] = useState(false);
-  const [newOne, setNewOne] = useState({});
+  // const [newOne, setNewOne] = useState({});
   const [newAllChat, setNewAllChat] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -81,7 +82,8 @@ const Message = ({ allChat, setAllChat, selectedCustomerChat, showHistory, SetSh
       const fetchUserByUserId = async () => {
         setHistoryLoading(true);
         try {
-          const response = await axios.get(`https://grozziie.zjweiting.com:3091/CustomerService-Chat/api/dev/messages/userMessages/${selectedCustomerChat?.userId}`);
+          // const response = await axios.get(`https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/messages/userMessages/${selectedCustomerChat?.userId}/mergeFetch`);
+          const response = await axios.get(`https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/messages/userMessages/${selectedCustomerChat?.userId}`);
           if (response.status === 200) {
             SetUserIdAllChat(response.data?.filter(data => data?.chatId !== selectedCustomerChat?.chatId));
             const allHistory = response.data?.filter(data => data?.chatId !== selectedCustomerChat?.chatId)
@@ -105,7 +107,7 @@ const Message = ({ allChat, setAllChat, selectedCustomerChat, showHistory, SetSh
 
 
 
-
+console.log(userIdAllChat,"old history")
 
   return (
     <div className="mb-20">
@@ -282,7 +284,7 @@ const Message = ({ allChat, setAllChat, selectedCustomerChat, showHistory, SetSh
                       </div>
                       : (
                         <div className="bg-fuchsia-200 px-2 py-1  rounded-b-lg rounded-tr-lg text-black">
-                          <p className="px-2 py-1 font-normal text-black">{chat?.message}</p>
+                          <p className="px-2 py-1 font-normal text-black"><ReactEmoji text={chat?.message} /></p>
                           <div className="flex justify-end"><small className=" text-right text-slate-500">{chat?.timestamp}</small> </div>
 
                         </div>
@@ -395,7 +397,7 @@ const Message = ({ allChat, setAllChat, selectedCustomerChat, showHistory, SetSh
                                   // Use a document viewer library or iframe to display the document
                                   // You'll need a library that can handle DOCX files
                                   <a
-                                    href={`data:application/zip;base64,${message}`}
+                                    href={`data:application/zip;base64,${message}`}  b                                                                                                                                                                      
                                     download={`${chat?.fileName}`}
                                   >
                                    
@@ -466,7 +468,7 @@ const Message = ({ allChat, setAllChat, selectedCustomerChat, showHistory, SetSh
                       : (
                        
                         <div className="bg-fuchsia-200 px-2 py-1 rounded-b-lg rounded-tl-lg text-black">
-                          <p className="px-2 py-1 font-normal text-black">{chat?.message}</p>
+                          <p className="px-2 py-1 font-normal text-black"><ReactEmoji text={chat?.message} /></p>
                           <div className="flex justify-start">
                             <small className="text-end  text-slate-500 text-xs mr-4">{chat?.timestamp}</small>
                             {

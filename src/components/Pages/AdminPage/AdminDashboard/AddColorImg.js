@@ -15,6 +15,8 @@ const AddColorImg = ({ Product }) => {
     const [colorName, setColorName] = useState('');
 
 
+    console.log(Product,"product")
+
     const handleColorImageChange = (e) => {
 
         // extract the current date and time components
@@ -58,11 +60,13 @@ const AddColorImg = ({ Product }) => {
             formData.append('typeName', typeName);
             formData.append('productId', Product?.id);
             formData.append('modelNumber', Product?.modelNumber);
+            formData.append('modelImage', Product?.imgPath.split("/")[4]);
             formData.append('productPrice', productPrice);
             formData.append('stockQuantity', stockQuantity);
             formData.append('productDescription', productDescription);
             // Make a POST request to your server
             axios.post('https://grozziie.zjweiting.com:8033/tht/colorImg/add', formData)
+            // axios.post('http://localhost:2000/tht/colorImg/add', formData)
                 .then(response => {
                     if (response.data.status === "success") {
                         toast.success("Color Image and image information uploaded successfully");
@@ -162,7 +166,7 @@ const AddColorImg = ({ Product }) => {
                         <textarea
                             id="productDescription"
                             placeholder="Add Product description"
-                            className="shadow resize-none appearance-none border rounded-lg w-full h-44  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                            className="shadow resize-both appearance-none border rounded-lg w-full h-44  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
                             value={productDescription}
                             onChange={handleProductDescriptionChange}
                             required
@@ -176,6 +180,8 @@ const AddColorImg = ({ Product }) => {
                     <h1 className="mt-10 text-2xl text-green-400 font-bold">Show the list Of {Product?.modelNumber}'s Color Images</h1>
                     <ShowColorImgList
                         modelNumber={Product?.modelNumber}
+                        productId={Product?.id}
+                        categoryImage={Product?.imgPath.split("/")[4]}
                     ></ShowColorImgList>
                 </div>
             </div>

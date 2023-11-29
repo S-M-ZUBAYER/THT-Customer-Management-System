@@ -79,13 +79,13 @@ function AddProduct({ product }) {
   const handleImageChange = (e) => {
     const relatedImages = Array.from(e.target.files);
     const resizePromises = relatedImages.map((image) => reduceImageResolution(image, 1000));
-  
+
     Promise.all(resizePromises)
       .then((resizedImages) => {
         setSelectedImages(resizedImages);
       });
   };
-  
+
 
   const handleVideoChange = (e) => {
     setSelectedVideos(e.target.files);
@@ -93,13 +93,13 @@ function AddProduct({ product }) {
   const handleInstructionsImageChange = (e) => {
     const instructionsImages = Array.from(e.target.files);
     const resizePromises = instructionsImages.map((image) => reduceImageResolution(image, 1000));
-  
+
     Promise.all(resizePromises)
       .then((resizedImages) => {
         setSelectedInstructionsImages(resizedImages);
       });
   };
-  
+
 
   const handleInstructionsVideoChange = (e) => {
     setSelectedInstructionsVideos(e.target.files);
@@ -178,31 +178,30 @@ function AddProduct({ product }) {
   const handleDescriptionImageChange = (e) => {
     const images = Array.from(e.target.files);
     const updateImagesPromises = images.map((image) => reduceImageResolution(image, 1000));
-  
+
     Promise.all(updateImagesPromises)
       .then((reducedImages) => {
         setSelectedDescriptionImages(reducedImages);
       });
   };
-  
 
-  
+
+
   const handleDescriptionImageRemark = (e) => {
     setDescriptionImgRemark(e.target.value);
 
   }
-  
+
 
   const handleProductImgUpload = (event) => {
     // extract the current date and time components
     const preFile = event.target.files[0];
-   const file= reduceImageResolution(preFile,1000);
-   file.then((fileObject) => {
-    console.log('Fulfilled File:', fileObject);
-    setProductImg(fileObject);
-  });
+    const file = reduceImageResolution(preFile, 1000);
+    file.then((fileObject) => {
+      setProductImg(fileObject);
+    });
 
-    
+
   };
 
   // const handleInvoiceFileUpload = (event) => {
@@ -223,7 +222,6 @@ function AddProduct({ product }) {
     const date = now.toLocaleDateString();
     const time = now.toLocaleTimeString();
     const formData = new FormData();
-    console.log(productImg,"productImg")
     formData.append('productImg', productImg);
     // formData.append('invoiceFile', invoiceFile);
     formData.append('productCountryName', productCountryName);
@@ -273,7 +271,10 @@ function AddProduct({ product }) {
       formData.append('instructionsVideos', selectedInstructionsVideos[i]);
     }
 
+    
+
     try {
+      console.log(productName,"new product name")
       await axios.post(`https://grozziie.zjweiting.com:8033/tht/${productCategory}/add`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
@@ -400,6 +401,7 @@ function AddProduct({ product }) {
             </select>
           </div>
 
+
           <div className="mb-4">
 
             <input
@@ -416,14 +418,19 @@ function AddProduct({ product }) {
             <label htmlFor="productDescription" className="block text-start text-gray-700 font-bold mb-2">
               Product Description
             </label>
+
+
             <textarea
               id="productDescription"
               placeholder="Add Product description"
-              className="shadow resize-none appearance-none border rounded-lg w-full h-44  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+              className="shadow resize-both appearance-none border rounded-lg w-full min-h-20 max-h-100 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
               value={productDescription}
               onChange={handleProductDescriptionChange}
               required
+              rows={5} // Initial number of visible text lines
             ></textarea>
+
+
           </div>
 
           <div className="my-8 mt-16  text-start mr-14 bg-gray-100 p-3 rounded-lg">
@@ -436,7 +443,7 @@ function AddProduct({ product }) {
 
             <div className="mb-4">
               <label htmlFor="productImageRemark" className="block text-start text-gray-700 font-bold mb-2">
-              Description Images Remarks
+                Description Images Remarks
               </label>
               <textarea
                 id="descriptionImgRemark"
@@ -547,7 +554,7 @@ function AddProduct({ product }) {
               ></textarea>
             </div>
           </div>
-          
+
 
 
           <div className="my-8 mt-16 grid  grid-cols-2 text-start mr-14">
@@ -635,7 +642,7 @@ function AddProduct({ product }) {
             <label className="block text-start text-gray-700 font-bold mb-2">
               Invoice
             </label>
-           
+
             <input
               type="file"
               multiple
@@ -643,7 +650,7 @@ function AddProduct({ product }) {
               onChange={handleInvoiceFileChange}
             />
 
-            
+
           </div>
           <button
             className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-10 px-20 rounded-lg"

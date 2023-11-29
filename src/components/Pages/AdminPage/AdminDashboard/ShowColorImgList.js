@@ -4,14 +4,17 @@ import DisplaySpinner from '../../../Shared/Loading/DisplaySpinner';
 import { RiDeleteBin7Line } from 'react-icons/ri';
 import { toast } from 'react-hot-toast';
 
-const ShowColorImgList = ({ modelNumber }) => {
+const ShowColorImgList = ({ modelNumber,productId,categoryImage }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [colorImages, setColorImages] = useState("");
 
+    console.log(categoryImage,"categoryImage")
+
     useEffect(() => {
         // Make a GET request to retrieve color images by model number
-        axios.get(`https://grozziie.zjweiting.com:8033/tht/colorImg/${modelNumber}`)
+        axios.get(`https://grozziie.zjweiting.com:8033/tht/colorImg/productColor/${productId}/${categoryImage}`)
+        // axios.get(`http://localhost:2000/tht/colorImg/productColor/${productId}/${categoryImage}`)
             .then(response => {
                 if (response.data.status === "success") {
                     // Set the retrieved color images in the state
@@ -31,6 +34,9 @@ const ShowColorImgList = ({ modelNumber }) => {
             });
     }, [modelNumber]);
 
+    console.log(colorImages,"color images")
+
+
     const handleToDeleteColorInfo = (id) => {
 
         const confirmed = window.confirm('Are you sure you want to delete this color image information?');
@@ -38,6 +44,7 @@ const ShowColorImgList = ({ modelNumber }) => {
           return; // Cancel the deletion if the user clicks Cancel or closes the modal
         }
         axios.delete(`https://grozziie.zjweiting.com:8033/tht/colorInfo/delete/${id}`)
+        // axios.delete(`http://localhost:2000/tht/colorInfo/delete/${id}`)
             .then(response => {
                 if (response.data) {
                     setColorImages(colorImages.filter(info => info?.id !== id))
@@ -95,6 +102,7 @@ const ShowColorImgList = ({ modelNumber }) => {
                                 <div key={index} className="mx-2 my-3 flex justify-between items-center text-start bg-slate-200 hover:bg-yellow-100  rounded-lg px-2 py-2">
 
                                     <img className=" h-10 w-10 rounded-full" src={`https://grozziie.zjweiting.com:8033/tht/colorImages/${colorImage.colorImage}`} alt={colorImage.colorName} ></img>
+                                    {/* <img className=" h-10 w-10 rounded-full" src={`http://localhost:2000/tht/colorImages/${colorImage.colorImage}`} alt={colorImage.colorName} ></img> */}
 
                                     <p>
                                         {modelNumber}

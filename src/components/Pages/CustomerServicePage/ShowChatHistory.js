@@ -6,6 +6,7 @@ import { FiFileText } from 'react-icons/fi';
 import { FaFileCsv } from 'react-icons/fa';
 import { BsFiletypeDocx } from 'react-icons/bs';
 import { BsFiletypeXlsx } from 'react-icons/bs';
+import ReactEmoji from 'react-emoji-render';
 import Spinner from '../../Shared/Loading/Spinner';
 import ImageModal from './ImageModal';
 
@@ -256,7 +257,7 @@ const ShowChatHistory = ({ userIdAllChat, customerUserId,SetUserIdAllChat }) => 
                       </div>
                       : (
                         <div className="bg-fuchsia-200 px-2 py-1  rounded-b-lg rounded-tr-lg text-black">
-                          <p className="px-2 py-1 font-normal text-black">{chat?.message}</p>
+                          <p className="px-2 py-1 font-normal text-black"><ReactEmoji text={chat?.message} /></p>
                           <div className="flex justify-end"><small className=" text-right text-slate-500">{chat?.timestamp}</small> </div>
 
                         </div>
@@ -474,7 +475,7 @@ const ShowChatHistory = ({ userIdAllChat, customerUserId,SetUserIdAllChat }) => 
                                 : (
                                  
                                   <div className="bg-fuchsia-200 px-2 py-1 rounded-b-lg rounded-tl-lg text-black">
-                                    <p className="px-2 py-1 font-normal text-black">{chat?.message}</p>
+                                    <p className="px-2 py-1 font-normal text-black"><ReactEmoji text={chat?.message} /></p>
                                     <div className="flex justify-start">
                                       <small className="text-end  text-slate-500 text-xs mr-4">{chat?.timestamp}</small>
                                       {

@@ -238,7 +238,7 @@ const Register = () => {
                                 //         navigate("/");
                                 try {
                                     const response = await axios.post(
-                                        'https://grozziie.zjweiting.com:3091/CustomerService-Chat/api/dev/user/signUp',
+                                        'https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/user/signUp',
                                         chatRegistration
                                     );
 
