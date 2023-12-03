@@ -49,7 +49,7 @@ const Register = () => {
 
 
 
-    // axios.get('https://grozziie.zjweiting.com:8033/tht/allUsers')
+    // axios.get('https://grozziieget.zjweiting.com:8033/tht/allUsers')
     //     .then(response => {
     //         setAllUsers(response.data);
 
@@ -183,7 +183,7 @@ const Register = () => {
 
         const form = event.target;
 
-        fetch('https://grozziie.zjweiting.com:8033/tht/check-user', {
+        fetch('https://grozziieget.zjweiting.com:8033/tht/check-user', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -210,7 +210,7 @@ const Register = () => {
                         return;
                     }
 
-                    fetch('https://grozziie.zjweiting.com:8033/tht/users/add', {
+                    fetch('https://grozziieget.zjweiting.com:8033/tht/users/add', {
                         method: 'POST',
                         headers: {
                             'content-type': 'application/json',

@@ -231,7 +231,7 @@ const CustomerServicePart = () => {
                 if (user) {
 
                     //load current user data from database
-                    fetch('https://grozziie.zjweiting.com:8033/tht/questions/add', {
+                    fetch('https://grozziieget.zjweiting.com:8033/tht/questions/add', {
                         method: 'POST',
                         headers: {
                             'content-type': 'application/json'
@@ -386,7 +386,7 @@ const CustomerServicePart = () => {
             }
 
             //load current user data from database
-            fetch('https://grozziie.zjweiting.com:8033/tht/unknownQuestions/add', {
+            fetch('https://grozziieget.zjweiting.com:8033/tht/unknownQuestions/add', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json'
@@ -500,7 +500,7 @@ const CustomerServicePart = () => {
             })
 
             //load current user data from database
-            fetch('https://grozziie.zjweiting.com:8033/tht/translationsQuestions/add', {
+            fetch('https://grozziieget.zjweiting.com:8033/tht/translationsQuestions/add', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json'

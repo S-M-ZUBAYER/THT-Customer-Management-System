@@ -16,7 +16,7 @@ const AddIconCategory = ({categories, setCategories}) => {
   const handleAddCategory = () => {
     if (categoryName.trim() !== '') {
       setCategories([...categories,categoryName]);
-      axios.post('https://grozziie.zjweiting.com:8033/tht/iconCategories/add', {
+      axios.post('https://grozziieget.zjweiting.com:8033/tht/iconCategories/add', {
         categoryName: categoryName,
       })
       .then((response) => {

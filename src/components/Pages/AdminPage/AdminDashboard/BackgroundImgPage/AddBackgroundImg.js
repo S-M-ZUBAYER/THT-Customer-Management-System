@@ -20,7 +20,7 @@ function AddBackgroundImg() {
 
   const { user } = useContext(AuthContext);
 useEffect(() => {
-  axios.get("https://grozziie.zjweiting.com:8033/tht/icons")
+  axios.get("https://grozziieget.zjweiting.com:8033/tht/icons")
     .then(res => {
       setBackgroundImgs(res.data)
     })
@@ -29,7 +29,7 @@ useEffect(() => {
 
 
   useEffect(() => {
-    fetch('https://grozziie.zjweiting.com:8033/tht/BackgroundCategories')
+    fetch('https://grozziieget.zjweiting.com:8033/tht/BackgroundCategories')
       .then(response => response.json())
       .then(data => {
         
@@ -68,8 +68,8 @@ useEffect(() => {
     formData.append('width', width);
   
     // Send formData to the server-side script for processing
-    // axios.post('https://grozziie.zjweiting.com:8033/tht/backgroundImgs/add', formData)
-    axios.post('https://grozziie.zjweiting.com:8033/tht/backgroundImgs/add', formData)
+    // axios.post('https://grozziieget.zjweiting.com:8033/tht/backgroundImgs/add', formData)
+    axios.post('https://grozziieget.zjweiting.com:8033/tht/backgroundImgs/add', formData)
       .then(res => {
         if (res.data.status === "success") {
           toast.success("Images uploaded successfully");

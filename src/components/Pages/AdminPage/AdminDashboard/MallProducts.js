@@ -35,7 +35,7 @@ const AddMallProducts = () => {
     // use useEffect to load the all mall product from data base
     useEffect(() => {
         setLoading(true)
-        fetch('https://grozziie.zjweiting.com:8033/tht/mallProducts')
+        fetch('https://grozziieget.zjweiting.com:8033/tht/mallProducts')
             .then(response => response.json())
             .then(data => setMallProduct(data));
         setLoading(false)
@@ -118,7 +118,7 @@ const AddMallProducts = () => {
             return; // Cancel the deletion if the user clicks Cancel or closes the modal
         }
         try {
-            await axios.delete(`https://grozziie.zjweiting.com:8033/tht/mallProducts/delete/${productId}`);
+            await axios.delete(`https://grozziieget.zjweiting.com:8033/tht/mallProducts/delete/${productId}`);
             toast.success(`One MallProduct deleted successfully`);
             setMallProduct((prevProducts) => prevProducts.filter((product) => product?.id !== productId));
         } catch (error) {
@@ -139,7 +139,7 @@ const AddMallProducts = () => {
     //create a function to update a product information from the frontend and database both side 
     const updateUser = async (userId, editingUser) => {
         try {
-            const response = await axios.put(`https://grozziie.zjweiting.com:8033/tht/users/update/${userId}`, editingUser);
+            const response = await axios.put(`https://grozziieget.zjweiting.com:8033/tht/users/update/${userId}`, editingUser);
             toast.success("user information updated successfully");
             // Optionally, you can show a success message to the user using a toast or other UI notification.
         } catch (error) {
@@ -186,7 +186,7 @@ const AddMallProducts = () => {
     //       formData.append('videos', selectedVideos[i]);
     //     }
     //     try {
-    //       await axios.put(`https://grozziie.zjweiting.com:8033/tht/mallProducts/update/${product?.id}`, formData, {
+    //       await axios.put(`https://grozziieget.zjweiting.com:8033/tht/mallProducts/update/${product?.id}`, formData, {
     //         headers: {
     //           'Content-Type': 'multipart/form-data'
     //         }
@@ -283,7 +283,7 @@ const AddMallProducts = () => {
                                     // <Link to={`/admin/mallProduct/details/${product?.Model},`}>
                                     <div key={index} className="mx-2 my-3 grid grid-cols-7  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">
                                         <Link to={`/admin/mallProduct/details/${product?.modelNumber}}`} onClick={() => setProduct(product)} className=" col-span-6 grid grid-cols-5">
-                                            <img className=" h-10 w-10 rounded-full" src={`https://grozziie.zjweiting.com:8033/tht/mallProductImages/${product.productImg}`} alt={product.productName} ></img>
+                                            <img className=" h-10 w-10 rounded-full" src={`https://grozziieget.zjweiting.com:8033/tht/mallProductImages/${product.productImg}`} alt={product.productName} ></img>
 
                                             <p>
                                                 {product?.productName}

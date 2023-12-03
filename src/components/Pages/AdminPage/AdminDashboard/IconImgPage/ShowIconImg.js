@@ -18,7 +18,7 @@ const ShowIconImg = () => {
 
   useEffect(() => {
     // Define the URL for your backend route with the categoryName parameter
-    const apiUrl = `https://grozziie.zjweiting.com:8033/tht/icons/${categoryName}`;
+    const apiUrl = `https://grozziieget.zjweiting.com:8033/tht/icons/${categoryName}`;
 
     // Make a GET request to fetch data for the specified category
     axios.get(apiUrl)
@@ -34,7 +34,7 @@ const ShowIconImg = () => {
 //create a function to delete icon from the frontend and database both side 
 const handleToDelete = async (id) => {
     try {
-      await axios.delete(`https://grozziie.zjweiting.com:8033/tht/icons/delete/${id}`);
+      await axios.delete(`https://grozziieget.zjweiting.com:8033/tht/icons/delete/${id}`);
       toast.success('Icon deleted successfully');
       setAllIcons(allIcons.filter((icon) => icon.id !== id));
     } catch (error) {
@@ -44,7 +44,7 @@ const handleToDelete = async (id) => {
   };
   
   const  handleToDownload=(icon)=>{
-    const imageURL = `https://grozziie.zjweiting.com:8033/tht/images/${icon}`; // Replace with your image URL
+    const imageURL = `https://grozziieget.zjweiting.com:8033/tht/images/${icon}`; // Replace with your image URL
   
     fetch(imageURL)
       .then((response) => response.blob())
@@ -80,7 +80,7 @@ const handleToDelete = async (id) => {
             return <div  className=" relative border-2">
               <AiOutlineDownload onClick={()=>handleToDownload(element?.image)} className=" absolute top-0 hover:cursor-pointer text-green-500"></AiOutlineDownload>
               <MdDelete onClick={()=>handleToDelete(element?.id)} className=" absolute right-0 hover:cursor-pointer text-red-500"></MdDelete>
-              <img key={index} id="myDiv" className=" inline-block w-28 h-28" src={`https://grozziie.zjweiting.com:8033/tht/images/${element.icon}`} alt="Icon"></img>
+              <img key={index} id="myDiv" className=" inline-block w-28 h-28" src={`https://grozziieget.zjweiting.com:8033/tht/images/${element.icon}`} alt="Icon"></img>
               </div>
           })
       }

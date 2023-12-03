@@ -20,7 +20,7 @@ const ShowHightWidth = () => {
 
     useEffect(() => {
         // Define the URL for your backend route with the categoryName parameter
-        const apiUrl = ` https://grozziie.zjweiting.com:8033/tht/modelInfo/${modelNo}`;
+        const apiUrl = ` https://grozziieget.zjweiting.com:8033/tht/modelInfo/${modelNo}`;
 
         // Make a GET request to fetch data for the specified category
         axios.get(apiUrl)
@@ -40,7 +40,7 @@ const ShowHightWidth = () => {
         return; 
       }
         try {
-            await axios.delete(`https://grozziie.zjweiting.com:8033/tht/modelInfo/delete/${id}`);
+            await axios.delete(`https://grozziieget.zjweiting.com:8033/tht/modelInfo/delete/${id}`);
             toast.success('Model Information deleted successfully');
             setAllModelInfo(allModelInfo.filter((city) => city.id !== id));
         } catch (error) {

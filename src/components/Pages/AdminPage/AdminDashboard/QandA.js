@@ -21,7 +21,7 @@ function QandA() {
 
   const fetchQuestionsAnswerByEmail = async () => {
     try {
-      const response = await axios.get('https://grozziie.zjweiting.com:8033/tht/QandAnswers', {
+      const response = await axios.get('https://grozziieget.zjweiting.com:8033/tht/QandAnswers', {
         params: {
           email: user?.email,
         },
@@ -40,7 +40,7 @@ function QandA() {
 //create a function to delete a user from the frontend and database both side 
 const handleDelete = async (userId) => {
   try {
-    await axios.delete(`https://grozziie.zjweiting.com:8033/tht/QandAnswers/delete/${userId}`);
+    await axios.delete(`https://grozziieget.zjweiting.com:8033/tht/QandAnswers/delete/${userId}`);
     toast.success('Question Answer deleted successfully');
     setQuestionsAnswer(questionAnswer.filter((user) => user.id !== userId));
   } catch (error) {
@@ -49,13 +49,40 @@ const handleDelete = async (userId) => {
   }
 };
 
+// const handleDelete = async (userId) => {
+//   try {
+//     // Assuming you have a token stored in localStorage or wherever you keep it
+   
+
+//     const response = await axios.delete(`https://grozziie.zjweiting.com:3086/tht/QandAnswers/delete/${userId}`, {
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'Access-Control-Allow-Origin': 'https://grozziie.zjweiting.com:3086',
+//       },
+//     });
+
+//     // Assuming the server responds with a success status
+//     if (response.status === 200) {
+//       toast.success('Question Answer deleted successfully');
+//       setQuestionsAnswer(questionAnswer.filter((user) => user.id !== userId));
+//     } else {
+//       // Handle other response statuses if necessary
+//       toast.error('Failed to delete user');
+//     }
+//   } catch (error) {
+//     console.error('Error deleting user:', error);
+//     toast.error('Failed to delete user');
+//   }
+// };
+
+
 
 
 
 //create a function to update a user from the frontend and database both side 
 const updateUser = async (userId, editingUser) => {
   try {
-    const response = await axios.put(`https://grozziie.zjweiting.com:8033/tht/QandAnswers/update/${userId}`, editingUser);
+    const response = await axios.put(`https://grozziieget.zjweiting.com:8033/tht/QandAnswers/update/${userId}`, editingUser);
     toast.success("user information updated successfully");
     // Optionally, you can show a success message to the user using a toast or other UI notification.
   } catch (error) {
@@ -84,7 +111,7 @@ const updateUser = async (userId, editingUser) => {
  const date = now.toLocaleDateString();
  const time = now.toLocaleTimeString();
       //load current user data from database
-      fetch('https://grozziie.zjweiting.com:8033/tht/QandAnswers/add', {
+      fetch('https://grozziieget.zjweiting.com:8033/tht/QandAnswers/add', {
           method: 'POST',
           headers: {
               'content-type': 'application/json'
@@ -130,7 +157,7 @@ const updateUser = async (userId, editingUser) => {
       return questionAnswer;
     }));
     try {
-      const response = await axios.put(`https://grozziie.zjweiting.com:8033/tht/QandAnswers/update/${id}`, {editedQuestion, editedAnswer, editedDate, editedTime});
+      const response = await axios.put(`https://grozziieget.zjweiting.com:8033/tht/QandAnswers/update/${id}`, {editedQuestion, editedAnswer, editedDate, editedTime});
       toast.success("user information updated successfully");
       // Optionally, you can show a success message to the user using a toast or other UI notification.
     } catch (error) {

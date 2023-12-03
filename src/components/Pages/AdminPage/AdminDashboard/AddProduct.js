@@ -41,6 +41,8 @@ function AddProduct({ product }) {
   const now = new Date();
 
 
+
+
   // const handleUpload = async () => {
   //   const formData = new FormData();
 
@@ -275,7 +277,7 @@ function AddProduct({ product }) {
 
     try {
       console.log(productName,"new product name")
-      await axios.post(`https://grozziie.zjweiting.com:8033/tht/${productCategory}/add`, formData, {
+      await axios.post(`https://grozziieget.zjweiting.com:8033/tht/${productCategory}/add`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -330,12 +332,7 @@ function AddProduct({ product }) {
           onChange={handleProductImgUpload}
           className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-10 px-3 lg:px-10 lg:ml-5 rounded-lg "
           accept="image/*" />
-        {/* <input 
-        type="file"
-        onChange={handleImageUpload}
-        placeholder=""
-        className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-10 px-3 lg:px-10 lg:ml-5 rounded-lg"
-        /> */}
+      
         <div>
           <div className="mb-4 grid  grid-cols-3 text-start">
             <label htmlFor="modelNumber" className="block col-span-1 text-gray-500 font-semibold mb-2">

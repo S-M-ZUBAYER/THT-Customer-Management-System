@@ -13,7 +13,7 @@ const ShowColorImgList = ({ modelNumber,productId,categoryImage }) => {
 
     useEffect(() => {
         // Make a GET request to retrieve color images by model number
-        axios.get(`https://grozziie.zjweiting.com:8033/tht/colorImg/productColor/${productId}/${categoryImage}`)
+        axios.get(`https://grozziieget.zjweiting.com:8033/tht/colorImg/productColor/${productId}/${categoryImage}`)
         // axios.get(`http://localhost:2000/tht/colorImg/productColor/${productId}/${categoryImage}`)
             .then(response => {
                 if (response.data.status === "success") {
@@ -43,7 +43,7 @@ const ShowColorImgList = ({ modelNumber,productId,categoryImage }) => {
         if (!confirmed) {
           return; // Cancel the deletion if the user clicks Cancel or closes the modal
         }
-        axios.delete(`https://grozziie.zjweiting.com:8033/tht/colorInfo/delete/${id}`)
+        axios.delete(`https://grozziieget.zjweiting.com:8033/tht/colorInfo/delete/${id}`)
         // axios.delete(`http://localhost:2000/tht/colorInfo/delete/${id}`)
             .then(response => {
                 if (response.data) {
@@ -101,7 +101,7 @@ const ShowColorImgList = ({ modelNumber,productId,categoryImage }) => {
                             colorImages?.map((colorImage, index) => (
                                 <div key={index} className="mx-2 my-3 flex justify-between items-center text-start bg-slate-200 hover:bg-yellow-100  rounded-lg px-2 py-2">
 
-                                    <img className=" h-10 w-10 rounded-full" src={`https://grozziie.zjweiting.com:8033/tht/colorImages/${colorImage.colorImage}`} alt={colorImage.colorName} ></img>
+                                    <img className=" h-10 w-10 rounded-full" src={`https://grozziieget.zjweiting.com:8033/tht/colorImages/${colorImage.colorImage}`} alt={colorImage.colorName} ></img>
                                     {/* <img className=" h-10 w-10 rounded-full" src={`http://localhost:2000/tht/colorImages/${colorImage.colorImage}`} alt={colorImage.colorName} ></img> */}
 
                                     <p>

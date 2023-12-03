@@ -18,7 +18,7 @@ function WarehouseAndCities() {
   const [allWarehouseNameList, setAllWarehouseNameList] = useState([]);
   const [cityName, setCityName] = useState('');
   useEffect(() => {
-    axios.get("https://grozziie.zjweiting.com:8033/tht/icons")
+    axios.get("https://grozziieget.zjweiting.com:8033/tht/icons")
       .then(res => {
         setIconImgs(res.data)
       })
@@ -27,7 +27,7 @@ function WarehouseAndCities() {
 
 
   useEffect(() => {
-    fetch('https://grozziie.zjweiting.com:8033/tht/warehouseNameList')
+    fetch('https://grozziieget.zjweiting.com:8033/tht/warehouseNameList')
       .then(response => response.json())
       .then(data => {
 
@@ -50,7 +50,7 @@ function WarehouseAndCities() {
     event.preventDefault();
 
     axios
-      .post('https://grozziie.zjweiting.com:8033/tht/cities/add', { cityName, warehouseName: selectedWarehouse })
+      .post('https://grozziieget.zjweiting.com:8033/tht/cities/add', { cityName, warehouseName: selectedWarehouse })
       .then((res) => {
         if (res.data.status === "success") {
           toast.success("City Name uploaded successfully");

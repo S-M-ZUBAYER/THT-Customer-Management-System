@@ -11,7 +11,7 @@ const Invoice = () => {
 // const [allInvoiceFiles,setAllInvoiceFiles]=useState([Product?.invoiceFile])
 
     const handleToDownload = (product) => {
-        const fileUrl = `https://grozziie.zjweiting.com:8033/tht/mallProductImages/${product}`;
+        const fileUrl = `https://grozziieget.zjweiting.com:8033/tht/mallProductImages/${product}`;
 
         fetch(fileUrl)
             .then((response) => response.blob())

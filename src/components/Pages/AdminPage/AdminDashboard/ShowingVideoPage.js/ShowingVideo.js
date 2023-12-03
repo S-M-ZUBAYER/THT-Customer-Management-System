@@ -14,7 +14,7 @@ function ShowingVideo() {
 
   useEffect(() => {
     // Make a GET request to retrieve showing videos
-    axios.get('https://grozziie.zjweiting.com:8033/tht/showingVideo')
+    axios.get('https://grozziieget.zjweiting.com:8033/tht/showingVideo')
       .then(response => {
         // Handle the successful response here
         setAllVideo((response?.data)?.data);
@@ -48,7 +48,7 @@ function ShowingVideo() {
 
     try {
       // Make a POST request to your backend API to handle the video upload
-      const response = await axios.post('https://grozziie.zjweiting.com:8033/tht/showingVideo/add', formData, {
+      const response = await axios.post('https://grozziieget.zjweiting.com:8033/tht/showingVideo/add', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -74,7 +74,7 @@ function ShowingVideo() {
     const confirmed = window.confirm('Are you sure you want to delete this showing video?');
     if (confirmed) {
       try {
-        await axios.delete(`https://grozziie.zjweiting.com:8033/tht/showingVideo/delete/${id}`);
+        await axios.delete(`https://grozziieget.zjweiting.com:8033/tht/showingVideo/delete/${id}`);
         toast.success(`One Showing Video deleted successfully`);
         const restVideo = allVideo.filter(each => (each?.id !== id));
         setAllVideo(restVideo)
@@ -134,7 +134,7 @@ function ShowingVideo() {
               <div className=" relative">
 
                 <video controls width="300">
-                  <source src={`https://grozziie.zjweiting.com:8033/tht/showingVideos/${video.showingVideo}`} type="video/mp4" />
+                  <source src={`https://grozziieget.zjweiting.com:8033/tht/showingVideos/${video.showingVideo}`} type="video/mp4" />
                   {/* Your browser does not support the video tag. */}
                 </video>
                 <button onClick={() => handleToDelete(video?.id)} className="absolute right-2 top-2 text-red-600 font-bold"><RiDeleteBin6Fill></RiDeleteBin6Fill></button>

@@ -23,7 +23,7 @@ function ModelHightWidth() {
   const [maxWidth, setMaxWidth] = useState('');
   const [selectedCommands, setSelectedCommands] = useState([]);
   useEffect(() => {
-    axios.get("https://grozziie.zjweiting.com:8033/tht/icons")
+    axios.get("https://grozziieget.zjweiting.com:8033/tht/icons")
       .then(res => {
         setIconImgs(res.data)
       })
@@ -32,7 +32,7 @@ function ModelHightWidth() {
 
 
   useEffect(() => {
-    fetch('https://grozziie.zjweiting.com:8033/tht/modelNoList')
+    fetch('https://grozziieget.zjweiting.com:8033/tht/modelNoList')
       .then(response => response.json())
       .then(data => {
 
@@ -68,7 +68,7 @@ function ModelHightWidth() {
     event.preventDefault();
 
     axios
-      .post('https://grozziie.zjweiting.com:8033/tht/hightWidth/add', { defaultHight,defaultWidth,maxHight,maxWidth,command:selectedCommands, modelNo: selectedModelNo })
+      .post('https://grozziieget.zjweiting.com:8033/tht/hightWidth/add', { defaultHight,defaultWidth,maxHight,maxWidth,command:selectedCommands, modelNo: selectedModelNo })
       .then((res) => {
         if (res.data.status === "success") {
           toast.success("Model information uploaded successfully");

@@ -23,7 +23,7 @@ const AddMallProducts = () => {
 
     const [eventProduct, setEventProduct] = useState([]);
 
-    //     axios.get('https://grozziie.zjweiting.com:8033/event')
+    //     axios.get('https://grozziieget.zjweiting.com:8033/event')
     //   .then(response => {
     //     setEventProduct(response.data);
     //   })
@@ -34,7 +34,7 @@ const AddMallProducts = () => {
     // use useEffect to load the all mall product from data base
     useEffect(() => {
         setLoading(true)
-        fetch('https://grozziie.zjweiting.com:8033/tht/eventProducts')
+        fetch('https://grozziieget.zjweiting.com:8033/tht/eventProducts')
             .then(response => response.json())
             .then(data => setEventProduct(data));
         setLoading(false);
@@ -64,7 +64,7 @@ const AddMallProducts = () => {
             return; // Cancel the deletion if the user clicks Cancel or closes the modal
         }
         try {
-            await axios.delete(`https://grozziie.zjweiting.com:8033/tht/eventProducts/delete/${productId}`);
+            await axios.delete(`https://grozziieget.zjweiting.com:8033/tht/eventProducts/delete/${productId}`);
             toast.success(`One MallProduct deleted successfully`);
             const restProduct = eventProduct.filter(product => (product?.id !== productId));
             setEventProduct(restProduct)
@@ -167,7 +167,7 @@ const AddMallProducts = () => {
                             // <Link to={`/admin/mallProduct/details/${product?.Model},`}>
                             <div className="  mx-2 my-3 grid grid-cols-7  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">
                                 <Link key={index} to={`/admin/eventProduct/details/${product?.modelNumber}}`} onClick={() => setProduct(product)} className=" col-span-6 grid grid-cols-6">
-                                    <img className=" h-10 w-10 rounded-full" src={`https://grozziie.zjweiting.com:8033/tht/eventProductImages/${product.productImg}`} alt={product.productName} ></img>
+                                    <img className=" h-10 w-10 rounded-full" src={`https://grozziieget.zjweiting.com:8033/tht/eventProductImages/${product.productImg}`} alt={product.productName} ></img>
 
                                     <p>
                                         {product?.productName}

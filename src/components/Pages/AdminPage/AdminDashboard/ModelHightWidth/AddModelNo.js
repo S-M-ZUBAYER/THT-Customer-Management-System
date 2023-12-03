@@ -14,7 +14,7 @@ const AddModelNo = ({allWarehouseNameList, setAllWarehouseNameList}) => {
   const handleAddWarehouse = () => {
     if (modelNo.trim() !== '') {
       setAllWarehouseNameList([...allWarehouseNameList,modelNo]);
-      axios.post('https://grozziie.zjweiting.com:8033/tht/modelNo/add', {
+      axios.post('https://grozziieget.zjweiting.com:8033/tht/modelNo/add', {
         modelNo: modelNo,
       })
       .then((response) => {

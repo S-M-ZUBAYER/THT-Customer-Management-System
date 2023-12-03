@@ -18,7 +18,7 @@ const AllUsers = () => {
 
 useEffect(() => {
   // This code will run when the component mounts
-  axios.get('https://grozziie.zjweiting.com:8033/tht/allUsers')
+  axios.get('https://grozziieget.zjweiting.com:8033/tht/allUsers')
     .then(response => {
       setUsers(response.data);
       setLoading(false);
@@ -33,7 +33,7 @@ useEffect(() => {
 //create a function to delete a user from the frontend and database both side 
   const deleteUser = async (userId) => {
     try {
-      await axios.delete(`https://grozziie.zjweiting.com:8033/tht/users/delete/${userId}`);
+      await axios.delete(`https://grozziieget.zjweiting.com:8033/tht/users/delete/${userId}`);
       toast.success('User deleted successfully');
       setUsers(users.filter((user) => user.id !== userId));
     } catch (error) {
@@ -49,7 +49,7 @@ useEffect(() => {
   //create a function to update a user from the frontend and database both side 
   const updateUser = async (userId, editingUser) => {
     try {
-      const response = await axios.put(`https://grozziie.zjweiting.com:8033/tht/users/update/${userId}`, editingUser);
+      const response = await axios.put(`https://grozziieget.zjweiting.com:8033/tht/users/update/${userId}`, editingUser);
       toast.success("user information updated successfully");
       // Optionally, you can show a success message to the user using a toast or other UI notification.
     } catch (error) {
@@ -69,7 +69,7 @@ useEffect(() => {
     const isAdmin=true;
     
     try {
-      const response = await axios.put(`https://grozziie.zjweiting.com:8033/tht/users/update/admin/${userId}`, isAdmin);
+      const response = await axios.put(`https://grozziieget.zjweiting.com:8033/tht/users/update/admin/${userId}`, isAdmin);
       setUsers(users.map((user)=>{
         if(user?.id===userId){
           user.isAdmin="true";

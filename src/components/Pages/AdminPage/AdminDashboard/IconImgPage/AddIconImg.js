@@ -19,7 +19,7 @@ function AddIconImg () {
 
   const { user } = useContext(AuthContext);
 useEffect(() => {
-  axios.get("https://grozziie.zjweiting.com:8033/tht/icons")
+  axios.get("https://grozziieget.zjweiting.com:8033/tht/icons")
     .then(res => {
         setIconImgs(res.data)
     })
@@ -28,7 +28,7 @@ useEffect(() => {
 
 
   useEffect(() => {
-    fetch('https://grozziie.zjweiting.com:8033/tht/iconCategories')
+    fetch('https://grozziieget.zjweiting.com:8033/tht/iconCategories')
       .then(response => response.json())
       .then(data => {
         
@@ -60,7 +60,7 @@ useEffect(() => {
     formData.append('categoryName', selectedCategory);
     // TODO: Send formData to server-side script for processing
     axios
-  .post('https://grozziie.zjweiting.com:8033/tht/icons/add', formData)
+  .post('https://grozziieget.zjweiting.com:8033/tht/icons/add', formData)
   .then((res) => {
     if (res.data.status === "success") {
       toast.success("Images uploaded successfully");
