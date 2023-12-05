@@ -66,7 +66,7 @@ const AddColorImg = ({ Product }) => {
         formData.append('productDescription', productDescription);
         // Make a POST request to your server
         axios.post('https://grozziieget.zjweiting.com:8033/tht/colorImg/add', formData)
-            // axios.post('http://localhost:2000/tht/colorImg/add', formData)
+            // axios.post('https://grozziieget.zjweiting.com:8033/tht/colorImg/add', formData)
             .then(response => {
                 if (response.data.status === "success") {
                     toast.success("Color Image and image information uploaded successfully");
