@@ -8,6 +8,7 @@ import { AuthContext } from '../../../context/UserContext';
 import { Client } from '@stomp/stompjs';
 import { sendChatMessage } from './SendMessageFunction';
 import axios from 'axios';
+const { v4: uuidv4 } = require('uuid');
 
 
 
@@ -20,48 +21,19 @@ const MessageInput = ({
   const [message, setMessage] = useState('');
   // const [selectedFiles, setSelectedFiles] = useState([]);
   const [fileType, setFileType] = useState(null); // Default to 'image'
-  const { chattingUser,connected, setConnected,selectedFiles, setSelectedFiles,allChat, setAllChat,newCome, setNewCome,newAllMessage, setNewAllMessage,newResponseCome, setNewResponseCome} = useContext(AuthContext);
+  const { chattingUser, user, connected, setConnected, selectedFiles, setSelectedFiles, allChat, setAllChat, newCome, setNewCome, newAllMessage, setNewAllMessage, newResponseCome, setNewResponseCome, localStoreSms, setLocalStoreSms,customerStatus,fetchUserByUserId ,currentCustomer} = useContext(AuthContext);
   const [response, setResponse] = useState({});
-  // const [newOne, setNewOne] = useState({});
-  // const [newAllMessage, setNewAllMessage] = useState([]);
-  // const [newCome, setNewCome] = useState({});
-  const [deviceId, setDeviceId] = useState(null);
-  // const [newResponseCome, setNewResponseCome] = useState({});
+
+
+
   const [newSentId, setNewSentId] = useState(getCurrentTimestampInSeconds());
+
+
   
+
 
 
  
-
-  
-  // const pc = new RTCPeerConnection();
-
-  // function getIPAddresses(pc) {
-  //   pc.createDataChannel('');
-  //   pc.createOffer()
-  //     .then(offer => pc.setLocalDescription(offer))
-  //     .catch(error => console.error('Error creating offer:', error));
-  
-  //   pc.onicecandidate = (e) => {
-  //     if (e.candidate) {
-  //       const ipAddressMatch = e.candidate.candidate.match(/([0-9.]{7,15})/);
-  //       if (ipAddressMatch) {
-  //         const ipAddress = ipAddressMatch[1];
-  //         setDeviceId(ipAddressMatch[1]);
-  //         console.log('Your IP address:', ipAddress);
-  //       } else {
-  //         console.log('IP address not found in candidate:', e.candidate.candidate);
-  //       }
-  //     } else {
-  //       console.log('No IP address found.');
-  //     }
-  
-  //     pc.onicecandidate = null; // Stop listening for ice candidates
-  //   };
-  // }
-  
-  // getIPAddresses(pc);
-  
 
   const showList = () => {
     if (newCome && newMessagesList && newMessagesList.length > 0) {
@@ -117,7 +89,21 @@ const MessageInput = ({
       setAllChat((prevAllChat) => {
         return prevAllChat.map((chat, index) => {
           if (chat.sentId === newResponseCome.sentId && newResponseCome.totalPart === newResponseCome.partNo) {
-            // Create a new object with smsLoading set to false
+          
+          
+    //         // Create a new object with smsLoading set to false
+    //         const liveChatKey = `${user?.email}LiveChat${chat?.sentTo}`;
+    // // setLocalStoreSms((prevChat) => [...prevChat, sms]);
+
+    // // Get existing messages from local storage
+    // const existingChat = JSON.parse(localStorage.getItem(liveChatKey)) || [];
+
+    // // Update local storage with the new SMS
+    // const updatedChat = [...existingChat, chat];
+    // localStorage.setItem(liveChatKey, JSON.stringify(updatedChat));
+
+
+
             return { ...chat, smsLoading: false };
           }
           // For other objects, return them as they are
@@ -126,7 +112,7 @@ const MessageInput = ({
       });
     }
   }, [newResponseCome]);
-  
+
 
 
   const handleToView = () => {
@@ -183,60 +169,70 @@ const MessageInput = ({
   });
 
 
+  const SocketDisconnect = () => {
+    if (connected) {
+      // Disconnect from the WebSocket
+      stompClient.deactivate();
+    }
+  };
+
+
+  //After solve the chatting app backend i need to comment out again...
+  const connect = () => {
+    stompClient.onConnect = (frame) => {
+      setConnected(true);
+      console.log('Connected: ' + frame);
+
+      const response = new Promise((resolve) => {
+        fetchUserByUserId();
+        stompClient.publish(
+          {
+            destination: '/app/connectStatus',
+            body: JSON.stringify({
+              userId: chattingUser?.userId,
+              deviceId: navigator.appName + navigator.platform + user?.email
+            }),
+          },
+          {},
+          (response) => {
+            resolve(response);
+          }
+        );
+      });
+
+      response.then((resolvedValue) => {
+        // You can now use the resolved value here
+        console.log('Promise resolved:', resolvedValue);
+      });
 
 
 
-//After solve the chatting app backend i need to comment out again...
 
+      stompClient.subscribe(`/topic/${chattingUser?.userId}`, (message) => {
+        console.log(message?.body, "coming sms")
+        const newSMS = JSON.parse(message.body);
+        if (newSMS && newSMS.msgType === "ans") {
+          setNewResponseCome(newSMS);
+        }
+        showGreeting(newSMS)
+
+      });
+    };
+
+    stompClient.onWebSocketError = (error) => {
+      console.error('Error with websocket', error);
+      // Handle error here, you can update state or show an error message to the user.
+    };
+    stompClient.activate();
+  };
 
   useEffect(() => {
-    const connect = () => {
-      stompClient.onConnect = (frame) => {
-        setConnected(true);
-        console.log('Connected: ' + frame);
 
-        const response = new Promise((resolve) => {
-          stompClient.publish(
-            {
-              destination: '/app/connectStatus',
-              body: JSON.stringify({
-                userId: chattingUser?.userId,
-                deviceId: deviceId,
-              }),
-            },
-            {},
-            (response) => {
-              resolve(response);
-              console.log(response, "device id");
-            }
-          );
-        });
-        
-        response.then((resolvedValue) => {
-          // You can now use the resolved value here
-          console.log('Promise resolved:', resolvedValue);
-        });
-        
+    if (connected) {
+      SocketDisconnect();
+    }
 
 
-
-        stompClient.subscribe(`/topic/${chattingUser?.userId}`, (message) => {
-          console.log(message?.body, "coming sms")
-          const newSMS = JSON.parse(message.body);
-          if (newSMS && newSMS.msgType === "ans") {
-            setNewResponseCome(newSMS);
-          }
-          showGreeting(newSMS)
-
-        });
-      };
-
-      stompClient.onWebSocketError = (error) => {
-        console.error('Error with websocket', error);
-        // Handle error here, you can update state or show an error message to the user.
-      };
-      stompClient.activate();
-    };
 
     // Try to connect
     connect();
@@ -256,18 +252,20 @@ const MessageInput = ({
       clearInterval(retryInterval);
       stompClient.deactivate();
     };
+    // }, [connected, newAllMessage]);
   }, [connected, newAllMessage]);
+  // }, [connected===false]);
 
- 
+
 
 
 
 
   const getAnswer = (sms) => {
-  
+
     if (sms && sms.totalPart === 1) {
       //show your message/video/file/image
-  
+
     }
     else {
       if (sms && sms.partNo === sms.totalPart) {//get partNo
@@ -295,7 +293,7 @@ const MessageInput = ({
       return;
 
     }
-  
+
 
     //Add New response
     const textMessage = {
@@ -317,26 +315,61 @@ const MessageInput = ({
       setNewCome(sms);
     }
 
-    if (sms?.totalPart === 1) {
+    // if (sms?.totalPart === 1) {
+    //   toast.success(`${sms?.msgType} come from  Id:${sms?.sentBy}`, {
+    //     position: "top-right"
+    //   })
+    // }
+    // else if (sms?.totalPart > 1 && sms?.partNo === sms?.totalPart) {
+    //   toast.success(`${sms?.msgType} come from  Id:${sms?.sentBy}`, {
+    //     position: "top-right"
+    //   })
+    // }
+
+    const handleFetchUser = () => {
+      fetchUserByUserId();
+    };
+    
+    const handleToastSuccess = () => {
       toast.success(`${sms?.msgType} come from  Id:${sms?.sentBy}`, {
         position: "top-right"
-      })
+      });
+    };
+    
+    if (sms?.totalPart === 1 || (sms?.totalPart > 1 && sms?.partNo === sms?.totalPart)) {
+      currentCustomer.forEach((element) => {
+        if (element?.status !== "STOPPED" || element?.userId !== sms?.sentBy) {
+          handleFetchUser();
+        }
+      });
+    
+      handleToastSuccess();
     }
-    else if (sms?.totalPart > 1 && sms?.partNo === sms?.totalPart) {
-      toast.success(`${sms?.msgType} come from  Id:${sms?.sentBy}`, {
-        position: "top-right"
-      })
-    }
-  
+    
+    
 
 
 
+    //   //==============================================
 
-  //   //==============================================
+
+    const liveChatKey = `${user?.email}LiveChat${sms?.sentBy}`;
+    // setLocalStoreSms((prevChat) => [...prevChat, sms]);
+
+    // Get existing messages from local storage
+    const existingChat = JSON.parse(localStorage.getItem(liveChatKey)) || [];
+
+    // Update local storage with the new SMS
+    const updatedChat = [...existingChat, sms];
+    console.log(liveChatKey,updatedChat,"Check")
+    localStorage.setItem(liveChatKey, JSON.stringify(updatedChat));
+
 
     setAllChat((prevChat) => [...prevChat, sms]);
 
   };
+
+
 
   const handleFileChange = async (e) => {
     const files = e.target.files;
@@ -381,9 +414,10 @@ const MessageInput = ({
       }
     });
 
+
     setNewAllMessage(newMessages);
 
-   
+
 
   };
 
@@ -467,6 +501,10 @@ const MessageInput = ({
   // function to send the sms part by part
 
   const handleSubmit = async (e) => {
+    if(customerStatus==="STOPPED"){
+      toast.error("You Can't Reply.May be customer connect with other Customer service");
+      return;
+    }
     setNewSentId(getCurrentTimestampInSeconds());
     e.preventDefault();
 
@@ -503,6 +541,13 @@ const MessageInput = ({
           partNo: 1,
           timestamp: getCurrentTime(),
         }]);
+
+        //for local storage
+
+
+     
+     
+    
         setResponse({});
         // sendChatMessage(textMessage);
         sendChatMessage({
@@ -516,6 +561,24 @@ const MessageInput = ({
           partNo: 1,
           timestamp: getCurrentTime(),
         });
+
+        // Get existing messages from local storage
+        const liveChatKey = `${user?.email}LiveChat${selectedCustomerChat?.userId}`;
+        const existingChat = JSON.parse(localStorage.getItem(liveChatKey)) || [];
+
+        // Update local storage with the new SMS
+        const updatedChat = [...existingChat, {
+          chatId: selectedCustomerChat?.chatId,
+          sentBy: selectedCustomerChat?.customerServiceId,
+          sentTo: selectedCustomerChat?.userId,
+          sentId: newSentId,
+          message: message,
+          msgType: "text",
+          totalPart: 1,
+          partNo: 1,
+          timestamp: getCurrentTime(),
+        }];
+        localStorage.setItem(liveChatKey, JSON.stringify(updatedChat));
 
       }
 
@@ -541,6 +604,7 @@ const MessageInput = ({
             partNo: stringParts.length,
             timestamp: getCurrentTime(),
           }]);
+
         }
         else {
           setAllChat((prevChat) => [...prevChat, {
@@ -557,6 +621,9 @@ const MessageInput = ({
             partNo: stringParts.length,
             timestamp: getCurrentTime(),
           }]);
+
+          //for local storage
+         
         }
 
         const newMessages = stringParts.map((part, index) => {
@@ -594,6 +661,14 @@ const MessageInput = ({
 
         // Send the first message in the newMessages array
         sendChatMessage(newMessages[0]);
+         // Get existing messages from local storage
+         const liveChatKey = `${user?.email}LiveChat${selectedCustomerChat?.userId}`;
+         console.log(liveChatKey,'Check')
+         const existingChat = JSON.parse(localStorage.getItem(liveChatKey)) || [];
+
+         // Update local storage with the new SMS
+         const updatedChat = [...existingChat, newMessages[0]];
+         localStorage.setItem(liveChatKey, JSON.stringify(updatedChat));
       }
 
 
@@ -602,6 +677,7 @@ const MessageInput = ({
         setMessage('');
 
         // Update the chat state with only text messages
+        // setLocalStoreSms((prevChat) => [...prevChat, ...allMessages]);
         setAllChat([...allChat, ...allMessages]);
       }
     }
@@ -621,8 +697,8 @@ const MessageInput = ({
           Typically
         </button>
       </div>
-      <form onSubmit={handleSubmit} className="p-4">
-        <div className="flex gap-2  w-full items-center px-3 my-2 bg-white z-40">
+      <form onSubmit={handleSubmit} className={`p-4 `}>
+        <div className={`flex gap-2  w-full items-center px-3 my-2 bg-white z-40`}>
           <button
             onClick={() => handleFileIconClick('image')}
             className={` ${fileType === 'image' ? 'selected' : ''}`}
@@ -668,7 +744,7 @@ const MessageInput = ({
             onChange={(e) => setMessage(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Type your message..."
-            className=" relative w-9/12 md:w-8/12 lg:9/12 py-1 px-2 rounded-md bg-cyan-200"
+            className={`relative w-9/12 md:w-8/12 lg:9/12 py-1 px-2 rounded-md bg-cyan-200  ${customerStatus==="STOPPED" && "bg-red-500"}`}
           />
           <button className="flex items-center absolute right-[55px] lg:right-[95px] " type="submit">
             <AiOutlineSend className=" cursor-pointer"></AiOutlineSend>

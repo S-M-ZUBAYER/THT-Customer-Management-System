@@ -29,7 +29,8 @@ const AddMallProducts = () => {
     //create useState To select any specific product
     const [selectedProduct, setSelectedProduct] = useState(null);
 
-    const { loading, setLoading } = useContext(AuthContext)
+    const [loading, setLoading ] = useState(true);
+    console.log(loading)
 
 
     // use useEffect to load the all mall product from data base
@@ -271,7 +272,7 @@ const AddMallProducts = () => {
                         </div>
                     </div>
                     {
-                    loading ?
+                    loading===true ?
                         <DisplaySpinner></DisplaySpinner>
                         :
                         (
@@ -280,7 +281,6 @@ const AddMallProducts = () => {
                                 <span className="text-xl font-bold text-red-400">No Mall Product Available</span>
                                 :
                                 filteredAllProduct?.map((product, index) => (
-                                    // <Link to={`/admin/mallProduct/details/${product?.Model},`}>
                                     <div key={index} className="mx-2 my-3 grid grid-cols-7  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">
                                         <Link to={`/admin/mallProduct/details/${product?.modelNumber}}`} onClick={() => setProduct(product)} className=" col-span-6 grid grid-cols-5">
                                             <img className=" h-10 w-10 rounded-full" src={`https://grozziieget.zjweiting.com:8033/tht/mallProductImages/${product.productImg}`} alt={product.productName} ></img>
@@ -300,12 +300,7 @@ const AddMallProducts = () => {
                                         </Link>
 
                                         <div className="flex items-center justify-around">
-                                            {/* <button className="text-blue-500 hover:cursor-pointer hover:text-2xl" onClick={() => openEditModal(product)}>
-                                <FiEdit></FiEdit>
-                            </button>
-                            {isModalOpen && (
-                                <ModalForEdit product={selectedProduct} onSave={handleSave} onClose={handleCloseModal} />
-                            )} */}
+                                            
                                             <RiDeleteBin7Line onClick={() => handleToDelete(product?.id)} className="hover:cursor-pointer hover:text-2xl"></RiDeleteBin7Line>
                                         </div>
                                     </div>
@@ -330,68 +325,6 @@ const AddMallProducts = () => {
                     Add new mall product
                 </button>
             </Link>
-
-
-            {/* mall product update */}
-            {/* modal part start from here to update a user information */}
-            {/* {editingProduct && (
-                <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-                    <div className="bg-white p-8">
-                        <h2 className="text-lg font-bold mb-4">Edit User</h2>
-                        <input
-                            type="text"
-                            placeholder="Name"
-                            value={editingProduct.pro}
-                            onChange={(e) => setEditingProduct({ ...editingProduct, name: e.target.value })}
-                            className="mb-2 px-4 py-2 border border-gray-300 rounded-md w-full"
-                        />
-                        <input
-                            type="email"
-                            placeholder="Email"
-                            readOnly
-                            value={editingProduct.email}
-                            onChange={(e) => setEditingProduct({ ...editingProduct, email: e.target.value })}
-                            className="mb-2 px-4 py-2 border border-gray-300 rounded-md w-full"
-                        />
-                        <input
-                            type="text"
-                            placeholder="Phone"
-                            value={editingProduct.phone}
-                            onChange={(e) => setEditingProduct({ ...editingProduct, phone: e.target.value })}
-                            className="mb-2 px-4 py-2 border border-gray-300 rounded-md w-full"
-                        />
-                        <input
-                            type="text"
-                            placeholder="Designation"
-                            value={editingProduct.designation}
-                            onChange={(e) => setEditingProduct({ ...editingProduct, designation: e.target.value })}
-                            className="mb-2 px-4 py-2 border border-gray-300 rounded-md w-full"
-                        />
-                        <input
-                            type="text"
-                            placeholder="Language"
-                            value={editingProduct.language}
-                            onChange={(e) => setEditingProduct({ ...editingProduct, language: e.target.value })}
-                            className="mb-2 px-4 py-2 border border-gray-300 rounded-md w-full"
-                        />
-                        <input
-                            type="text"
-                            placeholder="Country"
-                            value={editingProduct.country}
-                            onChange={(e) => setEditingProduct({ ...editingProduct, country: e.target.value })}
-                            className="mb-2 px-4 py-2 border border-gray-300 rounded-md w-full"
-                        />
-                        <button
-                            className="bg-blue-500 text-white px-4 py-2 rounded-md"
-                        //   onClick={() => saveUser(editingUser.id,editingUser)}handleSubmitToUpdate
-                        >
-                            Save
-                        </button>
-                    </div>
-                </div>
-            )} */}
-
-
 
         </div>
     );

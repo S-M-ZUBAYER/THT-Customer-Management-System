@@ -6,6 +6,7 @@ import { FacebookAuthProvider, GoogleAuthProvider, createUserWithEmailAndPasswor
 import app from '../Firebase/firebase.config';
 import toast from 'react-hot-toast';
 import { sendChatMessage } from '../components/Pages/CustomerServicePage/SendMessageFunction';
+import axios from 'axios';
 
 export const AuthContext = createContext();
 
@@ -27,7 +28,10 @@ const UserContext = ({ children }) => {
   const [newAllMessage, setNewAllMessage] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [newCome, setNewCome] = useState({});
-  const [allChat, setAllChat] = useState([])
+  const [allChat, setAllChat] = useState([]);
+  const [localStoreSms, setLocalStoreSms] = useState([]);
+  const [customerStatus,setCustomerStatus] = useState("RUNNING");
+  const [currentCustomer, setCurrentCustomer] = useState([]);
 
   function getCurrentTime() {
     const now = new Date();
@@ -46,6 +50,44 @@ const UserContext = ({ children }) => {
     return `${formattedHours}:${formattedMinutes} ${ampm}`;
   }
 
+
+//chatting list refresh process
+const fetchUserByUserId = async () => {
+  console.log("check the list")
+  try {
+      const response = await axios.get(`https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/chatlist/customer_service/${chattingUser?.userId}`);
+
+      if (response.status === 200) {
+          // Request was successful
+
+          const userData = response.data;
+          const updateCustomerData = (userData.sort((a, b) => {
+              const timestampA = new Date(a.timestamp);
+              const timestampB = new Date(b.timestamp);
+              return timestampB - timestampA;
+          }));
+          setCurrentCustomer(getUniqueCustomers(updateCustomerData))
+      } else {
+          // Handle unexpected status codes
+          console.error('Unexpected status code:', response.status);
+      }
+  } catch (error) {
+      // Handle network or other errors
+      console.error('Error fetching user data:', error);
+  }
+};
+
+function getUniqueCustomers(currentCustomer) {
+  const uniqueCustomers = currentCustomer.reduce((accumulator, customer) => {
+      const userId = customer.userId;
+      if (!accumulator.has(userId)) {
+          accumulator.set(userId, customer);
+      }
+      return accumulator;
+  }, new Map());
+
+  return (Array.from(uniqueCustomers.values()));
+}
 
   function getCurrentTimestampInSeconds() {
     const currentDate = new Date();
@@ -74,6 +116,9 @@ const UserContext = ({ children }) => {
       }
     }
   };
+
+
+
 
   const showGreeting = async (sms) => {
 
@@ -143,7 +188,7 @@ const UserContext = ({ children }) => {
 };
 
 
-console.log(`/topic/${chattingUser?.userId}`)
+
 
   let disconnectTimer;
    const stompClient = new Client({
@@ -153,49 +198,49 @@ console.log(`/topic/${chattingUser?.userId}`)
 
 //After solve the chatting backend need to start 
 
-  useEffect(() => {
-    const connect = () => {
-      stompClient.onConnect = (frame) => {
-        setConnected(true);
-        console.log('Connected: ' + frame);
-        console.log(`/topic/${chattingUser?.userId}`)
-        stompClient.subscribe(`/topic/${chattingUser?.userId}`, (message) => {
-          console.log(message?.body, "coming sms")
-          const newSMS = JSON.parse(message.body);
-          if (newSMS && newSMS.msgType === "ans") {
-            setNewResponseCome(newSMS);
-          }
-          showGreeting(newSMS)
+  // useEffect(() => {
+  //   const connect = () => {
+  //     stompClient.onConnect = (frame) => {
+  //       setConnected(true);
+  //       console.log('Connected: ' + frame);
+  //       console.log(`/topic/${chattingUser?.userId}`)
+  //       stompClient.subscribe(`/topic/${chattingUser?.userId}`, (message) => {
+  //         console.log(message?.body, "coming sms")
+  //         const newSMS = JSON.parse(message.body);
+  //         if (newSMS && newSMS.msgType === "ans") {
+  //           setNewResponseCome(newSMS);
+  //         }
+  //         showGreeting(newSMS)
 
-        });
-      };
+  //       });
+  //     };
 
-      stompClient.onWebSocketError = (error) => {
-        console.error('Error with websocket', error);
-        // Handle error here, you can update state or show an error message to the user.
-      };
-      stompClient.activate();
-    };
+  //     stompClient.onWebSocketError = (error) => {
+  //       console.error('Error with websocket', error);
+  //       // Handle error here, you can update state or show an error message to the user.
+  //     };
+  //     stompClient.activate();
+  //   };
 
-    // Try to connect
-    connect();
+  //   // Try to connect
+  //   connect();
 
-    // Retry every 5 seconds if not connected
-    const retryInterval = setInterval(() => {
-      if (!connected) {
-        console.log('Reconnecting to WebSocket...');
-        connect();
-      } else {
-        clearInterval(retryInterval);
-      }
-    }, 5000);
+  //   // Retry every 5 seconds if not connected
+  //   const retryInterval = setInterval(() => {
+  //     if (!connected) {
+  //       console.log('Reconnecting to WebSocket...');
+  //       connect();
+  //     } else {
+  //       clearInterval(retryInterval);
+  //     }
+  //   }, 5000);
 
-    // Cleanup on unmount
-    return () => {
-      clearInterval(retryInterval);
-      stompClient.deactivate();
-    };
-  }, [connected, newAllMessage]);
+  //   // Cleanup on unmount
+  //   return () => {
+  //     clearInterval(retryInterval);
+  //     stompClient.deactivate();
+  //   };
+  // }, [connected, newAllMessage]);
 
 
 
@@ -343,7 +388,14 @@ console.log(`/topic/${chattingUser?.userId}`)
     newCome, 
     setNewCome,
     allChat, 
-    setAllChat
+    setAllChat,
+    localStoreSms, 
+    setLocalStoreSms,
+    customerStatus,
+    setCustomerStatus,
+    currentCustomer, 
+    setCurrentCustomer,
+    fetchUserByUserId
   };
 
   return (

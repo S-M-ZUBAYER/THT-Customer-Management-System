@@ -276,7 +276,7 @@ function AddProduct({ product }) {
     
 
     try {
-      console.log(productName,"new product name")
+      
       await axios.post(`https://grozziieget.zjweiting.com:8033/tht/${productCategory}/add`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
@@ -284,7 +284,7 @@ function AddProduct({ product }) {
       });
       toast.success(`${productCategory} Product created successfully!`);
       setLoading(false);
-
+     
       // Reset all form fields
       setProductCountryName('');
       setProductName('');
@@ -311,7 +311,7 @@ function AddProduct({ product }) {
       setInventoryText('');
       setProductImg([]);
       setInvoiceFiles([]);
-
+      window.history.back();
     } catch (error) {
       console.error('Error creating product:', error);
       toast.error('Error creating product:', error);

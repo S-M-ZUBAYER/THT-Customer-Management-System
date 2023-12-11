@@ -9,16 +9,24 @@ import AddColorImg from './AddColorImg';
 import { CiEdit } from "react-icons/ci";
 import { FiEdit } from 'react-icons/fi';
 import { reduceImageResolution, reduceImagesResolution } from './Warehouse&Cities.js/functionForImageResulation';
+import { click } from '@testing-library/user-event/dist/click';
 
 
 function ProductDetails() {
+
+    // get product data from context component
     const { Product } = useContext(AllProductContext);
+
+    //get the API path extension from url
     const url = window.location.href;
     const productCategory = url.split('/')[4];
 
+    const updatedUrl = url.split('/').slice(0, 5).join('/');
+console.log(updatedUrl);
 
 
 
+    //Declare all of the initial state in here
     const [selectedImage, setSelectedImage] = useState(null);
     const [selectedColorImage, setSelectedColorImage] = useState(null);
     const [selectedInstructionImage, setSelectedInstructionImage] = useState(null);
@@ -28,9 +36,9 @@ function ProductDetails() {
     const [stockQuantity, setStockQuantity] = useState(Product?.stockQuantity);
     const [modelNumber, setModelNumber] = useState(Product?.modelNumber);
 
-   
 
 
+    // all of the simple function for display the product details
 
     const handleInstructionImageClick = (image) => {
         setSelectedInstructionImage(image);
@@ -41,15 +49,10 @@ function ProductDetails() {
     const handleColorImageClick = (image) => {
         setSelectedColorImage(image);
     };
-    
-
-
 
     const handleClose = () => {
         setSelectedVideo(null);
     };
-
-
     const handleProductPriceChange = (e) => {
         setProductPrice(e.target.value);
     };
@@ -77,11 +80,11 @@ function ProductDetails() {
         setStockQuantity(e.target.value);
     };
 
-    console.log(Product, "product")
 
 
 
-    //edit  part start
+
+    //Declare the initial state to edit some of the part 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isRelatedModalOpen, setIsRelatedModalOpen] = useState(false);
     const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false);
@@ -99,50 +102,49 @@ function ProductDetails() {
     const [afterSalesText, setAfterSalesText] = useState(Product?.afterSalesText);
     const [afterSalesInstruction, setAfterSalesInstruction] = useState(Product?.afterSalesInstruction);
     const [inventoryText, setInventoryText] = useState(Product?.inventoryText);
+    const [relatedImages, setRelatedImages] = useState([]);
+    const [descriptionImages, setDescriptionImages] = useState([]);
 
 
-    const [relatedImages,setRelatedImages]=useState(null);
-    const [descriptionImages,setDescriptionImages]=useState(null);
+    //modal part start from here to edit the product information
+    // Inside your component, add a function to open the modal
+    const openModal = () => {
+        setIsModalOpen(!isModalOpen);
+    };
+    const openRelatedModal = () => {
+        setIsRelatedModalOpen(!isRelatedModalOpen);
+    };
+    const openDescriptionModal = () => {
+        setIsDescriptionModalOpen(!isDescriptionModalOpen);
+    };
 
-     //modal 
- 
-     // Inside your component, add a function to open the modal
-     const openModal = () => {
-         setIsModalOpen(!isModalOpen);
-     };
-     const openRelatedModal = () => {
-         setIsRelatedModalOpen(!isRelatedModalOpen);
-     };
-     const openDescriptionModal = () => {
-         setIsDescriptionModalOpen(!isDescriptionModalOpen);
-     };
- 
-     // Add this function to close the modal
-     const closeModal = () => {
-         setIsModalOpen(false);
-     };
-     const closeRelatedModal = () => {
-         setIsRelatedModalOpen(false);
-     };
-     const closeDescriptionModal = () => {
-         setIsDescriptionModalOpen(false);
-     };
- 
-     
+    // Add this function to close the modal
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+    const closeRelatedModal = () => {
+        setIsRelatedModalOpen(false);
+    };
+    const closeDescriptionModal = () => {
+        setIsDescriptionModalOpen(false);
+    };
 
-   
-   
 
-      const handleEditSubmit = async (productId) => {
-        
-        if(newProductImg===null){
-            
+
+
+    // Here make the function to edit the product information
+
+    //This is the function to edit product image and all of string related information
+    const handleEditSubmit = async (productId) => {
+
+        if (newProductImg === null) {
+
             toast.error("Please select a product image");
             return;
         }
         const formData = new FormData();
         formData.append('newProductImg', newProductImg);
-    
+
         try {
             // Prepare the updated product data
             const updatedProduct = {
@@ -165,43 +167,44 @@ function ProductDetails() {
                 afterSalesInstruction,
                 inventoryText,
             };
-    
+
             formData.append('updatedProduct', JSON.stringify(updatedProduct));
-    
+
             // Make an API call to update the product
             const response = await axios.put(`https://grozziieget.zjweiting.com:8033/tht/${Product?.imgPath.split("/")[4]}/update/${productId}`, formData);
-    
+
             // Check the response and handle accordingly
             if (response.status === 200) {
                 console.log('Product updated successfully:', response.data);
                 toast.success('Product updated successfully:', response.data);
-                Product.productImg=newProductImg;
-                Product.modelNumber=updatedProduct.modelNumber;
-                Product.productImgLink=updatedProduct?.productImgLink;
-                Product.productImgRemark=updatedProduct?.productImgRemark;
-                Product.productCountryName=updatedProduct?.productCountryName;
-                Product.productDescription=updatedProduct?.productDescription;
-                Product.modelNumber=updatedProduct?.modelNumber;
-                Product.productPrice=updatedProduct?.productPrice;
-                Product.relatedImgLink=updatedProduct?.relatedImgLink;
-                Product.productName=updatedProduct?.productName;
-                Product.printerColor=updatedProduct?.printerColor;
-                Product.stockQuantity=updatedProduct?.stockQuantity;
-                Product.shelfStartTime=updatedProduct?.shelfStartTime;
-                Product.shelfEndTime=updatedProduct?.shelfEndTime;
-                Product.connectorType=updatedProduct?.connectorType;
-                Product.relatedImgRemark=updatedProduct?.relatedImgRemark;
-                Product.afterSalesText=updatedProduct?.afterSalesText;
-                Product.afterSalesInstruction=updatedProduct?.afterSalesInstruction;
-                Product.inventoryText=updatedProduct?.inventoryText;
+                Product.productImg = newProductImg;
+                Product.modelNumber = updatedProduct.modelNumber;
+                Product.productImgLink = updatedProduct?.productImgLink;
+                Product.productImgRemark = updatedProduct?.productImgRemark;
+                Product.productCountryName = updatedProduct?.productCountryName;
+                Product.productDescription = updatedProduct?.productDescription;
+                Product.modelNumber = updatedProduct?.modelNumber;
+                Product.productPrice = updatedProduct?.productPrice;
+                Product.relatedImgLink = updatedProduct?.relatedImgLink;
+                Product.productName = updatedProduct?.productName;
+                Product.printerColor = updatedProduct?.printerColor;
+                Product.stockQuantity = updatedProduct?.stockQuantity;
+                Product.shelfStartTime = updatedProduct?.shelfStartTime;
+                Product.shelfEndTime = updatedProduct?.shelfEndTime;
+                Product.connectorType = updatedProduct?.connectorType;
+                Product.relatedImgRemark = updatedProduct?.relatedImgRemark;
+                Product.afterSalesText = updatedProduct?.afterSalesText;
+                Product.afterSalesInstruction = updatedProduct?.afterSalesInstruction;
+                Product.inventoryText = updatedProduct?.inventoryText;
 
 
                 openModal();
+                window.history.back();
                 // Perform any additional actions after a successful update
             } else {
                 console.error('Failed to update product:', response.data);
                 toast.error('Failed to update product:', response.data);
-    
+
                 // Handle the failure, show an error message, etc.
             }
         } catch (error) {
@@ -211,8 +214,97 @@ function ProductDetails() {
         }
     };
 
-  
 
+    // This is the function to edit all of the related image
+    const handleEditRelatedSubmit = async (productId) => {
+        console.log("edit related image edit", productId);
+        const formData = new FormData();
+        for (let i = 0; i < relatedImages.length; i++) {
+            formData.append('images', relatedImages[i]);
+        }
+        
+        // try {
+        //     const response = await axios.put(`https://grozziieget.zjweiting.com:8033/tht/${Product?.imgPath.split("/")[4]}/updateRelatedImages/${productId}`, formData, {
+        //         headers: {
+        //             'Content-Type': 'multipart/form-data'
+        //         }
+        //     });
+        //     toast.success(`Related images updated successfully`);
+        //     closeRelatedModal();
+
+        // } catch (error) {
+        //     console.error('Error updating related images', error);
+        //     toast.error('Error updating related images', error);
+        // }
+
+        try {
+            const response = await axios.put(`https://grozziieget.zjweiting.com:8033/tht/${Product?.imgPath.split("/")[4]}/updateRelatedImages/${productId}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+        
+            if (response.status === 200) {
+                toast.success('Related images updated successfully');
+                closeRelatedModal();
+                window.history.back();
+            } else {
+                console.error('Failed to update related images:', response.data);
+                toast.error('Failed to update related images');
+            }
+        } catch (error) {
+            console.error('Error updating related images:', error.message);
+            toast.error('Error updating related images');
+        }
+        
+    };
+
+
+    // This is the function to edit all of the description images
+    const handleEditDescriptionSubmit = async (productId) => {
+        console.log("edit description image edit", productId);
+        const formData = new FormData();
+        for (let i = 0; i < descriptionImages.length; i++) {
+            formData.append('images', descriptionImages[i]);
+        }
+        // try {
+        //     const response = await axios.put(`https://grozziieget.zjweiting.com:8033/tht/${Product?.imgPath.split("/")[4]}/updateDescriptionImage/${productId}`, formData, {
+        //         headers: {
+        //             'Content-Type': 'multipart/form-data'
+        //         }
+        //     });
+
+        //     toast.success(`Description images updated successfully`);
+        //     closeDescriptionModal();
+        // } catch (error) {
+        //     console.error('Error updating description images:', error);
+        //     toast.error('Error updating description images:', error);
+        // }
+
+        try {
+            const response = await axios.put(`https://grozziieget.zjweiting.com:8033/tht/${Product?.imgPath.split("/")[4]}/updateDescriptionImage/${productId}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+        
+            if (response.status === 200) {
+                toast.success('Description images updated successfully');
+                closeDescriptionModal();
+                window.history.back();
+            } else {
+                console.error('Failed to update description images:', response.data);
+                toast.error('Failed to update description images');
+            }
+        } catch (error) {
+            console.error('Error updating description images:', error.message);
+            toast.error('Error updating description images');
+        }
+        
+    };
+
+
+    // here are all of the function to selected product image , related images and descriptions images
 
     const handleProductImgUpload = (event) => {
         const preFile = event.target.files[0];
@@ -222,31 +314,33 @@ function ProductDetails() {
         });
     };
 
-   
-    
+
+
+
     const handleRelatedImgUpload = (e) => {
-        const relatedImages = Array.from(e.target.files);
-        const resizePromises = relatedImages.map((image) => reduceImageResolution(image, 1000));
-    
+        const selectedImages = Array.from(e.target.files);
+        const resizePromises = selectedImages.map((image) => reduceImageResolution(image, 1000));
+
         Promise.all(resizePromises)
-          .then((resizedImages) => {
-            setRelatedImages(resizedImages);
-          });
-      };
+            .then((resizedImages) => {
+                setRelatedImages((prevImages) => [...prevImages, ...resizedImages]);
+            });
+    };
 
-      const handleDescriptionImgUpload = (e) => {
-        const images = Array.from(e.target.files);
-        const updateImagesPromises = images.map((image) => reduceImageResolution(image, 1000));
-    
-        Promise.all(updateImagesPromises)
-          .then((reducedImages) => {
-            setDescriptionImages(reducedImages);
-          });
-      };
-    
+    const handleDescriptionImgUpload = (e) => {
+        const selectedImages = Array.from(e.target.files);
+        const resizePromises = selectedImages.map((image) => reduceImageResolution(image, 1000));
+
+        Promise.all(resizePromises)
+            .then((resizedImages) => {
+                setDescriptionImages((prevImages) => [...prevImages, ...resizedImages]);
+            });
+    };
 
 
-    
+
+
+    // These are the simple function to edit the text related all of the functionalities
 
     const handleProductImgLink = (e) => {
         setProductImgLink(e.target.value);
@@ -296,7 +390,7 @@ function ProductDetails() {
     };
     const handleInventoryTextChange = (e) => {
         setInventoryText(e.target.value);
-      };
+    };
 
 
     return (
@@ -324,16 +418,12 @@ function ProductDetails() {
 
 
                         {/* This is the part to start the edit and modal functionalities */}
-
                         <div className="md:w-1/2 text-start pl-5 relative">
                             <button className="text-blue-500 absolute right-0 font-bold text-3xl cursor-pointer" onClick={openModal}>
                                 <FiEdit></FiEdit>
                             </button>
-                            {/* <CiEdit className="absolute right-0 font-bold text-3xl cursor-pointer"
-                                onClick={openModal}
-                            /> */}
 
-
+                            {/* Add the modal in here to edit the product image and all other text part to edit */}
                             {isModalOpen && (
                                 <div className="fixed z-50 inset-0 grid grid-cols-2 mx-auto rounded-lg h-5/6 w-5/6 my-auto bg-gray-900 bg-opacity-50">
                                     <div className="bg-white w-11/12 my-4 mx-auto p-2 px-8 text-center rounded-lg">
@@ -439,11 +529,8 @@ function ProductDetails() {
 
                                         </div>
                                     </div>
+
                                     <div className="w-full py-2 px-8">
-                                        {/* <form onSubmit={handleSubmit}> */}
-
-
-                                        
                                         <div className="mb-2 grid  grid-cols-3 text-start ">
                                             <label htmlFor="modelNumber" className="block col-span-1 text-gray-200 font-semibold mb-2">
                                                 Model Number
@@ -589,7 +676,7 @@ function ProductDetails() {
 
                                         <div className="mt-8 text-right">
                                             <button
-                                                onClick={()=>handleEditSubmit(Product?.id)}
+                                                onClick={() => handleEditSubmit(Product?.id)}
                                                 className="bg-blue-500 text-white  py-2 rounded-md mr-5 px-16 font-bold"
 
                                             >
@@ -606,10 +693,11 @@ function ProductDetails() {
 
 
                                     </div>
-                                   
+
                                 </div>
                             )}
 
+                            {/* Finish the modal part to edit the product image and all other text related information */}
 
 
 
@@ -677,53 +765,46 @@ function ProductDetails() {
                                 </div>
                             </div>
 
+
                             <div className="container relative">
-                            <button className="text-blue-500 absolute right-0 font-bold text-3xl cursor-pointer" onClick={openDescriptionModal}>
-                                <FiEdit></FiEdit>
-                            </button>
 
+                                {/* Edit button and also modal functionalities her to edit description image */}
+                                <button className="text-blue-500 absolute right-0 font-bold text-3xl cursor-pointer" onClick={openDescriptionModal}>
+                                    <FiEdit></FiEdit>
+                                </button>
 
+                                {isDescriptionModalOpen && (
+                                    <div className="fixed z-50 inset-0  mx-auto rounded-lg h-1/3 w-1/3 my-auto bg-gray-900 bg-opacity-50">
+                                        <div className="bg-white w-11/12 my-4 mx-auto p-2 px-8 text-center rounded-lg">
+                                            <h2 className="text-lg font-bold mb-2">Edit Description img</h2>
+                                            <input type="file"
+                                                onChange={handleDescriptionImgUpload} multiple
+                                                className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-2 px-3 lg:px-2 lg:ml-5 rounded-lg "
+                                                accept="image/*" />
 
+                                            <div className="mt-8 text-right">
+                                                <button
+                                                    onClick={() => handleEditDescriptionSubmit(Product?.id)}
+                                                    className="bg-blue-500 text-white  py-2 rounded-md mr-5 px-16 font-bold"
 
-                            {isDescriptionModalOpen && (
-                                <div className="fixed z-50 inset-0  mx-auto rounded-lg h-1/3 w-1/3 my-auto bg-gray-900 bg-opacity-50">
-                                    <div className="bg-white w-11/12 my-4 mx-auto p-2 px-8 text-center rounded-lg">
-                                        <h2 className="text-lg font-bold mb-2">Edit Description img</h2>
-                                        <input type="file"
-                                            onChange={handleDescriptionImgUpload}
-                                            className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-2 px-3 lg:px-2 lg:ml-5 rounded-lg "
-                                            accept="image/*" />
+                                                >
+                                                    Edit
+                                                </button>
+                                                <button
+                                                    onClick={closeDescriptionModal}
+                                                    className="bg-yellow-500 text-white px-16 py-2 rounded-md font-bold"
 
-                                        
-
-                                        <div className="mt-8 text-right">
-                                            <button
-                                                onClick={()=>handleEditSubmit(Product?.id)}
-                                                className="bg-blue-500 text-white  py-2 rounded-md mr-5 px-16 font-bold"
-
-                                            >
-                                                Edit
-                                            </button>
-                                            <button
-                                                onClick={closeDescriptionModal}
-                                                className="bg-yellow-500 text-white px-16 py-2 rounded-md font-bold"
-
-                                            >
-                                                Cancel
-                                            </button>
+                                                >
+                                                    Cancel
+                                                </button>
+                                            </div>
                                         </div>
-
-
                                     </div>
-                                   
-                                </div>
-                            )}
+                                )}
+                                {/* Here finish the description images editing part */}
 
 
 
-
-
-                            
                                 <h1 className="text-2xl font-bold mt-8 mb-5">Description Image Gallery Of  <span className="text-amber-400">{Product?.productName}</span></h1>
                                 <div className="grid grid-cols-3 gap-3">
                                     {(Product?.allDescriptionImages)?.split(",")?.map((image, index) => (
@@ -753,50 +834,46 @@ function ProductDetails() {
                                         </div>
                                     </div>
                                 )}
-
                             </div>
 
+
+
                             <div className="container relative">
-                            <button className="text-blue-500 absolute right-0 font-bold text-3xl cursor-pointer" onClick={openRelatedModal}>
-                                <FiEdit></FiEdit>
-                            </button>
 
+                                {/* Here start the functionalities to add edit button and modal to edit related images  */}
+                                <button className="text-blue-500 absolute right-0 font-bold text-3xl cursor-pointer" onClick={openRelatedModal}>
+                                    <FiEdit></FiEdit>
+                                </button>
 
+                                {isRelatedModalOpen && (
+                                    <div className="fixed z-50 inset-0  mx-auto rounded-lg h-1/3 w-1/3 my-auto bg-gray-900 bg-opacity-50">
+                                        <div className="bg-white w-11/12 my-4 mx-auto p-2 px-8 text-center rounded-lg">
+                                            <h2 className="text-lg font-bold mb-2">Edit Related  img</h2>
+                                            <input type="file"
+                                                onChange={handleRelatedImgUpload} multiple
+                                                className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-2 px-3 lg:px-2 lg:ml-5 rounded-lg "
+                                                accept="image/*" />
 
-                            {isRelatedModalOpen && (
-                                <div className="fixed z-50 inset-0  mx-auto rounded-lg h-1/3 w-1/3 my-auto bg-gray-900 bg-opacity-50">
-                                    <div className="bg-white w-11/12 my-4 mx-auto p-2 px-8 text-center rounded-lg">
-                                        <h2 className="text-lg font-bold mb-2">Edit Related  img</h2>
-                                        <input type="file"
-                                            onChange={handleRelatedImgUpload}
-                                            className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-2 px-3 lg:px-2 lg:ml-5 rounded-lg "
-                                            accept="image/*" />
+                                            <div className="mt-8 text-right">
+                                                <button
+                                                    onClick={() => handleEditRelatedSubmit(Product?.id)}
+                                                    className="bg-blue-500 text-white  py-2 rounded-md mr-5 px-16 font-bold"
 
-                                        
+                                                >
+                                                    Edit
+                                                </button>
+                                                <button
+                                                    onClick={closeRelatedModal}
+                                                    className="bg-yellow-500 text-white px-16 py-2 rounded-md font-bold"
 
-                                        <div className="mt-8 text-right">
-                                            <button
-                                                onClick={()=>handleEditSubmit(Product?.id)}
-                                                className="bg-blue-500 text-white  py-2 rounded-md mr-5 px-16 font-bold"
-
-                                            >
-                                                Edit
-                                            </button>
-                                            <button
-                                                onClick={closeRelatedModal}
-                                                className="bg-yellow-500 text-white px-16 py-2 rounded-md font-bold"
-
-                                            >
-                                                Cancel
-                                            </button>
+                                                >
+                                                    Cancel
+                                                </button>
+                                            </div>
                                         </div>
-
-
                                     </div>
-                                   
-                                </div>
-                            )}
-
+                                )}
+                                {/* Here finish the related image editing part */}
 
 
 
@@ -816,6 +893,7 @@ function ProductDetails() {
                                     </div>
                                 }
 
+
                                 {selectedImage && (
                                     <div className="fixed inset-0 flex items-center justify-center mx-auto my-auto w-3/4 h-3/4 bg-black bg-opacity-75 z-40 overflow-scroll">
                                         <div className="max-w-3xl max-h-3xl ">
@@ -833,7 +911,6 @@ function ProductDetails() {
                                         </div>
                                     </div>
                                 )}
-
                             </div>
 
                             <div className="container">
@@ -889,9 +966,6 @@ function ProductDetails() {
                                 )}
                             </div>
 
-
-
-
                             <div className="container">
                                 <h1 className="text-2xl font-bold mt-8 mb-5">Instructions Image Gallery Of  <span className="text-amber-400">{Product?.productName}</span></h1>
                                 <div className="grid grid-cols-3 gap-3">
@@ -905,6 +979,7 @@ function ProductDetails() {
                                         />
                                     ))}
                                 </div>
+
                                 {selectedInstructionImage && (
                                     <div className="fixed inset-0 flex items-center justify-center mx-auto my-auto w-3/4 h-3/4 bg-black bg-opacity-75 z-40 overflow-scroll">
                                         <div className="max-w-3xl max-h-3xl ">
@@ -922,7 +997,6 @@ function ProductDetails() {
                                         </div>
                                     </div>
                                 )}
-
                             </div>
 
 

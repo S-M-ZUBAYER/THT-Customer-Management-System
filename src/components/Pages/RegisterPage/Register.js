@@ -153,17 +153,26 @@ const Register = () => {
         //create a submit function to create user and store user information in Sql database
         ;
 
+
+
+
+
     const handleSubmit = (event) => {
         event.preventDefault();
 
         const chatRegistration = {
             userName: name,
             userEmail: email,
+            phone:phone,
             userPassword: password,
             role: "customer_service",
             designation: designation,
-            country: country
+            country: country,
+            addresses:[]
         }
+
+      
+     
 
 
         if (name === ""  || phone === "" || country === "" || language === "" || email === "" || designation === "") {
@@ -236,6 +245,9 @@ const Register = () => {
                                 //         toast.success("Registration complete Successfully");
                                 //         form.reset();
                                 //         navigate("/");
+
+                             
+
                                 try {
                                     const response = await axios.post(
                                         'https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/user/signUp',

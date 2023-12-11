@@ -24,6 +24,7 @@ const Message = ({selectedCustomerChat, showHistory, SetShowHistory, Loading }) 
   const [newAllChat, setNewAllChat] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+ 
 
   const openImageModal = (imgSrc) => {
     setSelectedImage(imgSrc);
@@ -107,7 +108,7 @@ const Message = ({selectedCustomerChat, showHistory, SetShowHistory, Loading }) 
 
 
 
-console.log(userIdAllChat,"old history")
+
 
   return (
     <div className="mb-20">

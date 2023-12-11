@@ -18,100 +18,40 @@ import BtnSpinner from '../../Shared/Loading/BtnSpinner';
 
 const CustomerService_1 = () => {
 
-    const { user, chattingUser,connected, setConnected,allChat, setAllChat } = useContext(AuthContext);
+    const { user, chattingUser, connected, setConnected, allChat, setAllChat, localStoreSms, setLocalStoreSms,customerStatus,setCustomerStatus,currentCustomer, setCurrentCustomer,fetchUserByUserId } = useContext(AuthContext);
     const [currentUser, setCurrentUser] = useState(null)
     const [selectedCustomerChat, setSelectedCustomerChat] = useState()
-    const [currentCustomer, setCurrentCustomer] = useState([]);
     // const [allChat, setAllChat] = useState([])
     const [showHistory, SetShowHistory] = useState(false);
     const scrollableDivRef = useRef(null);
     const [Loading, setLoading] = useState(false);
-    const [newMessagesList,setNewMessagesList] = useState([]);
+    const [newMessagesList, setNewMessagesList] = useState([]);
+    const [activeStatus, setActiveStatus] = useState("OFFLINE");
+    
 
 
 
 
-    // <---------------------------Final Web Socket------------------------------------>
-
-    // const [connected, setConnected] = useState(false);
-    // let disconnectTimer;
-    // const stompClient = new Client({
-    //     brokerURL: 'wss://grozziieget.zjweiting.com:3091/CustomerService-Chat/websocket',
-    //     // brokerURL: 'ws://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/websocket',
-    // });
-
-    // useEffect(() => {
-
-    //     const connect = () => {
-    //         stompClient.onConnect = (frame) => {
-    //             setConnected(true);
-    //             console.log('Connected: ' + frame);
-    //             stompClient.subscribe(`/topic/${chattingUser?.userId}`, (message) => {
-                  
-
-    //                 // Reset the disconnect timer whenever a new message is received
-    //                 clearTimeout(disconnectTimer);
-
-    //                 // Set a new timer to disconnect if no new messages in 5 minutes (300,000 milliseconds)
-    //                 disconnectTimer = setTimeout(() => {
-    //                     disconnectAndClearCache();
-    //                 }, 300000);
-
-    //             });
-    //         };
-
-    //         stompClient.onWebSocketError = (error) => {
-    //             console.error('Error with websocket', error);
-    //             // Handle error here, you can update state or show an error message to the user.
-    //         };
-
-    //         stompClient.activate();
-    //         if (stompClient.connected) {
-    //             toast.success("stomp Connected")
-    //         }
-
-    //         if (!stompClient.connected) {
-    //             toast.error("try to connect again")
-    //             console.log("try to connect again")
-    //             stompClient.onConnect = (frame) => {
-    //                 // Connection established
-    //                 setConnected(true);
-    //                 console.log('Connected: ' + frame);
-    //                 toast.success("connected again")
-    //             };
-    //         }
-    //     };
-
-    //     // Try to connect
-    //     connect();
-
-    //     // Retry every 5 seconds if not connected
-    //     const retryInterval = setInterval(() => {
-    //         if (!connected) {
-    //             console.log('Reconnecting to WebSocket...');
-    //             connect();
-    //         } else {
-    //             clearInterval(retryInterval);
-    //         }
-    //     }, 5000);
-
-    //     // Cleanup on unmount
-    //     return () => {
-    //         clearInterval(retryInterval);
-    //         stompClient.deactivate();
-    //     };
-    // }, [connected]);
+   
+    
+    // make the request to get the running time status 
+    const fetchUserStatus = async (userId) => {
+        try {
+          const response = await fetch(`https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/user/status/${userId}`);
+          if (response.ok) {
+            const data = await response.json();
+            setActiveStatus(data);
+            // Handle the data as needed
+          } else {
+            console.error('Failed to fetch user status');
+          }
+        } catch (error) {
+          console.error('Error fetching user status:', error);
+        }
+      };
 
 
-
-
-    const showGreeting = (message, sms) => {
-        console.log("S M SSS")
-        
-        setAllChat((prevChat) => [...prevChat, sms]);
-
-    };
-
+    
 
     // const disconnectAndClearCache = () => {
     //     if (connected) {
@@ -133,7 +73,7 @@ const CustomerService_1 = () => {
 
 
 
-  
+
 
 
     // <---------------------------Final Web Socket------------------------------------>
@@ -189,69 +129,61 @@ const CustomerService_1 = () => {
     };
 
 
-    const fetchUserByUserId = async () => {
-        try {
-            const response = await axios.get(`https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/chatlist/customer_service/${chattingUser?.userId}`);
+    
 
-            if (response.status === 200) {
-                // Request was successful
-
-                const userData = response.data;
-                const updateCustomerData = (userData.sort((a, b) => {
-                    const timestampA = new Date(a.timestamp);
-                    const timestampB = new Date(b.timestamp);
-                    return timestampB - timestampA;
-                }));
-                setCurrentCustomer(getUniqueCustomers(updateCustomerData))
-            } else {
-                // Handle unexpected status codes
-                console.error('Unexpected status code:', response.status);
-            }
-        } catch (error) {
-            // Handle network or other errors
-            console.error('Error fetching user data:', error);
-        }
-    };
 
 
     useEffect(() => {
-        fetchUserByChatId();
+        // fetchUserByChatId();
         fetchUserByUserId();
     }, [selectedCustomerChat?.chatId]);
 
 
 
 
- 
+
     useEffect(() => {
         // Scroll to the bottom when component mounts or when content changes
         scrollableDivRef.current.scrollTop = scrollableDivRef.current.scrollHeight;
-    }, [allChat, selectedCustomerChat,newMessagesList]);
+    }, [allChat, selectedCustomerChat, newMessagesList]);
 
 
 
 
-    function getUniqueCustomers(currentCustomer) {
-        const uniqueCustomers = currentCustomer.reduce((accumulator, customer) => {
-            const userId = customer.userId;
-            if (!accumulator.has(userId)) {
-                accumulator.set(userId, customer);
-            }
-            return accumulator;
-        }, new Map());
-
-        return (Array.from(uniqueCustomers.values()));
-    }
-
-
-
-
-
+    
 
     const handleToSelectCustomer = (customer) => {
-        // console.log(customer.userId)
-        setNewMessagesList(newMessagesList && newMessagesList?.filter((list,index)=>list.sentBy !== customer?.userId));
-        console.log(newMessagesList?.filter((list,index)=>list.sentBy !== customer?.userId))
+          
+
+       
+        //call function to show the status
+        fetchUserStatus(customer?.userId)
+
+        const liveChatKey = `${user?.email}LiveChat${customer?.userId}`;
+        const liveChatArray = JSON.parse(localStorage.getItem(liveChatKey));
+        setAllChat(liveChatArray);
+        
+        if(customer?.status==="STOPPED"){
+            setCustomerStatus("STOPPED");
+        }
+        if(customer?.status==="RUNNING"){
+            setCustomerStatus("RUNNING");
+        }
+
+        // if (!liveChatArray ) {
+        //     // If the key doesn't exist or customer?.userId doesn't exist, create a new array
+        //     const newLiveChatArray = []
+
+        //     localStorage.setItem(liveChatKey, JSON.stringify(newLiveChatArray));
+        // } else {
+        //     // Use the existing array
+        //     setLocalStoreSms(liveChatArray.customer?.userId);
+        // }
+
+
+        
+        setNewMessagesList(newMessagesList && newMessagesList?.filter((list, index) => list.sentBy !== customer?.userId));
+       
         // setNewMessagesList((prevChat) => [...prevChat, {}]);
         SetShowHistory(false)
         setCurrentUser(customer);
@@ -260,10 +192,6 @@ const CustomerService_1 = () => {
         setSelectedCustomerChat(customer)
     };
 
-
-
-
-  console.log(newMessagesList,"list")
 
 
     return (
@@ -305,28 +233,26 @@ const CustomerService_1 = () => {
 
                         {
                             currentCustomer.map((element, index) => {
-                                return <div key={index} className="text-sm  ml-2 px-3 cursor-pointer">
+                                return <div key={index} className={`text-sm  ml-2 px-3 cursor-pointer rounded-l-lg ${currentUser?.userId===element?.userId ? "bg-green-300":""}`}>
                                     <div onClick={() => handleToSelectCustomer(element)} className="flex justify-between items-center mx-1 my-1 cursor-pointer">
-                                        <div className="text-start">
-                                            {/* <p>ID: {element?.chatId}</p> */}
-
-                                            <p cl>User Id: {element?.userId}</p>
-                                            <p>Chat Id: {element?.chatId}</p>
+                                        <div className={`text-start font-semibold`}>
+                                            <p >User Id: {element?.userId}</p>
+                                            <p>Name:  {element?.customerServiceName ? element?.customerServiceName : `No Name(${element?.chatId})`}</p>
 
 
                                         </div>
                                         <div>
-                                            {(newMessagesList?.filter(sms=>sms?.sentBy===element?.userId))?.length>0 && <div  className="bg-yellow-400 px-2 rounded-full border-2 text-black font-semibold"> {(newMessagesList?.filter(sms=>sms?.sentBy===element?.userId))?.length}</div> }
+                                            {(newMessagesList?.filter(sms => sms?.sentBy === element?.userId))?.length > 0 && <div className="bg-yellow-400 px-2 rounded-full border-2 text-black font-semibold"> {(newMessagesList?.filter(sms => sms?.sentBy === element?.userId))?.length}</div>}
                                         </div>
                                         <div className="">
-                                            {element.status === "running" ?
+                                            {/* {element.status === "running" ?
                                                 <p className=" flex ml-auto bg-green-400 w-2 h-2 mb-1 rounded-full"></p>
                                                 :
                                                 // <p className=" flex ml-auto bg-slate-400 w-2 h-2 mb-1 rounded-full"></p> 
                                                 ""
 
-                                            }
-                                            <p>{(element?.timestamp).split(" ")[1].split(".")[0]}</p>
+                                            } */}
+                                            {/* <p>{(element?.timestamp).split(" ")[1].split(".")[0]}</p> */}
                                         </div>
 
                                     </div>
@@ -347,9 +273,12 @@ const CustomerService_1 = () => {
 
 
                     <div className="flex justify-around ">
-                        <p className="font-semibold">{selectedCustomerChat?.userId}</p>
+                        {
+                            activeStatus==="ONLINE" ? <p className="font-semibold text-green-600 px-2 py-0  border-4 rounded-full border-green-600">{currentUser?.userId}</p> : <p className="font-semibold text-red-600 px-2 py-0  border-4 rounded-full border-red-600">{currentUser?.userId}</p>
+                        }
+                        
                         <p className="bg-[#004368] text-gray-200 px-2 rounded-b-lg py-1">Text from app</p>
-                        <p className="font-semibold">{user?.name}</p>
+                        <p className="font-semibold">{currentUser?.customerServiceName ?currentUser?.customerServiceName:`No Name(${currentUser?.userId})` }</p>
                     </div>
 
                     <div>
