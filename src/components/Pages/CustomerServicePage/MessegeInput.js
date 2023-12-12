@@ -326,6 +326,10 @@ const MessageInput = ({
     //   })
     // }
 
+    // setAllChat((prevChat) => [...prevChat, sms]);
+    setAllChat((prevChat) => [...(prevChat?.length ? prevChat : []), sms]);
+
+
     const handleFetchUser = () => {
       fetchUserByUserId();
     };
@@ -346,8 +350,6 @@ const MessageInput = ({
       handleToastSuccess();
     }
     
-    
-
 
 
     //   //==============================================
@@ -365,7 +367,7 @@ const MessageInput = ({
     localStorage.setItem(liveChatKey, JSON.stringify(updatedChat));
 
 
-    setAllChat((prevChat) => [...prevChat, sms]);
+    
 
   };
 

@@ -86,6 +86,7 @@ console.log(updatedUrl);
 
     //Declare the initial state to edit some of the part 
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isTextModalOpen, setIsTextModalOpen] = useState(false);
     const [isRelatedModalOpen, setIsRelatedModalOpen] = useState(false);
     const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false);
     const [newProductImg, setNewProductImg] = useState(null);
@@ -111,6 +112,9 @@ console.log(updatedUrl);
     const openModal = () => {
         setIsModalOpen(!isModalOpen);
     };
+    const openTextModal = () => {
+        setIsTextModalOpen(!isTextModalOpen);
+    };
     const openRelatedModal = () => {
         setIsRelatedModalOpen(!isRelatedModalOpen);
     };
@@ -121,6 +125,9 @@ console.log(updatedUrl);
     // Add this function to close the modal
     const closeModal = () => {
         setIsModalOpen(false);
+    };
+    const closeTextModal = () => {
+        setIsTextModalOpen(false);
     };
     const closeRelatedModal = () => {
         setIsRelatedModalOpen(false);
@@ -198,7 +205,7 @@ console.log(updatedUrl);
                 Product.inventoryText = updatedProduct?.inventoryText;
 
 
-                openModal();
+                closeModal();
                 window.history.back();
                 // Perform any additional actions after a successful update
             } else {
@@ -213,6 +220,67 @@ console.log(updatedUrl);
             // Handle the error, show an error message, etc.
         }
     };
+    const handleTextEditSubmit = async (productId) => {
+        try {
+            // Prepare the updated product data
+            const updatedProduct = {
+                productImgLink,
+                productImgRemark,
+                productCountryName,
+                productDescription,
+                modelNumber,
+                productPrice,
+                relatedImgLink,
+                productName,
+                printerColor,
+                stockQuantity,
+                shelfStartTime,
+                shelfEndTime,
+                connectorType,
+                relatedImgRemark,
+                afterSalesText,
+                afterSalesInstruction,
+                inventoryText,
+            };
+    
+            // Make an API call to update the product
+            const response = await axios.put(`https://grozziieget.zjweiting.com:8033/tht/${Product?.imgPath.split("/")[4]}/update/textInformation/${productId}`, { updatedProduct });
+    
+            // Check the response and handle accordingly
+            if (response.status === 200) {
+                toast.success('Product updated successfully:', response.data);
+                closeTextModal();
+                Product.modelNumber = updatedProduct.modelNumber;
+                Product.productImgLink = updatedProduct?.productImgLink;
+                Product.productImgRemark = updatedProduct?.productImgRemark;
+                Product.productCountryName = updatedProduct?.productCountryName;
+                Product.productDescription = updatedProduct?.productDescription;
+                Product.modelNumber = updatedProduct?.modelNumber;
+                Product.productPrice = updatedProduct?.productPrice;
+                Product.relatedImgLink = updatedProduct?.relatedImgLink;
+                Product.productName = updatedProduct?.productName;
+                Product.printerColor = updatedProduct?.printerColor;
+                Product.stockQuantity = updatedProduct?.stockQuantity;
+                Product.shelfStartTime = updatedProduct?.shelfStartTime;
+                Product.shelfEndTime = updatedProduct?.shelfEndTime;
+                Product.connectorType = updatedProduct?.connectorType;
+                Product.relatedImgRemark = updatedProduct?.relatedImgRemark;
+                Product.afterSalesText = updatedProduct?.afterSalesText;
+                Product.afterSalesInstruction = updatedProduct?.afterSalesInstruction;
+                Product.inventoryText = updatedProduct?.inventoryText;
+               
+            } else {
+                console.error('Failed to update product:', response.data);
+                toast.error('Failed to update product:', response.data);
+                // Handle the failure, show an error message, etc.
+            }
+        } catch (error) {
+            console.error('Error updating product:', error);
+            toast.error('Error updating product:', error);
+            // Handle the error, show an error message, etc.
+        }
+    };
+    
 
 
     // This is the function to edit all of the related image
@@ -401,25 +469,12 @@ console.log(updatedUrl);
                     <div className="flex flex-col md:flex-row md:space-x-4">
 
                         <div>
-                            <div className="flex justify-center">
+                            <div className="flex justify-center relative">
                                 <div title={`Link:  ${Product?.productImgLink}\nRemark:  ${Product?.productImgRemark}`} className="md:w-1/2 mb-4 ">
                                     <img src={`https://grozziieget.zjweiting.com:8033/tht/${productCategory === "mallProduct" ? "mallProductImages" : "eventProductImages"}/${Product?.productImg}`} alt="Product" className="rounded-lg w-96 h-96 " />
                                 </div>
-                            </div>
 
-
-
-                            {/* need to paste in here */}
-                            <AddColorImg
-                                Product={Product}
-                            ></AddColorImg>
-
-                        </div>
-
-
-                        {/* This is the part to start the edit and modal functionalities */}
-                        <div className="md:w-1/2 text-start pl-5 relative">
-                            <button className="text-blue-500 absolute right-0 font-bold text-3xl cursor-pointer" onClick={openModal}>
+                                <button className="text-blue-500 absolute right-16 font-bold text-3xl cursor-pointer" onClick={openModal}>
                                 <FiEdit></FiEdit>
                             </button>
 
@@ -680,7 +735,7 @@ console.log(updatedUrl);
                                                 className="bg-blue-500 text-white  py-2 rounded-md mr-5 px-16 font-bold"
 
                                             >
-                                                Edit
+                                                Save
                                             </button>
                                             <button
                                                 onClick={closeModal}
@@ -697,8 +752,297 @@ console.log(updatedUrl);
                                 </div>
                             )}
 
-                            {/* Finish the modal part to edit the product image and all other text related information */}
+                            </div>
 
+
+
+                            {/* need to paste in here */}
+                            <AddColorImg
+                                Product={Product}
+                            ></AddColorImg>
+
+                        </div>
+
+
+                        {/* This is the part to start the edit and modal functionalities */}
+                        <div className="md:w-1/2 text-start pl-5 relative">
+                           
+
+                            {/* Finish the modal part to edit the product image and all other text related information */}
+                            <button className="text-blue-500 absolute right-0 font-bold text-3xl cursor-pointer" onClick={openTextModal}>
+                                <FiEdit></FiEdit>
+                            </button>
+
+                            {/* Add the modal in here to edit the product image and all other text part to edit */}
+                            {isTextModalOpen && (
+                                <div className="fixed z-50 inset-0 grid grid-cols-2 mx-auto rounded-lg h-5/6 w-5/6 my-auto bg-gray-900 bg-opacity-50">
+                                    <div className="bg-white w-11/12 my-4 mx-auto p-2 px-8 text-center rounded-lg">
+                                        <h2 className="text-lg font-bold mb-2">Edit Product text information</h2>
+                                        
+
+                                        <div>
+                                            <div className="mb-2 grid  grid-cols-3 text-start">
+                                                <label htmlFor="modelNumber" className="block col-span-1 text-gray-200 font-semibold mb-2">
+                                                    Img Link
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    id="productImgLink"
+                                                    className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                    value={productImgLink}
+                                                    placeholder='Enter the product Image link'
+                                                    onChange={handleProductImgLink}
+
+                                                />
+                                            </div>
+                                            <div className="mb-2">
+                                                <label htmlFor="productImageRemark" className="block text-start text-gray-700 font-bold mb-2">
+                                                    Image Remarks
+                                                </label>
+                                                <textarea
+                                                    id="productImageRemark"
+                                                    placeholder="Add product Image Remark"
+                                                    className="shadow resize-both appearance-none border rounded-lg w-full h-20  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                    value={productImgRemark}
+                                                    onChange={handleProductImageRemark}
+                                                ></textarea>
+                                            </div>
+
+                                        </div>
+
+                                        <div className="mb-2">
+                                            <select
+                                                id="productCountryCategory"
+                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                value={productCountryName}
+                                                onChange={handleProductCountryNameChange}
+                                                required
+                                            >
+                                                <option value="">Select Country Category</option>
+                                                <option value="zh-CN">中文</option>
+                                                <option value="en-US">English</option>
+                                                <option value="th-TH">ไทย</option>
+                                                <option value="fil-PH">Philippines</option>
+                                                <option value="vi-VN">Tiếng Việt</option>
+                                                <option value="ms-MY">Malaysia</option>
+                                                <option value="id-ID">Indonesia</option>
+                                            </select>
+                                        </div>
+
+                                        <div className="mb-2">
+                                            <select
+                                                id="productName"
+                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                value={productName}
+                                                onChange={handleProductNameChange}
+                                                required
+                                            >
+                                                <option value="">Select Product</option>
+                                                <option value="Dot Printer">Dot Printer</option>
+                                                <option value="Thermal Printer">Thermal Printer</option>
+                                                <option value="Attendance Machine">Attendance Machine</option>
+                                            </select>
+                                        </div>
+
+
+                                        <div className="mb-2">
+
+                                            <input
+                                                type="digit"
+                                                id="productPrice"
+                                                placeholder='Product Price'
+                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                value={productPrice}
+                                                onChange={handleProductPriceChange}
+                                                required
+                                            />
+                                        </div>
+                                        <div className="mb-2">
+                                            <label htmlFor="productDescription" className="block text-start text-gray-200 font-bold mb-2">
+                                                Product Description
+                                            </label>
+
+
+                                            <textarea
+                                                id="productDescription"
+                                                placeholder="Add Product description"
+                                                className="shadow resize-both appearance-none border rounded-lg w-full min-h-20 max-h-100 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                value={productDescription}
+                                                onChange={handleProductDescriptionChange}
+                                                required
+                                                rows={5} // Initial number of visible text lines
+                                            ></textarea>
+
+
+                                        </div>
+                                    </div>
+
+                                    <div className="w-full py-2 px-8">
+                                        <div className="mb-2 grid  grid-cols-3 text-start ">
+                                            <label htmlFor="modelNumber" className="block col-span-1 text-gray-200 font-semibold mb-2">
+                                                Model Number
+                                            </label>
+                                            <input
+                                                type="text"
+                                                id="modelNumber"
+                                                className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                value={modelNumber}
+                                                placeholder='Model Number'
+                                                onChange={handleModelNumberChange}
+                                                required
+                                            />
+                                        </div>
+                                        <div className="mb-2 grid  grid-cols-3 text-start ">
+                                            <label htmlFor="modelNumber" className="block col-span-1 text-gray-200 font-semibold mb-2">
+                                                Printer Color
+                                            </label>
+                                            <input
+                                                type="text"
+                                                id="printerColor"
+                                                className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                value={printerColor}
+                                                placeholder='Color'
+                                                onChange={handlePrinterColorChange}
+
+                                            />
+                                        </div>
+                                        <div className="mb-2 grid  grid-cols-3 text-start ">
+                                            <label htmlFor="modelNumber" className="block col-span-1 text-gray-200 font-semibold mb-2">
+                                                connector type
+                                            </label>
+                                            <input
+                                                type="text"
+                                                id="connectorType"
+                                                className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                value={connectorType}
+                                                placeholder='Bluetooth'
+                                                onChange={handleConnectorTypeChange}
+
+
+                                            />
+                                        </div>
+                                        <div className="mb-2 grid  grid-cols-3 text-start ">
+                                            <label htmlFor="modelNumber" className="block col-span-1 text-gray-200 font-bold mb-2">
+                                                Stock Quantity
+                                            </label>
+                                            <input
+                                                type="text"
+                                                id="stockQuantity"
+                                                className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                value={stockQuantity}
+                                                placeholder='Add quantity'
+                                                onChange={handleStockQuantityChange}
+
+                                            />
+                                        </div>
+
+                                        <div className="mb-1 grid  grid-cols-3 text-start">
+                                            <label htmlFor="relatedImgLink" className="block col-span-1 text-gray-500 font-semibold mb-1">
+                                                Related Imgs Link
+                                            </label>
+                                            <input
+                                                type="text"
+                                                id="relatedImgLink"
+                                                className="shadow col-span-2  appearance-none border rounded w-full py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                value={relatedImgLink}
+                                                placeholder='Enter the related Image link'
+                                                onChange={handleRelatedImgLink}
+
+                                            />
+                                        </div>
+                                        <div className="mb-1">
+                                            <label htmlFor="productImageRemark" className="block text-start text-gray-700 font-bold mb-1">
+                                                Related Images Remarks
+                                            </label>
+                                            <textarea
+                                                id="relatedImgRemark"
+                                                placeholder="Add product related Image Remark"
+                                                className="shadow resize-both appearance-none border rounded-lg w-full h-10  py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                value={relatedImgRemark}
+                                                onChange={handleRelatedImageRemark}
+                                            ></textarea>
+                                        </div>
+                                        <div className="mb-1">
+                                            <label htmlFor="shelfTimeStart" className="block text-start text-gray-700 font-bold mb-2">
+                                                Shelf Time
+                                            </label>
+                                            <div className="flex items-center justify-between">
+                                                <input
+                                                    type="datetime-local"
+                                                    id="shelfTimeStart"
+                                                    className="shadow appearance-none border rounded py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                    value={shelfStartTime}
+                                                    onChange={handleShelfStartTimeChange}
+                                                />
+                                                <input
+                                                    type="datetime-local"
+                                                    id="shelfTimeEnd"
+                                                    className="shadow appearance-none border rounded  py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                    value={shelfEndTime}
+                                                    onChange={handleShelfEndTimeChange}
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="mb-1">
+                                            <label htmlFor="afterSales" className="block text-gray-700 font-bold mb-1 text-start">
+                                                After-Sales
+                                            </label>
+                                            <textarea
+                                                id="afterSales"
+                                                placeholder="Add after-sales description"
+                                                className="shadow resize-both appearance-none border rounded w-full h-16 py-1 px-3  text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                value={afterSalesText}
+                                                onChange={handleAfterSalesTextChange}
+                                            ></textarea>
+                                        </div>
+                                        <div className="mb-1">
+                                            <label htmlFor="afterSalesInstructions" className="block text-start text-gray-700 font-bold mb-1">
+                                                After-Sales Instructions
+                                            </label>
+                                            <textarea
+                                                id="afterSalesInstructions"
+                                                placeholder='Add after-sales instructions'
+                                                className="shadow resize-both appearance-none border rounded-lg w-full h-16  py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                value={afterSalesInstruction}
+                                                onChange={handleAfterSalesInstructionChange}
+                                            ></textarea>
+                                        </div>
+                                        <div className="mb-1">
+                                            <label htmlFor="inventory" className="block text-start text-gray-700 font-bold mb-1">
+                                                Inventory
+                                            </label>
+                                            <textarea
+                                                id="inventory"
+                                                placeholder="Add inventory description"
+                                                className="shadow resize-both appearance-none border rounded-lg w-full h-16  py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                value={inventoryText}
+                                                onChange={handleInventoryTextChange}
+                                            ></textarea>
+                                        </div>
+
+                                        <div className="mt-8 text-right">
+                                            <button
+                                                onClick={() => handleTextEditSubmit(Product?.id)}
+                                                className="bg-blue-500 text-white  py-2 rounded-md mr-5 px-16 font-bold"
+
+                                            >
+                                                Save
+                                            </button>
+                                            <button
+                                                onClick={closeTextModal}
+                                                className="bg-yellow-500 text-white px-16 py-2 rounded-md font-bold"
+
+                                            >
+                                                Cancel
+                                            </button>
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+                            )}
 
 
 
@@ -788,7 +1132,7 @@ console.log(updatedUrl);
                                                     className="bg-blue-500 text-white  py-2 rounded-md mr-5 px-16 font-bold"
 
                                                 >
-                                                    Edit
+                                                    Save
                                                 </button>
                                                 <button
                                                     onClick={closeDescriptionModal}
@@ -860,7 +1204,7 @@ console.log(updatedUrl);
                                                     className="bg-blue-500 text-white  py-2 rounded-md mr-5 px-16 font-bold"
 
                                                 >
-                                                    Edit
+                                                    Save
                                                 </button>
                                                 <button
                                                     onClick={closeRelatedModal}
