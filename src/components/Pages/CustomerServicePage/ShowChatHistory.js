@@ -18,6 +18,7 @@ const ShowChatHistory = ({ userIdAllChat, customerUserId,SetUserIdAllChat }) => 
     const [selectedImage, setSelectedImage] = useState(null);
 
     const openImageModal = (imgSrc) => {
+      console.log("click")
         setSelectedImage(imgSrc);
         setModalOpen(true);
       };
@@ -117,6 +118,7 @@ const ShowChatHistory = ({ userIdAllChat, customerUserId,SetUserIdAllChat }) => 
                           className="w-48 h-auto"
                           src={`data:image/png;base64,${chat?.message}`}
                           alt={`Image ${index}`}
+                          onClick={() => openImageModal(`data:image/png;base64,${chat?.message}`)}
                         />
                         <div className="flex justify-end pt-3"><small className=" text-right text-xs">{chat?.timestamp}</small> </div>
 
@@ -313,6 +315,7 @@ const ShowChatHistory = ({ userIdAllChat, customerUserId,SetUserIdAllChat }) => 
                                     src={`data:image/png;base64,${chat?.message}`}
                                     alt={`Image ${index}`}
                                     onClick={() => openImageModal(`data:image/png;base64,${chat?.message}`)}
+                                   
                                   />
                                   <div className="flex justify-start mt-2">
                                       <small className="text-end  text-slate-500 text-xs mr-4">{chat?.timestamp}</small>
@@ -474,7 +477,7 @@ const ShowChatHistory = ({ userIdAllChat, customerUserId,SetUserIdAllChat }) => 
           
                                 : (
                                  
-                                  <div className="bg-fuchsia-200 px-2 py-1 rounded-b-lg rounded-tl-lg text-black">
+                                  <div className="bg-lime-200 px-2 py-1 rounded-b-lg rounded-tl-lg text-black">
                                     <p className="px-2 py-1 font-normal text-black"><ReactEmoji text={chat?.message} /></p>
                                     <div className="flex justify-start">
                                       <small className="text-end  text-slate-500 text-xs mr-4">{chat?.timestamp}</small>
@@ -509,9 +512,8 @@ const ShowChatHistory = ({ userIdAllChat, customerUserId,SetUserIdAllChat }) => 
                     </div>
                 </div>
             }
-
-
             )}
+             <p className="my-5 font-bold text-yellow-500 text-center text-xl">--------------------------X---------------------------</p>
         </div>
     );
 };

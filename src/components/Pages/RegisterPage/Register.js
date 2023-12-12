@@ -206,8 +206,8 @@ const Register = () => {
 
                 if (userExists === false) {
                     // Validate password length
-                    if (password.length < 6) {
-                        setLengthError("Your password must be at least 6 characters long");
+                    if (password.length < 8) {
+                        setLengthError("Your password must be at least 8 characters long");
                         setLoading(false);
                         return;
                     }

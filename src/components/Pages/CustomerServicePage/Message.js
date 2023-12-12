@@ -145,6 +145,7 @@ const Message = ({selectedCustomerChat, showHistory, SetShowHistory, Loading }) 
                           className="w-48 h-auto"
                           src={`data:image/png;base64,${chat?.message}`}
                           alt={`Image ${index}`}
+                          onClick={() => openImageModal(`data:image/png;base64,${chat?.message}`)}
                         />
                         <div className="flex justify-end pt-3"><small className=" text-right text-xs">{chat?.timestamp}</small> </div>
 
@@ -468,7 +469,7 @@ const Message = ({selectedCustomerChat, showHistory, SetShowHistory, Loading }) 
 
                       : (
                        
-                        <div className="bg-fuchsia-200 px-2 py-1 rounded-b-lg rounded-tl-lg text-black">
+                        <div className="bg-lime-200 px-2 py-1 rounded-b-lg rounded-tl-lg text-black">
                           <p className="px-2 py-1 font-normal text-black"><ReactEmoji text={chat?.message} /></p>
                           <div className="flex justify-start">
                             <small className="text-end  text-slate-500 text-xs mr-4">{chat?.timestamp}</small>

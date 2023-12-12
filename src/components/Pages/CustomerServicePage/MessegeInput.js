@@ -85,10 +85,10 @@ const MessageInput = ({
 
 
   useEffect(() => {
-    if (newResponseCome.totalPart === newResponseCome.partNo) {
+    if (newResponseCome?.totalPart === newResponseCome?.partNo) {
       setAllChat((prevAllChat) => {
-        return prevAllChat.map((chat, index) => {
-          if (chat.sentId === newResponseCome.sentId && newResponseCome.totalPart === newResponseCome.partNo) {
+        return prevAllChat?.map((chat, index) => {
+          if (chat?.sentId === newResponseCome?.sentId && newResponseCome?.totalPart === newResponseCome?.partNo) {
           
           
     //         // Create a new object with smsLoading set to false
@@ -341,9 +341,14 @@ const MessageInput = ({
     };
     
     if (sms?.totalPart === 1 || (sms?.totalPart > 1 && sms?.partNo === sms?.totalPart)) {
+
+      if (currentCustomer.length === 0) {
+        handleFetchUser();
+      }
       currentCustomer.forEach((element) => {
         if (element?.status !== "STOPPED" || element?.userId !== sms?.sentBy) {
           handleFetchUser();
+
         }
       });
     
