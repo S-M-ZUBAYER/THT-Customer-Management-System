@@ -7,9 +7,6 @@ import toast from 'react-hot-toast';
 import { AuthContext } from '../../../context/UserContext';
 import { Client } from '@stomp/stompjs';
 import { sendChatMessage } from './SendMessageFunction';
-import axios from 'axios';
-const { v4: uuidv4 } = require('uuid');
-
 
 
 const MessageInput = ({
@@ -19,39 +16,18 @@ const MessageInput = ({
 }) => {
 
   const [message, setMessage] = useState('');
-  // const [selectedFiles, setSelectedFiles] = useState([]);
   const [fileType, setFileType] = useState(null); // Default to 'image'
-  const { chattingUser, user, connected, setConnected, selectedFiles, setSelectedFiles, allChat, setAllChat, newCome, setNewCome, newAllMessage, setNewAllMessage, newResponseCome, setNewResponseCome, localStoreSms, setLocalStoreSms,customerStatus,fetchUserByUserId ,currentCustomer} = useContext(AuthContext);
   const [response, setResponse] = useState({});
-
-
-
   const [newSentId, setNewSentId] = useState(getCurrentTimestampInSeconds());
 
 
-  
+  //collect the value from useContext
+  const { chattingUser, user, connected, setConnected, selectedFiles, setSelectedFiles, allChat, setAllChat, newCome, setNewCome, newAllMessage, setNewAllMessage, newResponseCome, setNewResponseCome, localStoreSms, setLocalStoreSms, customerStatus, setCustomerStatus, fetchUserByUserId, currentCustomer } = useContext(AuthContext);
 
 
 
- 
-
-  const showList = () => {
-    if (newCome && newMessagesList && newMessagesList.length > 0) {
-      const updatedData = newMessagesList.filter((data) => data.sentBy !== selectedCustomerChat?.userId);
-      if (newCome.sentBy !== selectedCustomerChat?.userId) {
-        setNewMessagesList([...updatedData, newCome]);
-      } else {
-        setNewMessagesList(updatedData);
-      }
-    } else if (newCome && newCome.sentBy !== selectedCustomerChat?.userId) {
-      setNewMessagesList([newCome]);
-    }
-  }
-
-
+  //According to the coming new sms here update the chatting sms and list and show the toast in here.
   useEffect(() => {
-
-
     if (newCome.totalPart === 1) {
       if (newCome && newMessagesList && newMessagesList.length > 0) {
         const updatedData = newMessagesList.filter((data) => data.sentBy !== selectedCustomerChat?.userId);
@@ -76,7 +52,6 @@ const MessageInput = ({
       } else if (newCome && newCome.sentBy !== selectedCustomerChat?.userId) {
         setNewMessagesList([newCome]);
       }
-      // showList();
     }
 
   }, [newCome]);
@@ -84,26 +59,12 @@ const MessageInput = ({
 
 
 
+  //here update the loading part depend of the response from the app (get sms or not)
   useEffect(() => {
     if (newResponseCome?.totalPart === newResponseCome?.partNo) {
       setAllChat((prevAllChat) => {
         return prevAllChat?.map((chat, index) => {
           if (chat?.sentId === newResponseCome?.sentId && newResponseCome?.totalPart === newResponseCome?.partNo) {
-          
-          
-    //         // Create a new object with smsLoading set to false
-    //         const liveChatKey = `${user?.email}LiveChat${chat?.sentTo}`;
-    // // setLocalStoreSms((prevChat) => [...prevChat, sms]);
-
-    // // Get existing messages from local storage
-    // const existingChat = JSON.parse(localStorage.getItem(liveChatKey)) || [];
-
-    // // Update local storage with the new SMS
-    // const updatedChat = [...existingChat, chat];
-    // localStorage.setItem(liveChatKey, JSON.stringify(updatedChat));
-
-
-
             return { ...chat, smsLoading: false };
           }
           // For other objects, return them as they are
@@ -115,54 +76,23 @@ const MessageInput = ({
 
 
 
-  const handleToView = () => {
-    if (newCome.totalPart === 1) {
-      if (newCome && newMessagesList && newMessagesList.length > 0) {
-        const updatedData = newMessagesList.filter((data) => data.sentBy !== selectedCustomerChat?.userId);
-        if (newCome.sentBy !== selectedCustomerChat?.userId) {
-          setNewMessagesList([...updatedData, newCome]);
-        } else {
-          setNewMessagesList(updatedData);
-        }
-      } else if (newCome && newCome.sentBy !== selectedCustomerChat?.userId) {
-        setNewMessagesList([newCome]);
-      }
-      // showList();
-    }
-    else if (newCome.totalPart > 1 && newCome.partNo === 1) {
-      if (newCome && newMessagesList && newMessagesList.length > 0) {
-        const updatedData = newMessagesList.filter((data) => data.sentBy !== selectedCustomerChat?.userId);
-        if (newCome.sentBy !== selectedCustomerChat?.userId) {
-          setNewMessagesList([...updatedData, newCome]);
-        } else {
-          setNewMessagesList(updatedData);
-        }
-      } else if (newCome && newCome.sentBy !== selectedCustomerChat?.userId) {
-        setNewMessagesList([newCome]);
-      }
-    }
-  }
 
-
-
-
-  // Move setNewCome({}) outside of the useEffect
+  // Here make empty the new response status
   useEffect(() => {
     setNewCome({});
   }, [selectedCustomerChat]);
 
 
 
-
+  //Make the function to send the time according to the sending time
   function getCurrentTimestampInSeconds() {
     const currentDate = new Date();
     const timestampInSeconds = Math.floor(currentDate.getTime() / 1000);
     return timestampInSeconds;
   }
+
+
   // <---------------------------Final Web Socket------------------------------------>
-
-  // const [connected, setConnected] = useState(false);
-
   const stompClient = new Client({
     brokerURL: 'wss://grozziieget.zjweiting.com:3091/CustomerService-Chat/websocket',
     //  brokerURL: 'ws://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/websocket',
@@ -177,7 +107,6 @@ const MessageInput = ({
   };
 
 
-  //After solve the chatting app backend i need to comment out again...
   const connect = () => {
     stompClient.onConnect = (frame) => {
       setConnected(true);
@@ -232,8 +161,6 @@ const MessageInput = ({
       SocketDisconnect();
     }
 
-
-
     // Try to connect
     connect();
 
@@ -241,6 +168,7 @@ const MessageInput = ({
     const retryInterval = setInterval(() => {
       if (!connected) {
         console.log('Reconnecting to WebSocket...');
+        fetchUserByUserId();
         connect();
       } else {
         clearInterval(retryInterval);
@@ -252,40 +180,32 @@ const MessageInput = ({
       clearInterval(retryInterval);
       stompClient.deactivate();
     };
-    // }, [connected, newAllMessage]);
   }, [connected, newAllMessage]);
-  // }, [connected===false]);
 
 
 
 
 
-
+  //Here make the functionalities to change the interface after sending the sms , image, file, and video 
   const getAnswer = (sms) => {
-
     if (sms && sms.totalPart === 1) {
-      //show your message/video/file/image
+      setSelectedFiles([]);
 
     }
     else {
-      if (sms && sms.partNo === sms.totalPart) {//get partNo
-
-        // setNewAllMessage([]);
+      if (sms && sms.partNo === sms.totalPart) {
         setSelectedFiles([]);
-        //show your message/video/file/image
-
       }
       else {
-        //sent next part
         sendChatMessage((newAllMessage)[sms.partNo]);
 
       }
     }
   };
 
-  //===========================
 
 
+  // Here make the functionalities to send the response and update the user interface after coming new sms 
   const showGreeting = async (sms) => {
 
     if (sms.msgType === "ans") {
@@ -295,7 +215,7 @@ const MessageInput = ({
     }
 
 
-    //Add New response
+    //Add New response sms
     const textMessage = {
       chatId: sms?.chatId,
       sentBy: sms?.sentTo,
@@ -315,31 +235,19 @@ const MessageInput = ({
       setNewCome(sms);
     }
 
-    // if (sms?.totalPart === 1) {
-    //   toast.success(`${sms?.msgType} come from  Id:${sms?.sentBy}`, {
-    //     position: "top-right"
-    //   })
-    // }
-    // else if (sms?.totalPart > 1 && sms?.partNo === sms?.totalPart) {
-    //   toast.success(`${sms?.msgType} come from  Id:${sms?.sentBy}`, {
-    //     position: "top-right"
-    //   })
-    // }
-
-    // setAllChat((prevChat) => [...prevChat, sms]);
     setAllChat((prevChat) => [...(prevChat?.length ? prevChat : []), sms]);
 
 
     const handleFetchUser = () => {
       fetchUserByUserId();
     };
-    
+
     const handleToastSuccess = () => {
       toast.success(`${sms?.msgType} come from  Id:${sms?.sentBy}`, {
         position: "top-right"
       });
     };
-    
+
     if (sms?.totalPart === 1 || (sms?.totalPart > 1 && sms?.partNo === sms?.totalPart)) {
 
       if (currentCustomer.length === 0) {
@@ -348,51 +256,44 @@ const MessageInput = ({
       currentCustomer.forEach((element) => {
         if (element?.status !== "STOPPED" || element?.userId !== sms?.sentBy) {
           handleFetchUser();
+          if (element?.userId === selectedCustomerChat?.userId) {
+            setCustomerStatus("RUNNING")
+          }
 
         }
       });
-    
+
       handleToastSuccess();
     }
-    
 
 
-    //   //==============================================
 
+
+    // Here make the functionalities to store the coming sms in the local storage
 
     const liveChatKey = `${user?.email}LiveChat${sms?.sentBy}`;
-    // setLocalStoreSms((prevChat) => [...prevChat, sms]);
-
-    // Get existing messages from local storage
     const existingChat = JSON.parse(localStorage.getItem(liveChatKey)) || [];
-
-    // Update local storage with the new SMS
     const updatedChat = [...existingChat, sms];
-    console.log(liveChatKey,updatedChat,"Check")
     localStorage.setItem(liveChatKey, JSON.stringify(updatedChat));
-
-
-    
 
   };
 
 
-
+  //To select or change the file to send
   const handleFileChange = async (e) => {
     const files = e.target.files;
     const fileArray = Array.from(files);
     setSelectedFiles(fileArray);
-    //  setNewSentId(getCurrentTimestampInSeconds());
 
-    // new 
+
+    // To convert the file in base64Data and make part by part according to the size
     const base64Data = await readAsBase64(fileArray[0]);
     const stringParts = splitBase64String(base64Data, 45000);
 
 
 
-
+    //Make the structure and specific the part number to send one by one
     const newMessages = stringParts.map((part, index) => {
-
       if (fileType === 'video' || fileType === 'image') {
         return {
           chatId: selectedCustomerChat?.chatId,
@@ -421,15 +322,13 @@ const MessageInput = ({
       }
     });
 
-
+    // update the state to send the update sms 
     setNewAllMessage(newMessages);
-
-
 
   };
 
 
-
+  //Here make the nice formate to send the time 
   function getCurrentTime() {
     const now = new Date();
     const hours = now.getHours();
@@ -447,6 +346,8 @@ const MessageInput = ({
     return `${formattedHours}:${formattedMinutes} ${ampm}`;
   }
 
+
+  // Here delete the selected file from the interface
   const handleRemoveFile = (fileIndex) => {
     const updatedFiles = selectedFiles.filter((_, index) => index !== fileIndex);
     setSelectedFiles(updatedFiles);
@@ -465,6 +366,8 @@ const MessageInput = ({
     });
   };
 
+
+  //Here make the function to split the base64 string into multiple part according to the size
   function splitBase64String(base64Data, maxSizeInBytes) {
     const base64Parts = [];
     let currentPart = '';
@@ -484,11 +387,11 @@ const MessageInput = ({
       // Push any remaining data as a part
       base64Parts.push(currentPart);
     }
-
     return base64Parts;
   }
 
 
+  //Here find the selected the file type
   const handleFileIconClick = (type) => {
     // Programmatically trigger the input file dialog when the icon is clicked
     document.getElementById('fileInput').click();
@@ -496,6 +399,8 @@ const MessageInput = ({
   };
 
 
+
+  //Make the function to work the submit for ENTER button
   const handleKeyDown = (e) => {
     // Check if the Enter key is pressed (key code 13)
     if (e.keyCode === 13 && !e.shiftKey) {
@@ -505,10 +410,10 @@ const MessageInput = ({
   };
 
 
-  // function to send the sms part by part
 
+  // function to send the sms part by part
   const handleSubmit = async (e) => {
-    if(customerStatus==="STOPPED"){
+    if (customerStatus === "STOPPED") {
       toast.error("You Can't Reply.May be customer connect with other Customer service");
       return;
     }
@@ -519,7 +424,7 @@ const MessageInput = ({
     if (message.trim() !== '' || selectedFiles.length > 0) {
       const allMessages = [];
 
-
+      //Make the formate only sending and waiting for response customer get sms or not
       if (message.trim() !== '') {
         const textMessage = {
           chatId: selectedCustomerChat?.chatId,
@@ -549,14 +454,10 @@ const MessageInput = ({
           timestamp: getCurrentTime(),
         }]);
 
-        //for local storage
-
-
-     
-     
-    
+        // clear again the response sms 
         setResponse({});
-        // sendChatMessage(textMessage);
+
+        //Send the formatting sms to the customer
         sendChatMessage({
           chatId: selectedCustomerChat?.chatId,
           sentBy: selectedCustomerChat?.customerServiceId,
@@ -585,16 +486,17 @@ const MessageInput = ({
           partNo: 1,
           timestamp: getCurrentTime(),
         }];
+
+        // store the sending sms to the local storage
         localStorage.setItem(liveChatKey, JSON.stringify(updatedChat));
 
       }
 
-
+      // start the part to send the file to the customer
       if (selectedFiles.length > 0) {
         const file = selectedFiles[0]; // Use the first selected file
         const base64Data = await readAsBase64(file);
         const stringParts = splitBase64String(base64Data, 45000);
-        // const fileType = /* determine fileType */;
 
 
         if (fileType === 'video' || fileType === 'image') {
@@ -629,8 +531,6 @@ const MessageInput = ({
             timestamp: getCurrentTime(),
           }]);
 
-          //for local storage
-         
         }
 
         const newMessages = stringParts.map((part, index) => {
@@ -663,19 +563,17 @@ const MessageInput = ({
         });
 
 
-
-
-
         // Send the first message in the newMessages array
         sendChatMessage(newMessages[0]);
-         // Get existing messages from local storage
-         const liveChatKey = `${user?.email}LiveChat${selectedCustomerChat?.userId}`;
-         console.log(liveChatKey,'Check')
-         const existingChat = JSON.parse(localStorage.getItem(liveChatKey)) || [];
 
-         // Update local storage with the new SMS
-         const updatedChat = [...existingChat, newMessages[0]];
-         localStorage.setItem(liveChatKey, JSON.stringify(updatedChat));
+
+        // Get existing messages from local storage
+        const liveChatKey = `${user?.email}LiveChat${selectedCustomerChat?.userId}`;
+        const existingChat = JSON.parse(localStorage.getItem(liveChatKey)) || [];
+
+        // Update local storage with the new SMS
+        const updatedChat = [...existingChat, newMessages[0]];
+        localStorage.setItem(liveChatKey, JSON.stringify(updatedChat));
       }
 
 
@@ -683,7 +581,6 @@ const MessageInput = ({
         // Clear the 'text' variable if needed
         setMessage('');
 
-        // Update the chat state with only text messages
         // setLocalStoreSms((prevChat) => [...prevChat, ...allMessages]);
         setAllChat([...allChat, ...allMessages]);
       }
@@ -693,6 +590,8 @@ const MessageInput = ({
 
   return (
     <div className=" absolute rounded-b-lg z-40 bg-white pt-1 w-full bottom-0 ">
+
+      {/* Here are the design for the heading above the text area */}
       <div className="flex justify-around text-sm">
         <button className="bg-[#004368] text-white ml-8 hover:bg-blue-700 px-2 py-1 rounded-md mr-3">
           Auto Reply
@@ -704,8 +603,12 @@ const MessageInput = ({
           Typically
         </button>
       </div>
+
+      {/* Here the form to send the text, image, video, doc,pdf etc */}
       <form onSubmit={handleSubmit} className={`p-4 `}>
         <div className={`flex gap-2  w-full items-center px-3 my-2 bg-white z-40`}>
+
+
           <button
             onClick={() => handleFileIconClick('image')}
             className={` ${fileType === 'image' ? 'selected' : ''}`}
@@ -727,6 +630,8 @@ const MessageInput = ({
             className="hidden"
           />
 
+
+
           <div>
             <button
               onClick={() => handleFileIconClick('file')}
@@ -734,7 +639,6 @@ const MessageInput = ({
             >
               <AiOutlineFileAdd className="mr-2 text-gray-400 text-xl cursor-pointer"></AiOutlineFileAdd>
             </button>
-
             <input
               id="fileInput"
               type="file"
@@ -744,20 +648,19 @@ const MessageInput = ({
             />
           </div>
 
-
-
           <textarea
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Type your message..."
-            className={`relative w-9/12 md:w-8/12 lg:9/12 py-1 px-2 rounded-md bg-cyan-200  ${customerStatus==="STOPPED" && "bg-red-500"}`}
+            className={`relative w-9/12 md:w-8/12 lg:9/12 py-1 px-2 rounded-md bg-cyan-200  ${customerStatus === "STOPPED" && "bg-red-500"}`}
           />
           <button className="flex items-center absolute right-[55px] lg:right-[95px] " type="submit">
             <AiOutlineSend className=" cursor-pointer"></AiOutlineSend>
           </button>
         </div>
 
+        {/* Make the design to show and delete the selected file */}
         <div className="mt-2">
           {selectedFiles.map((file, index) => (
             <div key={index} className="flex items-center bg-gray-300 p-2 w-10/12">
