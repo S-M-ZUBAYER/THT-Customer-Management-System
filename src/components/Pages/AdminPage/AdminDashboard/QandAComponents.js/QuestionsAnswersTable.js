@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react';
-import { AuthContext } from '../../../../../context/UserContext';
 import DisplaySpinner from '../../../../Shared/Loading/DisplaySpinner';
 
 const QuestionAnswerTable = ({ questionAnswers, onDelete, onEdit }) => {
@@ -8,11 +7,6 @@ const QuestionAnswerTable = ({ questionAnswers, onDelete, onEdit }) => {
   const [editedAnswer, setEditedAnswer] = useState('');
   const [editedDate, setEditedDate] = useState('');
   const [editedTime, setEditedTime] = useState('');
-
-  const {loading,setLoading}=useContext(AuthContext);
-
-
-
 
 
   const handleDelete = (id) => {

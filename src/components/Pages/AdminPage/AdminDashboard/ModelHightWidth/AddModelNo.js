@@ -11,6 +11,7 @@ const AddModelNo = ({allWarehouseNameList, setAllWarehouseNameList}) => {
     setModelNo(e.target.value);
   };
 
+  //Create this function to add new model
   const handleAddWarehouse = () => {
     if (modelNo.trim() !== '') {
       setAllWarehouseNameList([...allWarehouseNameList,modelNo]);
@@ -19,21 +20,17 @@ const AddModelNo = ({allWarehouseNameList, setAllWarehouseNameList}) => {
       })
       .then((response) => {
         toast.success("New Model Number Added Successfully")
-        // Handle success, reset the input field, or show a success message
         setModelNo('');
       })
       .catch((error) => {
         console.error('Error adding Model No', error);
         toast.error(error)
-        // Handle error, show an error message to the user
       });
     }
 
   };
 
  
-
-
   return (
     <div>
       <h1 className="text-2xl font-bold text-yellow-900 my-5">Add All Model No</h1>

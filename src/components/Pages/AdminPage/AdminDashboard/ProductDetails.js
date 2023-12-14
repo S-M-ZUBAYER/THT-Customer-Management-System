@@ -6,23 +6,19 @@ import { AllProductContext } from '../../../../context/ProductContext';
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
 import AddColorImg from './AddColorImg';
-import { CiEdit } from "react-icons/ci";
 import { FiEdit } from 'react-icons/fi';
 import { reduceImageResolution, reduceImagesResolution } from './Warehouse&Cities.js/functionForImageResulation';
-import { click } from '@testing-library/user-event/dist/click';
 
 
 function ProductDetails() {
-
     // get product data from context component
     const { Product } = useContext(AllProductContext);
 
     //get the API path extension from url
     const url = window.location.href;
     const productCategory = url.split('/')[4];
-
     const updatedUrl = url.split('/').slice(0, 5).join('/');
-console.log(updatedUrl);
+
 
 
 
@@ -37,6 +33,29 @@ console.log(updatedUrl);
     const [modelNumber, setModelNumber] = useState(Product?.modelNumber);
 
 
+      //Declare the initial state to edit some of the part 
+      const [isModalOpen, setIsModalOpen] = useState(false);
+      const [isTextModalOpen, setIsTextModalOpen] = useState(false);
+      const [isRelatedModalOpen, setIsRelatedModalOpen] = useState(false);
+      const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false);
+      const [newProductImg, setNewProductImg] = useState(null);
+      const [productImgLink, setProductImgLink] = useState(Product?.productImgLink);
+      const [productImgRemark, setProductImgRemark] = useState(Product?.productImgRemark);
+      const [productCountryName, setProductCountryName] = useState(Product?.productCountryName);
+      const [productName, setProductName] = useState(Product?.productName);
+      const [printerColor, setPrinterColor] = useState(Product?.printerColor);
+      const [connectorType, setConnectorType] = useState(Product?.connectorType);
+      const [relatedImgRemark, setRelatedImgRemark] = useState(Product?.relatedImgRemark);
+      const [relatedImgLink, setRelatedImgLink] = useState(Product?.relatedImgLink);
+      const [shelfStartTime, setShelfStartTime] = useState(Product?.shelfStartTime);
+      const [shelfEndTime, setShelfEndTime] = useState(Product?.shelfEndTime);
+      const [afterSalesText, setAfterSalesText] = useState(Product?.afterSalesText);
+      const [afterSalesInstruction, setAfterSalesInstruction] = useState(Product?.afterSalesInstruction);
+      const [inventoryText, setInventoryText] = useState(Product?.inventoryText);
+      const [relatedImages, setRelatedImages] = useState([]);
+      const [descriptionImages, setDescriptionImages] = useState([]);
+
+
 
     // all of the simple function for display the product details
 
@@ -49,27 +68,21 @@ console.log(updatedUrl);
     const handleColorImageClick = (image) => {
         setSelectedColorImage(image);
     };
-
     const handleClose = () => {
         setSelectedVideo(null);
     };
     const handleProductPriceChange = (e) => {
         setProductPrice(e.target.value);
     };
-
     const handleProductDescriptionChange = (e) => {
         setProductDescription(e.target.value);
     };
-
     const handleVideoClick = (video) => {
         setSelectedVideo(video);
     };
-
-
     const handleCloseImage = () => {
         setSelectedImage(null);
     };
-
     const handleCloseInstructionImage = () => {
         setSelectedInstructionImage(null);
     };
@@ -81,34 +94,9 @@ console.log(updatedUrl);
     };
 
 
+  
 
-
-
-    //Declare the initial state to edit some of the part 
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isTextModalOpen, setIsTextModalOpen] = useState(false);
-    const [isRelatedModalOpen, setIsRelatedModalOpen] = useState(false);
-    const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false);
-    const [newProductImg, setNewProductImg] = useState(null);
-    const [productImgLink, setProductImgLink] = useState(Product?.productImgLink);
-    const [productImgRemark, setProductImgRemark] = useState(Product?.productImgRemark);
-    const [productCountryName, setProductCountryName] = useState(Product?.productCountryName);
-    const [productName, setProductName] = useState(Product?.productName);
-    const [printerColor, setPrinterColor] = useState(Product?.printerColor);
-    const [connectorType, setConnectorType] = useState(Product?.connectorType);
-    const [relatedImgRemark, setRelatedImgRemark] = useState(Product?.relatedImgRemark);
-    const [relatedImgLink, setRelatedImgLink] = useState(Product?.relatedImgLink);
-    const [shelfStartTime, setShelfStartTime] = useState(Product?.shelfStartTime);
-    const [shelfEndTime, setShelfEndTime] = useState(Product?.shelfEndTime);
-    const [afterSalesText, setAfterSalesText] = useState(Product?.afterSalesText);
-    const [afterSalesInstruction, setAfterSalesInstruction] = useState(Product?.afterSalesInstruction);
-    const [inventoryText, setInventoryText] = useState(Product?.inventoryText);
-    const [relatedImages, setRelatedImages] = useState([]);
-    const [descriptionImages, setDescriptionImages] = useState([]);
-
-
-    //modal part start from here to edit the product information
-    // Inside your component, add a function to open the modal
+    // add these functions to open the 4 modal to edit product information
     const openModal = () => {
         setIsModalOpen(!isModalOpen);
     };
@@ -122,7 +110,9 @@ console.log(updatedUrl);
         setIsDescriptionModalOpen(!isDescriptionModalOpen);
     };
 
-    // Add this function to close the modal
+
+
+    // Add this function to close these modals 
     const closeModal = () => {
         setIsModalOpen(false);
     };
