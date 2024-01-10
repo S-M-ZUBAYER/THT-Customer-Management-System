@@ -43,31 +43,6 @@ function AddProduct({ product }) {
 
 
 
-  // const handleUpload = async () => {
-  //   const formData = new FormData();
-
-  //   // Append selected images to the form data
-  //   for (let i = 0; i < selectedImages.length; i++) {
-  //     formData.append('images', selectedImages[i]);
-  //   }
-
-  //   // Append selected videos to the form data
-  //   for (let i = 0; i < selectedVideos.length; i++) {
-  //     formData.append('videos', selectedVideos[i]);
-  //   }
-
-
-
-  //   // try {
-  //   //   const response = await axios.post('/upload', formData, {
-  //   //     headers: {
-  //   //       'Content-Type': 'multipart/form-data'
-  //   //     }
-  //   //   });
-  //   // } catch (error) {
-  //   //   console.error('Error uploading files:', error);
-  //   // }
-  // };
 
 
   const url = window.location.href;
@@ -94,12 +69,13 @@ function AddProduct({ product }) {
   };
   const handleInstructionsImageChange = (e) => {
     const instructionsImages = Array.from(e.target.files);
-    const resizePromises = instructionsImages.map((image) => reduceImageResolution(image, 1000));
+    setSelectedInstructionsImages(instructionsImages);
+    // const resizePromises = instructionsImages.map((image) => reduceImageResolution(image, 1000));
 
-    Promise.all(resizePromises)
-      .then((resizedImages) => {
-        setSelectedInstructionsImages(resizedImages);
-      });
+    // Promise.all(resizePromises)
+    //   .then((resizedImages) => {
+    //     setSelectedInstructionsImages(resizedImages);
+    //   });
   };
 
 

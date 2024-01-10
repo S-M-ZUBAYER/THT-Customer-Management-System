@@ -3,18 +3,19 @@ import axios from 'axios';
 import DisplaySpinner from '../../../Shared/Loading/DisplaySpinner';
 import { RiDeleteBin7Line } from 'react-icons/ri';
 import { toast } from 'react-hot-toast';
+import { FiEdit } from 'react-icons/fi';
 
-const ShowColorImgList = ({ modelNumber,productId,categoryImage }) => {
+const ShowColorImgList = ({ modelNumber, productId, categoryImage }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [colorImages, setColorImages] = useState("");
 
-    console.log(categoryImage,"categoryImage")
+
 
     useEffect(() => {
         // Make a GET request to retrieve color images by model number
         axios.get(`https://grozziieget.zjweiting.com:8033/tht/colorImg/productColor/${productId}/${categoryImage}`)
-        // axios.get(`https://grozziieget.zjweiting.com:8033/tht/colorImg/productColor/${productId}/${categoryImage}`)
+            // axios.get(`https://grozziieget.zjweiting.com:8033/tht/colorImg/productColor/${productId}/${categoryImage}`)
             .then(response => {
                 if (response.data.status === "success") {
                     // Set the retrieved color images in the state
@@ -34,17 +35,17 @@ const ShowColorImgList = ({ modelNumber,productId,categoryImage }) => {
             });
     }, [modelNumber]);
 
-    console.log(colorImages,"color images")
+
 
 
     const handleToDeleteColorInfo = (id) => {
-
+console.log(id)
         const confirmed = window.confirm('Are you sure you want to delete this color image information?');
         if (!confirmed) {
-          return; // Cancel the deletion if the user clicks Cancel or closes the modal
+            return; // Cancel the deletion if the user clicks Cancel or closes the modal
         }
         axios.delete(`https://grozziieget.zjweiting.com:8033/tht/colorInfo/delete/${id}`)
-        // axios.delete(`https://grozziieget.zjweiting.com:8033/tht/colorInfo/delete/${id}`)
+            // axios.delete(`https://grozziieget.zjweiting.com:8033/tht/colorInfo/delete/${id}`)
             .then(response => {
                 if (response.data) {
                     setColorImages(colorImages.filter(info => info?.id !== id))
@@ -59,6 +60,73 @@ const ShowColorImgList = ({ modelNumber,productId,categoryImage }) => {
                 toast.error('An error occurred while deleting color information:', error);
             });
     };
+
+
+
+
+
+
+    // editing part 
+    const [currentColor, setCurrentColor] = useState("");
+    const [productPrice, setProductPrice] = useState("");
+    const [stockQuantity, setStockQuantity] = useState("");
+    const [colorName, setColorName] = useState("");
+    const [typeName, setTypeName] = useState("");
+    const [productDescription, setProductDescription] = useState("");
+    const [isModalVisible, setIsModalVisible] = useState(false);
+
+    const handleProductPriceChange = (e) => setProductPrice(e.target.value);
+    const handleStockQuantityChange = (e) => setStockQuantity(e.target.value);
+    const handleColorNameChange = (e) => setColorName(e.target.value);
+    const handleTypeNameChange = (e) => setTypeName(e.target.value);
+    const handleProductDescriptionChange = (e) => setProductDescription(e.target.value);
+
+
+    const handleEditColorInfo = (colorImage) => {
+        setCurrentColor(colorImage);
+        setColorName(colorImage?.colorName);
+        setTypeName(colorImage?.typeName);
+        setProductDescription(colorImage?.colorProductDescription);
+        setStockQuantity(colorImage?.colorProductQuantity);
+        setProductPrice(colorImage?.colorProductPrice)
+      
+        setIsModalVisible(true);
+    };
+
+    const handleModalCancel = () => {
+        setIsModalVisible(false);
+    };
+
+
+    const handleModalSave = async (colorId) => {
+        console.log(colorId)
+        try {
+            const updatedColorInfo = {
+                colorName,
+                typeName,
+                colorProductPrice: productPrice,
+                colorProductQuantity: stockQuantity,
+                colorProductDescription: productDescription,
+            };
+    
+            const response = await axios.put(`http://localhost:2000/tht/colorImg/edit/${colorId}`, updatedColorInfo);
+    
+            if (response.data.status === "success") {
+                toast.success('Color information updated successfully');
+                setIsModalVisible(false);
+            } else {
+                console.error('Failed to update color information');
+                toast.error('Failed to update color information');
+            }
+        } catch (error) {
+            console.error('An error occurred while updating color information:', error);
+            toast.error('An error occurred while updating color information:', error);
+        }
+    };
+    
+
+
+
 
 
     return (
@@ -85,6 +153,7 @@ const ShowColorImgList = ({ modelNumber,productId,categoryImage }) => {
                 <p className="">
                     Price
                 </p>
+                <FiEdit className="hover:cursor-pointer hover:text-2xl"></FiEdit>
                 <RiDeleteBin7Line className="hover:cursor-pointer hover:text-2xl"></RiDeleteBin7Line>
 
             </div>
@@ -119,11 +188,117 @@ const ShowColorImgList = ({ modelNumber,productId,categoryImage }) => {
                                     <p className="">
                                         {colorImage?.colorProductPrice}
                                     </p>
+                                    <FiEdit onClick={() => handleEditColorInfo(colorImage)} className="hover:cursor-pointer hover:text-2xl text-center"></FiEdit>
                                     <RiDeleteBin7Line onClick={() => handleToDeleteColorInfo(colorImage?.id)} className="hover:cursor-pointer hover:text-2xl"></RiDeleteBin7Line>
+                                    {isModalVisible && (
+
+                                        <div className="fixed z-50 inset-0  mx-auto rounded-lg h-5/6 w-3/6 my-auto  bg-gray-900 bg-opacity-50">
+                                            <div className="bg-white w-11/12 my-4 mx-auto p-2 px-8 text-center rounded-lg">
+                                                <h2 className="text-lg font-bold mb-2">Edit Product color image information</h2>
+
+
+                                                <div>
+                                                    <div className="my-8 grid  grid-cols-3 text-start mr-14">
+                                                        <label htmlFor="modelNumber" className="block col-span-1 text-gray-700 font-bold mb-2">
+                                                            Color Product Price
+                                                        </label>
+                                                        <input
+                                                            type="number"
+                                                            id="productPrice"
+                                                            className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                            value={productPrice}
+                                                            placeholder='Enter product price'
+                                                            onChange={(e) => handleProductPriceChange(e)}
+
+                                                        />
+                                                    </div>
+
+                                                    <div className="my-8  grid  grid-cols-3 text-start mr-14">
+                                                        <label htmlFor="modelNumber" className="block col-span-1 text-gray-700 font-bold mb-2">
+                                                            Stock Quantity
+                                                        </label>
+                                                        <input
+                                                            type="number"
+                                                            id="stockQuantity"
+                                                            className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                            value={stockQuantity}
+                                                            placeholder='Add quantity'
+                                                            onChange={handleStockQuantityChange}
+
+                                                        />
+                                                    </div>
+                                                    <div className="my-8  grid  grid-cols-3 text-start mr-14">
+                                                        <label htmlFor="modelNumber" className="block col-span-1 text-gray-700 font-bold mb-2">
+                                                            Color Name
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            id="colorName"
+                                                            className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                            value={colorName}
+                                                            placeholder='Enter the color Name'
+                                                            onChange={handleColorNameChange}
+
+                                                        />
+                                                    </div>
+                                                    <div className="my-8  grid  grid-cols-3 text-start mr-14">
+                                                        <label htmlFor="modelNumber" className="block col-span-1 text-gray-700 font-bold mb-2">
+                                                            Type
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            id="typeName"
+                                                            className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                            value={typeName}
+                                                            placeholder='Enter the type'
+                                                            onChange={handleTypeNameChange}
+
+                                                        />
+                                                    </div>
+                                                    <div className="mb-4">
+                                                        <label htmlFor="productDescription" className="block text-start text-gray-700 font-bold mb-2">
+                                                            Product Description
+                                                        </label>
+                                                        <textarea
+                                                            id="productDescription"
+                                                            placeholder="Add Product description"
+                                                            className="shadow resize-both appearance-none border rounded-lg w-full h-44  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                            value={productDescription}
+                                                            onChange={handleProductDescriptionChange}
+                                                            required
+                                                        ></textarea>
+                                                    </div>
+
+                                                    <div className="mt-8 text-right">
+                                                        <button
+                                                            onClick={()=>handleModalSave(colorImage?.id)}
+                                                            className="bg-blue-500 text-white  py-2 rounded-md mr-5 px-16 font-bold"
+
+                                                        >
+                                                            Save
+                                                        </button>
+                                                        <button
+                                                            onClick={handleModalCancel}
+                                                            className="bg-yellow-500 text-white px-16 py-2 rounded-md font-bold"
+
+                                                        >
+                                                            Cancel
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    )
+                                    }
+
 
                                 </div>
                             )))}
-        </div>
+
+
+
+        </div >
     );
 };
 

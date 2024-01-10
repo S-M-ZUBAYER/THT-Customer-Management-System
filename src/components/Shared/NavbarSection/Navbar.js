@@ -7,12 +7,14 @@ import UserContext, { AuthContext } from '../../../context/UserContext';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isSideNabOpen, setIsSideNabOpen] = useState(false);
   const [isCustomerOpen, setIsCustomerOpen] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
 
   const { user } = useContext(AuthContext);
 
   const toggleMenu = () => setIsOpen(!isOpen);
+  const toggleSideNabMenu = () => setIsSideNabOpen(!isSideNabOpen);
   const customerToggleMenu = () => setIsCustomerOpen(!isCustomerOpen);
   const adminToggleMenu = () => setIsAdminOpen(!isAdminOpen);
 
@@ -203,7 +205,8 @@ const Navbar = () => {
                 id="options-menu"
                 aria-haspopup="true"
                 aria-expanded="true"
-                onClick={toggleMenu}
+                onClick={toggleSideNabMenu}
+                // onClick={toggleMenu}
               >
 
                 <svg
@@ -221,7 +224,7 @@ const Navbar = () => {
                   />
                 </svg>
               </button>
-              {isOpen && (
+              {isSideNabOpen && (
                 <div className="z-40 origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                   <div
                     className="py-1"
@@ -259,7 +262,7 @@ const Navbar = () => {
                               className="block py-2 text-sm text-gray-700 hover:bg-gray-100 ring-black ring-opacity-5  hover:font-semibold hover:text-zinc-900 "
                               role="menuitem"
                             >
-                              Customer Service 1
+                              Automatic Service
                             </Link>
                             <Link
                               to="/customer-2"
@@ -267,7 +270,7 @@ const Navbar = () => {
                               className="block py-2 text-sm text-gray-700 hover:bg-gray-100 hover:font-semibold hover:text-zinc-900"
                               role="menuitem"
                             >
-                              Customer Service 2
+                              Manual Service
                             </Link>
 
                           </div>

@@ -33,27 +33,32 @@ function ProductDetails() {
     const [modelNumber, setModelNumber] = useState(Product?.modelNumber);
 
 
-      //Declare the initial state to edit some of the part 
-      const [isModalOpen, setIsModalOpen] = useState(false);
-      const [isTextModalOpen, setIsTextModalOpen] = useState(false);
-      const [isRelatedModalOpen, setIsRelatedModalOpen] = useState(false);
-      const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false);
-      const [newProductImg, setNewProductImg] = useState(null);
-      const [productImgLink, setProductImgLink] = useState(Product?.productImgLink);
-      const [productImgRemark, setProductImgRemark] = useState(Product?.productImgRemark);
-      const [productCountryName, setProductCountryName] = useState(Product?.productCountryName);
-      const [productName, setProductName] = useState(Product?.productName);
-      const [printerColor, setPrinterColor] = useState(Product?.printerColor);
-      const [connectorType, setConnectorType] = useState(Product?.connectorType);
-      const [relatedImgRemark, setRelatedImgRemark] = useState(Product?.relatedImgRemark);
-      const [relatedImgLink, setRelatedImgLink] = useState(Product?.relatedImgLink);
-      const [shelfStartTime, setShelfStartTime] = useState(Product?.shelfStartTime);
-      const [shelfEndTime, setShelfEndTime] = useState(Product?.shelfEndTime);
-      const [afterSalesText, setAfterSalesText] = useState(Product?.afterSalesText);
-      const [afterSalesInstruction, setAfterSalesInstruction] = useState(Product?.afterSalesInstruction);
-      const [inventoryText, setInventoryText] = useState(Product?.inventoryText);
-      const [relatedImages, setRelatedImages] = useState([]);
-      const [descriptionImages, setDescriptionImages] = useState([]);
+    //Declare the initial state to edit some of the part 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isTextModalOpen, setIsTextModalOpen] = useState(false);
+    const [isRelatedModalOpen, setIsRelatedModalOpen] = useState(false);
+    const [isRelatedVideoModalOpen, setIsRelatedVideoModalOpen] = useState(false);
+    const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false);
+    const [isInstructionImgModalOpen, setIsInstructionImgModalOpen] = useState(false);
+    const [isInstructionVideoModalOpen, setIsInstructionVideoModalOpen] = useState(false);
+    const [newProductImg, setNewProductImg] = useState(null);
+    const [productImgLink, setProductImgLink] = useState(Product?.productImgLink);
+    const [productImgRemark, setProductImgRemark] = useState(Product?.productImgRemark);
+    const [productCountryName, setProductCountryName] = useState(Product?.productCountryName);
+    const [productName, setProductName] = useState(Product?.productName);
+    const [printerColor, setPrinterColor] = useState(Product?.printerColor);
+    const [connectorType, setConnectorType] = useState(Product?.connectorType);
+    const [relatedImgRemark, setRelatedImgRemark] = useState(Product?.relatedImgRemark);
+    const [relatedImgLink, setRelatedImgLink] = useState(Product?.relatedImgLink);
+    const [shelfStartTime, setShelfStartTime] = useState(Product?.shelfStartTime);
+    const [shelfEndTime, setShelfEndTime] = useState(Product?.shelfEndTime);
+    const [afterSalesText, setAfterSalesText] = useState(Product?.afterSalesText);
+    const [afterSalesInstruction, setAfterSalesInstruction] = useState(Product?.afterSalesInstruction);
+    const [inventoryText, setInventoryText] = useState(Product?.inventoryText);
+    const [relatedImages, setRelatedImages] = useState([]);
+    const [relatedVideos, setRelatedVideos] = useState([]);
+    const [instructionVideos, setInstructionVideos] = useState([]);
+    const [descriptionImages, setDescriptionImages] = useState([]);
 
 
 
@@ -94,7 +99,7 @@ function ProductDetails() {
     };
 
 
-  
+
 
     // add these functions to open the 4 modal to edit product information
     const openModal = () => {
@@ -109,7 +114,15 @@ function ProductDetails() {
     const openDescriptionModal = () => {
         setIsDescriptionModalOpen(!isDescriptionModalOpen);
     };
-
+    const openRelatedVideoModal = () => {
+        setIsRelatedVideoModalOpen(!isRelatedVideoModalOpen);
+    };
+    const openInstructionImgModal = () => {
+        setIsInstructionImgModalOpen(!isInstructionImgModalOpen);
+    };
+    const openInstructionVideoModal = () => {
+        setIsInstructionVideoModalOpen(!isInstructionVideoModalOpen);
+    };
 
 
     // Add this function to close these modals 
@@ -121,6 +134,15 @@ function ProductDetails() {
     };
     const closeRelatedModal = () => {
         setIsRelatedModalOpen(false);
+    };
+    const closeRelatedVideoModal = () => {
+        setIsRelatedVideoModalOpen(false);
+    };
+    const closeInstructionImgModal = () => {
+        setIsInstructionImgModalOpen(false);
+    };
+    const closeInstructionVideoModal = () => {
+        setIsInstructionVideoModalOpen(false);
     };
     const closeDescriptionModal = () => {
         setIsDescriptionModalOpen(false);
@@ -232,10 +254,10 @@ function ProductDetails() {
                 afterSalesInstruction,
                 inventoryText,
             };
-    
+
             // Make an API call to update the product
             const response = await axios.put(`https://grozziieget.zjweiting.com:8033/tht/${Product?.imgPath.split("/")[4]}/update/textInformation/${productId}`, { updatedProduct });
-    
+
             // Check the response and handle accordingly
             if (response.status === 200) {
                 toast.success('Product updated successfully:', response.data);
@@ -258,7 +280,7 @@ function ProductDetails() {
                 Product.afterSalesText = updatedProduct?.afterSalesText;
                 Product.afterSalesInstruction = updatedProduct?.afterSalesInstruction;
                 Product.inventoryText = updatedProduct?.inventoryText;
-               
+
             } else {
                 console.error('Failed to update product:', response.data);
                 toast.error('Failed to update product:', response.data);
@@ -270,7 +292,7 @@ function ProductDetails() {
             // Handle the error, show an error message, etc.
         }
     };
-    
+
 
 
     // This is the function to edit all of the related image
@@ -280,20 +302,6 @@ function ProductDetails() {
         for (let i = 0; i < relatedImages.length; i++) {
             formData.append('images', relatedImages[i]);
         }
-        
-        // try {
-        //     const response = await axios.put(`https://grozziieget.zjweiting.com:8033/tht/${Product?.imgPath.split("/")[4]}/updateRelatedImages/${productId}`, formData, {
-        //         headers: {
-        //             'Content-Type': 'multipart/form-data'
-        //         }
-        //     });
-        //     toast.success(`Related images updated successfully`);
-        //     closeRelatedModal();
-
-        // } catch (error) {
-        //     console.error('Error updating related images', error);
-        //     toast.error('Error updating related images', error);
-        // }
 
         try {
             const response = await axios.put(`https://grozziieget.zjweiting.com:8033/tht/${Product?.imgPath.split("/")[4]}/updateRelatedImages/${productId}`, formData, {
@@ -301,7 +309,7 @@ function ProductDetails() {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-        
+
             if (response.status === 200) {
                 toast.success('Related images updated successfully');
                 closeRelatedModal();
@@ -314,8 +322,9 @@ function ProductDetails() {
             console.error('Error updating related images:', error.message);
             toast.error('Error updating related images');
         }
-        
+
     };
+
 
 
     // This is the function to edit all of the description images
@@ -325,19 +334,6 @@ function ProductDetails() {
         for (let i = 0; i < descriptionImages.length; i++) {
             formData.append('images', descriptionImages[i]);
         }
-        // try {
-        //     const response = await axios.put(`https://grozziieget.zjweiting.com:8033/tht/${Product?.imgPath.split("/")[4]}/updateDescriptionImage/${productId}`, formData, {
-        //         headers: {
-        //             'Content-Type': 'multipart/form-data'
-        //         }
-        //     });
-
-        //     toast.success(`Description images updated successfully`);
-        //     closeDescriptionModal();
-        // } catch (error) {
-        //     console.error('Error updating description images:', error);
-        //     toast.error('Error updating description images:', error);
-        // }
 
         try {
             const response = await axios.put(`https://grozziieget.zjweiting.com:8033/tht/${Product?.imgPath.split("/")[4]}/updateDescriptionImage/${productId}`, formData, {
@@ -345,7 +341,7 @@ function ProductDetails() {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-        
+
             if (response.status === 200) {
                 toast.success('Description images updated successfully');
                 closeDescriptionModal();
@@ -358,7 +354,7 @@ function ProductDetails() {
             console.error('Error updating description images:', error.message);
             toast.error('Error updating description images');
         }
-        
+
     };
 
 
@@ -384,6 +380,8 @@ function ProductDetails() {
                 setRelatedImages((prevImages) => [...prevImages, ...resizedImages]);
             });
     };
+
+
 
     const handleDescriptionImgUpload = (e) => {
         const selectedImages = Array.from(e.target.files);
@@ -451,6 +449,137 @@ function ProductDetails() {
     };
 
 
+    // New function
+
+    // This is the function to edit all of the related Video
+    const handleInstructionVideoUpload = (e) => {
+        const selectedVideos = Array.from(e.target.files);
+        setInstructionVideos(selectedVideos);
+        // const resizePromises = selectedVideos.map((video) => reduceImageResolution(video, 1000));
+
+        // Promise.all(resizePromises)
+        //     .then((resizedVideos) => {
+        //         setInstructionVideos((prevVideos) => [...prevVideos, ...resizedVideos]);
+        //     });
+    };
+
+
+    // This is the function to edit all of the related video
+    const handleEditInstructionVideoSubmit = async (productId) => {
+        console.log("edit Instruction video edit", productId);
+        const formData = new FormData();
+        for (let i = 0; i < instructionVideos.length; i++) {
+            formData.append('videos', instructionVideos[i]);
+        }
+
+        try {
+            const response = await axios.put(`https://grozziieget.zjweiting.com:8033/tht/${Product?.imgPath.split("/")[4]}/updateInstructionVideos/${productId}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            if (response.status === 200) {
+                toast.success('Instruction Videos updated successfully');
+                closeInstructionVideoModal();
+                window.history.back();
+            } else {
+                console.error('Failed to update instruction videos:', response.data);
+                toast.error('Failed to update instruction videos');
+            }
+        } catch (error) {
+            console.error('Error updating instruction videos:', error.message);
+            toast.error('Error updating instruction videos');
+        }
+
+    };
+
+    // This is the function to edit all of the related Video
+    const handleRelatedVideoUpload = (e) => {
+        const selectedVideos = Array.from(e.target.files);
+        setRelatedVideos(selectedVideos);
+        // const resizePromises = selectedVideos.map((image) => reduceImageResolution(image, 1000));
+
+        // Promise.all(resizePromises)
+        //     .then((resizedImages) => {
+        //         setRelatedImages((prevImages) => [...prevImages, ...resizedImages]);
+        //     });
+    };
+
+
+    // This is the function to edit all of the related video
+    const handleEditRelatedVideoSubmit = async (productId) => {
+        console.log("edit related video edit", productId);
+        const formData = new FormData();
+        for (let i = 0; i < relatedVideos.length; i++) {
+            formData.append('videos', relatedVideos[i]);
+        }
+
+        try {
+            const response = await axios.put(`https://grozziieget.zjweiting.com:8033/tht/${Product?.imgPath.split("/")[4]}/updateRelatedVideos/${productId}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            if (response.status === 200) {
+                toast.success('Related Videos updated successfully');
+                closeRelatedVideoModal();
+                window.history.back();
+            } else {
+                console.error('Failed to update related Videos:', response.data);
+                toast.error('Failed to update related Videos');
+            }
+        } catch (error) {
+            console.error('Error updating related Videos:', error.message);
+            toast.error('Error updating related Videos');
+        }
+
+    };
+    // This is the function to edit all of the instruction Img
+    const handleInstructionImgUpload = (e) => {
+        const selectedImages = Array.from(e.target.files);
+        setSelectedInstructionImage(selectedImages);
+        // const resizePromises = selectedImages.map((image) => reduceImageResolution(image, 1000));
+
+        // Promise.all(resizePromises)
+        //     .then((resizedImages) => {
+        //         setSelectedInstructionImage((prevImages) => [...prevImages, ...resizedImages]);
+        //     });
+    };
+
+
+    // This is the function to edit all of the Instruction Img
+    const handleEditInstructionImgSubmit = async (productId) => {
+        const formData = new FormData();
+        for (let i = 0; i < selectedInstructionImage.length; i++) {
+            formData.append('images', selectedInstructionImage[i]);
+        }
+        
+        try {
+            console.log("edit instructions images edit", productId);
+            const response = await axios.put(`https://grozziieget.zjweiting.com:8033/tht/${Product?.imgPath.split("/")[4]}/updateInstructionsImages/${productId}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            if (response.status === 200) {
+                toast.success('Instructions images updated successfully');
+                closeInstructionImgModal();
+                window.history.back();
+            } else {
+                console.error('Failed to update Instructions images:', response.data);
+                toast.error('Failed to update Instructions images');
+            }
+        } catch (error) {
+            console.error('Error updating Instructions images:', error.message);
+            toast.error('Error updating Instructions images');
+        }
+
+    };
+
+
     return (
         <div className="text-gray-800">
             <div className="flex justify-around items-center ">
@@ -465,282 +594,282 @@ function ProductDetails() {
                                 </div>
 
                                 <button className="text-blue-500 absolute right-16 font-bold text-3xl cursor-pointer" onClick={openModal}>
-                                <FiEdit></FiEdit>
-                            </button>
+                                    <FiEdit></FiEdit>
+                                </button>
 
-                            {/* Add the modal in here to edit the product image and all other text part to edit */}
-                            {isModalOpen && (
-                                <div className="fixed z-50 inset-0 grid grid-cols-2 mx-auto rounded-lg h-5/6 w-5/6 my-auto bg-gray-900 bg-opacity-50">
-                                    <div className="bg-white w-11/12 my-4 mx-auto p-2 px-8 text-center rounded-lg">
-                                        <h2 className="text-lg font-bold mb-2">Edit Product information</h2>
-                                        <input type="file"
-                                            onChange={handleProductImgUpload}
-                                            className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-2 px-3 lg:px-2 lg:ml-5 rounded-lg "
-                                            accept="image/*" />
+                                {/* Add the modal in here to edit the product image and all other text part to edit */}
+                                {isModalOpen && (
+                                    <div className="fixed z-50 inset-0 grid grid-cols-2 mx-auto rounded-lg h-5/6 w-5/6 my-auto bg-gray-900 bg-opacity-50">
+                                        <div className="bg-white w-11/12 my-4 mx-auto p-2 px-8 text-center rounded-lg">
+                                            <h2 className="text-lg font-bold mb-2">Edit Product information</h2>
+                                            <input type="file"
+                                                onChange={handleProductImgUpload}
+                                                className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-2 px-3 lg:px-2 lg:ml-5 rounded-lg "
+                                                accept="image/*" />
 
-                                        <div>
-                                            <div className="mb-2 grid  grid-cols-3 text-start">
-                                                <label htmlFor="modelNumber" className="block col-span-1 text-gray-200 font-semibold mb-2">
-                                                    Img Link
-                                                </label>
+                                            <div>
+                                                <div className="mb-2 grid  grid-cols-3 text-start">
+                                                    <label htmlFor="modelNumber" className="block col-span-1 text-gray-200 font-semibold mb-2">
+                                                        Img Link
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        id="productImgLink"
+                                                        className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                        value={productImgLink}
+                                                        placeholder='Enter the product Image link'
+                                                        onChange={handleProductImgLink}
+
+                                                    />
+                                                </div>
+                                                <div className="mb-2">
+                                                    <label htmlFor="productImageRemark" className="block text-start text-gray-700 font-bold mb-2">
+                                                        Image Remarks
+                                                    </label>
+                                                    <textarea
+                                                        id="productImageRemark"
+                                                        placeholder="Add product Image Remark"
+                                                        className="shadow resize-both appearance-none border rounded-lg w-full h-20  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                        value={productImgRemark}
+                                                        onChange={handleProductImageRemark}
+                                                    ></textarea>
+                                                </div>
+
+                                            </div>
+
+                                            <div className="mb-2">
+                                                <select
+                                                    id="productCountryCategory"
+                                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                    value={productCountryName}
+                                                    onChange={handleProductCountryNameChange}
+                                                    required
+                                                >
+                                                    <option value="">Select Country Category</option>
+                                                    <option value="zh-CN">中文</option>
+                                                    <option value="en-US">English</option>
+                                                    <option value="th-TH">ไทย</option>
+                                                    <option value="fil-PH">Philippines</option>
+                                                    <option value="vi-VN">Tiếng Việt</option>
+                                                    <option value="ms-MY">Malaysia</option>
+                                                    <option value="id-ID">Indonesia</option>
+                                                </select>
+                                            </div>
+
+                                            <div className="mb-2">
+                                                <select
+                                                    id="productName"
+                                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                    value={productName}
+                                                    onChange={handleProductNameChange}
+                                                    required
+                                                >
+                                                    <option value="">Select Product</option>
+                                                    <option value="Dot Printer">Dot Printer</option>
+                                                    <option value="Thermal Printer">Thermal Printer</option>
+                                                    <option value="Attendance Machine">Attendance Machine</option>
+                                                </select>
+                                            </div>
+
+
+                                            <div className="mb-2">
+
                                                 <input
-                                                    type="text"
-                                                    id="productImgLink"
-                                                    className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
-                                                    value={productImgLink}
-                                                    placeholder='Enter the product Image link'
-                                                    onChange={handleProductImgLink}
-
+                                                    type="digit"
+                                                    id="productPrice"
+                                                    placeholder='Product Price'
+                                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                    value={productPrice}
+                                                    onChange={handleProductPriceChange}
+                                                    required
                                                 />
                                             </div>
                                             <div className="mb-2">
-                                                <label htmlFor="productImageRemark" className="block text-start text-gray-700 font-bold mb-2">
-                                                    Image Remarks
+                                                <label htmlFor="productDescription" className="block text-start text-gray-200 font-bold mb-2">
+                                                    Product Description
+                                                </label>
+
+
+                                                <textarea
+                                                    id="productDescription"
+                                                    placeholder="Add Product description"
+                                                    className="shadow resize-both appearance-none border rounded-lg w-full min-h-20 max-h-100 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                    value={productDescription}
+                                                    onChange={handleProductDescriptionChange}
+                                                    required
+                                                    rows={5} // Initial number of visible text lines
+                                                ></textarea>
+
+
+                                            </div>
+                                        </div>
+
+                                        <div className="w-full py-2 px-8">
+                                            <div className="mb-2 grid  grid-cols-3 text-start ">
+                                                <label htmlFor="modelNumber" className="block col-span-1 text-gray-200 font-semibold mb-2">
+                                                    Model Number
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    id="modelNumber"
+                                                    className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                    value={modelNumber}
+                                                    placeholder='Model Number'
+                                                    onChange={handleModelNumberChange}
+                                                    required
+                                                />
+                                            </div>
+                                            <div className="mb-2 grid  grid-cols-3 text-start ">
+                                                <label htmlFor="modelNumber" className="block col-span-1 text-gray-200 font-semibold mb-2">
+                                                    Printer Color
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    id="printerColor"
+                                                    className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                    value={printerColor}
+                                                    placeholder='Color'
+                                                    onChange={handlePrinterColorChange}
+
+                                                />
+                                            </div>
+                                            <div className="mb-2 grid  grid-cols-3 text-start ">
+                                                <label htmlFor="modelNumber" className="block col-span-1 text-gray-200 font-semibold mb-2">
+                                                    connector type
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    id="connectorType"
+                                                    className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                    value={connectorType}
+                                                    placeholder='Bluetooth'
+                                                    onChange={handleConnectorTypeChange}
+
+
+                                                />
+                                            </div>
+                                            <div className="mb-2 grid  grid-cols-3 text-start ">
+                                                <label htmlFor="modelNumber" className="block col-span-1 text-gray-200 font-bold mb-2">
+                                                    Stock Quantity
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    id="stockQuantity"
+                                                    className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                    value={stockQuantity}
+                                                    placeholder='Add quantity'
+                                                    onChange={handleStockQuantityChange}
+
+                                                />
+                                            </div>
+
+                                            <div className="mb-1 grid  grid-cols-3 text-start">
+                                                <label htmlFor="relatedImgLink" className="block col-span-1 text-gray-500 font-semibold mb-1">
+                                                    Related Imgs Link
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    id="relatedImgLink"
+                                                    className="shadow col-span-2  appearance-none border rounded w-full py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                    value={relatedImgLink}
+                                                    placeholder='Enter the related Image link'
+                                                    onChange={handleRelatedImgLink}
+
+                                                />
+                                            </div>
+                                            <div className="mb-1">
+                                                <label htmlFor="productImageRemark" className="block text-start text-gray-700 font-bold mb-1">
+                                                    Related Images Remarks
                                                 </label>
                                                 <textarea
-                                                    id="productImageRemark"
-                                                    placeholder="Add product Image Remark"
-                                                    className="shadow resize-both appearance-none border rounded-lg w-full h-20  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
-                                                    value={productImgRemark}
-                                                    onChange={handleProductImageRemark}
+                                                    id="relatedImgRemark"
+                                                    placeholder="Add product related Image Remark"
+                                                    className="shadow resize-both appearance-none border rounded-lg w-full h-10  py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                    value={relatedImgRemark}
+                                                    onChange={handleRelatedImageRemark}
+                                                ></textarea>
+                                            </div>
+                                            <div className="mb-1">
+                                                <label htmlFor="shelfTimeStart" className="block text-start text-gray-700 font-bold mb-2">
+                                                    Shelf Time
+                                                </label>
+                                                <div className="flex items-center justify-between">
+                                                    <input
+                                                        type="datetime-local"
+                                                        id="shelfTimeStart"
+                                                        className="shadow appearance-none border rounded py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                        value={shelfStartTime}
+                                                        onChange={handleShelfStartTimeChange}
+                                                    />
+                                                    <input
+                                                        type="datetime-local"
+                                                        id="shelfTimeEnd"
+                                                        className="shadow appearance-none border rounded  py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                        value={shelfEndTime}
+                                                        onChange={handleShelfEndTimeChange}
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div className="mb-1">
+                                                <label htmlFor="afterSales" className="block text-gray-700 font-bold mb-1 text-start">
+                                                    After-Sales
+                                                </label>
+                                                <textarea
+                                                    id="afterSales"
+                                                    placeholder="Add after-sales description"
+                                                    className="shadow resize-both appearance-none border rounded w-full h-16 py-1 px-3  text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                    value={afterSalesText}
+                                                    onChange={handleAfterSalesTextChange}
+                                                ></textarea>
+                                            </div>
+                                            <div className="mb-1">
+                                                <label htmlFor="afterSalesInstructions" className="block text-start text-gray-700 font-bold mb-1">
+                                                    After-Sales Instructions
+                                                </label>
+                                                <textarea
+                                                    id="afterSalesInstructions"
+                                                    placeholder='Add after-sales instructions'
+                                                    className="shadow resize-both appearance-none border rounded-lg w-full h-16  py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                    value={afterSalesInstruction}
+                                                    onChange={handleAfterSalesInstructionChange}
+                                                ></textarea>
+                                            </div>
+                                            <div className="mb-1">
+                                                <label htmlFor="inventory" className="block text-start text-gray-700 font-bold mb-1">
+                                                    Inventory
+                                                </label>
+                                                <textarea
+                                                    id="inventory"
+                                                    placeholder="Add inventory description"
+                                                    className="shadow resize-both appearance-none border rounded-lg w-full h-16  py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                    value={inventoryText}
+                                                    onChange={handleInventoryTextChange}
                                                 ></textarea>
                                             </div>
 
-                                        </div>
+                                            <div className="mt-8 text-right">
+                                                <button
+                                                    onClick={() => handleEditSubmit(Product?.id)}
+                                                    className="bg-blue-500 text-white  py-2 rounded-md mr-5 px-16 font-bold"
 
-                                        <div className="mb-2">
-                                            <select
-                                                id="productCountryCategory"
-                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
-                                                value={productCountryName}
-                                                onChange={handleProductCountryNameChange}
-                                                required
-                                            >
-                                                <option value="">Select Country Category</option>
-                                                <option value="zh-CN">中文</option>
-                                                <option value="en-US">English</option>
-                                                <option value="th-TH">ไทย</option>
-                                                <option value="fil-PH">Philippines</option>
-                                                <option value="vi-VN">Tiếng Việt</option>
-                                                <option value="ms-MY">Malaysia</option>
-                                                <option value="id-ID">Indonesia</option>
-                                            </select>
-                                        </div>
+                                                >
+                                                    Save
+                                                </button>
+                                                <button
+                                                    onClick={closeModal}
+                                                    className="bg-yellow-500 text-white px-16 py-2 rounded-md font-bold"
 
-                                        <div className="mb-2">
-                                            <select
-                                                id="productName"
-                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
-                                                value={productName}
-                                                onChange={handleProductNameChange}
-                                                required
-                                            >
-                                                <option value="">Select Product</option>
-                                                <option value="Dot Printer">Dot Printer</option>
-                                                <option value="Thermal Printer">Thermal Printer</option>
-                                                <option value="Attendance Machine">Attendance Machine</option>
-                                            </select>
-                                        </div>
-
-
-                                        <div className="mb-2">
-
-                                            <input
-                                                type="digit"
-                                                id="productPrice"
-                                                placeholder='Product Price'
-                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
-                                                value={productPrice}
-                                                onChange={handleProductPriceChange}
-                                                required
-                                            />
-                                        </div>
-                                        <div className="mb-2">
-                                            <label htmlFor="productDescription" className="block text-start text-gray-200 font-bold mb-2">
-                                                Product Description
-                                            </label>
-
-
-                                            <textarea
-                                                id="productDescription"
-                                                placeholder="Add Product description"
-                                                className="shadow resize-both appearance-none border rounded-lg w-full min-h-20 max-h-100 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
-                                                value={productDescription}
-                                                onChange={handleProductDescriptionChange}
-                                                required
-                                                rows={5} // Initial number of visible text lines
-                                            ></textarea>
-
-
-                                        </div>
-                                    </div>
-
-                                    <div className="w-full py-2 px-8">
-                                        <div className="mb-2 grid  grid-cols-3 text-start ">
-                                            <label htmlFor="modelNumber" className="block col-span-1 text-gray-200 font-semibold mb-2">
-                                                Model Number
-                                            </label>
-                                            <input
-                                                type="text"
-                                                id="modelNumber"
-                                                className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
-                                                value={modelNumber}
-                                                placeholder='Model Number'
-                                                onChange={handleModelNumberChange}
-                                                required
-                                            />
-                                        </div>
-                                        <div className="mb-2 grid  grid-cols-3 text-start ">
-                                            <label htmlFor="modelNumber" className="block col-span-1 text-gray-200 font-semibold mb-2">
-                                                Printer Color
-                                            </label>
-                                            <input
-                                                type="text"
-                                                id="printerColor"
-                                                className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
-                                                value={printerColor}
-                                                placeholder='Color'
-                                                onChange={handlePrinterColorChange}
-
-                                            />
-                                        </div>
-                                        <div className="mb-2 grid  grid-cols-3 text-start ">
-                                            <label htmlFor="modelNumber" className="block col-span-1 text-gray-200 font-semibold mb-2">
-                                                connector type
-                                            </label>
-                                            <input
-                                                type="text"
-                                                id="connectorType"
-                                                className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
-                                                value={connectorType}
-                                                placeholder='Bluetooth'
-                                                onChange={handleConnectorTypeChange}
-
-
-                                            />
-                                        </div>
-                                        <div className="mb-2 grid  grid-cols-3 text-start ">
-                                            <label htmlFor="modelNumber" className="block col-span-1 text-gray-200 font-bold mb-2">
-                                                Stock Quantity
-                                            </label>
-                                            <input
-                                                type="text"
-                                                id="stockQuantity"
-                                                className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
-                                                value={stockQuantity}
-                                                placeholder='Add quantity'
-                                                onChange={handleStockQuantityChange}
-
-                                            />
-                                        </div>
-
-                                        <div className="mb-1 grid  grid-cols-3 text-start">
-                                            <label htmlFor="relatedImgLink" className="block col-span-1 text-gray-500 font-semibold mb-1">
-                                                Related Imgs Link
-                                            </label>
-                                            <input
-                                                type="text"
-                                                id="relatedImgLink"
-                                                className="shadow col-span-2  appearance-none border rounded w-full py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
-                                                value={relatedImgLink}
-                                                placeholder='Enter the related Image link'
-                                                onChange={handleRelatedImgLink}
-
-                                            />
-                                        </div>
-                                        <div className="mb-1">
-                                            <label htmlFor="productImageRemark" className="block text-start text-gray-700 font-bold mb-1">
-                                                Related Images Remarks
-                                            </label>
-                                            <textarea
-                                                id="relatedImgRemark"
-                                                placeholder="Add product related Image Remark"
-                                                className="shadow resize-both appearance-none border rounded-lg w-full h-10  py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
-                                                value={relatedImgRemark}
-                                                onChange={handleRelatedImageRemark}
-                                            ></textarea>
-                                        </div>
-                                        <div className="mb-1">
-                                            <label htmlFor="shelfTimeStart" className="block text-start text-gray-700 font-bold mb-2">
-                                                Shelf Time
-                                            </label>
-                                            <div className="flex items-center justify-between">
-                                                <input
-                                                    type="datetime-local"
-                                                    id="shelfTimeStart"
-                                                    className="shadow appearance-none border rounded py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
-                                                    value={shelfStartTime}
-                                                    onChange={handleShelfStartTimeChange}
-                                                />
-                                                <input
-                                                    type="datetime-local"
-                                                    id="shelfTimeEnd"
-                                                    className="shadow appearance-none border rounded  py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
-                                                    value={shelfEndTime}
-                                                    onChange={handleShelfEndTimeChange}
-                                                />
+                                                >
+                                                    Cancel
+                                                </button>
                                             </div>
-                                        </div>
 
-                                        <div className="mb-1">
-                                            <label htmlFor="afterSales" className="block text-gray-700 font-bold mb-1 text-start">
-                                                After-Sales
-                                            </label>
-                                            <textarea
-                                                id="afterSales"
-                                                placeholder="Add after-sales description"
-                                                className="shadow resize-both appearance-none border rounded w-full h-16 py-1 px-3  text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
-                                                value={afterSalesText}
-                                                onChange={handleAfterSalesTextChange}
-                                            ></textarea>
-                                        </div>
-                                        <div className="mb-1">
-                                            <label htmlFor="afterSalesInstructions" className="block text-start text-gray-700 font-bold mb-1">
-                                                After-Sales Instructions
-                                            </label>
-                                            <textarea
-                                                id="afterSalesInstructions"
-                                                placeholder='Add after-sales instructions'
-                                                className="shadow resize-both appearance-none border rounded-lg w-full h-16  py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
-                                                value={afterSalesInstruction}
-                                                onChange={handleAfterSalesInstructionChange}
-                                            ></textarea>
-                                        </div>
-                                        <div className="mb-1">
-                                            <label htmlFor="inventory" className="block text-start text-gray-700 font-bold mb-1">
-                                                Inventory
-                                            </label>
-                                            <textarea
-                                                id="inventory"
-                                                placeholder="Add inventory description"
-                                                className="shadow resize-both appearance-none border rounded-lg w-full h-16  py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
-                                                value={inventoryText}
-                                                onChange={handleInventoryTextChange}
-                                            ></textarea>
-                                        </div>
 
-                                        <div className="mt-8 text-right">
-                                            <button
-                                                onClick={() => handleEditSubmit(Product?.id)}
-                                                className="bg-blue-500 text-white  py-2 rounded-md mr-5 px-16 font-bold"
-
-                                            >
-                                                Save
-                                            </button>
-                                            <button
-                                                onClick={closeModal}
-                                                className="bg-yellow-500 text-white px-16 py-2 rounded-md font-bold"
-
-                                            >
-                                                Cancel
-                                            </button>
                                         </div>
-
 
                                     </div>
-
-                                </div>
-                            )}
+                                )}
 
                             </div>
 
@@ -756,7 +885,7 @@ function ProductDetails() {
 
                         {/* This is the part to start the edit and modal functionalities */}
                         <div className="md:w-1/2 text-start pl-5 relative">
-                           
+
 
                             {/* Finish the modal part to edit the product image and all other text related information */}
                             <button className="text-blue-500 absolute right-0 font-bold text-3xl cursor-pointer" onClick={openTextModal}>
@@ -768,7 +897,7 @@ function ProductDetails() {
                                 <div className="fixed z-50 inset-0 grid grid-cols-2 mx-auto rounded-lg h-5/6 w-5/6 my-auto bg-gray-900 bg-opacity-50">
                                     <div className="bg-white w-11/12 my-4 mx-auto p-2 px-8 text-center rounded-lg">
                                         <h2 className="text-lg font-bold mb-2">Edit Product text information</h2>
-                                        
+
 
                                         <div>
                                             <div className="mb-2 grid  grid-cols-3 text-start">
@@ -1076,9 +1205,8 @@ function ProductDetails() {
                                     <p className="my-1">{Product?.connectorType}</p>
                                 </div>
 
-
-
                             </div>
+
                             <div className=" mb-5">
                                 <h2 className="text-lg font-semibold">Product Name</h2>
                                 <p className="text-base text-gray-700">
@@ -1247,7 +1375,47 @@ function ProductDetails() {
                                 )}
                             </div>
 
-                            <div className="container">
+                            <div className="container relative">
+
+
+                                {/* New Editing part start from here for related video  */}
+                                <button className="text-blue-500 absolute right-0 font-bold text-3xl cursor-pointer" onClick={openRelatedVideoModal}>
+                                    <FiEdit></FiEdit>
+                                </button>
+
+                                {isRelatedVideoModalOpen && (
+                                    <div className="fixed z-50 inset-0  mx-auto rounded-lg h-1/3 w-1/3 my-auto bg-gray-900 bg-opacity-50">
+                                        <div className="bg-white w-11/12 my-4 mx-auto p-2 px-8 text-center rounded-lg">
+                                            <h2 className="text-lg font-bold mb-2">Edit Related Video </h2>
+                                            <input
+                                                type="file"
+                                                onChange={handleRelatedVideoUpload}
+                                                multiple
+                                                className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-2 px-3 lg:px-2 lg:ml-5 rounded-lg"
+                                                accept="video/*" // Change the accept attribute to allow video files
+                                            />
+
+
+                                            <div className="mt-8 text-right">
+                                                <button
+                                                    onClick={() => handleEditRelatedVideoSubmit(Product?.id)}
+                                                    className="bg-blue-500 text-white  py-2 rounded-md mr-5 px-16 font-bold"
+
+                                                >
+                                                    Save
+                                                </button>
+                                                <button
+                                                    onClick={closeRelatedVideoModal}
+                                                    className="bg-yellow-500 text-white px-16 py-2 rounded-md font-bold"
+
+                                                >
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
                                 <h1 className="text-2xl font-bold mt-8 mb-5">
                                     Related Video Gallery Of{' '}
                                     <span className="text-amber-400">{Product?.productName}</span>{' '}
@@ -1300,7 +1468,42 @@ function ProductDetails() {
                                 )}
                             </div>
 
-                            <div className="container">
+                            <div className="container relative">
+
+                                {/* New Editing part start from here for Instruction image  */}
+                                <button className="text-blue-500 absolute right-0 font-bold text-3xl cursor-pointer" onClick={openInstructionImgModal}>
+                                    <FiEdit></FiEdit>
+                                </button>
+
+                                {isInstructionImgModalOpen && (
+                                    <div className="fixed z-50 inset-0  mx-auto rounded-lg h-1/3 w-1/3 my-auto bg-gray-900 bg-opacity-50">
+                                        <div className="bg-white w-11/12 my-4 mx-auto p-2 px-8 text-center rounded-lg">
+                                            <h2 className="text-lg font-bold mb-2">Edit Instruction Images </h2>
+                                            <input type="file"
+                                                onChange={handleInstructionImgUpload} multiple
+                                                className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-2 px-3 lg:px-2 lg:ml-5 rounded-lg "
+                                                accept="image/*" />
+
+                                            <div className="mt-8 text-right">
+                                                <button
+                                                    onClick={() => handleEditInstructionImgSubmit(Product?.id)}
+                                                    className="bg-blue-500 text-white  py-2 rounded-md mr-5 px-16 font-bold"
+
+                                                >
+                                                    Save
+                                                </button>
+                                                <button
+                                                    onClick={closeInstructionImgModal}
+                                                    className="bg-yellow-500 text-white px-16 py-2 rounded-md font-bold"
+
+                                                >
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
                                 <h1 className="text-2xl font-bold mt-8 mb-5">Instructions Image Gallery Of  <span className="text-amber-400">{Product?.productName}</span></h1>
                                 <div className="grid grid-cols-3 gap-3">
                                     {(Product?.allInstructionsImage)?.split(",")?.map((image, index) => (
@@ -1335,6 +1538,41 @@ function ProductDetails() {
 
 
                             <div className="container">
+
+                                {/* New Editing part start from here for Instruction video  */}
+                                <button className="text-blue-500 absolute right-0 font-bold text-3xl cursor-pointer" onClick={openInstructionVideoModal}>
+                                    <FiEdit></FiEdit>
+                                </button>
+
+                                {isInstructionVideoModalOpen && (
+                                    <div className="fixed z-50 inset-0  mx-auto rounded-lg h-1/3 w-1/3 my-auto bg-gray-900 bg-opacity-50">
+                                        <div className="bg-white w-11/12 my-4 mx-auto p-2 px-8 text-center rounded-lg">
+                                            <h2 className="text-lg font-bold mb-2">Edit Instruction Videos </h2>
+                                            <input type="file"
+                                                onChange={handleInstructionVideoUpload} multiple
+                                                className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-2 px-3 lg:px-2 lg:ml-5 rounded-lg "
+                                                accept="video/*"/>
+
+                                            <div className="mt-8 text-right">
+                                                <button
+                                                    onClick={() => handleEditInstructionVideoSubmit(Product?.id)}
+                                                    className="bg-blue-500 text-white  py-2 rounded-md mr-5 px-16 font-bold"
+
+                                                >
+                                                    Save
+                                                </button>
+                                                <button
+                                                    onClick={closeInstructionVideoModal}
+                                                    className="bg-yellow-500 text-white px-16 py-2 rounded-md font-bold"
+
+                                                >
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
                                 <h1 className="text-2xl font-bold mt-8 mb-5">
                                     Instructions Video Gallery Of{' '}
                                     <span className="text-amber-400">{Product?.productName}</span>{' '}

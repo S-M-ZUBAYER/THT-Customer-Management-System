@@ -441,7 +441,20 @@ const MessageInput = ({
         allMessages.push(textMessage);
 
 
-        setAllChat([...allChat, {
+        // setAllChat([...allChat, {
+        //   chatId: selectedCustomerChat?.chatId,
+        //   sentBy: selectedCustomerChat?.customerServiceId,
+        //   sentTo: selectedCustomerChat?.userId,
+        //   sentId: newSentId,
+        //   smsLoading: true,
+        //   message: message,
+        //   msgType: "text",
+        //   totalPart: 1,
+        //   partNo: 1,
+        //   timestamp: getCurrentTime(),
+        // }]);
+
+        setAllChat((prevAllChat) => (prevAllChat ? [...prevAllChat] : []), {
           chatId: selectedCustomerChat?.chatId,
           sentBy: selectedCustomerChat?.customerServiceId,
           sentTo: selectedCustomerChat?.userId,
@@ -452,7 +465,8 @@ const MessageInput = ({
           totalPart: 1,
           partNo: 1,
           timestamp: getCurrentTime(),
-        }]);
+        });
+        
 
         // clear again the response sms 
         setResponse({});

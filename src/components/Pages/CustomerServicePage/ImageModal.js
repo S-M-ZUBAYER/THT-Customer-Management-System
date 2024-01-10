@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 const ImageModal = ({ imgSrc, alt, onClose }) => {
   return (
 
-    <div className="fixed z-50 inset-0 flex items-center justify-center mx-auto my-auto w-3/4 h-auto bg-black bg-opacity-75">
+    <div className="fixed inset-0 z-50 flex items-center justify-center mx-auto my-auto w-3/4 h-3/4 bg-black bg-opacity-75  overflow-scroll">
       <div className="max-w-3xl max-h-3xl">
         <img
           src={imgSrc}

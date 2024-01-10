@@ -65,8 +65,8 @@ const ShowIconImg = () => {
       .catch((error) => {
         console.error('Error downloading image:', error);
       });
+      
   }
-
 
 
   return (
