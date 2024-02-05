@@ -35,7 +35,7 @@ const ShowHightWidth = () => {
       });
   }, [modelNo]);
 
-   
+
   //create a function to delete icon from the frontend and database both side 
   const handleToDelete = async (id) => {
     const confirmed = window.confirm('Are you sure you want to delete all questions?');
@@ -111,16 +111,9 @@ const ShowHightWidth = () => {
                     )}
                   </tbody>
                 </table>
-
-
-
-
               }
             </div>
       }
-
-
-
     </div>
   );
 };

@@ -33,6 +33,7 @@ import ModelHightWidth from "../../components/Pages/AdminPage/AdminDashboard/Mod
 import ShowHightWidth from "../../components/Pages/AdminPage/AdminDashboard/ModelHightWidth/ShowHightWidth";
 import AutomaticChat from "../../components/Pages/CustomerServicePage/AutomaticChat";
 import ImageResize from "../../components/Pages/AdminPage/AdminDashboard/ImageResize";
+import AddWifiModelHightWidth from "../../components/Pages/AdminPage/AdminDashboard/WifiModelHeightWidth/AddWifiModelInfo";
 
 
 export const routes = createBrowserRouter([
@@ -117,6 +118,10 @@ export const routes = createBrowserRouter([
             {
                 path: "/admin/modelHightWidth",
                 element: <PrivateRoute><ModelHightWidth></ModelHightWidth></PrivateRoute>
+            },
+            {
+                path: "/admin/wifiModelHightWidth",
+                element: <PrivateRoute><AddWifiModelHightWidth></AddWifiModelHightWidth></PrivateRoute>
             },
             {
                 path: "/admin/modelInfo/:modelNo",
