@@ -10,6 +10,11 @@ function ShowingVideo() {
   const [title, setTitle] = useState('');
   const [allVideo, setAllVideo] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [productCountryName, setProductCountryName] = useState('');
+
+  const handleProductCountryNameChange = (e) => {
+    setProductCountryName(e.target.value);
+  };
 
 
   useEffect(() => {
@@ -45,10 +50,12 @@ function ShowingVideo() {
     const formData = new FormData();
     formData.append('showingVideo', video); // Use 'showingVideo' instead of 'video'
     formData.append('title', title);
+    formData.append('country', productCountryName);
 
     try {
       // Make a POST request to your backend API to handle the video upload
       const response = await axios.post('https://grozziieget.zjweiting.com:8033/tht/showingVideo/add', formData, {
+      // const response = await axios.post('http://localhost:2000/tht/showingVideo/add', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -91,18 +98,40 @@ function ShowingVideo() {
 
       <div className=" flex justify-center items-center">
         <form className="" onSubmit={handleFormSubmit}>
-          <div className="mb-3 text-center">
+          <div className="mb-5 text-center">
             <label htmlFor="title" className=" mr-2 font-semibold ">Title:</label>
             <input
               type="text"
               id="title"
-              className="bg-white border px-1 mr-auto"
+              className="bg-white border px-1 py-1 mr-auto"
+              placeholder="Enter the title"
               name="title"
               value={title}
               onChange={handleTitleChange}
               required
             />
           </div>
+
+          <div className="mb-5 text-center flex justify-center items-center">
+            <label htmlFor="title" className=" mr-2 font-semibold ">Country:</label>
+            <select
+              id="productCountryCategory"
+              className="shadow appearance-none border rounded w-48 py-2 px-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+              value={productCountryName}
+              onChange={handleProductCountryNameChange}
+              required
+            >
+              <option value="">Select Country Category</option>
+              <option value="zh-CN">中文</option>
+              <option value="en-US">English</option>
+              <option value="th-TH">ไทย</option>
+              <option value="fil-PH">Philippines</option>
+              <option value="vi-VN">Tiếng Việt</option>
+              <option value="ms-MY">Malaysia</option>
+              <option value="id-ID">Indonesia</option>
+            </select>
+          </div>
+
           <div className="text-center ml-20">
             <label htmlFor="video" className="mr-2 font-semibold ">Video:</label>
             <input
@@ -138,6 +167,7 @@ function ShowingVideo() {
                   {/* Your browser does not support the video tag. */}
                 </video>
                 <button onClick={() => handleToDelete(video?.id)} className="absolute right-2 top-2 text-red-600 font-bold"><RiDeleteBin6Fill></RiDeleteBin6Fill></button>
+                <p  className="absolute left-2 top-2 text-green-600 font-bold">{video?.countryName}</p>
                 <h3 className="font-semibold text-lg">{video.title}</h3>
               </div>
             </div>

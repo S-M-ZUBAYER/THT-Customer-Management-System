@@ -106,7 +106,8 @@ const Login = () => {
               'https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/user/signIn',
               {
                 userEmail: email,
-                userPassword: password
+                userPassword: password,
+                deviceType:"web"
               }
             );
 

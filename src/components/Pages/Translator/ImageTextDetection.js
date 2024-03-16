@@ -38,6 +38,39 @@ const ImageTextDetector = ({ setText, text, textId }) => {
     }
   };
 
+  // const handleTextDetection = async (image) => {
+  //   try {
+  //     if (!image) {
+  //       console.error("No image provided.");
+  //       return;
+  //     }
+  
+  //     const { data: { text } } = await Tesseract.recognize(image, "eng", {
+  //       tessedit_char_blacklist: "!@#$%^&*()_+=-[]{}|;':\",./<>?",
+  //     });
+  //     console.log("Recognized Text:", text);
+  
+  //     // Define a regular expression to match different time formats
+  //     const timeRegex = /(\b\d{1,2}:\d{2}\b|\b\d{1,2}:\d{2}:\d{2}\b)/g;
+  //     let matchedTimes = text.match(timeRegex); // Find all matches using regex
+  
+  //     // Filter out duplicate time numbers
+  //     matchedTimes = [...new Set(matchedTimes)];
+  
+  //     if (matchedTimes && matchedTimes.length > 0) {
+  //       console.log("Matched Times:", matchedTimes);
+  //       // Process matched times further if needed
+  //     } else {
+  //       console.log("No time numbers found.");
+  //     }
+  //   } catch (error) {
+  //     console.error('Error detecting text:', error);
+  //   }
+  // };
+  
+  
+  
+
   return (
     <div>
       <div
