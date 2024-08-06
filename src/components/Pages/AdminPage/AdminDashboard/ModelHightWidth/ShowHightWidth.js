@@ -73,6 +73,7 @@ const ShowHightWidth = () => {
                   <thead>
                     <tr className="bg-gradient-to-r from-teal-400 to-purple-400">
                       <th className="border border-gray-400 px-4 py-2 text-white">Model Name</th>
+                      <th className="border border-gray-400 px-4 py-2 text-white">PID</th>
                       <th className="border border-gray-400 px-4 py-2 text-white">Default Hight</th>
                       <th className="border border-gray-400 px-4 py-2 text-white">Default Width</th>
                       <th className="border border-gray-400 px-4 py-2 text-white">Max Hight</th>
@@ -88,12 +89,13 @@ const ShowHightWidth = () => {
                           className="border hover:bg-gradient-to-r hover:from-blue-100 hover:to-purple-100"
                           key={element.id}
                         >
-                          <td className="px-4 py-2 border">{element.modelNo}</td>
-                          <td className="px-4 py-2 border">{element.defaultHight}</td>
-                          <td className="px-4 py-2 border">{element.defaultWidth}</td>
-                          <td className="px-4 py-2 border">{element.maxHight}</td>
-                          <td className="px-4 py-2 border">{element.maxWidth}</td>
-                          <td className="px-4 py-2 border">{element.command}</td>
+                          <td className="px-4 py-2 border">{element?.modelNo}</td>
+                          <td className="px-4 py-2 border">{element?.pidNo}</td>
+                          <td className="px-4 py-2 border">{element?.defaultHight}</td>
+                          <td className="px-4 py-2 border">{element?.defaultWidth}</td>
+                          <td className="px-4 py-2 border">{element?.maxHight}</td>
+                          <td className="px-4 py-2 border">{element?.maxWidth}</td>
+                          <td className="px-4 py-2 border">{element?.command}</td>
                           <td className="px-4 py-2 border-r flex justify-center">
                             <MdDelete
                               onClick={() => handleToDelete(element.id)}

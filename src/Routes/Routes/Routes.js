@@ -36,6 +36,7 @@ import ImageResize from "../../components/Pages/AdminPage/AdminDashboard/ImageRe
 import AddWifiModelHightWidth from "../../components/Pages/AdminPage/AdminDashboard/WifiModelHeightWidth/AddWifiModelInfo";
 
 
+
 export const routes = createBrowserRouter([
     {
         path: "/",
@@ -86,8 +87,8 @@ export const routes = createBrowserRouter([
                 path: "login",
                 element: <Login></Login>
             },
-           
-          
+
+
             {
                 path: "register",
                 element: <Register></Register>

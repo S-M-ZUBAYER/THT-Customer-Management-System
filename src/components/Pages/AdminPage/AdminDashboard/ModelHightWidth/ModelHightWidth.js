@@ -22,6 +22,7 @@ function ModelHightWidth() {
   const [maxHight, setMaxHight] = useState('');
   const [maxWidth, setMaxWidth] = useState('');
   const [selectedCommands, setSelectedCommands] = useState([]);
+  const [selectedPID, setSelectedPID] = useState('');
   useEffect(() => {
     axios.get("https://grozziieget.zjweiting.com:8033/tht/icons")
       .then(res => {
@@ -40,7 +41,7 @@ function ModelHightWidth() {
 
       });
   }, []);
-  
+
 
 
   // Function to handle changes in the city name input field
@@ -60,7 +61,11 @@ function ModelHightWidth() {
     const { value } = event.target;
     setMaxWidth(value);
   };
- 
+  const handleInputPIDChange = (e) => {
+    setSelectedPID(e.target.value);
+  };
+
+
 
 
 
@@ -68,14 +73,15 @@ function ModelHightWidth() {
     event.preventDefault();
 
     axios
-      .post('https://grozziieget.zjweiting.com:8033/tht/hightWidth/add', { defaultHight,defaultWidth,maxHight,maxWidth,command:selectedCommands, modelNo: selectedModelNo })
+      .post('https://grozziieget.zjweiting.com:8033/tht/hightWidth/add', { pidNo: selectedPID, defaultHight, defaultWidth, maxHight, maxWidth, command: selectedCommands, modelNo: selectedModelNo })
       .then((res) => {
         if (res.data.status === "success") {
           toast.success("Model information uploaded successfully");
-          setDefaultHight('')
-          setDefaultWidth('')
-          setMaxHight('')
-          setMaxWidth('')
+          setSelectedPID("");
+          setDefaultHight("")
+          setDefaultWidth("")
+          setMaxHight("")
+          setMaxWidth("")
           setSelectedCommands([])
         } else {
           toast.error("Model information uploaded failed");
@@ -93,7 +99,7 @@ function ModelHightWidth() {
   };
 
 
-//check box 
+  //check box 
 
 
   // Define the list of elements to choose from
@@ -107,7 +113,7 @@ function ModelHightWidth() {
     if (checked) {
       setSelectedCommands([...selectedCommands, value]);
     } else {
-        setSelectedCommands(selectedCommands.filter((element) => element !== value));
+      setSelectedCommands(selectedCommands.filter((element) => element !== value));
     }
   };
 
@@ -125,7 +131,15 @@ function ModelHightWidth() {
 
       <div className="my-32 flex items-center justify-center">
         <form className="flex flex-col items-center justify-center">
-          <p className="mb-3">Default H&W</p>  
+          <p className="mb-3">PID</p>
+          <input
+            type="text"
+            className="bg-white text-gray-800 mb-5 px-4 py-2 border rounded-md w-48 mr-2"
+            value={selectedPID}
+            onChange={handleInputPIDChange}
+            placeholder="Enter PID"
+          />
+          <p className="mb-3">Default H&W</p>
           <label className="mb-4 flex justify-center">
             <input
               type="text" // Changed type to "text" for city names
@@ -140,7 +154,7 @@ function ModelHightWidth() {
               onChange={handleDefaultWidthChange} // Handle the input change event
             />
           </label>
-          <p className="mb-3">Max H&W</p>  
+          <p className="mb-3">Max H&W</p>
           <label className="mb-4 flex justify-center">
             <input
               type="text" // Changed type to "text" for city names
@@ -155,30 +169,30 @@ function ModelHightWidth() {
               onChange={handleMaxWidthChange} // Handle the input change event
             />
           </label>
-        
+
           <div>
-      <h2 className="mb-2">Select Elements:</h2>
-      <form>
-        {elements.map((element) => (
-          <label className="mr-6" key={element}>
-            <input
-              type="checkbox"
-              value={element}
-              className="mr-1"
-              checked={selectedCommands.includes(element)}
-              onChange={handleCheckboxChange}
-            />
-            {element}
-          </label>
-        ))}
-      </form>
-      <h3>Selected Elements:</h3>
-      <ul>
-        {selectedCommands.map((element) => (
-          <li key={element}>{element}</li>
-        ))}
-      </ul>
-    </div>
+            <h2 className="mb-2">Select Elements:</h2>
+            <form>
+              {elements.map((element) => (
+                <label className="mr-6" key={element}>
+                  <input
+                    type="checkbox"
+                    value={element}
+                    className="mr-1"
+                    checked={selectedCommands.includes(element)}
+                    onChange={handleCheckboxChange}
+                  />
+                  {element}
+                </label>
+              ))}
+            </form>
+            <h3>Selected Elements:</h3>
+            <ul>
+              {selectedCommands.map((element) => (
+                <li key={element}>{element}</li>
+              ))}
+            </ul>
+          </div>
 
           <select className="bg-white text-gray-800" value={selectedModelNo} onChange={handleSelectChange}>
             <option value="">Select model No</option>

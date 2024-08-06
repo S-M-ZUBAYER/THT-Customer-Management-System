@@ -4,6 +4,7 @@ import { MdArrowDropDown } from "react-icons/md";
 import { RiMenu3Line } from "react-icons/ri";
 import GrozzieeLogo from "../../../Assets/Images/Grozziie/Grozziie_logo.jpg"
 import UserContext, { AuthContext } from '../../../context/UserContext';
+import { AllProductContext } from '../../../context/ProductContext';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,7 +12,9 @@ const Navbar = () => {
   const [isCustomerOpen, setIsCustomerOpen] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
 
+
   const { user } = useContext(AuthContext);
+  const { showData } = useContext(AllProductContext);
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const toggleSideNabMenu = () => setIsSideNabOpen(!isSideNabOpen);
@@ -24,19 +27,19 @@ const Navbar = () => {
         <div className="flex h-16 items-center justify-between">
 
           <div className="relative visible lg:hidden">
-         { user?.isAdmin === "true" &&
-            <button
+            {user?.isAdmin === "true" &&
+              <button
 
-              className="rounded bg-gray-100 p-2 text-gray-600 transition hover:text-gray-600"
+                className="rounded bg-gray-100 p-2 text-gray-600 transition hover:text-gray-600"
 
-              id="options-menu"
-              aria-haspopup="true"
-              aria-expanded="true"
-              onClick={adminToggleMenu}
-            >
-              <RiMenu3Line></RiMenu3Line>
-            </button>
-}
+                id="options-menu"
+                aria-haspopup="true"
+                aria-expanded="true"
+                onClick={adminToggleMenu}
+              >
+                <RiMenu3Line></RiMenu3Line>
+              </button>
+            }
 
             {isAdminOpen && (
               <div className="origin-top-right absolute z-40 left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
@@ -184,14 +187,14 @@ const Navbar = () => {
             <div className="sm:flex sm:gap-4">
               {
                 user ? "" :
-                 <Link
-                className="rounded-md bg-[#004368] px-5 py-2 text-sm font-semibold text-white shadow dark:hover:bg-teal-500"
-                to="/login"
-              >
-                Sign In
-              </Link>
+                  <Link
+                    className="rounded-md bg-[#004368] px-5 py-2 text-sm font-semibold text-white shadow dark:hover:bg-teal-500"
+                    to="/login"
+                  >
+                    Sign In
+                  </Link>
               }
-             
+              <div className="font-semibold text-base flex items-center">{showData}</div>
 
 
             </div>
@@ -206,7 +209,7 @@ const Navbar = () => {
                 aria-haspopup="true"
                 aria-expanded="true"
                 onClick={toggleSideNabMenu}
-                // onClick={toggleMenu}
+              // onClick={toggleMenu}
               >
 
                 <svg

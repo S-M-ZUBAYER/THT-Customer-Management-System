@@ -223,8 +223,10 @@ function Translator() {
             })
             .then((data) => {
                 // Handle successful response
-                setText(data?.data);
-                setMidTranslate(data?.data);
+                // setText(data?.data);
+                // setMidTranslate(data?.data);
+                setText(data?.data?.replace(/^"|"$/g, ''));
+                setMidTranslate(data?.data?.replace(/^"|"$/g, ''));
                 SetIsLoading(false);
             })
             .catch((error) => {
@@ -234,7 +236,7 @@ function Translator() {
                 setMidTranslate("Failed to translate...")
                 // You can add code here to handle the error, such as showing a notification to the user
             });
-        
+
 
 
 
@@ -281,7 +283,8 @@ function Translator() {
             })
             .then((data) => {
                 // Handle successful response
-                setTargetTranslate(data?.data);
+                // setTargetTranslate(data?.data);
+                setTargetTranslate(data?.data?.replace(/^"|"$/g, ''));
                 SetIsLoading2(false);
                 inputElement.value = "";
             })
@@ -289,17 +292,17 @@ function Translator() {
                 // Handle any errors that occurred during the fetch
                 console.error("Fetch error:", error);
                 SetIsLoading2(false);
-                    setTargetTranslate("Failed to translate...")
+                setTargetTranslate("Failed to translate...")
                 // You can add code here to handle the error, such as showing a notification to the user
             });
-        
+
 
 
 
 
     }
 
-    
+
     const handleToSingleTranslate = () => {
         const inputElement1 = document.getElementById("inputField11");
         setTargetTranslate1('')
@@ -311,18 +314,18 @@ function Translator() {
 
         const targetInput1 = {
             target: targetLan1,
-            text:text1
+            text: text1
         }
 
 
 
         // let apiUrl = `http://localhost:5000/tht/translate`;
         let apiUrl = `https://grozziie.zjweiting.com:8035/tht/translate`;
-    
+
         if (!targetLan1) {
             notify();
         }
-       
+
 
         fetch(apiUrl, {
             method: "POST",
@@ -342,7 +345,10 @@ function Translator() {
             })
             .then((data) => {
                 // Handle successful response
-                setTargetTranslate1(data?.data);
+                const cleanedData = data?.data?.replace(/^"|"$/g, '');
+                console.log(cleanedData)
+                // setTargetTranslate1(data?.data);
+                setTargetTranslate1(cleanedData);
                 SetIsLoading22(false);
                 inputElement1.value = "";
             })
@@ -350,10 +356,10 @@ function Translator() {
                 // Handle any errors that occurred during the fetch
                 console.error("Fetch error:", error);
                 SetIsLoading22(false);
-                    setTargetTranslate1("Failed to translate...")
+                setTargetTranslate1("Failed to translate...")
                 // You can add code here to handle the error, such as showing a notification to the user
             });
-        
+
 
 
 

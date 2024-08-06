@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 import { AuthContext } from '../../../context/UserContext';
 import { Client } from '@stomp/stompjs';
 import { sendChatMessage } from './SendMessageFunction';
+import smsNotify from '../../../../src/Assets/MP3/IphoneMobCup.mp3';
 
 
 const MessageInput = ({
@@ -24,7 +25,11 @@ const MessageInput = ({
   //collect the value from useContext
   const { chattingUser, user, connected, setConnected, selectedFiles, setSelectedFiles, allChat, setAllChat, newCome, setNewCome, newAllMessage, setNewAllMessage, newResponseCome, setNewResponseCome, localStoreSms, setLocalStoreSms, customerStatus, setCustomerStatus, fetchUserByUserId, currentCustomer } = useContext(AuthContext);
 
-
+  useEffect(() => {
+    if (Notification.permission !== 'granted') {
+      Notification.requestPermission();
+    }
+  }, []);
 
   //According to the coming new sms here update the chatting sms and list and show the toast in here.
   useEffect(() => {
@@ -95,6 +100,7 @@ const MessageInput = ({
   // <---------------------------Final Web Socket------------------------------------>
   const stompClient = new Client({
     brokerURL: 'wss://grozziieget.zjweiting.com:3091/CustomerService-Chat/websocket',
+    // brokerURL: 'ws://127.0.0.1:5000',
     //  brokerURL: 'ws://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/websocket',
   });
 
@@ -243,6 +249,12 @@ const MessageInput = ({
     };
 
     const handleToastSuccess = () => {
+      const audio = new Audio(smsNotify); // Ensure this path is correct
+      audio.play().then(() => {
+        console.log('Audio played successfully');
+      }).catch((error) => {
+        console.error('Error playing audio:', error);
+      });
       toast.success(`${sms?.msgType} come from  Id:${sms?.sentBy}`, {
         position: "top-right"
       });
@@ -466,7 +478,7 @@ const MessageInput = ({
           partNo: 1,
           timestamp: getCurrentTime(),
         });
-        
+
 
         // clear again the response sms 
         setResponse({});
@@ -673,7 +685,6 @@ const MessageInput = ({
             <AiOutlineSend className=" cursor-pointer"></AiOutlineSend>
           </button>
         </div>
-
         {/* Make the design to show and delete the selected file */}
         <div className="mt-2">
           {selectedFiles.map((file, index) => (

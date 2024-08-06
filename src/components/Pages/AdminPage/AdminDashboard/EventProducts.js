@@ -31,10 +31,12 @@ const AddMallProducts = () => {
     //     console.log(error);
     //   });
 
+
     // use useEffect to load the all mall product from data base
     useEffect(() => {
         setLoading(true)
         fetch('https://grozziieget.zjweiting.com:8033/tht/eventProducts')
+            // fetch('https://grozziieget.zjweiting.com:8033/tht/eventProducts/country/zh-CN')
             .then(response => response.json())
             .then(data => setEventProduct(data));
         setLoading(false);
@@ -126,81 +128,81 @@ const AddMallProducts = () => {
                 </form>
 
                 <div className=" h-screen overflow-y-scroll">
-                <div className="mx-2 my-3 grid grid-cols-7  text-start text-lg font-semibold bg-slate-300 px-2 py-2">
-                    <div className=" col-span-6 grid grid-cols-6">
-                        <p>
-                            Image
-                        </p>
-                        <p>
-                            product Name
-                        </p>
-                        <p className="">
-                            Model No
-                        </p>
-                        <p className="">
-                            country
-                        </p>
-                        <p className="">
-                            Id
-                        </p>
+                    <div className="mx-2 my-3 grid grid-cols-7  text-start text-lg font-semibold bg-slate-300 px-2 py-2">
+                        <div className=" col-span-6 grid grid-cols-6">
+                            <p>
+                                Image
+                            </p>
+                            <p>
+                                product Name
+                            </p>
+                            <p className="">
+                                Model No
+                            </p>
+                            <p className="">
+                                country
+                            </p>
+                            <p className="">
+                                Id
+                            </p>
 
-                        <p className="">
-                            Show Type
-                        </p>
+                            <p className="">
+                                Show Type
+                            </p>
+                        </div>
+
+                        <div className="flex items-center justify-around">
+                            {/* <FiEdit></FiEdit> */}
+                            <RiDeleteBin7Line></RiDeleteBin7Line>
+                        </div>
                     </div>
 
-                    <div className="flex items-center justify-around">
-                        {/* <FiEdit></FiEdit> */}
-                        <RiDeleteBin7Line></RiDeleteBin7Line>
-                    </div>
-                </div>
-
-                {loading ?
-                    <DisplaySpinner></DisplaySpinner>
-                    :
-
-                    filteredAllProduct?.length === 0
-                        ?
-                        <span className="text-xl font-bold text-red-400">No Mall Product Available</span>
+                    {loading ?
+                        <DisplaySpinner></DisplaySpinner>
                         :
-                        filteredAllProduct?.map((product, index) => (
-                            // <Link to={`/admin/mallProduct/details/${product?.Model},`}>
-                            <div className="  mx-2 my-3 grid grid-cols-7  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">
-                                <Link key={index} to={`/admin/eventProduct/details/${product?.modelNumber}}`} onClick={() => setProduct(product)} className=" col-span-6 grid grid-cols-6">
-                                    <img className=" h-10 w-10 rounded-full" src={`https://grozziieget.zjweiting.com:8033/tht/eventProductImages/${product.productImg}`} alt={product.productName} ></img>
 
-                                    <p>
-                                        {product?.productName}
-                                    </p>
-                                    <p className="">
-                                        {product?.modelNumber}
-                                    </p>
-                                    <p className="">
-                                        {product?.productCountryName}
-                                    </p>
-                                    <p className="">
-                                        {product?.id}
-                                    </p>
-                                    <p className="">
-                                        {product?.productImgRemark}
-                                    </p>
-                                </Link>
+                        filteredAllProduct?.length === 0
+                            ?
+                            <span className="text-xl font-bold text-red-400">No Mall Product Available</span>
+                            :
+                            filteredAllProduct?.map((product, index) => (
+                                // <Link to={`/admin/mallProduct/details/${product?.Model},`}>
+                                <div className="  mx-2 my-3 grid grid-cols-7  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">
+                                    <Link key={index} to={`/admin/eventProduct/details/${product?.modelNumber}}`} onClick={() => setProduct(product)} className=" col-span-6 grid grid-cols-6">
+                                        <img className=" h-10 w-10 rounded-full" src={`https://grozziieget.zjweiting.com:8033/tht/eventProductImages/${product.productImg}`} alt={product.productName} ></img>
 
-                                <div className="flex items-center justify-around">
-                                    {/* <button className="text-blue-500 hover:cursor-pointer hover:text-2xl" onClick={() => openEditModal(product)}>
+                                        <p>
+                                            {product?.productName}
+                                        </p>
+                                        <p className="">
+                                            {product?.modelNumber}
+                                        </p>
+                                        <p className="">
+                                            {product?.productCountryName}
+                                        </p>
+                                        <p className="">
+                                            {product?.id}
+                                        </p>
+                                        <p className="">
+                                            {product?.productImgRemark}
+                                        </p>
+                                    </Link>
+
+                                    <div className="flex items-center justify-around">
+                                        {/* <button className="text-blue-500 hover:cursor-pointer hover:text-2xl" onClick={() => openEditModal(product)}>
                              <FiEdit></FiEdit>
                          </button>
                          {isModalOpen && (
                              <ModalForEdit product={selectedProduct} onSave={handleSave} onClose={handleCloseModal} />
                          )} */}
-                                    <RiDeleteBin7Line onClick={() => handleToDelete(product?.id)} className="hover:cursor-pointer hover:text-2xl"></RiDeleteBin7Line>
+                                        <RiDeleteBin7Line onClick={() => handleToDelete(product?.id)} className="hover:cursor-pointer hover:text-2xl"></RiDeleteBin7Line>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
 
                 </div>
 
-               
+
             </div>
 
 

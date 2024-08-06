@@ -3,6 +3,7 @@ import emailjs from 'emailjs-com';
 import { Link } from 'react-router-dom';
 import img from "../../../Assets/Images/THT-Pic.jpg"
 import customerServiceImg from "../../../Assets/Images/customer service/Customer service.jpg"
+import WebSocketComponent from '../CustomerServicePage/CloudChat/WebSocketComponent';
 
 const Contact = () => {
 
@@ -13,22 +14,22 @@ const Contact = () => {
 
     const handleToSendEmail = (event) => {
         event.preventDefault();
-    
+
         // Send email using EmailJS
         emailjs.send('service_7rnps2c', 'template_wt3urfs', {
-          from_name: name,
-          from_email: email,
-          message: message,
+            from_name: name,
+            from_email: email,
+            message: message,
         }, 'BdhgJg9oyaR8HBBNx')
-          .then((result) => {
-            alert("Send The sms Success fully")
-            // TODO: Add success message or redirect to thank-you page
-          })
-          .catch((error) => {
-            console.log(error.text);
-            // TODO: Add error message
-          });
-      };
+            .then((result) => {
+                alert("Send The sms Success fully")
+                // TODO: Add success message or redirect to thank-you page
+            })
+            .catch((error) => {
+                console.log(error.text);
+                // TODO: Add error message
+            });
+    };
 
 
     return (
@@ -161,12 +162,13 @@ const Contact = () => {
                         <button className=" px-20 py-1 my-10 mb-16 text-lg font-bold tracking-wide text-white capitalize transition-colors duration-300 transform  bg-[#004368]  rounded-md hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
                             Submit
                         </button>
-                    </form> 
+                    </form>
                 </div>
 
 
             </div>
 
+            <WebSocketComponent></WebSocketComponent>
 
 
 
