@@ -19,10 +19,10 @@ const UserContext = ({ children }) => {
   const [chattingUser, setChattingUser] = useState(null);
   const [DUser, setDUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [comingSMS,setComingSMS]=useState(null)
+  const [comingSMS, setComingSMS] = useState(null)
 
   // <----------------------------chatting---------------------->
-  
+
   const [connected, setConnected] = useState(false);
   const [newResponseCome, setNewResponseCome] = useState({});
   const [newAllMessage, setNewAllMessage] = useState([]);
@@ -30,8 +30,9 @@ const UserContext = ({ children }) => {
   const [newCome, setNewCome] = useState({});
   const [allChat, setAllChat] = useState([]);
   const [localStoreSms, setLocalStoreSms] = useState([]);
-  const [customerStatus,setCustomerStatus] = useState("RUNNING");
+  const [customerStatus, setCustomerStatus] = useState("RUNNING");
   const [currentCustomer, setCurrentCustomer] = useState([]);
+  const [serviceCountry, setServiceCountry] = useState("");
 
   function getCurrentTime() {
     const now = new Date();
@@ -49,45 +50,51 @@ const UserContext = ({ children }) => {
 
     return `${formattedHours}:${formattedMinutes} ${ampm}`;
   }
-  
-  
-//chatting list refresh process
-const fetchUserByUserId = async () => {
-  console.log("check the list")
-  try {
-      const response = await axios.get(`https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/chatlist/customer_service/${chattingUser?.userId}`);
+
+
+  //chatting list refresh process
+  const fetchUserByUserId = async () => {
+    console.log("check the list")
+    try {
+      let response;
+      if (serviceCountry === "EN") {
+        response = await axios.get(`https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/chatlist/customer_service/${chattingUser?.userId}`);
+      } else {
+        response = await axios.get(`https://jiapuv.com:3091/CustomerService-ChatCN/api/dev/chatlist/customer_service/${chattingUser?.userId}`);
+      }
+
 
       if (response.status === 200) {
-          // Request was successful
+        // Request was successful
 
-          const userData = response.data;
-          const updateCustomerData = (userData.sort((a, b) => {
-              const timestampA = new Date(a.timestamp);
-              const timestampB = new Date(b.timestamp);
-              return timestampB - timestampA;
-          }));
-          setCurrentCustomer(getUniqueCustomers(updateCustomerData))
+        const userData = response.data;
+        const updateCustomerData = (userData.sort((a, b) => {
+          const timestampA = new Date(a.timestamp);
+          const timestampB = new Date(b.timestamp);
+          return timestampB - timestampA;
+        }));
+        setCurrentCustomer(getUniqueCustomers(updateCustomerData))
       } else {
-          // Handle unexpected status codes
-          console.error('Unexpected status code:', response.status);
+        // Handle unexpected status codes
+        console.error('Unexpected status code:', response.status);
       }
-  } catch (error) {
+    } catch (error) {
       // Handle network or other errors
       console.error('Error fetching user data:', error);
-  }
-};
+    }
+  };
 
-function getUniqueCustomers(currentCustomer) {
-  const uniqueCustomers = currentCustomer.reduce((accumulator, customer) => {
+  function getUniqueCustomers(currentCustomer) {
+    const uniqueCustomers = currentCustomer.reduce((accumulator, customer) => {
       const userId = customer.userId;
       if (!accumulator.has(userId)) {
-          accumulator.set(userId, customer);
+        accumulator.set(userId, customer);
       }
       return accumulator;
-  }, new Map());
+    }, new Map());
 
-  return (Array.from(uniqueCustomers.values()));
-}
+    return (Array.from(uniqueCustomers.values()));
+  }
 
   function getCurrentTimestampInSeconds() {
     const currentDate = new Date();
@@ -96,10 +103,10 @@ function getUniqueCustomers(currentCustomer) {
   }
 
   const getAnswer = (sms) => {
-  
+
     if (sms && sms.totalPart === 1) {
       //show your message/video/file/image
-  
+
     }
     else {
       if (sms && sms.partNo === sms.totalPart) {//get partNo
@@ -127,7 +134,7 @@ function getUniqueCustomers(currentCustomer) {
       return;
 
     }
-  
+
 
     //Add New response
     const textMessage = {
@@ -159,7 +166,7 @@ function getUniqueCustomers(currentCustomer) {
         position: "top-right"
       })
     }
-  
+
 
 
 
@@ -172,31 +179,34 @@ function getUniqueCustomers(currentCustomer) {
 
   const disconnectAndClearCache = () => {
     if (connected) {
-        // Disconnect from the WebSocket
-        stompClient.deactivate();
+      // Disconnect from the WebSocket
+      stompClient.deactivate();
 
-        // Clear the cache or reset any relevant state
-        // You can add code here to clear specific caches or reset state
-        // For example, you can clear the chat history or reset the chatMessage state.
+      // Clear the cache or reset any relevant state
+      // You can add code here to clear specific caches or reset state
+      // For example, you can clear the chat history or reset the chatMessage state.
 
-        // Clear the disconnect timer if it's set
-        if (disconnectTimer) {
-            toast.success("Disconnected successfully")
-            clearTimeout(disconnectTimer);
-        }
+      // Clear the disconnect timer if it's set
+      if (disconnectTimer) {
+        toast.success("Disconnected successfully")
+        clearTimeout(disconnectTimer);
+      }
     }
-};
+  };
 
 
 
 
   let disconnectTimer;
-   const stompClient = new Client({
-    brokerURL: 'wss://grozziieget.zjweiting.com:3091/CustomerService-Chat/websocket',
-    //  brokerURL: 'ws://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/websocket',
+  const stompClient = new Client({
+    brokerURL: serviceCountry === "EN"
+      ? 'wss://grozziieget.zjweiting.com:3091/CustomerService-Chat/websocket'
+      : 'wss://jiapuv.com:3091/CustomerService-ChatCN/websocket',
+
   });
 
-//After solve the chatting backend need to start 
+
+  //After solve the chatting backend need to start 
 
   // useEffect(() => {
   //   const connect = () => {
@@ -287,7 +297,7 @@ function getUniqueCustomers(currentCustomer) {
   const [totalQuestions, setTotalQuestions] = useState([]);
   const [unknownQuestions, setUnknownQuestions] = useState([]);
 
-  
+
 
 
   function unknownCalculatePercentage(totalQuestions, currentQuestions) {
@@ -373,29 +383,31 @@ function getUniqueCustomers(currentCustomer) {
     setCategory,
     categories,
     setCategories,
-    chattingUser, 
+    chattingUser,
     setChattingUser,
     comingSMS,
     setComingSMS,
     connected,
     setConnected,
-    newResponseCome, 
+    newResponseCome,
     setNewResponseCome,
-    newAllMessage, 
+    newAllMessage,
     setNewAllMessage,
-    selectedFiles, 
+    selectedFiles,
     setSelectedFiles,
-    newCome, 
+    newCome,
     setNewCome,
-    allChat, 
+    allChat,
     setAllChat,
-    localStoreSms, 
+    localStoreSms,
     setLocalStoreSms,
     customerStatus,
     setCustomerStatus,
-    currentCustomer, 
+    currentCustomer,
     setCurrentCustomer,
-    fetchUserByUserId
+    fetchUserByUserId,
+    serviceCountry,
+    setServiceCountry
   };
 
   return (

@@ -54,7 +54,7 @@ const Login = () => {
     }
   };
 
-  const { signIn, signInWithGoogle, signInWithFacebook, resetPassword, loading, setLoading } = useContext(AuthContext);
+  const { signIn, signInWithGoogle, signInWithFacebook, resetPassword, loading, setLoading, serviceCountry, setServiceCountry } = useContext(AuthContext);
 
   const from = location?.state?.from?.pathname || "/";
 
@@ -85,7 +85,7 @@ const Login = () => {
     })
       .then(res => res.json())
       .then(async data => {
-      
+
         if (data?.message === "Wrong email/password combination!") {
           toast.error(data.message);
           setLoading(false);
@@ -99,17 +99,22 @@ const Login = () => {
           localStorage.setItem('user', JSON.stringify(data[0]));
           localStorage.setItem('DUser', JSON.stringify({ email, password, selectedShops }));
           setDUser({ email, password, selectedShops })
-   
+
 
           try {
-            const response = await axios.post(
-              'https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/user/signIn',
-              {
-                userEmail: email,
-                userPassword: password,
-                deviceType:"web"
-              }
-            );
+
+            const url =
+              serviceCountry === "CN"
+                ? 'https://jiapuv.com:3091/CustomerService-ChatCN/api/dev/user/signIn'
+                : 'https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/user/signIn';
+
+            const response = await axios.post(url, {
+              userEmail: email,
+              userPassword: password,
+              deviceType: "web"
+            });
+
+
 
             if (response.status === 200) {
               localStorage.setItem('chattingUser', JSON.stringify({
@@ -120,6 +125,7 @@ const Login = () => {
                 designation: response?.data?.designation,
                 country: response?.data?.country
               }));
+
               setChattingUser({
                 userName: response?.data?.userName,
                 userId: response?.data?.userId,
@@ -128,6 +134,7 @@ const Login = () => {
                 designation: response?.data?.designation,
                 country: response?.data?.country
               });
+              localStorage.setItem('serviceCountry', JSON.stringify(serviceCountry));
               setLoading(false);
               form.reset();
               navigate("/");
@@ -271,6 +278,17 @@ const Login = () => {
               </div>
 
               <div className="my-3">or</div>
+
+              <div className="flex justify-start mb-10 pl-2">
+                <label className=" font-semibold">Location:</label>
+                <select
+                  value={serviceCountry}
+                  onChange={(e) => setServiceCountry(e.target.value)}
+                >
+                  <option value="EN">English</option>
+                  <option value="CN">Chinese</option>
+                </select>
+              </div>
 
               {/* <label htmlFor="email">Email:</label> */}
               <input className=" w-full pl-2 text-gray-800 bg-white" placeholder="username or email" type="email" id="email" value={email} onChange={handleEmailChange} />

@@ -34,6 +34,7 @@ import ShowHightWidth from "../../components/Pages/AdminPage/AdminDashboard/Mode
 import AutomaticChat from "../../components/Pages/CustomerServicePage/AutomaticChat";
 import ImageResize from "../../components/Pages/AdminPage/AdminDashboard/ImageResize";
 import AddWifiModelHightWidth from "../../components/Pages/AdminPage/AdminDashboard/WifiModelHeightWidth/AddWifiModelInfo";
+import AutomaticChat_CN from "../../components/Pages/CustomerServicePage/AutomaticChat_CN";
 
 
 
@@ -54,6 +55,10 @@ export const routes = createBrowserRouter([
             {
                 path: "/customer-1",
                 element: <PrivateRoute><AutomaticChat></AutomaticChat></PrivateRoute>
+            },
+            {
+                path: "/chineseCustomer",
+                element: <PrivateRoute><AutomaticChat_CN></AutomaticChat_CN></PrivateRoute>
             },
             {
                 path: "/customer-2",

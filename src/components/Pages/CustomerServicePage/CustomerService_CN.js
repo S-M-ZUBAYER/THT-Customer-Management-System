@@ -2,21 +2,24 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 
 import CustomerServicePart from './CustomerServicePart';
 import { AuthContext } from '../../../context/UserContext';
+// import { AuthContext } from '../../../context/UserContext_CN';
 import axios from 'axios';
 // import { Client } from '@stomp/stompjs';
 
-import Message from './Message';
-import MessageInput from './MessegeInput';
+
+
 import toast from 'react-hot-toast';
 import { SiSocketdotio } from 'react-icons/si';
 import BtnSpinner from '../../Shared/Loading/BtnSpinner';
+import Message_CN from './Message_CN';
+import MessageInput_CN from './MessegeInput_CN';
 
 
 
 
 
 
-const CustomerService_1 = () => {
+const CustomerService_CN = () => {
 
     const { user, chattingUser, connected, setConnected, allChat, setAllChat, localStoreSms, setLocalStoreSms, customerStatus, setCustomerStatus, currentCustomer, setCurrentCustomer, fetchUserByUserId } = useContext(AuthContext);
     const [currentUser, setCurrentUser] = useState(null)
@@ -37,9 +40,10 @@ const CustomerService_1 = () => {
     // make the request to get the running time status 
     const fetchUserStatus = async (userId) => {
         try {
-            const response = await fetch(`https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/user/status/${userId}`);
+            const response = await fetch(`https://jiapuv.com:3091/CustomerService-ChatCN/api/dev/user/status/${userId}`);
             if (response.ok) {
                 const data = await response.json();
+                console.log(data);
                 setActiveStatus(data);
                 // Handle the data as needed
             } else {
@@ -111,7 +115,7 @@ const CustomerService_1 = () => {
     const fetchUserByChatId = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/messages/${selectedCustomerChat?.chatId}`);
+            const response = await axios.get(`https://jiapuv.com:3091/CustomerService-ChatCN/api/dev/messages/${selectedCustomerChat?.chatId}`);
             if (response.status === 200) {
                 const userData = response.data;
                 setAllChat(userData);
@@ -289,26 +293,26 @@ const CustomerService_1 = () => {
                     </div>
 
                     <div className=" overflow-y-scroll h-[60vh] mb-10 text-start" ref={scrollableDivRef}>
-                        <Message
+                        <Message_CN
                             allChat={allChat}
                             Loading={Loading}
                             setAllChat={setAllChat}
                             selectedCustomerChat={selectedCustomerChat}
                             showHistory={showHistory}
                             SetShowHistory={SetShowHistory}
-                        ></Message>
+                        ></Message_CN>
 
                     </div>
 
 
-                    <MessageInput
+                    <MessageInput_CN
                         selectedCustomerChat={selectedCustomerChat}
                         setSelectedCustomerChat={setSelectedCustomerChat}
                         allChat={allChat}
                         setAllChat={setAllChat}
                         newMessagesList={newMessagesList}
                         setNewMessagesList={setNewMessagesList}
-                    ></MessageInput>
+                    ></MessageInput_CN>
 
 
 
@@ -346,4 +350,4 @@ const CustomerService_1 = () => {
     );
 };
 
-export default CustomerService_1;
+export default CustomerService_CN;

@@ -13,7 +13,7 @@ const Navbar = () => {
   const [isAdminOpen, setIsAdminOpen] = useState(false);
 
 
-  const { user } = useContext(AuthContext);
+  const { user, serviceCountry } = useContext(AuthContext);
   const { showData } = useContext(AllProductContext);
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -91,48 +91,97 @@ const Navbar = () => {
                     Home
                   </Link>
                 </li>
+                {
+                  serviceCountry !== "CN" &&
+                  <li>
+                    <div className="relative">
+                      <button
+                        className="flex justify-between items-center  text-gray-500 transition hover:font-semibold hover:text-zinc-900"
+                        onClick={toggleMenu}
+                      >
+                        Customer Service
+                        <MdArrowDropDown className="text-2xl pt-1"></MdArrowDropDown>
 
-                <li>
-                  <div className="relative">
-                    <button
-                      className="flex justify-between items-center  text-gray-500 transition hover:font-semibold hover:text-zinc-900"
-                      onClick={toggleMenu}
-                    >
-                      Customer Service
-                      <MdArrowDropDown className="text-2xl pt-1"></MdArrowDropDown>
-
-                    </button>
-                    {isOpen && (
-                      <div className="absolute left-0 z-40 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                        <div
-                          className="py-1"
-                          role="menu"
-                          aria-orientation="vertical"
-                          aria-labelledby="options-menu"
-                        >
-                          <Link
-                            to="/customer-1"
-                            onClick={toggleMenu}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100  hover:font-semibold hover:text-zinc-900"
-                            role="menuitem"
+                      </button>
+                      {isOpen && (
+                        <div className="absolute left-0 z-40 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                          <div
+                            className="py-1"
+                            role="menu"
+                            aria-orientation="vertical"
+                            aria-labelledby="options-menu"
                           >
-                            Automatic Service
-                          </Link>
-                          <Link
-                            to="/customer-2"
-                            onClick={toggleMenu}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:font-semibold hover:text-zinc-900"
-                            role="menuitem"
-                          >
-                            Manual Service
-                          </Link>
+                            <Link
+                              to="/customer-1"
+                              onClick={toggleMenu}
+                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100  hover:font-semibold hover:text-zinc-900"
+                              role="menuitem"
+                            >
+                              Automatic Service
+                            </Link>
+                            <Link
+                              to="/customer-2"
+                              onClick={toggleMenu}
+                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:font-semibold hover:text-zinc-900"
+                              role="menuitem"
+                            >
+                              Manual Service
+                            </Link>
 
+                          </div>
                         </div>
-                      </div>
-                    )}
-                  </div>
+                      )}
+                    </div>
 
-                </li>
+                  </li>
+                }
+
+                {
+                  serviceCountry === "CN" &&
+                  <li>
+                    <div className="relative">
+                      <button
+                        className="flex justify-between items-center  text-gray-500 transition hover:font-semibold hover:text-zinc-900"
+                        onClick={toggleMenu}
+                      >
+                        Chinese Customer Service
+                        <MdArrowDropDown className="text-2xl pt-1"></MdArrowDropDown>
+
+                      </button>
+                      {isOpen && (
+                        <div className="absolute left-0 z-40 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                          <div
+                            className="py-1"
+                            role="menu"
+                            aria-orientation="vertical"
+                            aria-labelledby="options-menu"
+                          >
+
+                            <Link
+                              to="/chineseCustomer"
+                              onClick={toggleMenu}
+                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:font-semibold hover:text-zinc-900"
+                              role="menuitem"
+                            >
+                              Chinese Service
+                            </Link>
+                            <Link
+                              to="/customer-2"
+                              onClick={toggleMenu}
+                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:font-semibold hover:text-zinc-900"
+                              role="menuitem"
+                            >
+                              Manual Service
+                            </Link>
+
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                  </li>
+                }
+
 
                 {
                   user?.isAdmin === "true" &&

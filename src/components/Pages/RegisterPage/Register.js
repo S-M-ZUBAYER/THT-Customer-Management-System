@@ -23,7 +23,7 @@ import BtnSpinner from '../../Shared/Loading/BtnSpinner';
 
 
 const Register = () => {
-    const { setUser, setChattingUser } = useContext(AuthContext)
+    const { setUser, setChattingUser, setServiceCountry, serviceCountry } = useContext(AuthContext)
     const [loading, setLoading] = useState(false)
     //create different kind of state to get the current value
     const [email, setEmail] = useState('');
@@ -163,19 +163,19 @@ const Register = () => {
         const chatRegistration = {
             userName: name,
             userEmail: email,
-            phone:phone,
+            phone: phone,
             userPassword: password,
             role: "customer_service",
             designation: designation,
             country: country,
-            addresses:[]
+            addresses: []
         }
 
-      
-     
 
 
-        if (name === ""  || phone === "" || country === "" || language === "" || email === "" || designation === "") {
+
+
+        if (name === "" || phone === "" || country === "" || language === "" || email === "" || designation === "") {
             toast.error("Please provide all the information");
             return;
         }
@@ -202,7 +202,7 @@ const Register = () => {
             .then((response) => response.json())
             .then((data) => {
                 const userExists = data.exists;
-                
+
 
                 if (userExists === false) {
                     // Validate password length
@@ -240,19 +240,21 @@ const Register = () => {
                         .then(async (data) => {
                             if (data) {
                                 localStorage.setItem('user', JSON.stringify(user));
+                                localStorage.setItem('serviceCountry', JSON.stringify(serviceCountry));
                                 setUser(user);
                                 // setLoading(false);
                                 //         toast.success("Registration complete Successfully");
                                 //         form.reset();
                                 //         navigate("/");
 
-                             
+
 
                                 try {
-                                    const response = await axios.post(
-                                        'https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/user/signUp',
-                                        chatRegistration
-                                    );
+                                    const url = serviceCountry === "EN"
+                                        ? 'https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/user/signUp'
+                                        : 'https://jiapuv.com:3091/CustomerService-ChatCN/api/dev/user/signUp';
+
+                                    const response = await axios.post(url, chatRegistration);
 
                                     if (response) {
                                         localStorage.setItem('chattingUser', JSON.stringify({
@@ -407,6 +409,17 @@ const Register = () => {
 
                         <input className=" w-full pl-2 bg-white text-gray-800" placeholder="Designation" type="text" id="designation" value={designation} onChange={handleDesignationChange} />
                         <hr className=" border-slate-400 mb-6 my-1" ></hr>
+
+                        <div className="flex justify-start mb-10 pl-2">
+                            <label>Language:</label>
+                            <select
+                                value={serviceCountry}
+                                onChange={(e) => setServiceCountry(e.target.value)}
+                            >
+                                <option value="EN">English</option>
+                                <option value="CN">Chinese</option>
+                            </select>
+                        </div>
 
                         <input className=" w-full pl-2 bg-white text-gray-800" placeholder="country" type="text" id="country" value={country} onChange={handleCountryChange} />
                         <hr className=" border-slate-400 mb-6 my-1" ></hr>
