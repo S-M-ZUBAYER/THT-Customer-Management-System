@@ -32,7 +32,7 @@ const UserContext_CN = ({ children }) => {
     const [localStoreSms, setLocalStoreSms] = useState([]);
     const [customerStatus, setCustomerStatus] = useState("RUNNING");
     const [currentCustomer, setCurrentCustomer] = useState([]);
-    const [serviceCountry, setServiceCountry] = useState("");
+    const [serviceCountry, setServiceCountry] = useState("EN");
 
     function getCurrentTime() {
         const now = new Date();

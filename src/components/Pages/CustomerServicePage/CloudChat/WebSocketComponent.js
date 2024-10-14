@@ -223,13 +223,13 @@ const WebSocketComponent = () => {
         // Binary data as an array of bits
         const binaryArray = new Uint8Array([
             0b0001, // 255 in decimal
-            // 0b11011000, // 216 in decimal
-            // 0b11111111, // 255 in decimal
-            // 0b11100000, // 224 in decimal
-            // 0b00000000, // 0 in decimal
-            // 0b00010000, // 16 in decimal
-            // 0b01001010, // 74 in decimal
-            // 0b01000110  // 70 in decimal
+            0b11011000, // 216 in decimal
+            0b11111111, // 255 in decimal
+            0b11100000, // 224 in decimal
+            0b00000000, // 0 in decimal
+            0b00010000, // 16 in decimal
+            0b01001010, // 74 in decimal
+            0b01000110  // 70 in decimal
         ]);
 
         if (socket && isConnected) {
