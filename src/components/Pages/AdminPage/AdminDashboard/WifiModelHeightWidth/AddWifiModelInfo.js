@@ -159,7 +159,8 @@ function AddWifiModelHightWidth() {
 
     try {
       // Send the PUT request to update the data in the backend
-      const response = await fetch('http://localhost:2000/tht/wifiModelHightWidth/update', {
+      // const response = await fetch('http://localhost:2000/tht/wifiModelHightWidth/update', {
+      const response = await fetch('https://grozziieget.zjweiting.com:8033/tht/wifiModelHightWidth/update', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

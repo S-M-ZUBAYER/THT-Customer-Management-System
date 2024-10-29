@@ -33,11 +33,19 @@ function AddIconImg() {
   };
 
   // fetch data to get all the category name from backend
+  // useEffect(() => {
+  //   fetch('https://grozziieget.zjweiting.com:8033/tht/iconCategories')
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       setCategories(data.map(category => category.allIconsCategoris))
+  //     });
+  // }, []);
+  // fetch data to get all the category name from backend
   useEffect(() => {
-    fetch('https://grozziieget.zjweiting.com:8033/tht/iconCategories')
+    fetch('https://grozziieget.zjweiting.com:8033/tht/iconCategoriesList')
       .then(response => response.json())
       .then(data => {
-        setCategories(data.map(category => category.allIconsCategoris))
+        setCategories(data)
       });
   }, []);
   const handleImageChange = (e) => {
@@ -72,6 +80,7 @@ function AddIconImg() {
         toast.error("An error occurred while uploading images"); // Show a toast for the error
       });
   }
+  console.log(categories, "Category");
 
 
   return (
@@ -93,8 +102,8 @@ function AddIconImg() {
 
           <select className="bg-white text-gray-800" value={selectedCategory} onChange={handleSelectChange}>
             <option value="">Select a category</option>
-            {categories.map((cat, index) => (
-              <option key={index} value={cat}>{cat}</option>
+            {categories.map((category, index) => (
+              <option key={index} value={category.en}>{category.en}</option>
             ))}
           </select>
 

@@ -5,9 +5,16 @@ import IconsLogo from "../../../../Assets/Images/Admin/icons.png"
 import mallLogo from "../../../../Assets/Images/Admin/Mall.png"
 import eventLogo from "../../../../Assets/Images/Admin/Event.png"
 import QALogo from "../../../../Assets/Images/Admin/Q&A.jpg"
+import BluetoothLogo from "../../../../Assets/Images/Admin/bluetooth.jpg"
+import BluetoothManyLogo from "../../../../Assets/Images/Admin/bluetoothMany.jpg"
+import wifiLogo from "../../../../Assets/Images/Admin/wifi.jpg"
+import wifiManyLogo from "../../../../Assets/Images/Admin/WifiiMany.jpg"
+import loginLogo from "../../../../Assets/Images/Admin/login.jpg"
+import allLoginLogo from "../../../../Assets/Images/Admin/Users.png"
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import BtnSpinner from '../../../Shared/Loading/BtnSpinner';
+import { HiRefresh } from "react-icons/hi";
 
 const AdminDashboard = () => {
   const { user } = useContext(AuthContext);
@@ -21,11 +28,17 @@ const AdminDashboard = () => {
   const [categoriesLoading, setCategoriesLoading] = useState(false)
   const [questionAnswer, setQuestionsAnswer] = useState(null);
   const [questionAnswerLoading, setquestionAnswerLoading] = useState(true)
- const [userLoading,setUserLoading]=useState(true)
- const [eventLoading,setEventLoading]=useState(true)
- const [mallLoading,setMallLoading]=useState(true)
- const [categoryLoading,setCategoryLoading]=useState(true)
- const [qandALoading,setQandALoading]=useState(true)
+  const [userLoading, setUserLoading] = useState(true)
+  const [eventLoading, setEventLoading] = useState(true)
+  const [mallLoading, setMallLoading] = useState(true)
+  const [categoryLoading, setCategoryLoading] = useState(true)
+  const [qandALoading, setQandALoading] = useState(true)
+  const [modelApiCount, setModelApiCount] = useState({})
+  const [modelApiCountLoading, setModelApiCountLoading] = useState(true)
+  const [loginApiCount, setLoginApiCount] = useState("")
+  const [modelLoginApiCountLoading, setModelLoginApiCountLoading] = useState(true)
+  const [todayLoginApiCount, setTodayLoginApiCount] = useState("")
+  const [todayLoginApiCountLoading, setTodayModelLoginApiCountLoading] = useState(true)
 
 
   //got the current user data from database  
@@ -54,7 +67,71 @@ const AdminDashboard = () => {
     fetch('https://grozziieget.zjweiting.com:8033/tht/eventProducts')
       .then(response => response.json())
       .then(data => setEventProduct(data));
-      setEventLoading(false);
+    setEventLoading(false);
+  }, []);
+
+  const fetchApiCallCount = async () => {
+    setModelApiCountLoading(true);
+    try {
+      const response = await fetch('https://grozziieget.zjweiting.com:8033/tht/apiCallCount');
+      if (!response.ok) {
+        throw new Error('Failed to fetch API call count');
+      }
+      const data = await response.json();
+      setModelApiCount(data);
+    } catch (error) {
+      console.error("Error fetching API call count:", error);
+    } finally {
+      setModelApiCountLoading(false);
+    }
+  };
+  const fetchLoginApiCallCount = async () => {
+    setModelLoginApiCountLoading(true);
+    try {
+      const response = await fetch('https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/logininfo/total/sum');
+      if (!response.ok) {
+        throw new Error('Failed to fetch API call count');
+      }
+      const data = await response.json();
+      setLoginApiCount(data);
+    } catch (error) {
+      console.error("Error fetching API call count:", error);
+    } finally {
+      setModelLoginApiCountLoading(false);
+    }
+  };
+
+  const getTodayUserDataByDate = async () => {
+    setTodayModelLoginApiCountLoading(true);
+    const today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
+
+    const url = `https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/logininfo/userByDate/${today}`;
+
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setTodayLoginApiCount(data);
+      // Process data as needed
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+    finally {
+      setTodayModelLoginApiCountLoading(false);
+    }
+  };
+
+
+
+
+
+  useEffect(() => {
+    fetchApiCallCount();
+    fetchLoginApiCallCount();
+    getTodayUserDataByDate();
+    getTodayUserDataByDate();
   }, []);
 
 
@@ -75,7 +152,7 @@ const AdminDashboard = () => {
     fetch('https://grozziieget.zjweiting.com:8033/tht/mallProducts')
       .then(response => response.json())
       .then(data => setMallProduct(data));
-      setMallLoading(false)
+    setMallLoading(false)
   }, []);
 
   useEffect(() => {
@@ -103,6 +180,11 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleCount = () => {
+    fetchApiCallCount();
+    fetchLoginApiCallCount();
+    getTodayUserDataByDate();
+  }
 
   return (
     <div>
@@ -124,7 +206,13 @@ const AdminDashboard = () => {
       </div>
 
 
-      <section className="p-6 py-6 bg-gradient-to-l from-blue-900 via-slate-900 to-black pt-12 text-gray-200 mb-16 rounded-lg">
+      <section className="relative p-6 py-6 bg-gradient-to-l from-blue-900 via-slate-900 to-black pt-12 text-gray-200 mb-16 rounded-lg">
+        <button
+          onClick={handleCount}
+          className="absolute text-3xl top-4 right-4 bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"
+        >
+          <HiRefresh />
+        </button>
         <div data-aos="fade-down" data-aos-duration="2000" className="mb-5 mt-5">
           <h2 className="text-black text-3xl text-green-400 font-bold mb-5">Short Overview</h2>
           <p className="text-gray-200 text-base font-semibold mb-8">THT-Space Electrical Company Ltd. is a leading manufacturer of printing and attendance check equipment. With a factory located in China, the company produces a range of products including dot printers, thermal printers, attendance check clocks, and binding machines.</p>
@@ -138,11 +226,11 @@ const AdminDashboard = () => {
             <div className="flex flex-col justify-center align-middle">
               <p className="text-3xl font-semibold leading-none">
                 {
-                  userLoading?
-                  <BtnSpinner></BtnSpinner>
-                  :allUsers?.length
+                  userLoading ?
+                    <BtnSpinner></BtnSpinner>
+                    : allUsers?.length
                 }
-                </p>
+              </p>
               <p className="capitalize">Total Users</p>
             </div>
           </Link>
@@ -153,12 +241,12 @@ const AdminDashboard = () => {
             </div>
             <div className="flex flex-col justify-center align-middle">
               <p className="text-3xl font-semibold leading-none">
-              {
-                  categoriesLoading?
-                  <BtnSpinner></BtnSpinner>
-                  :categories?.length
+                {
+                  categoriesLoading ?
+                    <BtnSpinner></BtnSpinner>
+                    : categories?.length
                 }
-                </p>
+              </p>
               <p className="capitalize">Total Icons Category</p>
             </div>
           </Link>
@@ -169,12 +257,12 @@ const AdminDashboard = () => {
             </div>
             <div className="flex flex-col justify-center align-middle">
               <p className="text-3xl font-semibold leading-none">
-              {
-                  mallLoading?
-                  <BtnSpinner></BtnSpinner>
-                  :mallProduct?.length
+                {
+                  mallLoading ?
+                    <BtnSpinner></BtnSpinner>
+                    : mallProduct?.length
                 }
-                </p>
+              </p>
               <p className="capitalize">Total Mall Product</p>
             </div>
           </Link>
@@ -185,29 +273,109 @@ const AdminDashboard = () => {
             </div>
             <div className="flex flex-col justify-center align-middle">
               <p className="text-3xl font-semibold leading-none">
-              {
-                  eventLoading?
-                  <BtnSpinner></BtnSpinner>
-                  :eventProduct?.length
+                {
+                  eventLoading ?
+                    <BtnSpinner></BtnSpinner>
+                    : eventProduct?.length
                 }
-                </p>
+              </p>
               <p className="capitalize">Total Event Product</p>
             </div>
           </Link>
-          <Link to='/admin/questionAnswer' data-aos="fade-left" data-aos-duration="2000" className="flex p-4 space-x-4 rounded-lg md:space-x-6 bg-gradient-to-t from-blue-900 via-slate-900 to-violet-700 text-gray-100">
+          <Link data-aos="fade-right" data-aos-duration="2000" className="flex p-4 space-x-4 rounded-lg md:space-x-6 bg-gradient-to-t from-blue-900 via-slate-900 to-violet-700 text-gray-100">
             <div className="flex justify-center p-2 align-middle rounded-lg sm:p-4 bg-violet-400">
 
-              <img className="w-16 h-16" src={QALogo}></img>
+              <img className="w-16 h-16" src={loginLogo}></img>
             </div>
             <div className="flex flex-col justify-center align-middle">
               <p className="text-3xl font-semibold leading-none">
-              {
-                qandALoading?
-                  <BtnSpinner></BtnSpinner>
-                  :questionAnswer?.length
+                {
+                  todayLoginApiCountLoading ?
+                    <BtnSpinner></BtnSpinner>
+                    : todayLoginApiCount
                 }
-                {}</p>
-              <p className="capitalize">Total Q&A</p>
+              </p>
+              <p className="capitalize">Today Login Count</p>
+            </div>
+          </Link>
+          <Link data-aos="fade-left" data-aos-duration="2000" className="flex p-4 space-x-4 rounded-lg md:space-x-6 bg-gradient-to-t from-blue-900 via-slate-900 to-violet-700 text-gray-100">
+            <div className="flex justify-center p-2 align-middle rounded-lg sm:p-4 bg-violet-400">
+
+              <img className="w-16 h-16" src={usersLogo}></img>
+            </div>
+            <div className="flex flex-col justify-center align-middle">
+              <p className="text-3xl font-semibold leading-none">
+                {
+                  modelLoginApiCountLoading ?
+                    <BtnSpinner></BtnSpinner>
+                    : loginApiCount
+                }
+                { }</p>
+              <p className="capitalize">Total Login Count</p>
+            </div>
+          </Link>
+          <Link data-aos="fade-left" data-aos-duration="2000" className="flex p-4 space-x-4 rounded-lg md:space-x-6 bg-gradient-to-t from-blue-900 via-slate-900 to-violet-700 text-gray-100">
+            <div className="flex justify-center p-2 align-middle rounded-lg sm:p-4 bg-violet-400">
+
+              <img className="w-16 h-16" src={wifiLogo}></img>
+            </div>
+            <div className="flex flex-col justify-center align-middle">
+              <p className="text-3xl font-semibold leading-none">
+                {
+                  modelApiCountLoading ?
+                    <BtnSpinner></BtnSpinner>
+                    : modelApiCount?.wifiCount
+                }
+                { }</p>
+              <p className="capitalize">Today Wifi Count</p>
+            </div>
+          </Link>
+          <Link data-aos="fade-left" data-aos-duration="2000" className="flex p-4 space-x-4 rounded-lg md:space-x-6 bg-gradient-to-t from-blue-900 via-slate-900 to-violet-700 text-gray-100">
+            <div className="flex justify-center p-2 align-middle rounded-lg sm:p-4 bg-violet-400">
+
+              <img className="w-16 h-16" src={wifiManyLogo}></img>
+            </div>
+            <div className="flex flex-col justify-center align-middle">
+              <p className="text-3xl font-semibold leading-none">
+                {
+                  modelApiCountLoading ?
+                    <BtnSpinner></BtnSpinner>
+                    : modelApiCount?.wifiTotalCount
+                }
+                { }</p>
+              <p className="capitalize">Total Wifi Count</p>
+            </div>
+          </Link>
+          <Link data-aos="fade-left" data-aos-duration="2000" className="flex p-4 space-x-4 rounded-lg md:space-x-6 bg-gradient-to-t from-blue-900 via-slate-900 to-violet-700 text-gray-100">
+            <div className="flex justify-center p-2 align-middle rounded-lg sm:p-4 bg-violet-400">
+
+              <img className="w-16 h-16" src={BluetoothLogo}></img>
+            </div>
+            <div className="flex flex-col justify-center align-middle">
+              <p className="text-3xl font-semibold leading-none">
+                {
+                  modelApiCountLoading ?
+                    <BtnSpinner></BtnSpinner>
+                    : modelApiCount?.bluetoothCount
+                }
+                { }</p>
+              <p className="capitalize">Today Bluetooth Count</p>
+            </div>
+          </Link>
+          <Link data-aos="fade-left" data-aos-duration="2000" className="flex p-4 space-x-4 rounded-lg md:space-x-6 bg-gradient-to-t from-blue-900 via-slate-900 to-violet-700 text-gray-100">
+            <div className="flex justify-center p-2 align-middle rounded-lg sm:p-4 bg-violet-400">
+
+              <img className="w-16 h-16" src={BluetoothManyLogo}></img>
+            </div>
+            <div className="flex flex-col justify-center align-middle">
+              <p className="text-3xl font-semibold leading-none">
+                {
+                  modelApiCountLoading ?
+                    <BtnSpinner></BtnSpinner>
+                    : modelApiCount?.bluetoothTotalCount
+                }
+                { }</p>
+              <p className="capitalize">Total Bluetooth Count</p>
             </div>
           </Link>
         </div>
