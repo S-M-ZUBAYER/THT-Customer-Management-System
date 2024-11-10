@@ -24,6 +24,9 @@ function AddProduct({ product }) {
   const [inventoryText, setInventoryText] = useState('');
   const [productImgLink, setProductImgLink] = useState("");
   const [productImgRemark, setProductImgRemark] = useState("");
+  const [showingDataLink, setShowingDataLink] = useState("");
+  const [showingDataMark, setShowingDataMark] = useState("");
+  const [slideImageMark, setSlideImageMark] = useState("");
   const [relatedImgLink, setRelatedImgLink] = useState("");
   const [relatedImgRemark, setRelatedImgRemark] = useState("");
   const [descriptionImgRemark, setDescriptionImgRemark] = useState("");
@@ -143,6 +146,18 @@ function AddProduct({ product }) {
     setProductImgRemark(e.target.value);
 
   }
+  const handleShowingDataLink = (e) => {
+    setShowingDataLink(e.target.value);
+
+  }
+  const handleShowingDataMark = (e) => {
+    setShowingDataMark(e.target.value);
+
+  }
+  const handleSlideImageMark = (e) => {
+    setSlideImageMark(e.target.value);
+
+  }
 
   const handleRelatedImgLink = (e) => {
     setRelatedImgLink(e.target.value);
@@ -162,6 +177,7 @@ function AddProduct({ product }) {
         setSelectedDescriptionImages(reducedImages);
       });
   };
+
 
 
 
@@ -222,7 +238,12 @@ function AddProduct({ product }) {
     formData.append('inventoryText', inventoryText);
     formData.append('date', date);
     formData.append('time', time);
+    formData.append('link', showingDataLink);
+    formData.append('mark', showingDataMark);
+    formData.append('slideImageMark', slideImageMark);
     // Append selected invoice files to the form data
+    console.log(formData, "formdata");
+
     for (let i = 0; i < invoiceFiles.length; i++) {
       formData.append('invoiceFiles', invoiceFiles[i]);
     }
@@ -249,10 +270,9 @@ function AddProduct({ product }) {
       formData.append('instructionsVideos', selectedInstructionsVideos[i]);
     }
 
-    
-
     try {
-      
+
+      // await axios.post(`http://localhost:2000/tht/${productCategory}/add`, formData, {
       await axios.post(`https://grozziieget.zjweiting.com:8033/tht/${productCategory}/add`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
@@ -260,7 +280,7 @@ function AddProduct({ product }) {
       });
       toast.success(`${productCategory} Product created successfully!`);
       setLoading(false);
-     
+
       // Reset all form fields
       setProductCountryName('');
       setProductName('');
@@ -308,7 +328,7 @@ function AddProduct({ product }) {
           onChange={handleProductImgUpload}
           className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-10 px-3 lg:px-10 lg:ml-5 rounded-lg "
           accept="image/*" />
-      
+
         <div>
           <div className="mb-4 grid  grid-cols-3 text-start">
             <label htmlFor="modelNumber" className="block col-span-1 text-gray-500 font-semibold mb-2">
@@ -335,6 +355,48 @@ function AddProduct({ product }) {
               value={productImgRemark}
               onChange={handleProductImageRemark}
             ></textarea>
+          </div>
+          <div className="mb-4 grid  grid-cols-3 text-start">
+            <label htmlFor="modelNumber" className="block col-span-1 text-gray-500 font-semibold mb-2">
+              Showing Data Link
+            </label>
+            <input
+              type="text"
+              id="showingDataLink"
+              className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+              value={showingDataLink}
+              placeholder='Enter the Showing link'
+              onChange={handleShowingDataLink}
+
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="productImageRemark" className="block text-start text-gray-700 font-bold mb-2">
+              Showing Data Mark
+            </label>
+            <input
+              type="number"
+              id="ShowingDataMark"
+              placeholder="Please Showing Data Mark"
+              className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+              value={showingDataMark}
+              onChange={handleShowingDataMark}
+
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="productImageRemark" className="block text-start text-gray-700 font-bold mb-2">
+              Slider Image Mark
+            </label>
+            <input
+              type="text"
+              id="SlideImageMark"
+              placeholder="Please Enter Slide Image Mark"
+              className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+              value={slideImageMark}
+              onChange={handleSlideImageMark}
+
+            />
           </div>
         </div>
       </div>

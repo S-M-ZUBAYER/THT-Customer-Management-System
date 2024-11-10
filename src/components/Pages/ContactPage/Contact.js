@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import img from "../../../Assets/Images/THT-Pic.jpg"
 import customerServiceImg from "../../../Assets/Images/customer service/Customer service.jpg"
 import WebSocketComponent from '../CustomerServicePage/CloudChat/WebSocketComponent';
+import Mabang from './Mabang';
 
 const Contact = () => {
 
@@ -169,7 +170,7 @@ const Contact = () => {
             </div>
 
             <WebSocketComponent></WebSocketComponent>
-
+            <Mabang></Mabang>
 
 
         </div>

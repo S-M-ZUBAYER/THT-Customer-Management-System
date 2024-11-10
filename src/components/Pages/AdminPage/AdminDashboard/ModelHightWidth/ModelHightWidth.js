@@ -23,6 +23,7 @@ function ModelHightWidth() {
   const [maxWidth, setMaxWidth] = useState('');
   const [selectedCommands, setSelectedCommands] = useState([]);
   const [selectedPID, setSelectedPID] = useState('');
+  const [sliderImageMark, setSliderImageMark] = useState('');
   useEffect(() => {
     axios.get("https://grozziieget.zjweiting.com:8033/tht/icons")
       .then(res => {
@@ -64,6 +65,9 @@ function ModelHightWidth() {
   const handleInputPIDChange = (e) => {
     setSelectedPID(e.target.value);
   };
+  const handleSliderImageMarkChange = (e) => {
+    setSliderImageMark(e.target.value);
+  };
 
 
 
@@ -71,9 +75,9 @@ function ModelHightWidth() {
 
   const handleUpload = (event) => {
     event.preventDefault();
-
     axios
-      .post('https://grozziieget.zjweiting.com:8033/tht/hightWidth/add', { pidNo: selectedPID, defaultHight, defaultWidth, maxHight, maxWidth, command: selectedCommands, modelNo: selectedModelNo })
+      .post('https://grozziieget.zjweiting.com:8033/tht/hightWidth/add', { pidNo: selectedPID, defaultHight, defaultWidth, maxHight, maxWidth, command: selectedCommands, modelNo: selectedModelNo, sliderImageMark: sliderImageMark })
+      // .post('http://localhost:2000/tht/hightWidth/add', { pidNo: selectedPID, defaultHight, defaultWidth, maxHight, maxWidth, command: selectedCommands, modelNo: selectedModelNo, sliderImageMark: sliderImageMark })
       .then((res) => {
         if (res.data.status === "success") {
           toast.success("Model information uploaded successfully");
@@ -82,6 +86,7 @@ function ModelHightWidth() {
           setDefaultWidth("")
           setMaxHight("")
           setMaxWidth("")
+          setSliderImageMark("")
           setSelectedCommands([])
         } else {
           toast.error("Model information uploaded failed");
@@ -169,6 +174,16 @@ function ModelHightWidth() {
               onChange={handleMaxWidthChange} // Handle the input change event
             />
           </label>
+          <div>
+            <p className="mb-3  mt-5">Slider Image Mark</p>
+            <input
+              type="text"
+              className="bg-white text-gray-800 mb-5 px-4 py-2 border rounded-md w-48 mr-2"
+              value={sliderImageMark}
+              onChange={handleSliderImageMarkChange}
+              placeholder="Enter Slider Image Mark"
+            />
+          </div>
 
           <div>
             <h2 className="mb-2">Select Elements:</h2>

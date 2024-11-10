@@ -225,8 +225,8 @@ function Translator() {
                 // Handle successful response
                 // setText(data?.data);
                 // setMidTranslate(data?.data);
-                setText(data?.data?.replace(/^"|"$/g, ''));
-                setMidTranslate(data?.data?.replace(/^"|"$/g, ''));
+                setText(data?.data?.replace(/^['"]|['"]$/g, ''));
+                setMidTranslate(data?.data?.replace(/^['"]|['"]$/g, ''));
                 SetIsLoading(false);
             })
             .catch((error) => {
@@ -284,7 +284,7 @@ function Translator() {
             .then((data) => {
                 // Handle successful response
                 // setTargetTranslate(data?.data);
-                setTargetTranslate(data?.data?.replace(/^"|"$/g, ''));
+                setTargetTranslate(data?.data?.replace(/^['"]|['"]$/g, ''));
                 SetIsLoading2(false);
                 inputElement.value = "";
             })
@@ -345,7 +345,7 @@ function Translator() {
             })
             .then((data) => {
                 // Handle successful response
-                const cleanedData = data?.data?.replace(/^"|"$/g, '');
+                const cleanedData = data?.data?.replace(/^['"]|['"]$/g, '');
                 console.log(cleanedData)
                 // setTargetTranslate1(data?.data);
                 setTargetTranslate1(cleanedData);
@@ -383,7 +383,7 @@ function Translator() {
                             <textarea id='inputField11' ref={textareaRef1} placeholder="please type here" onChange={handleToCollectText1} onDoubleClick={handleToSingleTranslate} onKeyPress={handleKeyPress1} className="border-2 bg-white text-black border-slate-600 rounded-t-lg md:rounded-t-none md:rounded-tl-lg p-2  mt-2 md:ml-2 h-44  w-72 md:w-64 lg:w-72  block"></textarea>
                             <div className="border-2 border-slate-600 md:ml-2 sm:rounded-b-lg md:rounded-b-none md:rounded-bl-lg mb-2 mr-2 md:mr-0">
                                 <div className="flex justify-between items-center ml-2">
-                                    <AiOutlineCopy className="copyClass text-black" onClick={(e) => handleToCopyText(e)}></AiOutlineCopy>
+                                    <AiOutlineCopy className="copyClass text-black cursor-pointer" onClick={(e) => handleToCopyText(e)}></AiOutlineCopy>
                                     <CiMicrophoneOn className='text-black'></CiMicrophoneOn>
                                     <AiOutlineSound className='text-black'></AiOutlineSound>
                                     <div>
@@ -405,7 +405,7 @@ function Translator() {
                             </div>
                             <div className="border-2 border-slate-600 md:rounded-br-lg mr-2  mb-2">
                                 <div className="flex justify-between items-center ml-2 ">
-                                    <AiOutlineCopy className="copyClass text-black" onClick={(e) => handleToCopy22(e)}></AiOutlineCopy>
+                                    <AiOutlineCopy className="copyClass text-black cursor-pointer" onClick={(e) => handleToCopy22(e)}></AiOutlineCopy>
                                     <CiMicrophoneOn className='text-black'></CiMicrophoneOn>
                                     <AiOutlineSound className='text-black'></AiOutlineSound>
 
@@ -451,7 +451,7 @@ function Translator() {
                             <textarea id='inputField' ref={textareaRef} placeholder="please type here" onChange={handleToCollectText} onDoubleClick={handleToTranslate} onKeyPress={handleKeyPress} className="border-2 bg-white text-black border-slate-600 rounded-t-lg md:rounded-t-none md:rounded-tl-lg p-2  mt-2 md:ml-2 h-44  w-72 md:w-64 lg:w-72  block"></textarea>
                             <div className="border-2 border-slate-600 md:ml-2 sm:rounded-b-lg md:rounded-b-none md:rounded-bl-lg mb-2 mr-2 md:mr-0">
                                 <div className="flex justify-between items-center ml-2">
-                                    <AiOutlineCopy className="copyClass text-black" onClick={(e) => handleToCopyText(e)}></AiOutlineCopy>
+                                    <AiOutlineCopy className="copyClass text-black cursor-pointer" onClick={(e) => handleToCopyText(e)}></AiOutlineCopy>
                                     <CiMicrophoneOn className='text-black'></CiMicrophoneOn>
                                     <AiOutlineSound className='text-black'></AiOutlineSound>
                                     <div className="py-2 mr-2">
@@ -485,7 +485,7 @@ function Translator() {
                             </div>
                             <div className="border-2 border-slate-600  mb-2 mr-2 md:mr-0 ">
                                 <div className="flex justify-between items-center ml-2 ">
-                                    <AiOutlineCopy className="copyClass text-black" onClick={(e) => handleToCopy(e)}></AiOutlineCopy>
+                                    <AiOutlineCopy className="copyClass text-black cursor-pointer" onClick={(e) => handleToCopy(e)}></AiOutlineCopy>
                                     <CiMicrophoneOn className='text-black'></CiMicrophoneOn>
                                     <AiOutlineSound className='text-black'></AiOutlineSound>
                                     <div className="form-control">
@@ -510,7 +510,7 @@ function Translator() {
                             </div>
                             <div className="border-2 border-slate-600 md:rounded-br-lg mr-2  mb-2">
                                 <div className="flex justify-between items-center ml-2 ">
-                                    <AiOutlineCopy className="copyClass text-black" onClick={(e) => handleToCopy2(e)}></AiOutlineCopy>
+                                    <AiOutlineCopy className="copyClass text-black cursor-pointer" onClick={(e) => handleToCopy2(e)}></AiOutlineCopy>
                                     <CiMicrophoneOn className='text-black'></CiMicrophoneOn>
                                     <AiOutlineSound className='text-black'></AiOutlineSound>
 

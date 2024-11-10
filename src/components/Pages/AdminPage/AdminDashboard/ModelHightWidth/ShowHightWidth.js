@@ -78,6 +78,7 @@ const ShowHightWidth = () => {
                       <th className="border border-gray-400 px-4 py-2 text-white">Default Width</th>
                       <th className="border border-gray-400 px-4 py-2 text-white">Max Hight</th>
                       <th className="border border-gray-400 px-4 py-2 text-white">Max Width</th>
+                      <th className="border border-gray-400 px-4 py-2 text-white">Slide Mark</th>
                       <th className="border border-gray-400 px-4 py-2 text-white">command</th>
                       <th className="border border-gray-400 px-4 py-2 text-white">Actions</th>
                     </tr>
@@ -95,6 +96,7 @@ const ShowHightWidth = () => {
                           <td className="px-4 py-2 border">{element?.defaultWidth}</td>
                           <td className="px-4 py-2 border">{element?.maxHight}</td>
                           <td className="px-4 py-2 border">{element?.maxWidth}</td>
+                          <td className="px-4 py-2 border">{element?.sliderImageMark}</td>
                           <td className="px-4 py-2 border">{element?.command}</td>
                           <td className="px-4 py-2 border-r flex justify-center">
                             <MdDelete

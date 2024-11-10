@@ -129,7 +129,7 @@ const AddMallProducts = () => {
 
                 <div className=" h-screen overflow-y-scroll">
                     <div className="mx-2 my-3 grid grid-cols-7  text-start text-lg font-semibold bg-slate-300 px-2 py-2">
-                        <div className=" col-span-6 grid grid-cols-6">
+                        <div className=" col-span-6 grid grid-cols-8">
                             <p>
                                 Image
                             </p>
@@ -148,6 +148,12 @@ const AddMallProducts = () => {
 
                             <p className="">
                                 Show Type
+                            </p>
+                            <p className="">
+                                Show Mark
+                            </p>
+                            <p className="">
+                                Slide Mark
                             </p>
                         </div>
 
@@ -168,7 +174,7 @@ const AddMallProducts = () => {
                             filteredAllProduct?.map((product, index) => (
                                 // <Link to={`/admin/mallProduct/details/${product?.Model},`}>
                                 <div className="  mx-2 my-3 grid grid-cols-7  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">
-                                    <Link key={index} to={`/admin/eventProduct/details/${product?.modelNumber}}`} onClick={() => setProduct(product)} className=" col-span-6 grid grid-cols-6">
+                                    <Link key={index} to={`/admin/eventProduct/details/${product?.modelNumber}}`} onClick={() => setProduct(product)} className=" col-span-6 grid grid-cols-8">
                                         <img className=" h-10 w-10 rounded-full" src={`https://grozziieget.zjweiting.com:8033/tht/eventProductImages/${product.productImg}`} alt={product.productName} ></img>
 
                                         <p>
@@ -185,6 +191,12 @@ const AddMallProducts = () => {
                                         </p>
                                         <p className="">
                                             {product?.productImgRemark}
+                                        </p>
+                                        <p className="">
+                                            {product?.mark}
+                                        </p>
+                                        <p className="">
+                                            {product?.slideImageMark}
                                         </p>
                                     </Link>
 

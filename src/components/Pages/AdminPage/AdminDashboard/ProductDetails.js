@@ -44,6 +44,9 @@ function ProductDetails() {
     const [newProductImg, setNewProductImg] = useState(null);
     const [productImgLink, setProductImgLink] = useState(Product?.productImgLink);
     const [productImgRemark, setProductImgRemark] = useState(Product?.productImgRemark);
+    const [showingDataLink, setShowingDataLink] = useState(Product?.link);
+    const [showingDataMark, setShowingDataMark] = useState(Product?.mark);
+    const [slideImageMark, setSlideImageMark] = useState(Product?.slideImageMark);
     const [productCountryName, setProductCountryName] = useState(Product?.productCountryName);
     const [productName, setProductName] = useState(Product?.productName);
     const [printerColor, setPrinterColor] = useState(Product?.printerColor);
@@ -184,7 +187,7 @@ function ProductDetails() {
                 relatedImgRemark,
                 afterSalesText,
                 afterSalesInstruction,
-                inventoryText,
+                inventoryText
             };
 
             formData.append('updatedProduct', JSON.stringify(updatedProduct));
@@ -253,9 +256,13 @@ function ProductDetails() {
                 afterSalesText,
                 afterSalesInstruction,
                 inventoryText,
+                link: showingDataLink,
+                mark: showingDataMark,
+                slideImageMark,
             };
 
             // Make an API call to update the product
+            // const response = await axios.put(`http://localhost:2000/tht/${Product?.imgPath.split("/")[4]}/update/textInformation/${productId}`, { updatedProduct });
             const response = await axios.put(`https://grozziieget.zjweiting.com:8033/tht/${Product?.imgPath.split("/")[4]}/update/textInformation/${productId}`, { updatedProduct });
 
             // Check the response and handle accordingly
@@ -280,6 +287,9 @@ function ProductDetails() {
                 Product.afterSalesText = updatedProduct?.afterSalesText;
                 Product.afterSalesInstruction = updatedProduct?.afterSalesInstruction;
                 Product.inventoryText = updatedProduct?.inventoryText;
+                Product.link = updatedProduct?.link;
+                Product.mark = updatedProduct?.mark;
+                Product.slideImageMark = updatedProduct?.slideImageMark;
 
             } else {
                 console.error('Failed to update product:', response.data);
@@ -405,6 +415,19 @@ function ProductDetails() {
 
     const handleProductImageRemark = (e) => {
         setProductImgRemark(e.target.value);
+
+    }
+    const handleShowingDataLink = (e) => {
+        setShowingDataLink(e.target.value);
+
+    }
+    const handleSlideImageMark = (e) => {
+        setSlideImageMark(e.target.value);
+
+    }
+
+    const handleShowingDataMark = (e) => {
+        setShowingDataMark(e.target.value);
 
     }
     const handleProductCountryNameChange = (e) => {
@@ -555,7 +578,7 @@ function ProductDetails() {
         for (let i = 0; i < selectedInstructionImage.length; i++) {
             formData.append('images', selectedInstructionImage[i]);
         }
-        
+
         try {
             console.log("edit instructions images edit", productId);
             const response = await axios.put(`https://grozziieget.zjweiting.com:8033/tht/${Product?.imgPath.split("/")[4]}/updateInstructionsImages/${productId}`, formData, {
@@ -634,7 +657,6 @@ function ProductDetails() {
                                                         onChange={handleProductImageRemark}
                                                     ></textarea>
                                                 </div>
-
                                             </div>
 
                                             <div className="mb-2">
@@ -926,7 +948,48 @@ function ProductDetails() {
                                                     onChange={handleProductImageRemark}
                                                 ></textarea>
                                             </div>
+                                            <div className="mb-4 grid  grid-cols-3 text-start">
+                                                <label htmlFor="modelNumber" className="block col-span-1 text-gray-500 font-semibold mb-2">
+                                                    Showing Data Link
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    id="showingDataLink"
+                                                    className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                    value={showingDataLink}
+                                                    placeholder='Enter the Showing link'
+                                                    onChange={handleShowingDataLink}
 
+                                                />
+                                            </div>
+                                            <div className="mb-4">
+                                                <label htmlFor="productImageRemark" className="block text-start text-gray-700 font-bold mb-2">
+                                                    Showing Data Mark
+                                                </label>
+                                                <input
+                                                    type="number"
+                                                    id="ShowingDataMark"
+                                                    placeholder="Please Showing Data Mark"
+                                                    className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                    value={showingDataMark}
+                                                    onChange={handleShowingDataMark}
+
+                                                />
+                                            </div>
+                                            <div className="mb-4">
+                                                <label htmlFor="productImageRemark" className="block text-start text-gray-700 font-bold mb-2">
+                                                    Slide Image Mark
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    id="slideImageMark"
+                                                    placeholder="Please Showing Data Mark"
+                                                    className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                    value={slideImageMark}
+                                                    onChange={handleSlideImageMark}
+
+                                                />
+                                            </div>
                                         </div>
 
                                         <div className="mb-2">
@@ -1551,7 +1614,7 @@ function ProductDetails() {
                                             <input type="file"
                                                 onChange={handleInstructionVideoUpload} multiple
                                                 className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-2 px-3 lg:px-2 lg:ml-5 rounded-lg "
-                                                accept="video/*"/>
+                                                accept="video/*" />
 
                                             <div className="mt-8 text-right">
                                                 <button

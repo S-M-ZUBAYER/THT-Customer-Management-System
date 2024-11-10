@@ -29,7 +29,7 @@ const AddMallProducts = () => {
     //create useState To select any specific product
     const [selectedProduct, setSelectedProduct] = useState(null);
 
-    const [loading, setLoading ] = useState(true);
+    const [loading, setLoading] = useState(true);
     console.log(loading)
 
 
@@ -248,7 +248,7 @@ const AddMallProducts = () => {
 
                 <div className=" h-screen overflow-y-scroll">
                     <div className="mx-2 my-3 grid grid-cols-7  text-start text-lg font-semibold bg-slate-300 px-2 py-2">
-                        <div className=" col-span-6 grid grid-cols-5">
+                        <div className=" col-span-6 grid grid-cols-6">
                             <p>
                                 Image
                             </p>
@@ -264,6 +264,9 @@ const AddMallProducts = () => {
                             <p className="">
                                 Id
                             </p>
+                            <p className="">
+                                Show Mark
+                            </p>
                         </div>
 
                         <div className="flex items-center justify-around">
@@ -272,39 +275,42 @@ const AddMallProducts = () => {
                         </div>
                     </div>
                     {
-                    loading===true ?
-                        <DisplaySpinner></DisplaySpinner>
-                        :
-                        (
-                            filteredAllProduct?.length === 0
-                                ?
-                                <span className="text-xl font-bold text-red-400">No Mall Product Available</span>
-                                :
-                                filteredAllProduct?.map((product, index) => (
-                                    <div key={index} className="mx-2 my-3 grid grid-cols-7  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">
-                                        <Link to={`/admin/mallProduct/details/${product?.modelNumber}}`} onClick={() => setProduct(product)} className=" col-span-6 grid grid-cols-5">
-                                            <img className=" h-10 w-10 rounded-full" src={`https://grozziieget.zjweiting.com:8033/tht/mallProductImages/${product.productImg}`} alt={product.productName} ></img>
+                        loading === true ?
+                            <DisplaySpinner></DisplaySpinner>
+                            :
+                            (
+                                filteredAllProduct?.length === 0
+                                    ?
+                                    <span className="text-xl font-bold text-red-400">No Mall Product Available</span>
+                                    :
+                                    filteredAllProduct?.map((product, index) => (
+                                        <div key={index} className="mx-2 my-3 grid grid-cols-7  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">
+                                            <Link to={`/admin/mallProduct/details/${product?.modelNumber}}`} onClick={() => setProduct(product)} className=" col-span-6 grid grid-cols-6">
+                                                <img className=" h-10 w-10 rounded-full" src={`https://grozziieget.zjweiting.com:8033/tht/mallProductImages/${product.productImg}`} alt={product.productName} ></img>
 
-                                            <p>
-                                                {product?.productName}
-                                            </p>
-                                            <p className="">
-                                                {product?.modelNumber}
-                                            </p>
-                                            <p className="">
-                                                {product?.productCountryName}
-                                            </p>
-                                            <p className="">
-                                                {product?.id}
-                                            </p>
-                                        </Link>
+                                                <p>
+                                                    {product?.productName}
+                                                </p>
+                                                <p className="">
+                                                    {product?.modelNumber}
+                                                </p>
+                                                <p className="">
+                                                    {product?.productCountryName}
+                                                </p>
+                                                <p className="">
+                                                    {product?.id}
+                                                </p>
+                                                <p className="">
+                                                    {product?.mark}
+                                                </p>
+                                            </Link>
 
-                                        <div className="flex items-center justify-around">
-                                            
-                                            <RiDeleteBin7Line onClick={() => handleToDelete(product?.id)} className="hover:cursor-pointer hover:text-2xl"></RiDeleteBin7Line>
+                                            <div className="flex items-center justify-around">
+
+                                                <RiDeleteBin7Line onClick={() => handleToDelete(product?.id)} className="hover:cursor-pointer hover:text-2xl"></RiDeleteBin7Line>
+                                            </div>
                                         </div>
-                                    </div>
-                                )))}
+                                    )))}
 
 
                 </div>

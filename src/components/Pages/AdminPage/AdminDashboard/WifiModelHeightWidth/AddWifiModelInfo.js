@@ -21,6 +21,7 @@ function AddWifiModelHightWidth() {
   const [maxHeight, setMaxHeight] = useState('');
   const [maxWidth, setMaxWidth] = useState('');
   const [allModelInfo, setAllModelInfo] = useState([]);
+  const [sliderImageMark, setSliderImageMark] = useState('');
   const { loading, setLoading } = useContext(AuthContext)
 
   useEffect(() => {
@@ -88,7 +89,9 @@ function AddWifiModelHightWidth() {
     setMaxWidth(value);
   };
 
-
+  const handleSliderImageMarkChange = (e) => {
+    setSliderImageMark(e.target.value);
+  };
 
 
   const handleUpload = (event) => {
@@ -99,11 +102,11 @@ function AddWifiModelHightWidth() {
     }
 
     axios
-      // .post('http://localhost:2000/tht/wifiModelHightWidth/add', { PID: selectedPID, modelNo: selectedModelNo, maxHeight, maxWidth, defaultHeight, defaultWidth, type: selectedType, musicValue: selectedMusicStatus })
-      .post('https://grozziieget.zjweiting.com:8033/tht/wifiModelHightWidth/add', { PID: selectedPID, modelNo: selectedModelNo, maxHeight, maxWidth, defaultHeight, defaultWidth, type: selectedType, musicValue: selectedMusicStatus })
+      .post('http://localhost:2000/tht/wifiModelHightWidth/add', { PID: selectedPID, modelNo: selectedModelNo, maxHeight, maxWidth, defaultHeight, defaultWidth, type: selectedType, musicValue: selectedMusicStatus, sliderImageMark: sliderImageMark })
+      // .post('https://grozziieget.zjweiting.com:8033/tht/wifiModelHightWidth/add', { PID: selectedPID, modelNo: selectedModelNo, maxHeight, maxWidth, defaultHeight, defaultWidth, type: selectedType, musicValue: selectedMusicStatus, sliderImageMark: sliderImageMark })
       .then((res) => {
         if (res.data.status === "success") {
-          setAllModelInfo([...allModelInfo, { PID: selectedPID, modelNo: selectedModelNo, maxHeight, maxWidth, defaultHeight, defaultWidth, type: selectedType, musicValue: selectedMusicStatus }])
+          setAllModelInfo([...allModelInfo, { PID: selectedPID, modelNo: selectedModelNo, maxHeight, maxWidth, defaultHeight, defaultWidth, type: selectedType, musicValue: selectedMusicStatus, sliderImageMark }])
           toast.success("Model information uploaded successfully");
           setDefaultHeight('')
           setDefaultWidth('')
@@ -113,6 +116,7 @@ function AddWifiModelHightWidth() {
           setSelectedType('')
           setSelectedMusicStatus('')
           setSelectedPID('')
+          setSliderImageMark('')
         } else {
           toast.error("Model information uploaded failed");
         }
@@ -140,11 +144,7 @@ function AddWifiModelHightWidth() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState("");
 
-  // Handle opening and closing the modal
-  const HandleToEdit = (element) => {
-    setIsModalOpen(true);
-    setFormData(element);
-  }
+
   const closeModal = () => setIsModalOpen(false);
 
   // Handle form input change
@@ -232,7 +232,16 @@ function AddWifiModelHightWidth() {
             onChange={handleInputMusicChange}
             placeholder="Input Music Status"
           />
-
+          <div>
+            <p className="mb-3  mt-5">Slider Image Mark</p>
+            <input
+              type="text"
+              className="bg-white text-gray-800 mb-5 px-4 py-2 border rounded-md w-48 mr-2"
+              value={sliderImageMark}
+              onChange={handleSliderImageMarkChange}
+              placeholder="Enter Slider Image Mark"
+            />
+          </div>
 
           <p className="mb-3">Default H&W</p>
           <label className="mb-4 flex justify-center">
@@ -303,6 +312,7 @@ function AddWifiModelHightWidth() {
                         <th className="border border-gray-400 px-4 py-2 text-white">Max Hight</th>
                         <th className="border border-gray-400 px-4 py-2 text-white">Max Width</th>
                         <th className="border border-gray-400 px-4 py-2 text-white">Music Status</th>
+                        <th className="border border-gray-400 px-4 py-2 text-white">Slider Mark</th>
                         <th className="border border-gray-400 px-4 py-2 text-white">Actions</th>
                       </tr>
                     </thead>
@@ -321,12 +331,13 @@ function AddWifiModelHightWidth() {
                             <td className="px-4 py-2 border">{element.maxHeight}</td>
                             <td className="px-4 py-2 border">{element.maxWidth}</td>
                             <td className="px-4 py-2 border">{element.musicValue}</td>
+                            <td className="px-4 py-2 border">{element.sliderImageMark}</td>
                             <td className="px-4 py-2 border-r flex justify-center">
                               <MdDelete
                                 onClick={() => handleToDelete(element.id)}
                                 className="text-red-500 hover:cursor-pointer"
                               ></MdDelete>
-                              <CiEdit onClick={() => HandleToEdit(element)} className="text-green-500 hover:cursor-pointer ml-4" />
+
                             </td>
                           </tr>
                         ))
@@ -343,71 +354,7 @@ function AddWifiModelHightWidth() {
               </div>
         }
 
-        {isModalOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg mx-auto">
-              <h2 className="text-xl font-bold mb-4">Edit Model Details</h2>
-              <form onSubmit={handleFormSubmit}>
-                {/* Input fields for editing values in pairs */}
-                {Object.keys(formData).map((key, index) => {
-                  // Create pairs of data fields per row
-                  const nextKey = Object.keys(formData)[index + 1]; // Get the next field key
-                  return index % 2 === 0 && ( // Only render for even-indexed keys to create a row for each pair
-                    <div className="grid grid-cols-2 gap-4 mb-4" key={key}>
-                      {/* First input */}
-                      <div>
-                        <label className="block text-gray-700 font-semibold mb-1 capitalize">
-                          {key.replace(/([A-Z])/g, ' $1')}
-                        </label>
-                        <input
-                          type="text"
-                          name={key}
-                          value={formData[key]}
-                          onChange={handleModalInputChange}
-                          className="w-full border border-gray-300 p-2 rounded"
-                          readOnly={key === 'id'} // Make the input read-only if the name is 'id'
-                        />
-                      </div>
 
-                      {/* Second input (if exists) */}
-                      {nextKey && (
-                        <div>
-                          <label className="block text-gray-700 font-semibold mb-1 capitalize">
-                            {nextKey.replace(/([A-Z])/g, ' $1')}
-                          </label>
-                          <input
-                            type="text"
-                            name={nextKey}
-                            value={formData[nextKey]}
-                            onChange={handleModalInputChange}
-                            className="w-full border border-gray-300 p-2 rounded"
-                          />
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-
-                {/* Buttons */}
-                <div className="flex justify-end gap-4 mt-6">
-                  <button
-                    type="button"
-                    className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 my-10 px-4 ml-5 rounded-lg"
-                    onClick={closeModal}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-10 px-4 ml-5 rounded-lg"
-                  >
-                    Save Changes
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
 
 
       </div>

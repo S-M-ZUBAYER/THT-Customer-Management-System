@@ -39,7 +39,7 @@ const ShowColorImgList = ({ modelNumber, productId, categoryImage }) => {
 
 
     const handleToDeleteColorInfo = (id) => {
-console.log(id)
+        console.log(id)
         const confirmed = window.confirm('Are you sure you want to delete this color image information?');
         if (!confirmed) {
             return; // Cancel the deletion if the user clicks Cancel or closes the modal
@@ -89,7 +89,7 @@ console.log(id)
         setProductDescription(colorImage?.colorProductDescription);
         setStockQuantity(colorImage?.colorProductQuantity);
         setProductPrice(colorImage?.colorProductPrice)
-      
+
         setIsModalVisible(true);
     };
 
@@ -108,9 +108,10 @@ console.log(id)
                 colorProductQuantity: stockQuantity,
                 colorProductDescription: productDescription,
             };
-    
-            const response = await axios.put(`http://localhost:2000/tht/colorImg/edit/${colorId}`, updatedColorInfo);
-    
+
+            // const response = await axios.put(`http://localhost:2000/tht/colorImg/edit/${colorId}`, updatedColorInfo);
+            const response = await axios.put(`https://grozziieget.zjweiting.com:8033/tht/colorImg/edit/${colorId}`, updatedColorInfo);
+
             if (response.data.status === "success") {
                 toast.success('Color information updated successfully');
                 setIsModalVisible(false);
@@ -123,7 +124,7 @@ console.log(id)
             toast.error('An error occurred while updating color information:', error);
         }
     };
-    
+
 
 
 
@@ -271,7 +272,7 @@ console.log(id)
 
                                                     <div className="mt-8 text-right">
                                                         <button
-                                                            onClick={()=>handleModalSave(colorImage?.id)}
+                                                            onClick={() => handleModalSave(colorImage?.id)}
                                                             className="bg-blue-500 text-white  py-2 rounded-md mr-5 px-16 font-bold"
 
                                                         >

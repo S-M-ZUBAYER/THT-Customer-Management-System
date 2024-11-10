@@ -13,7 +13,7 @@ import { AuthContext } from '../../../context/UserContext';
 const Admin = () => {
 
     const { user } = useContext(AuthContext);
-    
+
 
 
     const [isOpen, setIsOpen] = useState(false);
@@ -39,6 +39,7 @@ const Admin = () => {
                                 <li><Link to='/admin/backgroundImg' className="sm:text-xs md:text-base text-gray-700">Add Background Image</Link></li>
                                 <li><Link to='/admin/mallProduct' className="sm:text-xs md:text-base text-gray-700">Add Mall Products</Link></li>
                                 <li><Link to='/admin/eventProduct' className="sm:text-xs md:text-base text-gray-700">Add Event Products</Link></li>
+                                <li><Link to='/admin/shopifyInfo' className="sm:text-xs md:text-base text-gray-700">Add Shopify & Others Info</Link></li>
                             </>
                         }
 

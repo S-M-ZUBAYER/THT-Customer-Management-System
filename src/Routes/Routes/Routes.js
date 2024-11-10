@@ -35,6 +35,7 @@ import AutomaticChat from "../../components/Pages/CustomerServicePage/AutomaticC
 import ImageResize from "../../components/Pages/AdminPage/AdminDashboard/ImageResize";
 import AddWifiModelHightWidth from "../../components/Pages/AdminPage/AdminDashboard/WifiModelHeightWidth/AddWifiModelInfo";
 import AutomaticChat_CN from "../../components/Pages/CustomerServicePage/AutomaticChat_CN";
+import ShopifyInfo from "../../components/Pages/AdminPage/AdminDashboard/ShopifyInfo";
 
 
 
@@ -156,6 +157,10 @@ export const routes = createBrowserRouter([
             {
                 path: "/admin/mallProduct",
                 element: <PrivateRoute><AddMallProducts></AddMallProducts></PrivateRoute>
+            },
+            {
+                path: "/admin/shopifyInfo",
+                element: <PrivateRoute><ShopifyInfo></ShopifyInfo></PrivateRoute>
             },
             {
                 path: "/admin/eventProduct",
