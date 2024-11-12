@@ -40,6 +40,7 @@ const Admin = () => {
                                 <li><Link to='/admin/mallProduct' className="sm:text-xs md:text-base text-gray-700">Add Mall Products</Link></li>
                                 <li><Link to='/admin/eventProduct' className="sm:text-xs md:text-base text-gray-700">Add Event Products</Link></li>
                                 <li><Link to='/admin/shopifyInfo' className="sm:text-xs md:text-base text-gray-700">Add Shopify & Others Info</Link></li>
+                                <li><Link to='/admin/userBaseBitmap' className="sm:text-xs md:text-base text-gray-700">User Base Bitmap</Link></li>
                             </>
                         }
 

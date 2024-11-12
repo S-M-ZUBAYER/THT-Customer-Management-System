@@ -36,6 +36,8 @@ import ImageResize from "../../components/Pages/AdminPage/AdminDashboard/ImageRe
 import AddWifiModelHightWidth from "../../components/Pages/AdminPage/AdminDashboard/WifiModelHeightWidth/AddWifiModelInfo";
 import AutomaticChat_CN from "../../components/Pages/CustomerServicePage/AutomaticChat_CN";
 import ShopifyInfo from "../../components/Pages/AdminPage/AdminDashboard/ShopifyInfo";
+import UserBaseBitmap from "../../components/Pages/AdminPage/UserBaseBitmap";
+import ShowBitmap from "../../components/Pages/AdminPage/ShowBitmap";
 
 
 
@@ -161,6 +163,14 @@ export const routes = createBrowserRouter([
             {
                 path: "/admin/shopifyInfo",
                 element: <PrivateRoute><ShopifyInfo></ShopifyInfo></PrivateRoute>
+            },
+            {
+                path: "/admin/userBaseBitmap",
+                element: <PrivateRoute><UserBaseBitmap></UserBaseBitmap></PrivateRoute>
+            },
+            {
+                path: "/admin/userBaseBitmap/showBitmap/:userId",
+                element: <PrivateRoute><ShowBitmap></ShowBitmap></PrivateRoute>
             },
             {
                 path: "/admin/eventProduct",

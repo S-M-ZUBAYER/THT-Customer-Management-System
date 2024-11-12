@@ -10,11 +10,14 @@ import BluetoothManyLogo from "../../../../Assets/Images/Admin/bluetoothMany.jpg
 import wifiLogo from "../../../../Assets/Images/Admin/wifi.jpg"
 import wifiManyLogo from "../../../../Assets/Images/Admin/WifiiMany.jpg"
 import loginLogo from "../../../../Assets/Images/Admin/login.jpg"
+import iosLogo from "../../../../Assets/Images/Admin/ios.jpeg"
+import androidLogo from "../../../../Assets/Images/Admin/Android.jpg"
 import allLoginLogo from "../../../../Assets/Images/Admin/Users.png"
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import BtnSpinner from '../../../Shared/Loading/BtnSpinner';
 import { HiRefresh } from "react-icons/hi";
+import DynamicBarChart from './DynamicBarChart';
 
 const AdminDashboard = () => {
   const { user } = useContext(AuthContext);
@@ -38,7 +41,9 @@ const AdminDashboard = () => {
   const [loginApiCount, setLoginApiCount] = useState("")
   const [modelLoginApiCountLoading, setModelLoginApiCountLoading] = useState(true)
   const [todayLoginApiCount, setTodayLoginApiCount] = useState("")
+  const [deviceTypeCount, setDeviceTypeCount] = useState("")
   const [todayLoginApiCountLoading, setTodayModelLoginApiCountLoading] = useState(true)
+  const [deviceTypeCountLoading, setDeviceTypeCountLoading] = useState(true)
 
 
   //got the current user data from database  
@@ -46,6 +51,7 @@ const AdminDashboard = () => {
     if (user?.email) {
       fetchUserByEmail();
       fetchQuestionsAnswerByEmail();
+      fetchDeviceTypeCount();
     }
   }, [user?.email]);
 
@@ -98,6 +104,21 @@ const AdminDashboard = () => {
       console.error("Error fetching API call count:", error);
     } finally {
       setModelLoginApiCountLoading(false);
+    }
+  };
+  const fetchDeviceTypeCount = async () => {
+    setModelLoginApiCountLoading(true);
+    try {
+      const response = await fetch('https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/logininfo/user/by/deviceType');
+      if (!response.ok) {
+        throw new Error('Failed to fetch API call count');
+      }
+      const data = await response.json();
+      setDeviceTypeCount(data);
+    } catch (error) {
+      console.error("Error fetching API call count:", error);
+    } finally {
+      setDeviceTypeCountLoading(false);
     }
   };
 
@@ -378,8 +399,94 @@ const AdminDashboard = () => {
               <p className="capitalize">Total Bluetooth Count</p>
             </div>
           </Link>
+          <Link data-aos="fade-left" data-aos-duration="2000" className="flex p-4 space-x-4 rounded-lg md:space-x-6 bg-gradient-to-t from-blue-900 via-slate-900 to-violet-700 text-gray-100">
+            <div className="flex justify-center p-2 align-middle rounded-lg sm:p-4 bg-violet-400">
+
+              <img className="w-16 h-16" src={androidLogo}></img>
+            </div>
+            <div className="flex flex-col justify-center align-middle">
+              <p className="text-3xl font-semibold leading-none">
+                {
+                  deviceTypeCountLoading ?
+                    <BtnSpinner></BtnSpinner>
+                    : deviceTypeCount?.Android
+                }
+                { }</p>
+              <p className="capitalize">Total Android Users</p>
+            </div>
+          </Link>
+          <Link data-aos="fade-left" data-aos-duration="2000" className="flex p-4 space-x-4 rounded-lg md:space-x-6 bg-gradient-to-t from-blue-900 via-slate-900 to-violet-700 text-gray-100">
+            <div className="flex justify-center p-2 align-middle rounded-lg sm:p-4 bg-violet-400">
+
+              <img className="w-16 h-16" src={iosLogo}></img>
+            </div>
+            <div className="flex flex-col justify-center align-middle">
+              <p className="text-3xl font-semibold leading-none">
+                {
+                  deviceTypeCountLoading ?
+                    <BtnSpinner></BtnSpinner>
+                    : deviceTypeCount?.IOS
+                }
+                { }</p>
+              <p className="capitalize">Total IOS Users</p>
+            </div>
+          </Link>
         </div>
       </section>
+      {/* Status Bar / Progress */}
+      {/* <div className="bg-white p-6 rounded-lg shadow-md">
+        <h3 className="text-xl font-semibold mb-4">Country wise user Progress bar</h3>
+        <div className="space-y-4">
+          <div className="flex justify-between items-center">
+            <span>Malaysia</span>
+            <span className="font-semibold">75%</span>
+          </div>
+          <div className="bg-gray-200 h-4 rounded-full">
+            <div className="bg-yellow-500 h-full rounded-full" style={{ width: "75%" }}></div>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <span>China</span>
+            <span className="font-semibold">80%</span>
+          </div>
+          <div className="bg-gray-200 h-4 rounded-full">
+            <div className="bg-blue-500 h-full rounded-full" style={{ width: "80%" }}></div>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <span>Philippines</span>
+            <span className="font-semibold">45%</span>
+          </div>
+          <div className="bg-gray-200 h-4 rounded-full">
+            <div className="bg-green-500 h-full rounded-full" style={{ width: "45%" }}></div>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <span>Indonesia</span>
+            <span className="font-semibold">65%</span>
+          </div>
+          <div className="bg-gray-200 h-4 rounded-full">
+            <div className="bg-purple-500 h-full rounded-full" style={{ width: "65%" }}></div>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <span>Thailand</span>
+            <span className="font-semibold">55%</span>
+          </div>
+          <div className="bg-gray-200 h-4 rounded-full">
+            <div className="bg-red-500 h-full rounded-full" style={{ width: "55%" }}></div>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <span>Vietnam</span>
+            <span className="font-semibold">70%</span>
+          </div>
+          <div className="bg-gray-200 h-4 rounded-full">
+            <div className="bg-pink-500 h-full rounded-full" style={{ width: "70%" }}></div>
+          </div>
+        </div>
+      </div> */}
+      <DynamicBarChart></DynamicBarChart>
     </div>
 
   );
