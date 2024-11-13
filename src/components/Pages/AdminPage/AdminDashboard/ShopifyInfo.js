@@ -15,7 +15,6 @@ const ShopifyInfo = () => {
         const fetchData = async () => {
             try {
                 const response = await axios.get('https://grozziieget.zjweiting.com:8033/tht/mallProducts/showShopify');
-                console.log(response, "response");
 
                 if (response.status === 200) {
                     const data = response.data[0];
@@ -113,7 +112,7 @@ const ShopifyInfo = () => {
                         </button>
                         <button
                             onClick={handleSave}
-                            className={`px-6 py-3 font-medium text-white rounded transition-colors ${loading ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700'}`}
+                            className={`px-6 py-3 font-medium text-white rounded transition-colors ${loading ? 'bg-gray-400' : 'bg-[#004368]  hover:bg-blue-700'}`}
                             disabled={loading}
                         >
                             {loading ? 'Saving...' : 'Save'}

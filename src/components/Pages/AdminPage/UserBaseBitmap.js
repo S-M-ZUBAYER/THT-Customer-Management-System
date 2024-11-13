@@ -34,7 +34,7 @@ const UserBaseBitmap = () => {
         fetchUsers();
     }, [page]); // Re-run effect when page changes
 
-    console.log(users);
+
 
     const openModal = (user) => {
         setSelectedUser(user);

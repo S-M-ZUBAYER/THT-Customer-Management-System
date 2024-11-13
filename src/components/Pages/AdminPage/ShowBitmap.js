@@ -8,7 +8,6 @@ const ShowBitmap = () => {
     const [userBitmaps, setUserBitmaps] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    console.log(userDetails);
     const fetchUserDetails = async () => {
         try {
             const response = await fetch(`https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/user/${userId}`);
@@ -37,7 +36,6 @@ const ShowBitmap = () => {
             setLoading(false);
         }
     };
-    console.log(userBitmaps);
 
     useEffect(() => {
         // Fetch user details from API
@@ -58,6 +56,8 @@ const ShowBitmap = () => {
     if (!userDetails) {
         return <div>No user details available</div>;
     }
+
+
 
     return (
         <div className="p-6 min-h-screen  text-slate-500">
