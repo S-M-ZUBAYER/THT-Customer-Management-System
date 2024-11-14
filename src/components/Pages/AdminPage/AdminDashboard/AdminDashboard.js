@@ -1,22 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Dashboard from './Dashboard';// Assume BtnSpinner is a reusable spinner component for loading states
 import { fetchData } from './apiService'; // Utility for fetching data
 import usersLogo from "../../../../Assets/Images/Admin/Users.png"
 import IconsLogo from "../../../../Assets/Images/Admin/icons.png"
 import mallLogo from "../../../../Assets/Images/Admin/Mall.png"
 import eventLogo from "../../../../Assets/Images/Admin/Event.png"
-import QALogo from "../../../../Assets/Images/Admin/Q&A.jpg"
 import BluetoothLogo from "../../../../Assets/Images/Admin/bluetooth.jpg"
-import BluetoothManyLogo from "../../../../Assets/Images/Admin/bluetoothMany.jpg"
 import wifiLogo from "../../../../Assets/Images/Admin/wifi.jpg"
-import wifiManyLogo from "../../../../Assets/Images/Admin/WifiiMany.jpg"
 import loginLogo from "../../../../Assets/Images/Admin/login.jpg"
 import iosLogo from "../../../../Assets/Images/Admin/ios.jpeg"
 import androidLogo from "../../../../Assets/Images/Admin/Android.jpg"
-import allLoginLogo from "../../../../Assets/Images/Admin/Users.png"
 import axios from 'axios';
+import { AuthContext } from '../../../../context/UserContext';
 const AdminDashboard = () => {
-
+  const { user } = useContext(AuthContext);
   const [userInfo, setUserInfo] = useState(null);
   const [allUsers, setAllUsers] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -27,6 +24,7 @@ const AdminDashboard = () => {
   const [modelApiCount, setModelApiCount] = useState({});
   const [deviceTypeCount, setDeviceTypeCount] = useState({});
   const [deviceTypeTotalCount, setDeviceTypeTotalCount] = useState({});
+  const [totalAppUser, setTotalAppUser] = useState(0);
 
   const [loading, setLoading] = useState({
     userLoading: true,
@@ -38,6 +36,7 @@ const AdminDashboard = () => {
     modelApiCountLoading: true,
     deviceTypeCountLoading: true,
     deviceTypeTotalCountLoading: true,
+    totalAppUserLoading: true,
   });
 
   const today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
@@ -52,10 +51,11 @@ const AdminDashboard = () => {
     fetchData('https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/logininfo/total/sum', setLoginApiCount, 'modelLoginApiCountLoading', setLoading);
     fetchData('https://grozziieget.zjweiting.com:8033/tht/apiCallCount', setModelApiCount, 'modelApiCountLoading', setLoading);
     fetchData('https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/logininfo/user/by/countrywise/deviceType', setDeviceTypeCount, 'deviceTypeCountLoading', setLoading);
-    fetchData('https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/logininfo/user/by/deviceType', setDeviceTypeTotalCount, 'deviceTypeCountTotalLoading', setLoading);
+    fetchData('https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/logininfo/user/by/deviceType', setDeviceTypeTotalCount, 'deviceTypeTotalCountLoading', setLoading);
+    fetchData('https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/user/total/count', setTotalAppUser, 'totalAppUserLoading', setLoading);
   }, []);
 
-
+  console.log(deviceTypeTotalCount, loading.deviceTypeTotalCountLoading);
 
 
   const handleCountRefresh = async () => {
@@ -66,8 +66,11 @@ const AdminDashboard = () => {
 
 
   return (
-    <div className="admin-dashboard">
+    <div className="admin-dashboard bg-[#FAFAFB]">
       <Dashboard
+        user={user}
+        totalAppUser={totalAppUser}
+        TotalAppUserLoading={loading.totalAppUserLoading}
         userInfo={userInfo}
         handleCount={handleCountRefresh}
         userLoading={loading.userLoading}
@@ -94,9 +97,7 @@ const AdminDashboard = () => {
         eventLogo={eventLogo}
         loginLogo={loginLogo}
         wifiLogo={wifiLogo}
-        wifiManyLogo={wifiManyLogo}
         BluetoothLogo={BluetoothLogo}
-        BluetoothManyLogo={BluetoothManyLogo}
         androidLogo={androidLogo}
         iosLogo={iosLogo}
       />

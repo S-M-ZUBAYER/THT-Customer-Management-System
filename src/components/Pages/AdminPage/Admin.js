@@ -46,7 +46,7 @@ const Admin = () => {
 
                     </ul>
                 </div>
-                <div className="col-span-5 lg:col-span-4 shadow-lg rounded-lg mb-10">
+                <div className="col-span-5 lg:col-span-4 shadow-lg rounded-lg " >
 
 
                     <Outlet></Outlet>

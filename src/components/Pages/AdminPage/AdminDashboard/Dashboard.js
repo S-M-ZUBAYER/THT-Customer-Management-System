@@ -1,11 +1,17 @@
 import { Link } from 'react-router-dom';
 import { HiRefresh } from 'react-icons/hi';
+import { IoIosRefresh } from "react-icons/io";
 import BtnSpinner from '../../../Shared/Loading/BtnSpinner';
-import DynamicBarChart from './DynamicBarChart';
-import DynamicBarChart2 from './DynamicBarChart2';
+import DynamicBarChart from './DeviceTypeChart';
+import DynamicBarChart2 from './PrinterModelChart';
+import DeviceTypeChart from './DeviceTypeChart';
+import PrinterModelChart from './PrinterModelChart';
 
 const Dashboard = ({
+    user,
     userInfo,
+    totalAppUser,
+    totalAppUserLoading,
     handleCount,
     userLoading,
     allUsers,
@@ -38,64 +44,129 @@ const Dashboard = ({
     iosLogo,
 }) => {
 
+    const singleCard = [
+        { link: '/admin/users', logo: usersLogo, label: 'Total User', count: userLoading ? <BtnSpinner /> : allUsers?.length || 0 },
+        { link: '/admin/icon', logo: IconsLogo, label: 'Icon Categories', count: categoriesLoading ? <BtnSpinner /> : categories?.length || 0 },
+        { link: '/admin/mallProduct', logo: mallLogo, label: 'Mall Product', count: mallLoading ? <BtnSpinner /> : mallProduct?.length || 0 },
+        { link: '/admin/eventProduct', logo: eventLogo, label: 'Event Product', count: eventLoading ? <BtnSpinner /> : eventProduct?.length || 0 },
+        { logo: androidLogo, label: 'Android User', count: deviceTypeTotalCountLoading ? <BtnSpinner /> : deviceTypeTotalCount.Android || 0 },
+        { logo: iosLogo, label: 'IOS User', count: deviceTypeTotalCountLoading ? <BtnSpinner /> : deviceTypeTotalCount.IOS || 0 }
+    ];
+
+    const secondRowCard = [
+        {
+            title: "Log In Count",
+            logo: loginLogo,
+            data: [{ logo: loginLogo, label: 'Today Log In', count: todayLoginApiCountLoading ? <BtnSpinner /> : todayLoginApiCount },
+            { logo: usersLogo, label: 'Total Log In', count: modelLoginApiCountLoading ? <BtnSpinner /> : loginApiCount },
+
+            ]
+        },
+        {
+            title: "Wi-Fi",
+            logo: wifiLogo,
+            data: [{ logo: wifiLogo, label: 'Today Wi-fi Count', count: modelApiCountLoading ? <BtnSpinner /> : modelApiCount?.wifiCount },
+            { logo: wifiManyLogo, label: 'Total Wi-fi Count', count: modelApiCountLoading ? <BtnSpinner /> : modelApiCount?.wifiTotalCount },
+
+            ]
+        },
+        {
+            title: "Bluetooth",
+            logo: BluetoothLogo,
+            data: [{ logo: BluetoothLogo, label: 'Today Bluetooth Count', count: modelApiCountLoading ? <BtnSpinner /> : modelApiCount?.bluetoothCount },
+            { logo: BluetoothManyLogo, label: 'Total Bluetooth Count', count: modelApiCountLoading ? <BtnSpinner /> : modelApiCount?.bluetoothTotalCount },
+
+            ]
+        },
+    ]
+
 
     return (
         <div>
-            {/* Overview Section */}
-            <section className="relative p-6 py-6 bg-white pt-12 text-gray-800 mb-16 rounded-lg shadow-lg">
-                <button
-                    onClick={handleCount}
-                    className="absolute text-3xl top-4 right-4 bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
-                >
-                    <HiRefresh />
-                </button>
+            <div className="flex justify-between items-start pt-5">
+                <section className="ml-5 flex justify-start items-center">
+                    <div>
+                        <img className="w-20 h-20 rounded-full" src={user?.image} alt={`${user?.name} logo`} />
+                    </div>
+                    <div className="text-start ml-2">
+                        <p className="font-base text-base text-black">Welcome to your dashboard</p>
+                        <p className="font-bold text-2xl">{user?.name}</p>
+                    </div>
 
-                <div data-aos="fade-down" data-aos-duration="2000" className="mb-5 mt-5">
-                    <h2 className="text-3xl text-gray-500 font-bold mb-5">Short Overview</h2>
-                    <p className="text-gray-700 text-base font-semibold mb-8">
-                        THT-Space Electrical Company Ltd. is a leading manufacturer of printing and attendance check equipment. With a factory located in China, the company produces a range of products including dot printers, thermal printers, attendance check clocks, and binding machines.
-                    </p>
+                </section>
+                <div className="pt-2  pr-6">
+                    <button onClick={handleCount} className="flex justify-center items-center bg-white py-1 px-2 rounded-xl cursor-pointer">
+                        <IoIosRefresh />
+                        <p className="ml-1 cursor-pointer"> Refresh</p>
+                    </button>
                 </div>
+            </div>
 
-                {/* Cards Section */}
-                <div className="container grid grid-cols-1 gap-6 mx-auto sm:grid-cols-2 xl:grid-cols-4">
-                    {/* Card Item Template */}
-                    {[
-                        { link: '/admin/users', logo: usersLogo, label: 'Total Users', count: userLoading ? <BtnSpinner /> : allUsers?.length },
-                        { link: '/admin/icon', logo: IconsLogo, label: 'Total Icons Category', count: categoriesLoading ? <BtnSpinner /> : categories?.length },
-                        { link: '/admin/mallProduct', logo: mallLogo, label: 'Total Mall Product', count: mallLoading ? <BtnSpinner /> : mallProduct?.length },
-                        { link: '/admin/eventProduct', logo: eventLogo, label: 'Total Event Product', count: eventLoading ? <BtnSpinner /> : eventProduct?.length },
-                        { logo: loginLogo, label: 'Today Login Count', count: todayLoginApiCountLoading ? <BtnSpinner /> : todayLoginApiCount },
-                        { logo: usersLogo, label: 'Total Login Count', count: modelLoginApiCountLoading ? <BtnSpinner /> : loginApiCount },
-                        { logo: wifiLogo, label: 'Today Wifi Count', count: modelApiCountLoading ? <BtnSpinner /> : modelApiCount?.wifiCount },
-                        { logo: wifiManyLogo, label: 'Total Wifi Count', count: modelApiCountLoading ? <BtnSpinner /> : modelApiCount?.wifiTotalCount },
-                        { logo: BluetoothLogo, label: 'Today Bluetooth Count', count: modelApiCountLoading ? <BtnSpinner /> : modelApiCount?.bluetoothCount },
-                        { logo: BluetoothManyLogo, label: 'Total Bluetooth Count', count: modelApiCountLoading ? <BtnSpinner /> : modelApiCount?.bluetoothTotalCount },
-                        { logo: androidLogo, label: 'Total Android Users', count: deviceTypeTotalCountLoading ? <BtnSpinner /> : deviceTypeTotalCount?.Android },
-                        { logo: iosLogo, label: 'Total IOS Users', count: deviceTypeTotalCountLoading ? <BtnSpinner /> : deviceTypeTotalCount?.IOS },
-                    ].map((item, index) => (
+
+            <section className="relative p-6 py-6 pt-7 text-gray-800 mb-16 ">
+
+
+                <div className="container mb-6 grid grid-cols-2 mx-auto sm:grid-cols-2 xl:grid-cols-6 md:grid-cols-4 gap-3 xl:mb-3">
+
+                    {singleCard?.map((item, index) => (
                         <Link
                             key={index}
                             to={item.link || '#'}
                             data-aos={index % 2 === 0 ? "fade-right" : "fade-left"}
                             data-aos-duration="2000"
-                            className="flex p-4 space-x-4 rounded-lg md:space-x-6 bg-white text-gray-800 shadow-md hover:shadow-lg transition-shadow"
+                            className="flex w-48 h-24 justify-start items-center rounded-2xl  bg-white text-gray-800 shadow-slate-100 shadow-md hover:shadow-lg transition-shadow md:mb-2 sm:w-full"
                         >
-                            <div className="flex justify-center p-2 align-middle rounded-lg sm:p-4 bg-gray-100">
-                                <img className="w-16 h-16" src={item.logo} alt={`${item.label} logo`} />
+                            <div className="flex justify-center items-center pl-3 ">
+                                <img className="w-12 h-12 rounded-full " src={item.logo} alt={`${item.label} logo`} />
                             </div>
-                            <div className="flex flex-col justify-center align-middle">
-                                <p className="text-3xl font-semibold leading-none">{item.count}</p>
-                                <p className="capitalize">{item.label}</p>
+                            <div className="flex flex-col justify-start items-center pl-2">
+                                <p className="capitalize font-normal">{item.label}</p>
+                                <p className="text-2xl font-bold text-start w-full">{item.count}</p>
                             </div>
                         </Link>
                     ))}
                 </div>
+                <div className="container grid grid-cols-1 mt-6 md:mt-0  sm:grid-cols-2 xl:grid-cols-3 xl:mt-0 gap-6 mx-auto">
+                    {secondRowCard.map((item, index) => (
+                        <div
+                            key={index}
+                            data-aos={index % 2 === 0 ? "fade-right" : "fade-left"}
+                            data-aos-duration="2000"
+                            className="flex flex-col p-6 bg-white rounded-2xl shadow-md shadow-slate-100 hover:shadow-lg transition-shadow"
+                        >
+                            {/* Icon and Title */}
+                            <div className="flex items-center space-x-4 mb-4">
+                                <div className="">
+                                    <img className="w-12 h-12" src={item.logo} alt={`${item.title} logo`} />
+                                </div>
+                                <p className="text-2xl font-semibold text-gray-500">{item.title}</p>
+                            </div>
+
+                            {/* Data */}
+                            <div className="flex justify-start gap-10 pl-1">
+                                {item.data.map((dataItem, dataIndex) => (
+                                    <div key={dataIndex} className="flex flex-col items-start">
+                                        <p className="text-sm font-medium text-gray-800">{dataItem.label}</p>
+                                        <p className="text-2xl font-bold text-gray-800">{dataItem.count}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </section>
-            <DynamicBarChart
+            <div className="grid grid-cols-2 gap-6 px-5 pb-10">
+                <DeviceTypeChart
+                    totalAppUser={totalAppUser}
+                    totalAppUserLoading={totalAppUserLoading}
+                    deviceTypeCount={deviceTypeCount}
+                />
+                <PrinterModelChart />
+            </div>
+            {/* <DynamicBarChart
                 deviceTypeCount={deviceTypeCount}
             />
-            <DynamicBarChart2 />
+            <DynamicBarChart2 /> */}
         </div>
 
     )
