@@ -140,8 +140,11 @@ const PrinterModelChart = () => {
     //         if (!response.ok) throw new Error('Failed to fetch printer model data');
     //         const data = await response.json();
     //         console.log(data);
-
-    //         setPrinterModels(data);
+    //         const printerModels = Object.entries(data).map(([model, count]) => ({
+    //             model,
+    //             count,
+    //         }));
+    //         setPrinterModels(printerModels);
     //     } catch (error) {
     //         console.error("Error fetching printer model data:", error);
     //     } finally {

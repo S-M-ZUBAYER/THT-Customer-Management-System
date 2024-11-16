@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ShowPaymentPage from './ShowPaymentPage';
 
 const UserBaseBitmap = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -188,6 +189,7 @@ const UserBaseBitmap = () => {
                     </div>
                 </div>
             )}
+            <ShowPaymentPage></ShowPaymentPage>
         </div>
     );
 };
