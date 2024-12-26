@@ -38,6 +38,7 @@ import AutomaticChat_CN from "../../components/Pages/CustomerServicePage/Automat
 import ShopifyInfo from "../../components/Pages/AdminPage/AdminDashboard/ShopifyInfo";
 import UserBaseBitmap from "../../components/Pages/AdminPage/UserBaseBitmap";
 import ShowBitmap from "../../components/Pages/AdminPage/ShowBitmap";
+import PDFPaymentInfo from "../../components/Pages/AdminPage/AdminDashboard/PDFPaymentInfo";
 
 
 

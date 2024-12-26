@@ -3,6 +3,8 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import VersionInfo from './VersionInfo';
+import PDFPaymentInfo from './PDFPaymentInfo';
+import CropPaymentInfo from './CropPaymentInfo';
 
 const ShopifyInfo = () => {
     const [mark, setMark] = useState('');
@@ -86,7 +88,7 @@ const ShopifyInfo = () => {
                             type="number"
                             value={mark}
                             onChange={(e) => setMark(e.target.value)}
-                            className="p-3 border border-gray-300 rounded w-full"
+                            className="p-3 bg-white text-black border border-gray-300 rounded w-full"
                             placeholder="Enter mark"
                         />
                     </section>
@@ -97,7 +99,7 @@ const ShopifyInfo = () => {
                             type="url"
                             value={link}
                             onChange={(e) => setLink(e.target.value)}
-                            className="p-3 border border-gray-300 rounded w-full"
+                            className="p-3 bg-white text-black border border-gray-300 rounded w-full"
                             placeholder="Enter Shopify link"
                         />
                     </section>
@@ -105,7 +107,7 @@ const ShopifyInfo = () => {
                     <div className="flex justify-between mt-8">
                         <button
                             onClick={handleCancel}
-                            className="px-6 py-3 font-medium bg-gray-300 rounded hover:bg-gray-400 transition-colors"
+                            className="px-6 py-3 text-white font-medium bg-gray-800 rounded hover:bg-gray-500 transition-colors"
                             disabled={loading}
                         >
                             Cancel
@@ -133,6 +135,8 @@ const ShopifyInfo = () => {
                 </div>
             </div>
             <VersionInfo></VersionInfo>
+            <PDFPaymentInfo></PDFPaymentInfo>
+            <CropPaymentInfo></CropPaymentInfo>
         </div>
     );
 };

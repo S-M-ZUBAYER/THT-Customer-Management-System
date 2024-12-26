@@ -19,6 +19,21 @@ const VersionInfo = () => {
     const [iosVersionMark, setIosVersionMark] = useState(null);
     const [iosLoading, setIosLoading] = useState(false);
 
+    const [chineseAppVersion, setChineseAppVersion] = useState('');
+    const [chineseAndroidId, setChineseAndroidId] = useState('');
+    const [chineseReleaseNotes, setChineseReleaseNotes] = useState('');
+    const [chineseDownloadUrl, setChineseDownloadUrl] = useState('');
+    const [chineseLoading, setChineseLoading] = useState(false);
+    const [chineseAppData, setChineseAppData] = useState(null);
+    const [chineseVersionMark, setChineseVersionMark] = useState(null);
+    const [chineseIosAppVersion, setChineseIosAppVersion] = useState('');
+    const [chineseIosId, setChineseIosId] = useState('');
+    const [chineseIosReleaseNotes, setChineseIosReleaseNotes] = useState('');
+    const [chineseIosDownloadUrl, setChineseIosDownloadUrl] = useState('');
+    const [chineseIosAppData, setChineseIosAppData] = useState(null);
+    const [chineseIosVersionMark, setChineseIosVersionMark] = useState(null);
+    const [chineseIosLoading, setChineseIosLoading] = useState(false);
+
     useEffect(() => {
         // Fetch initial data
         const fetchData = async () => {
@@ -42,6 +57,20 @@ const VersionInfo = () => {
                     setIosVersionMark(data2?.versionMark)
                     setIosId(data2?.id)
                     setIosAppData(data2);
+                    const data3 = response.data[2];
+                    setChineseIosAppVersion(data3?.appVersion);
+                    setChineseIosReleaseNotes(data3?.releaseNotes);
+                    setChineseIosDownloadUrl(data3?.downloadUrl);
+                    setChineseIosVersionMark(data3?.versionMark)
+                    setChineseIosId(data3?.id)
+                    setChineseIosAppData(data3);
+                    const data4 = response.data[3];
+                    setChineseAppVersion(data4?.appVersion);
+                    setChineseReleaseNotes(data4?.releaseNotes);
+                    setChineseDownloadUrl(data4?.downloadUrl);
+                    setChineseVersionMark(data4?.versionMark)
+                    setChineseAndroidId(data4?.id)
+                    setChineseAppData(data4);
                 } else {
                     toast.error('Failed to load data');
                 }
@@ -68,7 +97,22 @@ const VersionInfo = () => {
         toast.info('Inputs cleared');
     };
 
-    const handleSave = async () => {
+    const handleChineseCancel = () => {
+        setChineseAppVersion('');
+        setChineseReleaseNotes('');
+        setChineseDownloadUrl('');
+        setChineseVersionMark('');
+        toast.info('Inputs cleared');
+    };
+    const handleChineseIosCancel = () => {
+        setChineseIosAppVersion('');
+        setChineseIosReleaseNotes('');
+        setChineseIosDownloadUrl('');
+        setChineseIosVersionMark("");
+        toast.info('Inputs cleared');
+    };
+
+    const handleAppSave = async () => {
         console.log("Android");
 
         // Validate inputs
@@ -157,7 +201,102 @@ const VersionInfo = () => {
         }
     };
 
+    const handleChineseAppSave = async () => {
+        console.log("Chinese Android");
 
+        // Validate inputs
+        if (!chineseAppVersion) {
+            toast.error('Please enter the Chinese app version');
+            return;
+        }
+        if (!chineseReleaseNotes) {
+            toast.error('Please enter chinese release notes');
+            return;
+        }
+        if (!chineseDownloadUrl || !/^https?:\/\/[^\s$.?#].[^\s]*$/.test(chineseDownloadUrl)) {
+            toast.error('Please enter a valid URL for the chinese download link');
+            return;
+        }
+        console.log({
+            chineseAppVersion,
+            chineseReleaseNotes,
+            chineseDownloadUrl,
+            chineseVersionMark
+        });
+        setChineseLoading(true);
+        try {
+            // const response = await axios.put(`http://localhost:2000/tht/version/update/${androidId}`, {
+            const response = await axios.put(`https://grozziieget.zjweiting.com:8033/tht/version/update/${chineseAndroidId}`, {
+                appVersion: chineseAppVersion,
+                releaseNotes: chineseReleaseNotes,
+                downloadUrl: chineseDownloadUrl,
+                versionMark: chineseVersionMark
+            });
+
+
+            if (response.status === 200) {
+                toast.success('Data saved successfully!');
+                setChineseAppData({
+                    id: 1,
+                    appVersion: chineseAppVersion,
+                    releaseNotes: chineseReleaseNotes,
+                    downloadUrl: chineseDownloadUrl,
+                    versionMark: chineseVersionMark
+                });
+                handleChineseCancel(); // Clear inputs after successful save
+            } else {
+                toast.error('Failed to save data');
+            }
+        } catch (error) {
+            toast.error('An error occurred while saving data');
+            console.error(error);
+        } finally {
+            setChineseLoading(false);
+        }
+    };
+
+
+    const handleChineseIosSave = async () => {
+
+        // Validate inputs
+        if (!chineseIosAppVersion) {
+            toast.error('Please enter the Chinese ios app version');
+            return;
+        }
+        if (!iosReleaseNotes) {
+            toast.error('Please enter Chinese ios release notes');
+            return;
+        }
+        if (!chineseIosDownloadUrl || !/^https?:\/\/[^\s$.?#].[^\s]*$/.test(chineseIosDownloadUrl)) {
+            toast.error('Please enter a valid URL for the chinese download link');
+            return;
+        }
+
+        setChineseIosLoading(true);
+        try {
+            // const response = await axios.put(`http://localhost:2000/tht/version/update/${iosId}`, {
+            const response = await axios.put(`https://grozziieget.zjweiting.com:8033/tht/version/update/${chineseIosId}`, {
+                appVersion: chineseIosAppVersion,
+                releaseNotes: chineseIosReleaseNotes,
+                downloadUrl: chineseIosDownloadUrl,
+                versionMark: chineseIosVersionMark
+
+            });
+
+            if (response.status === 200) {
+                toast.success('Data saved successfully!');
+                setChineseIosAppData({ id: 2, appVersion: chineseIosAppVersion, releaseNotes: chineseIosReleaseNotes, downloadUrl: chineseIosDownloadUrl, versionMark: chineseIosVersionMark });
+                handleChineseIosCancel(); // Clear inputs after successful save
+            } else {
+                toast.error('Failed to save data');
+            }
+        } catch (error) {
+            toast.error('An error occurred while saving data');
+            console.error(error);
+        } finally {
+            setChineseIosLoading(false);
+        }
+    };
 
 
     return (
@@ -165,7 +304,7 @@ const VersionInfo = () => {
             <div className="flex justify-center items-center min-h-screen bg-gray-100">
                 <div className="p-8 max-w-2xl w-full mx-auto bg-gray-50">
                     <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
-                        Android Application Information
+                        Global Android Application Information
                     </h2>
 
                     <section className="mb-8">
@@ -174,7 +313,7 @@ const VersionInfo = () => {
                             type="text"
                             value={appVersion}
                             onChange={(e) => setAppVersion(e.target.value)}
-                            className="p-3 border border-gray-300 rounded w-full"
+                            className="p-3 bg-white text-black border border-gray-300 rounded w-full"
                             placeholder="Enter app version"
                         />
                     </section>
@@ -184,7 +323,7 @@ const VersionInfo = () => {
                         <textarea
                             value={releaseNotes}
                             onChange={(e) => setReleaseNotes(e.target.value)}
-                            className="p-3 border border-gray-300 rounded w-full"
+                            className="p-3 bg-white text-black border border-gray-300 rounded w-full"
                             placeholder="Enter release notes"
                             rows="4"
                         />
@@ -196,7 +335,7 @@ const VersionInfo = () => {
                             type="url"
                             value={downloadUrl}
                             onChange={(e) => setDownloadUrl(e.target.value)}
-                            className="p-3 border border-gray-300 rounded w-full"
+                            className="p-3 bg-white text-black border border-gray-300 rounded w-full"
                             placeholder="Enter download URL"
                         />
                     </section>
@@ -206,7 +345,7 @@ const VersionInfo = () => {
                             type="url"
                             value={versionMark}
                             onChange={(e) => setVersionMark(e.target.value)}
-                            className="p-3 border border-gray-300 rounded w-full"
+                            className="p-3 bg-white text-black border border-gray-300 rounded w-full"
                             placeholder="Enter download URL"
                         />
                     </section>
@@ -214,13 +353,13 @@ const VersionInfo = () => {
                     <div className="flex justify-between mt-8">
                         <button
                             onClick={handleCancel}
-                            className="px-6 py-3 font-medium bg-gray-300 rounded hover:bg-gray-400 transition-colors"
+                            className="px-6 py-3 font-medium bg-gray-800 text-white rounded hover:bg-gray-600 transition-colors"
                             disabled={loading}
                         >
                             Cancel
                         </button>
                         <button
-                            onClick={handleSave}
+                            onClick={handleAppSave}
                             className={`px-6 py-3 font-medium text-white rounded transition-colors ${loading ? 'bg-gray-400' : 'bg-[#004368]  hover:bg-blue-700'}`}
                             disabled={loading}
                         >
@@ -246,7 +385,7 @@ const VersionInfo = () => {
             <div className="flex justify-center items-center min-h-screen bg-gray-100 pt-32">
                 <div className="p-8 max-w-2xl w-full mx-auto bg-gray-50">
                     <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
-                        Ios Application Information
+                        Global Ios Application Information
                     </h2>
 
                     <section className="mb-8">
@@ -255,7 +394,7 @@ const VersionInfo = () => {
                             type="text"
                             value={iosAppVersion}
                             onChange={(e) => setIosAppVersion(e.target.value)}
-                            className="p-3 border border-gray-300 rounded w-full"
+                            className="p-3 bg-white text-black border border-gray-300 rounded w-full"
                             placeholder="Enter app version"
                         />
                     </section>
@@ -265,7 +404,7 @@ const VersionInfo = () => {
                         <textarea
                             value={iosReleaseNotes}
                             onChange={(e) => setIosReleaseNotes(e.target.value)}
-                            className="p-3 border border-gray-300 rounded w-full"
+                            className="p-3 bg-white text-black border border-gray-300 rounded w-full"
                             placeholder="Enter release notes"
                             rows="4"
                         />
@@ -277,7 +416,7 @@ const VersionInfo = () => {
                             type="url"
                             value={iosDownloadUrl}
                             onChange={(e) => setIosDownloadUrl(e.target.value)}
-                            className="p-3 border border-gray-300 rounded w-full"
+                            className="p-3 bg-white text-black border border-gray-300 rounded w-full"
                             placeholder="Enter download URL"
                         />
                     </section>
@@ -287,7 +426,7 @@ const VersionInfo = () => {
                             type="url"
                             value={iosVersionMark}
                             onChange={(e) => setIosVersionMark(e.target.value)}
-                            className="p-3 border border-gray-300 rounded w-full"
+                            className="p-3 bg-white text-black border border-gray-300 rounded w-full"
                             placeholder="Enter download URL"
                         />
                     </section>
@@ -295,7 +434,7 @@ const VersionInfo = () => {
                     <div className="flex justify-between mt-8">
                         <button
                             onClick={handleIosCancel}
-                            className="px-6 py-3 font-medium bg-gray-300 rounded hover:bg-gray-400 transition-colors"
+                            className="px-6 py-3 font-medium bg-gray-600 text-white rounded hover:bg-gray-800 transition-colors"
                             disabled={loading}
                         >
                             Cancel
@@ -324,8 +463,174 @@ const VersionInfo = () => {
                 </div>
 
             </div>
+
+            {/* chinese part */}
+            <div className="flex justify-center items-center min-h-screen bg-gray-100 pt-32">
+                <div className="p-8 max-w-2xl w-full mx-auto bg-gray-50">
+                    <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
+                        Chinese Android Application Information
+                    </h2>
+
+                    <section className="mb-8">
+                        <label className="block font-medium text-gray-700 text-lg mb-2">Android App Version</label>
+                        <input
+                            type="text"
+                            value={chineseAppVersion}
+                            onChange={(e) => setChineseAppVersion(e.target.value)}
+                            className="p-3 bg-white text-black border border-gray-300 rounded w-full"
+                            placeholder="Enter Chinese app version"
+                        />
+                    </section>
+
+                    <section className="mb-8">
+                        <label className="block font-medium text-gray-700 text-lg mb-2">Chinese Android Release Notes</label>
+                        <textarea
+                            value={chineseReleaseNotes}
+                            onChange={(e) => setChineseReleaseNotes(e.target.value)}
+                            className="p-3 bg-white text-black border border-gray-300 rounded w-full"
+                            placeholder="Enter Chinese release notes"
+                            rows="4"
+                        />
+                    </section>
+
+                    <section className="mb-8">
+                        <label className="block font-medium text-gray-700 text-lg mb-2">Chinese Android Download URL</label>
+                        <input
+                            type="url"
+                            value={chineseDownloadUrl}
+                            onChange={(e) => setChineseDownloadUrl(e.target.value)}
+                            className="p-3 bg-white text-black border border-gray-300 rounded w-full"
+                            placeholder="Enter Chinese download URL"
+                        />
+                    </section>
+                    <section className="mb-8">
+                        <label className="block font-medium text-gray-700 text-lg mb-2">Chinese Android Version Mark</label>
+                        <input
+                            type="url"
+                            value={chineseVersionMark}
+                            onChange={(e) => setChineseVersionMark(e.target.value)}
+                            className="p-3 bg-white text-black border border-gray-300 rounded w-full"
+                            placeholder="Enter Chinese download URL"
+                        />
+                    </section>
+
+                    <div className="flex justify-between mt-8">
+                        <button
+                            onClick={handleChineseCancel}
+                            className="px-6 py-3 font-medium bg-gray-800 text-white rounded hover:bg-gray-600 transition-colors"
+                            disabled={loading}
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            onClick={handleChineseAppSave}
+                            className={`px-6 py-3 font-medium text-white rounded transition-colors ${chineseLoading ? 'bg-gray-400' : 'bg-[#004368]  hover:bg-blue-700'}`}
+                            disabled={chineseLoading}
+                        >
+                            {chineseLoading ? 'Saving...' : 'Save'}
+                        </button>
+                    </div>
+
+                    <ToastContainer />
+
+                    {chineseAppData && (
+                        <section className="mt-12 bg-gray-100 p-6">
+                            <h3 className="text-2xl font-medium text-gray-800 mb-4">Current Chinese Android Application Data</h3>
+                            <div className="text-gray-700">
+                                <p><strong>Chinese Android App Version:</strong> {chineseAppData.appVersion}</p>
+                                <p><strong>Chinese Android Release Notes:</strong> {chineseAppData.releaseNotes}</p>
+                                <p><strong>Chinese Android Download URL:</strong> <a href={chineseAppData.downloadUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">{chineseAppData.downloadUrl}</a></p>
+                            </div>
+                        </section>
+                    )}
+                </div>
+
+            </div>
+            <div className="flex justify-center items-center min-h-screen bg-gray-100 pt-32">
+                <div className="p-8 max-w-2xl w-full mx-auto bg-gray-50">
+                    <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
+                        Chinese Ios Application Information
+                    </h2>
+
+                    <section className="mb-8">
+                        <label className="block font-medium text-gray-700 text-lg mb-2">Chinese Ios App Version</label>
+                        <input
+                            type="text"
+                            value={chineseIosAppVersion}
+                            onChange={(e) => setChineseIosAppVersion(e.target.value)}
+                            className="p-3 bg-white text-black border border-gray-300 rounded w-full"
+                            placeholder="Enter app version"
+                        />
+                    </section>
+
+                    <section className="mb-8">
+                        <label className="block font-medium text-gray-700 text-lg mb-2">Chinese Ios Release Notes</label>
+                        <textarea
+                            value={chineseIosReleaseNotes}
+                            onChange={(e) => setChineseIosReleaseNotes(e.target.value)}
+                            className="p-3 bg-white text-black border border-gray-300 rounded w-full"
+                            placeholder="Enter release notes"
+                            rows="4"
+                        />
+                    </section>
+
+                    <section className="mb-8">
+                        <label className="block font-medium text-gray-700 text-lg mb-2">Chinese Ios Download URL</label>
+                        <input
+                            type="url"
+                            value={chineseIosDownloadUrl}
+                            onChange={(e) => setChineseIosDownloadUrl(e.target.value)}
+                            className="p-3 bg-white text-black border border-gray-300 rounded w-full"
+                            placeholder="Enter download URL"
+                        />
+                    </section>
+                    <section className="mb-8">
+                        <label className="block font-medium text-gray-700 text-lg mb-2">Chinese Ios Version Mark</label>
+                        <input
+                            type="url"
+                            value={chineseIosVersionMark}
+                            onChange={(e) => setChineseIosVersionMark(e.target.value)}
+                            className="p-3 bg-white text-black border border-gray-300 rounded w-full"
+                            placeholder="Enter download URL"
+                        />
+                    </section>
+
+                    <div className="flex justify-between mt-8">
+                        <button
+                            onClick={handleChineseIosCancel}
+                            className="px-6 py-3 font-medium bg-gray-600 text-white rounded hover:bg-gray-800 transition-colors"
+                            disabled={loading}
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            onClick={handleChineseIosSave}
+                            className={`px-6 py-3 font-medium text-white rounded transition-colors ${chineseIosLoading ? 'bg-gray-400' : 'bg-[#004368]  hover:bg-blue-700'}`}
+                            disabled={chineseIosLoading}
+                        >
+                            {chineseIosLoading ? 'Saving...' : 'Save'}
+                        </button>
+                    </div>
+
+                    <ToastContainer />
+
+                    {chineseIosAppData && (
+                        <section className="mt-12 bg-gray-100 p-6">
+                            <h3 className="text-2xl font-medium text-gray-800 mb-4">Current Chinese Ios Application Data</h3>
+                            <div className="text-gray-700">
+                                <p><strong>Chinese Ios App Version:</strong> {chineseIosAppData.appVersion}</p>
+                                <p><strong>Chinese Ios Release Notes:</strong> {chineseIosAppData.releaseNotes}</p>
+                                <p><strong>Chinese Ios Download URL:</strong> <a href={chineseIosAppData.downloadUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">{chineseIosAppData.downloadUrl}</a></p>
+                            </div>
+                        </section>
+                    )}
+                </div>
+
+            </div>
         </div>
     );
 };
 
 export default VersionInfo;
+
+

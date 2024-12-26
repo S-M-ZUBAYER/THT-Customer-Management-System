@@ -165,7 +165,7 @@ const Register = () => {
             userEmail: email,
             phone: phone,
             userPassword: password,
-            role: "customer_service",
+            role: "user",
             designation: designation,
             country: country,
             addresses: []
@@ -261,7 +261,7 @@ const Register = () => {
                                             userName: name,
                                             userId: response?.data?.userId,
                                             userEmail: email,
-                                            role: "customer_service",
+                                            role: "user",
                                             designation: designation,
                                             country: country
                                         }));
@@ -269,7 +269,7 @@ const Register = () => {
                                             userName: name,
                                             userId: response?.data?.userId,
                                             userEmail: email,
-                                            role: "customer_service",
+                                            role: "user",
                                             designation: designation,
                                             country: country
                                         });
