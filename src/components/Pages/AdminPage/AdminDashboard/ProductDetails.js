@@ -28,6 +28,7 @@ function ProductDetails() {
     const [selectedInstructionImage, setSelectedInstructionImage] = useState(null);
     const [selectedVideo, setSelectedVideo] = useState(null);
     const [productPrice, setProductPrice] = useState(Product?.productPrice);
+    const [productOriginalPrice, setProductOriginalPrice] = useState(Product?.productOriginalPrice);
     const [productDescription, setProductDescription] = useState(Product?.productDescription);
     const [stockQuantity, setStockQuantity] = useState(Product?.stockQuantity);
     const [modelNumber, setModelNumber] = useState(Product?.modelNumber);
@@ -81,6 +82,9 @@ function ProductDetails() {
     };
     const handleProductPriceChange = (e) => {
         setProductPrice(e.target.value);
+    };
+    const handleProductOriginalPriceChange = (e) => {
+        setProductOriginalPrice(e.target.value);
     };
     const handleProductDescriptionChange = (e) => {
         setProductDescription(e.target.value);
@@ -177,6 +181,7 @@ function ProductDetails() {
                 productDescription,
                 modelNumber,
                 productPrice,
+                productOriginalPrice,
                 relatedImgLink,
                 productName,
                 printerColor,
@@ -207,6 +212,7 @@ function ProductDetails() {
                 Product.productDescription = updatedProduct?.productDescription;
                 Product.modelNumber = updatedProduct?.modelNumber;
                 Product.productPrice = updatedProduct?.productPrice;
+                Product.productOriginalPrice = updatedProduct?.productOriginalPrice;
                 Product.relatedImgLink = updatedProduct?.relatedImgLink;
                 Product.productName = updatedProduct?.productName;
                 Product.printerColor = updatedProduct?.printerColor;
@@ -245,6 +251,7 @@ function ProductDetails() {
                 productDescription,
                 modelNumber,
                 productPrice,
+                productOriginalPrice,
                 relatedImgLink,
                 productName,
                 printerColor,
@@ -276,6 +283,7 @@ function ProductDetails() {
                 Product.productDescription = updatedProduct?.productDescription;
                 Product.modelNumber = updatedProduct?.modelNumber;
                 Product.productPrice = updatedProduct?.productPrice;
+                Product.productOriginalPrice = updatedProduct?.productOriginalPrice;
                 Product.relatedImgLink = updatedProduct?.relatedImgLink;
                 Product.productName = updatedProduct?.productName;
                 Product.printerColor = updatedProduct?.printerColor;
@@ -622,8 +630,8 @@ function ProductDetails() {
 
                                 {/* Add the modal in here to edit the product image and all other text part to edit */}
                                 {isModalOpen && (
-                                    <div className="fixed z-50 inset-0 grid grid-cols-2 mx-auto rounded-lg h-5/6 w-5/6 my-auto bg-gray-900 bg-opacity-50">
-                                        <div className="bg-white w-11/12 my-4 mx-auto p-2 px-8 text-center rounded-lg">
+                                    <div className="fixed z-50 inset-0 grid grid-cols-2 mx-auto rounded-lg h-[900px] w-5/6 my-auto bg-white bg-opacity-100 border-2 shadow-xl">
+                                        <div className="bg-white w-11/12 my-4 mx-auto p-2 px-8 text-center rounded-lg shadow-xl">
                                             <h2 className="text-lg font-bold mb-2">Edit Product information</h2>
                                             <input type="file"
                                                 onChange={handleProductImgUpload}
@@ -632,7 +640,7 @@ function ProductDetails() {
 
                                             <div>
                                                 <div className="mb-2 grid  grid-cols-3 text-start">
-                                                    <label htmlFor="modelNumber" className="block col-span-1 text-gray-200 font-semibold mb-2">
+                                                    <label htmlFor="modelNumber" className="block col-span-1 text-gray-700 font-semibold mb-2">
                                                         Img Link
                                                     </label>
                                                     <input
@@ -695,7 +703,6 @@ function ProductDetails() {
 
 
                                             <div className="mb-2">
-
                                                 <input
                                                     type="digit"
                                                     id="productPrice"
@@ -706,8 +713,20 @@ function ProductDetails() {
                                                     required
                                                 />
                                             </div>
+
                                             <div className="mb-2">
-                                                <label htmlFor="productDescription" className="block text-start text-gray-200 font-bold mb-2">
+                                                <input
+                                                    type="digit"
+                                                    id="productOriginalPrice"
+                                                    placeholder='Product Original Price'
+                                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                    value={productOriginalPrice}
+                                                    onChange={handleProductOriginalPriceChange}
+                                                    required
+                                                />
+                                            </div>
+                                            <div className="mb-2">
+                                                <label htmlFor="productDescription" className="block text-start text-gray-700 font-bold mb-2">
                                                     Product Description
                                                 </label>
 
@@ -726,9 +745,9 @@ function ProductDetails() {
                                             </div>
                                         </div>
 
-                                        <div className="w-full py-2 px-8">
+                                        <div className="w-full pt-10 px-8">
                                             <div className="mb-2 grid  grid-cols-3 text-start ">
-                                                <label htmlFor="modelNumber" className="block col-span-1 text-gray-200 font-semibold mb-2">
+                                                <label htmlFor="modelNumber" className="block col-span-1 text-gray-700 font-semibold mb-2">
                                                     Model Number
                                                 </label>
                                                 <input
@@ -742,7 +761,7 @@ function ProductDetails() {
                                                 />
                                             </div>
                                             <div className="mb-2 grid  grid-cols-3 text-start ">
-                                                <label htmlFor="modelNumber" className="block col-span-1 text-gray-200 font-semibold mb-2">
+                                                <label htmlFor="modelNumber" className="block col-span-1 text-gray-700 font-semibold mb-2">
                                                     Printer Color
                                                 </label>
                                                 <input
@@ -756,7 +775,7 @@ function ProductDetails() {
                                                 />
                                             </div>
                                             <div className="mb-2 grid  grid-cols-3 text-start ">
-                                                <label htmlFor="modelNumber" className="block col-span-1 text-gray-200 font-semibold mb-2">
+                                                <label htmlFor="modelNumber" className="block col-span-1 text-gray-700 font-semibold mb-2">
                                                     connector type
                                                 </label>
                                                 <input
@@ -771,7 +790,7 @@ function ProductDetails() {
                                                 />
                                             </div>
                                             <div className="mb-2 grid  grid-cols-3 text-start ">
-                                                <label htmlFor="modelNumber" className="block col-span-1 text-gray-200 font-bold mb-2">
+                                                <label htmlFor="modelNumber" className="block col-span-1 text-gray-700 font-bold mb-2">
                                                     Stock Quantity
                                                 </label>
                                                 <input
@@ -916,14 +935,14 @@ function ProductDetails() {
 
                             {/* Add the modal in here to edit the product image and all other text part to edit */}
                             {isTextModalOpen && (
-                                <div className="fixed z-50 inset-0 grid grid-cols-2 mx-auto rounded-lg h-5/6 w-5/6 my-auto bg-gray-900 bg-opacity-50">
-                                    <div className="bg-white w-11/12 my-4 mx-auto p-2 px-8 text-center rounded-lg">
+                                <div className="fixed z-50 inset-0 grid grid-cols-2 mx-auto rounded-lg h-[900px] w-5/6 my-auto bg-white bg-opacity-100 border-2 shadow-2xl ">
+                                    <div className="bg-white w-11/12 my-4 mx-auto p-2 px-8 text-center rounded-lg shadow-xl">
                                         <h2 className="text-lg font-bold mb-2">Edit Product text information</h2>
 
 
                                         <div>
                                             <div className="mb-2 grid  grid-cols-3 text-start">
-                                                <label htmlFor="modelNumber" className="block col-span-1 text-gray-200 font-semibold mb-2">
+                                                <label htmlFor="modelNumber" className="block col-span-1 text-gray-700 font-semibold mb-2">
                                                     Img Link
                                                 </label>
                                                 <input
@@ -1039,8 +1058,21 @@ function ProductDetails() {
                                                 required
                                             />
                                         </div>
+
                                         <div className="mb-2">
-                                            <label htmlFor="productDescription" className="block text-start text-gray-200 font-bold mb-2">
+
+                                            <input
+                                                type="digit"
+                                                id="productOriginalPrice"
+                                                placeholder='Product Original Price'
+                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                value={productOriginalPrice}
+                                                onChange={handleProductOriginalPriceChange}
+                                                required
+                                            />
+                                        </div>
+                                        <div className="mb-2">
+                                            <label htmlFor="productDescription" className="block text-start text-gray-700 font-bold mb-2">
                                                 Product Description
                                             </label>
 
@@ -1059,9 +1091,9 @@ function ProductDetails() {
                                         </div>
                                     </div>
 
-                                    <div className="w-full py-2 px-8">
+                                    <div className="w-full pt-10 px-8">
                                         <div className="mb-2 grid  grid-cols-3 text-start ">
-                                            <label htmlFor="modelNumber" className="block col-span-1 text-gray-200 font-semibold mb-2">
+                                            <label htmlFor="modelNumber" className="block col-span-1 text-gray-700 font-semibold mb-2">
                                                 Model Number
                                             </label>
                                             <input
@@ -1075,7 +1107,7 @@ function ProductDetails() {
                                             />
                                         </div>
                                         <div className="mb-2 grid  grid-cols-3 text-start ">
-                                            <label htmlFor="modelNumber" className="block col-span-1 text-gray-200 font-semibold mb-2">
+                                            <label htmlFor="modelNumber" className="block col-span-1 text-gray-700 font-semibold mb-2">
                                                 Printer Color
                                             </label>
                                             <input
@@ -1089,7 +1121,7 @@ function ProductDetails() {
                                             />
                                         </div>
                                         <div className="mb-2 grid  grid-cols-3 text-start ">
-                                            <label htmlFor="modelNumber" className="block col-span-1 text-gray-200 font-semibold mb-2">
+                                            <label htmlFor="modelNumber" className="block col-span-1 text-gray-700 font-semibold mb-2">
                                                 connector type
                                             </label>
                                             <input
@@ -1104,7 +1136,7 @@ function ProductDetails() {
                                             />
                                         </div>
                                         <div className="mb-2 grid  grid-cols-3 text-start ">
-                                            <label htmlFor="modelNumber" className="block col-span-1 text-gray-200 font-bold mb-2">
+                                            <label htmlFor="modelNumber" className="block col-span-1 text-gray-700 font-bold mb-2">
                                                 Stock Quantity
                                             </label>
                                             <input
@@ -1245,6 +1277,12 @@ function ProductDetails() {
                                 <h2 className="text-lg font-semibold">Product Price </h2>
                                 <p className="text-base text-gray-700">
                                     {Product?.productPrice}
+                                </p>
+                            </div>
+                            <div className=" mb-5">
+                                <h2 className="text-lg font-semibold">Product Original Price </h2>
+                                <p className="text-base text-gray-700">
+                                    {Product?.productOriginalPrice ? Product?.productOriginalPrice : 0}
                                 </p>
                             </div>
 
