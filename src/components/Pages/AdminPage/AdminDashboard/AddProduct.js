@@ -12,6 +12,7 @@ function AddProduct({ product }) {
   const [productCountryName, setProductCountryName] = useState('');
   const [productName, setProductName] = useState('');
   const [productPrice, setProductPrice] = useState('');
+  const [productOriginalPrice, setProductOriginalPrice] = useState('');
   const [productDescription, setProductDescription] = useState('');
   const [modelNumber, setModelNumber] = useState('');
   const [printerColor, setPrinterColor] = useState('');
@@ -96,6 +97,9 @@ function AddProduct({ product }) {
 
   const handleProductPriceChange = (e) => {
     setProductPrice(e.target.value);
+  };
+  const handleProductOriginalPriceChange = (e) => {
+    setProductOriginalPrice(e.target.value);
   };
 
   const handleProductDescriptionChange = (e) => {
@@ -226,6 +230,7 @@ function AddProduct({ product }) {
     formData.append('relatedImgRemark', relatedImgRemark);
     formData.append('descriptionImgRemark', descriptionImgRemark);
     formData.append('productPrice', productPrice);
+    formData.append('productOriginalPrice', productOriginalPrice);
     formData.append('productDescription', productDescription);
     formData.append('modelNumber', modelNumber);
     formData.append('printerColor', printerColor);
@@ -285,6 +290,7 @@ function AddProduct({ product }) {
       setProductCountryName('');
       setProductName('');
       setProductPrice('');
+      setProductOriginalPrice('');
       setProductImgLink("");
       setProductImgRemark("");
       setRelatedImgLink("");
@@ -326,12 +332,12 @@ function AddProduct({ product }) {
         {/* <label>Product Image:</label> */}
         <input type="file"
           onChange={handleProductImgUpload}
-          className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-10 px-3 lg:px-10 lg:ml-5 rounded-lg "
+          className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-10 px-3 lg:px-10 lg:ml-5 rounded-lg border-red-600"
           accept="image/*" />
 
         <div>
-          <div className="mb-4 grid  grid-cols-3 text-start">
-            <label htmlFor="modelNumber" className="block col-span-1 text-gray-500 font-semibold mb-2">
+          <div className="mb-4 text-start">
+            <label htmlFor="modelNumber" className="block col-span-1 text-gray-700 font-bold mb-2">
               Product Img Link
             </label>
             <input
@@ -346,18 +352,42 @@ function AddProduct({ product }) {
           </div>
           <div className="mb-4">
             <label htmlFor="productImageRemark" className="block text-start text-gray-700 font-bold mb-2">
-              Product Image Remarks
+              Product Showing Place Remarks
             </label>
-            <textarea
-              id="productImageRemark"
-              placeholder="Add product Image Remark"
-              className="shadow resize-none appearance-none border rounded-lg w-full h-44  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
-              value={productImgRemark}
-              onChange={handleProductImageRemark}
-            ></textarea>
+            <div className="relative">
+              <select
+                id="productImageRemark"
+                className="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                value={productImgRemark}
+                onChange={handleProductImageRemark}
+              >
+                <option value="" disabled>
+                  Select Product Showing Place Remark
+                </option>
+                <option value="1">Old App Slider</option>
+                <option value="2">Event Product</option>
+                <option value="3">New Arrival</option>
+                <option value="4">Label Slider</option>
+                <option value="9">Home Slider</option>
+              </select>
+              <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+                <svg
+                  className="w-5 h-5 text-gray-500"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+            </div>
           </div>
-          <div className="mb-4 grid  grid-cols-3 text-start">
-            <label htmlFor="modelNumber" className="block col-span-1 text-gray-500 font-semibold mb-2">
+          <div className="mb-4 text-start">
+            <label htmlFor="modelNumber" className="block col-span-1 text-gray-700 font-bold mb-2">
               Showing Data Link
             </label>
             <input
@@ -370,23 +400,47 @@ function AddProduct({ product }) {
 
             />
           </div>
+
           <div className="mb-4">
-            <label htmlFor="productImageRemark" className="block text-start text-gray-700 font-bold mb-2">
+            <label
+              htmlFor="ShowingDataMark"
+              className="block text-start text-gray-700 font-bold mb-2"
+            >
               Showing Data Mark
             </label>
-            <input
-              type="number"
-              id="ShowingDataMark"
-              placeholder="Please Showing Data Mark"
-              className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
-              value={showingDataMark}
-              onChange={handleShowingDataMark}
-
-            />
+            <div className="relative">
+              <select
+                id="ShowingDataMark"
+                className="shadow col-span-2 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                value={showingDataMark} // Controlled component
+                onChange={handleShowingDataMark}
+              >
+                <option value="" disabled>
+                  Please select for app/web mark
+                </option>
+                <option value="0">Showing In App</option>
+                <option value="1">Showing In Web</option>
+              </select>
+              <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+                <svg
+                  className="w-5 h-5 text-gray-500"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+            </div>
           </div>
+
           <div className="mb-4">
             <label htmlFor="productImageRemark" className="block text-start text-gray-700 font-bold mb-2">
-              Slider Image Mark
+              Slide Image Mark For Using Printer Model
             </label>
             <input
               type="text"
@@ -402,10 +456,10 @@ function AddProduct({ product }) {
       </div>
       <div className="w-full md:w-1/2 p-8">
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
+          <div className="mb-4 relative">
             <select
               id="productCountryCategory"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white border-red-600"
               value={productCountryName}
               onChange={handleProductCountryNameChange}
               required
@@ -419,22 +473,59 @@ function AddProduct({ product }) {
               <option value="ms-MY">Malaysia</option>
               <option value="id-ID">Indonesia</option>
             </select>
+            <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+              <svg
+                className="w-4 h-4 text-gray-500"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </div>
           </div>
 
-          <div className="mb-4">
+
+          <div className="mb-4 relative">
             <select
               id="productName"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white border-red-600"
               value={productName}
               onChange={handleProductNameChange}
               required
             >
-              <option value="">Select Product</option>
+              <option value="" disabled>
+                Select Product
+              </option>
               <option value="Dot Printer">Dot Printer</option>
               <option value="Thermal Printer">Thermal Printer</option>
               <option value="Attendance Machine">Attendance Machine</option>
+              <option value="Power Bank">Power Bank</option>
             </select>
+            <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+              <svg
+                className="w-4 h-4 text-gray-500"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </div>
           </div>
+
 
 
           <div className="mb-4">
@@ -446,6 +537,19 @@ function AddProduct({ product }) {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
               value={productPrice}
               onChange={handleProductPriceChange}
+              required
+            />
+          </div>
+
+          <div className="mb-4">
+
+            <input
+              type="digit"
+              id="productOriginalPrice"
+              placeholder='Product Original Price'
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+              value={productOriginalPrice}
+              onChange={handleProductOriginalPriceChange}
               required
             />
           </div>
@@ -501,7 +605,7 @@ function AddProduct({ product }) {
             <input
               type="text"
               id="modelNumber"
-              className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+              className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white border-red-600"
               value={modelNumber}
               placeholder='Model Number'
               onChange={handleModelNumberChange}

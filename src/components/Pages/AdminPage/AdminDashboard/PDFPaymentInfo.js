@@ -189,7 +189,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const PDFPaymentInfo = () => {
-    const [amounts, setAmounts] = useState({ USD: '', CNY: '', SGD: '', EUR: '' });
+    const [amounts, setAmounts] = useState({ USD: '', CNY: '', SGD: '', EUR: '', allowMark: '' });
     const [loading, setLoading] = useState(false);
     const [currentData, setCurrentData] = useState(null);
 
@@ -204,6 +204,7 @@ const PDFPaymentInfo = () => {
                         CNY: data.CNY,
                         SGD: data.SGD,
                         EUR: data.EUR,
+                        allowMark: data.allowMark,
                     });
                     setCurrentData(data);
                 } else {
@@ -344,6 +345,17 @@ const PDFPaymentInfo = () => {
                             placeholder="Enter EUR amount"
                         />
                     </section>
+                    <section className="mb-8">
+                        <label className="block font-medium text-gray-700 text-lg mb-2">Allow Mark</label>
+                        <input
+                            type="number"
+                            name="allowMark"
+                            value={amounts?.allowMark}
+                            onChange={handleChange}
+                            className="p-3 bg-white text-black border border-gray-300 rounded w-full"
+                            placeholder="Enter Allow Mark"
+                        />
+                    </section>
 
                     <div className="flex justify-between mt-8">
                         <button
@@ -369,10 +381,11 @@ const PDFPaymentInfo = () => {
                             <h3 className="text-2xl font-medium text-gray-800 mb-4">Current Payment Data</h3>
                             <div className="text-gray-700">
                                 <p><strong>ID:</strong> {currentData.id}</p>
-                                <p><strong>USD Amount:</strong> {currentData.USD}</p>
-                                <p><strong>CNY Amount:</strong> {currentData.CNY}</p>
-                                <p><strong>SGD Amount:</strong> {currentData.SGD}</p>
-                                <p><strong>EUR Amount:</strong> {currentData.EUR}</p>
+                                <p><strong>USD Amount:</strong> {currentData?.USD}</p>
+                                <p><strong>CNY Amount:</strong> {currentData?.CNY}</p>
+                                <p><strong>SGD Amount:</strong> {currentData?.SGD}</p>
+                                <p><strong>EUR Amount:</strong> {currentData?.EUR}</p>
+                                <p><strong>Allow Mark:</strong> {currentData?.allowMark}</p>
                             </div>
                         </section>
                     )}

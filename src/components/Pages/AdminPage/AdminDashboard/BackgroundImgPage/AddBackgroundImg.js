@@ -7,6 +7,7 @@ import { AuthContext } from "../../../../../context/UserContext";
 import AddBackgroundCategory from "./AddBackgroundCategory";
 import BackgroundCategoryList from "./BackgroundCategoryList";
 import ShowingVideo from "../ShowingVideoPage.js/ShowingVideo";
+import ShowingVideoCN from "../ShowingVideoPage.js/ShowingVideoCN";
 
 function AddBackgroundImg() {
   const [selectedImages, setSelectedImages] = useState([]);
@@ -121,33 +122,46 @@ function AddBackgroundImg() {
             <img className="h-4/5 w-4/5" src={addIcon}></img>
             <input type="file" className="hidden" accept="image/*" onChange={handleImageChange} multiple />
           </label>
+          <div className="space-y-4">
+            {/* Category Selection */}
+            <div className="flex items-center">
+              <label className="font-semibold w-24" htmlFor="category">Category:</label>
+              <select
+                id="category"
+                className="bg-white text-gray-800 border-2 px-3 py-2 w-full"
+                value={selectedCategory}
+                onChange={handleSelectChange}
+              >
+                <option value="">Select a category</option>
+                {categories.map((cat, index) => (
+                  <option key={index} value={cat}>{cat}</option>
+                ))}
+              </select>
+            </div>
 
-          <select className="bg-white text-gray-800" value={selectedCategory} onChange={handleSelectChange}>
-            <option value="">Select a category</option>
-            {categories.map((cat, index) => (
-              <option key={index} value={cat}>{cat}</option>
-            ))}
-          </select>
+            {/* Height Input */}
+            <div className="flex items-center">
+              <label className="font-semibold w-24" htmlFor="height">Height:</label>
+              <input
+                type="number"
+                id="height"
+                className="border-2 bg-white px-3 py-2 w-full"
+                value={height}
+                onChange={handleHeightChange}
+              />
+            </div>
 
-          <div className="mt-2">
-            <label className="font-semibold" htmlFor="height">Height:</label>
-            <input
-              type="number"
-              id="height"
-              className="border-2 ml-3 bg-white"
-              value={height}
-              onChange={handleHeightChange}
-            />
-          </div>
-          <div className="mt-2">
-            <label className="font-semibold" htmlFor="width">Width:</label>
-            <input
-              type="number"
-              id="width"
-              value={width}
-              className="border-2 ml-3 bg-white"
-              onChange={handleWidthChange}
-            />
+            {/* Width Input */}
+            <div className="flex items-center">
+              <label className="font-semibold w-24" htmlFor="width">Width:</label>
+              <input
+                type="number"
+                id="width"
+                className="border-2 bg-white px-3 py-2 w-full"
+                value={width}
+                onChange={handleWidthChange}
+              />
+            </div>
           </div>
 
           <button
@@ -167,6 +181,7 @@ function AddBackgroundImg() {
 
       {/* This is the component to store and showing the showing video */}
       <ShowingVideo></ShowingVideo>
+      <ShowingVideoCN></ShowingVideoCN>
 
     </div>
   );

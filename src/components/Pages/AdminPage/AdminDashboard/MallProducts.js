@@ -11,14 +11,17 @@ import { AuthContext } from '../../../../context/UserContext';
 import DisplaySpinner from '../../../Shared/Loading/DisplaySpinner';
 
 
-const AddMallProducts = () => {
+const MallProducts = () => {
     const { allMallProduct, setAllMallProduct, setProduct } = useContext(AllProductContext)
 
     //create useState To update the product information
     const [editingProduct, setEditingProduct] = useState(null);
 
     //create useState To search the specific product
-    const [searchTerm, setSearchTerm] = useState('');
+    const [searchTerm, setSearchTerm] = useState(() => {
+        return localStorage.getItem('mallProductSearch') || '';
+    });
+
 
     //create useState to declare the all mall product
     const [mallProduct, setMallProduct] = useState([]);
@@ -28,6 +31,8 @@ const AddMallProducts = () => {
 
     //create useState To select any specific product
     const [selectedProduct, setSelectedProduct] = useState(null);
+    const [searchAllQuery, setSearchAllQuery] = useState('');
+    const [error, setError] = useState(null);
 
     const [loading, setLoading] = useState(true);
     console.log(loading)
@@ -35,12 +40,36 @@ const AddMallProducts = () => {
 
     // use useEffect to load the all mall product from data base
     useEffect(() => {
-        setLoading(true)
-        fetch('https://grozziieget.zjweiting.com:8033/tht/mallProducts')
-            .then(response => response.json())
-            .then(data => setMallProduct(data));
-        setLoading(false)
+        const fetchMallProducts = async () => {
+            setLoading(true); // Start the loading process
+            setError(null); // Reset any existing error
+
+            try {
+                console.log("Fetching event products...");
+
+                // const response = await fetch('http://localhost:2000/tht/mallProducts');
+                const response = await fetch('https://grozziieget.zjweiting.com:8033/tht/mallProducts');
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.status} ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                setMallProduct(data); // Update the eventProduct state
+            } catch (err) {
+                setError(err.message); // Capture any error
+            } finally {
+                setLoading(false); // Ensure loading state is reset
+            }
+        };
+
+        fetchMallProducts();
     }, []);
+
+    useEffect(() => {
+        setSearchAllQuery(searchTerm);
+    }, [searchTerm, mallProduct]);
+
+
 
     //create a function to got the modal of searching product
     const handleChange = (event) => {
@@ -54,13 +83,7 @@ const AddMallProducts = () => {
         console.log("click")
         setSearchAllQuery('');
         setSearchTerm('');
-        // event.preventDefault();
-        // // filter products array based on search term
-        // const filteredProducts = eventProduct.filter((product) =>
-        //     product?.modelNumber.toLowerCase().includes(searchTerm.toLowerCase())
-        // );
-        // // update products state with filtered products
-        // setEventProduct(filteredProducts);
+        localStorage.removeItem('mallProductSearch');
     };
 
 
@@ -88,17 +111,14 @@ const AddMallProducts = () => {
 
 
 
-
-
-    const [searchAllQuery, setSearchAllQuery] = useState('');
-
-
-
     //new search function 
     const handleSearchAllChange = (event) => {
-        setSearchAllQuery(event.target.value);
-        setSearchTerm(event.target.value);
+        const value = event.target.value;
+        setSearchAllQuery(value);
+        setSearchTerm(value);
+        localStorage.setItem('mallProductSearch', value); // Store the value in localStorage
     };
+
 
 
     const filteredAllProduct = mallProduct.filter((request) =>
@@ -119,6 +139,7 @@ const AddMallProducts = () => {
             return; // Cancel the deletion if the user clicks Cancel or closes the modal
         }
         try {
+            // await axios.delete(`http://localhost:2000/tht/mallProducts/delete/${productId}`);
             await axios.delete(`https://grozziieget.zjweiting.com:8033/tht/mallProducts/delete/${productId}`);
             toast.success(`One MallProduct deleted successfully`);
             setMallProduct((prevProducts) => prevProducts.filter((product) => product?.id !== productId));
@@ -278,39 +299,42 @@ const AddMallProducts = () => {
                         loading === true ?
                             <DisplaySpinner></DisplaySpinner>
                             :
-                            (
-                                filteredAllProduct?.length === 0
-                                    ?
-                                    <span className="text-xl font-bold text-red-400">No Mall Product Available</span>
-                                    :
-                                    filteredAllProduct?.map((product, index) => (
-                                        <div key={index} className="mx-2 my-3 grid grid-cols-7  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">
-                                            <Link to={`/admin/mallProduct/details/${product?.modelNumber}}`} onClick={() => setProduct(product)} className=" col-span-6 grid grid-cols-6">
-                                                <img className=" h-10 w-10 rounded-full" src={`https://grozziieget.zjweiting.com:8033/tht/mallProductImages/${product.productImg}`} alt={product.productName} ></img>
+                            error ?
+                                <p className="text-red-500 font-semibold text-xl">{error}</p>
+                                :
+                                (
+                                    filteredAllProduct?.length === 0
+                                        ?
+                                        <span className="text-xl font-bold text-red-400">No Mall Product Available</span>
+                                        :
+                                        filteredAllProduct?.map((product, index) => (
+                                            <div key={index} className="mx-2 my-3 grid grid-cols-7  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">
+                                                <Link to={`/admin/mallProduct/details/${product?.modelNumber}}`} onClick={() => setProduct(product)} className=" col-span-6 grid grid-cols-6">
+                                                    <img className=" h-10 w-10 rounded-full" src={`https://grozziieget.zjweiting.com:8033/tht/mallProductImages/${product.productImg}`} alt={product.productName} ></img>
 
-                                                <p>
-                                                    {product?.productName}
-                                                </p>
-                                                <p className="">
-                                                    {product?.modelNumber}
-                                                </p>
-                                                <p className="">
-                                                    {product?.productCountryName}
-                                                </p>
-                                                <p className="">
-                                                    {product?.id}
-                                                </p>
-                                                <p className="">
-                                                    {product?.mark}
-                                                </p>
-                                            </Link>
+                                                    <p>
+                                                        {product?.productName}
+                                                    </p>
+                                                    <p className="">
+                                                        {product?.modelNumber}
+                                                    </p>
+                                                    <p className="">
+                                                        {product?.productCountryName}
+                                                    </p>
+                                                    <p className="">
+                                                        {product?.id}
+                                                    </p>
+                                                    <p className="">
+                                                        {product?.mark}
+                                                    </p>
+                                                </Link>
 
-                                            <div className="flex items-center justify-around">
+                                                <div className="flex items-center justify-around">
 
-                                                <RiDeleteBin7Line onClick={() => handleToDelete(product?.id)} className="hover:cursor-pointer hover:text-2xl"></RiDeleteBin7Line>
+                                                    <RiDeleteBin7Line onClick={() => handleToDelete(product?.id)} className="hover:cursor-pointer hover:text-2xl"></RiDeleteBin7Line>
+                                                </div>
                                             </div>
-                                        </div>
-                                    )))}
+                                        )))}
 
 
                 </div>
@@ -336,4 +360,4 @@ const AddMallProducts = () => {
     );
 };
 
-export default AddMallProducts;
+export default MallProducts;

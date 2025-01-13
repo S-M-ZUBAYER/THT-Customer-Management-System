@@ -10,18 +10,21 @@ import { AuthContext } from '../../../../context/UserContext';
 
 
 
-const AddMallProducts = () => {
-    const [searchTerm, setSearchTerm] = useState('');
+const EventProducts = () => {
+    const [searchTerm, setSearchTerm] = useState(() => {
+        return localStorage.getItem('eventProductSearch') || '';
+    });
     const [searchAllQuery, setSearchAllQuery] = useState('');
     const { allEventProduct, setAllEventProduct, setProduct } = useContext(AllProductContext)
-    const { loading, setLoading } = useContext(AuthContext)
+    const [loading, setLoading] = useState(true);
+    const [eventProduct, setEventProduct] = useState([]);
+    const [error, setError] = useState(null);
 
 
     const handleChange = (event) => {
         setSearchTerm(event.target.value);
     };
 
-    const [eventProduct, setEventProduct] = useState([]);
 
     //     axios.get('https://grozziieget.zjweiting.com:8033/event')
     //   .then(response => {
@@ -34,26 +37,36 @@ const AddMallProducts = () => {
 
     // use useEffect to load the all mall product from data base
     useEffect(() => {
-        setLoading(true)
-        fetch('https://grozziieget.zjweiting.com:8033/tht/eventProducts')
-            // fetch('https://grozziieget.zjweiting.com:8033/tht/eventProducts/country/zh-CN')
-            .then(response => response.json())
-            .then(data => setEventProduct(data));
-        setLoading(false);
+        const fetchEventProducts = async () => {
+            try {
+                const response = await fetch('https://grozziieget.zjweiting.com:8033/tht/eventProducts');
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.status} ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                setEventProduct(data); // Update the eventProduct state
+            } catch (err) {
+                setError(err.message); // Capture any error
+            } finally {
+                setLoading(false); // Ensure loading state is reset
+            }
+        };
+
+        fetchEventProducts();
     }, []);
+
+    useEffect(() => {
+        setSearchAllQuery(searchTerm);
+        console.log("call");
+    }, [searchTerm, eventProduct]);
 
     //create a function to got the specific searching products
     const handleToSearch = (event) => {
         event.preventDefault();
         setSearchAllQuery('');
         setSearchTerm('');
-        // event.preventDefault();
-        // // filter products array based on search term
-        // const filteredProducts = eventProduct.filter((product) =>
-        //     product?.modelNumber.toLowerCase().includes(searchTerm.toLowerCase())
-        // );
-        // // update products state with filtered products
-        // setEventProduct(filteredProducts);
+        localStorage.removeItem('eventProductSearch');
     };
 
 
@@ -66,6 +79,7 @@ const AddMallProducts = () => {
             return; // Cancel the deletion if the user clicks Cancel or closes the modal
         }
         try {
+            // await axios.delete(`http://localhost:2000/tht/eventProducts/delete/${productId}`);
             await axios.delete(`https://grozziieget.zjweiting.com:8033/tht/eventProducts/delete/${productId}`);
             toast.success(`One MallProduct deleted successfully`);
             const restProduct = eventProduct.filter(product => (product?.id !== productId));
@@ -85,8 +99,10 @@ const AddMallProducts = () => {
     }
 
     const handleSearchAllChange = (event) => {
-        setSearchAllQuery(event.target.value);
-        setSearchTerm(event.target.value);
+        const value = event.target.value;
+        setSearchAllQuery(value);
+        setSearchTerm(value);
+        localStorage.setItem('eventProductSearch', value);
     };
 
 
@@ -166,51 +182,53 @@ const AddMallProducts = () => {
                     {loading ?
                         <DisplaySpinner></DisplaySpinner>
                         :
-
-                        filteredAllProduct?.length === 0
-                            ?
-                            <span className="text-xl font-bold text-red-400">No Mall Product Available</span>
+                        error ?
+                            <p className="text-red-500 font-semibold text-xl">{error}</p>
                             :
-                            filteredAllProduct?.map((product, index) => (
-                                // <Link to={`/admin/mallProduct/details/${product?.Model},`}>
-                                <div className="  mx-2 my-3 grid grid-cols-7  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">
-                                    <Link key={index} to={`/admin/eventProduct/details/${product?.modelNumber}}`} onClick={() => setProduct(product)} className=" col-span-6 grid grid-cols-8">
-                                        <img className=" h-10 w-10 rounded-full" src={`https://grozziieget.zjweiting.com:8033/tht/eventProductImages/${product.productImg}`} alt={product.productName} ></img>
+                            filteredAllProduct?.length === 0
+                                ?
+                                <span className="text-xl font-bold text-red-400">No Mall Product Available</span>
+                                :
+                                filteredAllProduct?.map((product, index) => (
+                                    // <Link to={`/admin/mallProduct/details/${product?.Model},`}>
+                                    <div className="  mx-2 my-3 grid grid-cols-7  text-start bg-slate-200 hover:bg-yellow-100 cursor-pointer rounded-lg px-2 py-2">
+                                        <Link key={index} to={`/admin/eventProduct/details/${product?.modelNumber}}`} onClick={() => setProduct(product)} className=" col-span-6 grid grid-cols-8">
+                                            <img className=" h-10 w-10 rounded-full" src={`https://grozziieget.zjweiting.com:8033/tht/eventProductImages/${product.productImg}`} alt={product.productName} ></img>
 
-                                        <p>
-                                            {product?.productName}
-                                        </p>
-                                        <p className="">
-                                            {product?.modelNumber}
-                                        </p>
-                                        <p className="">
-                                            {product?.productCountryName}
-                                        </p>
-                                        <p className="">
-                                            {product?.id}
-                                        </p>
-                                        <p className="">
-                                            {product?.productImgRemark}
-                                        </p>
-                                        <p className="">
-                                            {product?.mark}
-                                        </p>
-                                        <p className="">
-                                            {product?.slideImageMark}
-                                        </p>
-                                    </Link>
+                                            <p>
+                                                {product?.productName}
+                                            </p>
+                                            <p className="">
+                                                {product?.modelNumber}
+                                            </p>
+                                            <p className="">
+                                                {product?.productCountryName}
+                                            </p>
+                                            <p className="">
+                                                {product?.id}
+                                            </p>
+                                            <p className="">
+                                                {product?.productImgRemark}
+                                            </p>
+                                            <p className="">
+                                                {product?.mark}
+                                            </p>
+                                            <p className="">
+                                                {product?.slideImageMark}
+                                            </p>
+                                        </Link>
 
-                                    <div className="flex items-center justify-around">
-                                        {/* <button className="text-blue-500 hover:cursor-pointer hover:text-2xl" onClick={() => openEditModal(product)}>
+                                        <div className="flex items-center justify-around">
+                                            {/* <button className="text-blue-500 hover:cursor-pointer hover:text-2xl" onClick={() => openEditModal(product)}>
                              <FiEdit></FiEdit>
                          </button>
                          {isModalOpen && (
                              <ModalForEdit product={selectedProduct} onSave={handleSave} onClose={handleCloseModal} />
                          )} */}
-                                        <RiDeleteBin7Line onClick={() => handleToDelete(product?.id)} className="hover:cursor-pointer hover:text-2xl"></RiDeleteBin7Line>
+                                            <RiDeleteBin7Line onClick={() => handleToDelete(product?.id)} className="hover:cursor-pointer hover:text-2xl"></RiDeleteBin7Line>
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))}
 
                 </div>
 
@@ -230,4 +248,4 @@ const AddMallProducts = () => {
     );
 };
 
-export default AddMallProducts;
+export default EventProducts;

@@ -50,18 +50,16 @@ const Navbar = () => {
                       user?.isAdmin === "true" && <>
                         <li><Link to='/admin/users' className="sm:text-xs md:text-base text-gray-700">All Users</Link></li>
                         <li><Link to='/admin/questionAnswer' className="sm:text-xs md:text-base text-gray-700">Add Q & A</Link></li>
-                        <li><Link to='/admin/warehouse&cities' className="sm:text-xs md:text-base text-gray-700">Add warehouse&cities</Link></li>
-                        <li><Link to='/admin/backgroundImg' className="sm:text-xs md:text-base text-gray-700">Add Icons</Link></li>
-                        <li><Link to='/admin/icon' className="sm:text-xs md:text-base text-gray-700">Add BackGround Image</Link></li>
+                        <li><Link to='/admin/warehouse&cities' className="sm:text-xs md:text-base text-gray-700">Add Warehouse&Cities</Link></li>
+                        <li><Link to='/admin/modelHightWidth' className="sm:text-xs md:text-base text-gray-700">Add Bluetooth Model H&W</Link></li>
+                        <li><Link to='/admin/wifiModelHightWidth' className="sm:text-xs md:text-base text-gray-700">Add Wifi Model H&W</Link></li>
+                        <li><Link to='/admin/icon' className="sm:text-xs md:text-base text-gray-700">Add Icons</Link></li>
+                        <li><Link to='/admin/backgroundImg' className="sm:text-xs md:text-base text-gray-700">Add Background Image & Video</Link></li>
                         <li><Link to='/admin/mallProduct' className="sm:text-xs md:text-base text-gray-700">Add Mall Products</Link></li>
                         <li><Link to='/admin/eventProduct' className="sm:text-xs md:text-base text-gray-700">Add Event Products</Link></li>
-                        <li><Link to='/admin/shopifyInfo' className="sm:text-xs md:text-base text-gray-700">Add Shopify Info</Link></li>
-                        <Link className="text-left ml-2" to='/'>
-                          <button className='px-4 py-2 mt-8 ml-0 font-semibold bg-[#004368] text-white lg:text-lg rounded  mb-5'>
-                            Back to homepage
-                          </button>
-                        </Link>
-
+                        <li><Link to='/admin/shopifyInfo' className="sm:text-xs md:text-base text-gray-700">Add Shopify & Others Info</Link></li>
+                        <li><Link to='/admin/userBaseBitmap' className="sm:text-xs md:text-base text-gray-700">User Base Bitmap</Link></li>
+                        <li><Link to='/admin/powerBank' className="sm:text-xs md:text-base text-gray-700">Power Bank</Link></li>
                       </>
                     }
 

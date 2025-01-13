@@ -12,6 +12,13 @@ function ShowingVideo() {
   const [loading, setLoading] = useState(false);
   const [productCountryName, setProductCountryName] = useState('');
 
+  const [selectedCountry, setSelectedCountry] = useState("en-US");
+
+  // Extract unique country names
+  const countries = [...new Set(allVideo.map((video) => video.countryName))];
+
+  // Filter videos based on the selected country
+  const filteredVideos = allVideo.filter((video) => video.countryName === selectedCountry)
   const handleProductCountryNameChange = (e) => {
     setProductCountryName(e.target.value);
   };
@@ -22,7 +29,10 @@ function ShowingVideo() {
     axios.get('https://grozziieget.zjweiting.com:8033/tht/showingVideo')
       .then(response => {
         // Handle the successful response here
-        setAllVideo((response?.data)?.data);
+        console.log((response?.data)?.data);
+
+        setAllVideo((response?.data)?.data.filter(item => item.imgPath !== 'https://jiapuv.com:8033/tht/showingVideos/'));
+
       })
       .catch(error => {
         // Handle any errors here
@@ -51,11 +61,12 @@ function ShowingVideo() {
     formData.append('showingVideo', video); // Use 'showingVideo' instead of 'video'
     formData.append('title', title);
     formData.append('country', productCountryName);
+    formData.append('imgPath', `https://grozziieget.zjweiting.com:8033/tht/showingVideos/`);
 
     try {
       // Make a POST request to your backend API to handle the video upload
       const response = await axios.post('https://grozziieget.zjweiting.com:8033/tht/showingVideo/add', formData, {
-      // const response = await axios.post('http://localhost:2000/tht/showingVideo/add', formData, {
+        // const response = await axios.post('http://localhost:2000/tht/showingVideo/add', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -94,7 +105,7 @@ function ShowingVideo() {
 
   return (
     <div className="mt-20">
-      <h2 className="font-bold text-3xl text-lime-400 mb-10">Upload Showing Video</h2>
+      <h2 className="font-bold text-3xl text-[#004368] mb-8">Upload Showing Video</h2>
 
       <div className=" flex justify-center items-center">
         <form className="" onSubmit={handleFormSubmit}>
@@ -146,34 +157,64 @@ function ShowingVideo() {
           </div>
           <div>
             <button type="submit" className=" bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-10 px-20 ml-5 rounded-lg">
-             {
-              loading ?  <BtnSpinner></BtnSpinner> :'Upload Showing Video'
-             }
-              
-              </button>
+              {
+                loading ? <BtnSpinner></BtnSpinner> : 'Upload Showing Video'
+              }
+
+            </button>
           </div>
         </form>
       </div>
 
       <div>
-        <h2 className="font-bold text-3xl text-lime-400 mt-20 mb-12">Available Showing Video</h2>
-        <div className="grid grid-cols-3 gap-4 mx-auto">
-          {allVideo.map((video, index) => (
-            <div key={index} className="mb-4 flex justify-center">
-              <div className=" relative">
+        <h2 className="font-bold text-3xl text-[#004368] mt-20 mb-6">
+          Available Showing Video From Global Server
+        </h2>
 
-                <video controls width="300">
-                  <source src={`https://grozziieget.zjweiting.com:8033/tht/showingVideos/${video.showingVideo}`} type="video/mp4" />
-                  {/* Your browser does not support the video tag. */}
+        {/* Country Tabs */}
+        <div className="flex justify-center items-center mb-6">
+          <div className="p-2 bg-slate-300 rounded-full" >
+            {countries.map((country, index) => (
+              <button
+                key={index}
+                onClick={() => setSelectedCountry(country)}
+                className={`px-16 py-2 rounded-full text-xl  ${selectedCountry === country
+                  ? "bg-[#004368] text-white font-bold"
+                  : "text-gray-500 font-semibold"
+                  }`}
+              >
+                {country === "ms-MY" ? "Malaysia" : country === "th-TH" ? "Thailand" : country === "en-US" ? "USA" : country === "vi-VN" ? "vietnam" : country === "zh-cn" ? "China" : country}
+              </button>
+            ))}
+          </div>
+
+        </div>
+
+        {/* Video Grid */}
+        <div className="grid grid-cols-4 gap-4 px-10">
+          {filteredVideos.map((video, index) => (
+            <div key={index} className="mb-4 flex justify-center p-2 shadow-lg rounded-lg">
+              <div className="relative rounded-lg">
+                <video controls width="300" className="rounded-lg">
+                  <source
+                    src={`${video.imgPath}${video.showingVideo}`}
+                    type="video/mp4"
+                  />
                 </video>
-                <button onClick={() => handleToDelete(video?.id)} className="absolute right-2 top-2 text-red-600 font-bold"><RiDeleteBin6Fill></RiDeleteBin6Fill></button>
-                <p  className="absolute left-2 top-2 text-green-600 font-bold">{video?.countryName}</p>
-                <h3 className="font-semibold text-lg">{video.title}</h3>
+                <button
+                  onClick={() => handleToDelete(video.id)}
+                  className="absolute right-2 top-2 text-blue-600 p-2 bg-slate-300 rounded-full font-bold"
+                >
+                  <RiDeleteBin6Fill />
+                </button>
+
+                <h3 className="font-semibold text-base my-2">{video.title}</h3>
               </div>
             </div>
           ))}
         </div>
       </div>
+
     </div>
   );
 }

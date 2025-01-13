@@ -242,6 +242,7 @@ function ProductDetails() {
         }
     };
     const handleTextEditSubmit = async (productId) => {
+
         try {
             // Prepare the updated product data
             const updatedProduct = {
@@ -268,10 +269,12 @@ function ProductDetails() {
                 slideImageMark,
             };
 
+            console.log(updatedProduct);
+
             // Make an API call to update the product
             // const response = await axios.put(`http://localhost:2000/tht/${Product?.imgPath.split("/")[4]}/update/textInformation/${productId}`, { updatedProduct });
             const response = await axios.put(`https://grozziieget.zjweiting.com:8033/tht/${Product?.imgPath.split("/")[4]}/update/textInformation/${productId}`, { updatedProduct });
-
+            console.log(updatedProduct, "data");
             // Check the response and handle accordingly
             if (response.status === 200) {
                 toast.success('Product updated successfully:', response.data);
@@ -667,10 +670,10 @@ function ProductDetails() {
                                                 </div>
                                             </div>
 
-                                            <div className="mb-2">
+                                            <div className="mb-2 relative">
                                                 <select
                                                     id="productCountryCategory"
-                                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                    className="shadow appearance-none border rounded w-full py-2 px-3 pr-10 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
                                                     value={productCountryName}
                                                     onChange={handleProductCountryNameChange}
                                                     required
@@ -684,12 +687,26 @@ function ProductDetails() {
                                                     <option value="ms-MY">Malaysia</option>
                                                     <option value="id-ID">Indonesia</option>
                                                 </select>
+                                                <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+                                                    <svg
+                                                        className="w-5 h-5 text-gray-500"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        viewBox="0 0 20 20"
+                                                        fill="currentColor"
+                                                    >
+                                                        <path
+                                                            fillRule="evenodd"
+                                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                            clipRule="evenodd"
+                                                        />
+                                                    </svg>
+                                                </div>
                                             </div>
 
-                                            <div className="mb-2">
+                                            <div className="mb-2 relative">
                                                 <select
                                                     id="productName"
-                                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                    className="shadow appearance-none border rounded w-full py-2 px-3 pr-10 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
                                                     value={productName}
                                                     onChange={handleProductNameChange}
                                                     required
@@ -698,8 +715,24 @@ function ProductDetails() {
                                                     <option value="Dot Printer">Dot Printer</option>
                                                     <option value="Thermal Printer">Thermal Printer</option>
                                                     <option value="Attendance Machine">Attendance Machine</option>
+                                                    <option value="Power Bank">Power Bank</option>
                                                 </select>
+                                                <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+                                                    <svg
+                                                        className="w-5 h-5 text-gray-500"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        viewBox="0 0 20 20"
+                                                        fill="currentColor"
+                                                    >
+                                                        <path
+                                                            fillRule="evenodd"
+                                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                            clipRule="evenodd"
+                                                        />
+                                                    </svg>
+                                                </div>
                                             </div>
+
 
 
                                             <div className="mb-2">
@@ -956,20 +989,54 @@ function ProductDetails() {
                                                 />
                                             </div>
                                             <div className="mb-2">
-                                                <label htmlFor="productImageRemark" className="block text-start text-gray-700 font-bold mb-2">
-                                                    Image Remarks
+                                                <label
+                                                    htmlFor="productImageRemark"
+                                                    className="block text-start text-gray-700 font-bold mb-2"
+                                                >
+                                                    Product Showing Place Remarks
                                                 </label>
-                                                <textarea
-                                                    id="productImageRemark"
-                                                    placeholder="Add product Image Remark"
-                                                    className="shadow resize-both appearance-none border rounded-lg w-full h-20  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
-                                                    value={productImgRemark}
-                                                    onChange={handleProductImageRemark}
-                                                ></textarea>
+
+                                                <div className="relative">
+                                                    <select
+                                                        id="productImageRemark"
+                                                        className="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                        value={productImgRemark} // Ensures the default selection matches `productImgRemark`
+                                                        onChange={handleProductImageRemark}
+                                                    >
+                                                        <option value="" disabled>
+                                                            Select an image remark
+                                                        </option>
+                                                        <option value="1">Old App Slider</option>
+                                                        <option value="2">Event Product</option>
+                                                        <option value="3">Device Slider</option>
+                                                        <option value="4">Label Slider</option>
+                                                        <option value="9">Home Slider</option>
+                                                    </select>
+                                                    <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+                                                        <svg
+                                                            className="w-5 h-5 text-gray-500"
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            viewBox="0 0 20 20"
+                                                            fill="currentColor"
+                                                        >
+                                                            <path
+                                                                fillRule="evenodd"
+                                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                                clipRule="evenodd"
+                                                            />
+                                                        </svg>
+                                                    </div>
+
+                                                </div>
+
+
+
                                             </div>
-                                            <div className="mb-4 grid  grid-cols-3 text-start">
-                                                <label htmlFor="modelNumber" className="block col-span-1 text-gray-500 font-semibold mb-2">
-                                                    Showing Data Link
+
+
+                                            <div className="mb-4 text-start">
+                                                <label htmlFor="modelNumber" className="block col-span-1 text-gray-700 font-bold mb-2">
+                                                    Showing Product Link from Web
                                                 </label>
                                                 <input
                                                     type="text"
@@ -983,21 +1050,42 @@ function ProductDetails() {
                                             </div>
                                             <div className="mb-4">
                                                 <label htmlFor="productImageRemark" className="block text-start text-gray-700 font-bold mb-2">
-                                                    Showing Data Mark
+                                                    Click To Show App/Web Product
                                                 </label>
-                                                <input
-                                                    type="number"
-                                                    id="ShowingDataMark"
-                                                    placeholder="Please Showing Data Mark"
-                                                    className="shadow col-span-2  appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
-                                                    value={showingDataMark}
-                                                    onChange={handleShowingDataMark}
+                                                <div className="relative">
+                                                    <select
+                                                        id="ShowingDataMark"
+                                                        className="shadow col-span-2 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                        value={showingDataMark} // Ensures the default selection matches `showingDataMark`
+                                                        onChange={handleShowingDataMark}
+                                                    >
+                                                        <option value="" disabled>
+                                                            Please select for app/web mark
+                                                        </option>
+                                                        <option value="0">Showing In App</option>
+                                                        <option value="1">Showing In Web</option>
+                                                    </select>
+                                                    <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+                                                        <svg
+                                                            className="w-5 h-5 text-gray-500"
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            viewBox="0 0 20 20"
+                                                            fill="currentColor"
+                                                        >
+                                                            <path
+                                                                fillRule="evenodd"
+                                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                                clipRule="evenodd"
+                                                            />
+                                                        </svg>
+                                                    </div>
+                                                </div>
 
-                                                />
+
                                             </div>
                                             <div className="mb-4">
                                                 <label htmlFor="productImageRemark" className="block text-start text-gray-700 font-bold mb-2">
-                                                    Slide Image Mark
+                                                    Slide Image Mark For Using Printer Model
                                                 </label>
                                                 <input
                                                     type="text"
@@ -1011,10 +1099,10 @@ function ProductDetails() {
                                             </div>
                                         </div>
 
-                                        <div className="mb-2">
+                                        <div className="mb-2 relative">
                                             <select
                                                 id="productCountryCategory"
-                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                className="shadow appearance-none border rounded w-full py-2 px-3 pr-10 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
                                                 value={productCountryName}
                                                 onChange={handleProductCountryNameChange}
                                                 required
@@ -1028,12 +1116,26 @@ function ProductDetails() {
                                                 <option value="ms-MY">Malaysia</option>
                                                 <option value="id-ID">Indonesia</option>
                                             </select>
+                                            <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+                                                <svg
+                                                    className="w-5 h-5 text-gray-500"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 20 20"
+                                                    fill="currentColor"
+                                                >
+                                                    <path
+                                                        fillRule="evenodd"
+                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                        clipRule="evenodd"
+                                                    />
+                                                </svg>
+                                            </div>
                                         </div>
 
-                                        <div className="mb-2">
+                                        <div className="mb-2 relative">
                                             <select
                                                 id="productName"
-                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+                                                className="shadow appearance-none border rounded w-full py-2 px-3 pr-10 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
                                                 value={productName}
                                                 onChange={handleProductNameChange}
                                                 required
@@ -1042,8 +1144,24 @@ function ProductDetails() {
                                                 <option value="Dot Printer">Dot Printer</option>
                                                 <option value="Thermal Printer">Thermal Printer</option>
                                                 <option value="Attendance Machine">Attendance Machine</option>
+                                                <option value="Power Bank">Power Bank</option>
                                             </select>
+                                            <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+                                                <svg
+                                                    className="w-5 h-5 text-gray-500"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 20 20"
+                                                    fill="currentColor"
+                                                >
+                                                    <path
+                                                        fillRule="evenodd"
+                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                        clipRule="evenodd"
+                                                    />
+                                                </svg>
+                                            </div>
                                         </div>
+
 
 
                                         <div className="mb-2">
@@ -1319,11 +1437,11 @@ function ProductDetails() {
                             <h4 className=" font-semibold mb-2 mt-4">Shelf Time</h4>
                             <div className="flex space-x-4 text-gray-500">
                                 <div className="flex-grow border pl-3 mr-8 rounded-md">
-                                    <p className="text-gray-700">{Product?.shelfStartTime.split("T")[0]
+                                    <p className="text-gray-700">{Product?.shelfStartTime?.split("T")[0]
                                     }</p>
                                 </div>
                                 <div className="flex-grow border pl-3 mr-8 rounded-md">
-                                    <p className="text-gray-700">{Product?.shelfEndTime.split("T")[0]
+                                    <p className="text-gray-700">{Product?.shelfEndTime?.split("T")[0]
                                     }</p>
                                 </div>
                             </div>

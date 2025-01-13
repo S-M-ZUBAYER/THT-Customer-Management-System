@@ -35,52 +35,72 @@ const VersionInfo = () => {
     const [chineseIosLoading, setChineseIosLoading] = useState(false);
 
     useEffect(() => {
-        // Fetch initial data
-        const fetchData = async () => {
-            try {
-                // const response = await axios.get('http://localhost:2000/tht/version');
-                const response = await axios.get('https://grozziieget.zjweiting.com:8033/tht/version');
 
-
-                if (response.status === 200) {
-                    const data = response.data[0];
-                    setAppVersion(data?.appVersion);
-                    setReleaseNotes(data?.releaseNotes);
-                    setDownloadUrl(data?.downloadUrl);
-                    setVersionMark(data?.versionMark)
-                    setAndroidId(data?.id)
-                    setAppData(data);
-                    const data2 = response.data[1];
-                    setIosAppVersion(data2?.appVersion);
-                    setIosReleaseNotes(data2?.releaseNotes);
-                    setIosDownloadUrl(data2?.downloadUrl);
-                    setIosVersionMark(data2?.versionMark)
-                    setIosId(data2?.id)
-                    setIosAppData(data2);
-                    const data3 = response.data[2];
-                    setChineseIosAppVersion(data3?.appVersion);
-                    setChineseIosReleaseNotes(data3?.releaseNotes);
-                    setChineseIosDownloadUrl(data3?.downloadUrl);
-                    setChineseIosVersionMark(data3?.versionMark)
-                    setChineseIosId(data3?.id)
-                    setChineseIosAppData(data3);
-                    const data4 = response.data[3];
-                    setChineseAppVersion(data4?.appVersion);
-                    setChineseReleaseNotes(data4?.releaseNotes);
-                    setChineseDownloadUrl(data4?.downloadUrl);
-                    setChineseVersionMark(data4?.versionMark)
-                    setChineseAndroidId(data4?.id)
-                    setChineseAppData(data4);
-                } else {
-                    toast.error('Failed to load data');
-                }
-            } catch (error) {
-                toast.error('An error occurred while fetching data');
-                console.error(error);
-            }
-        };
-        fetchData();
+        fetchGlobalData();
+        fetchChineseData();
     }, []);
+
+    // Fetch initial data
+    const fetchGlobalData = async () => {
+        try {
+            // const response = await axios.get('http://localhost:2000/tht/version');
+            const response = await axios.get('https://grozziieget.zjweiting.com:8033/tht/version');
+
+
+            if (response.status === 200) {
+                const data = response.data[0];
+                setAppVersion(data?.appVersion);
+                setReleaseNotes(data?.releaseNotes);
+                setDownloadUrl(data?.downloadUrl);
+                setVersionMark(data?.versionMark)
+                setAndroidId(data?.id)
+                setAppData(data);
+                const data2 = response.data[1];
+                setIosAppVersion(data2?.appVersion);
+                setIosReleaseNotes(data2?.releaseNotes);
+                setIosDownloadUrl(data2?.downloadUrl);
+                setIosVersionMark(data2?.versionMark)
+                setIosId(data2?.id)
+                setIosAppData(data2);
+            } else {
+                toast.error('Failed to load data');
+            }
+        } catch (error) {
+            toast.error('An error occurred while fetching data');
+            console.error(error);
+        }
+    };
+
+    // Fetch initial data
+    const fetchChineseData = async () => {
+        try {
+            // const response = await axios.get('http://localhost:2000/tht/version');
+            const response = await axios.get('https://jiapuv.com:8033/tht/version');
+
+
+            if (response.status === 200) {
+                const data4 = response.data[1];
+                setChineseIosAppVersion(data4?.appVersion);
+                setChineseIosReleaseNotes(data4?.releaseNotes);
+                setChineseIosDownloadUrl(data4?.downloadUrl);
+                setChineseIosVersionMark(data4?.versionMark)
+                setChineseIosId(data4?.id)
+                setChineseIosAppData(data4);
+                const data3 = response.data[0];
+                setChineseAppVersion(data3?.appVersion);
+                setChineseReleaseNotes(data3?.releaseNotes);
+                setChineseDownloadUrl(data3?.downloadUrl);
+                setChineseVersionMark(data3?.versionMark)
+                setChineseAndroidId(data3?.id)
+                setChineseAppData(data3);
+            } else {
+                toast.error('Failed to load data');
+            }
+        } catch (error) {
+            toast.error('An error occurred while fetching data');
+            console.error(error);
+        }
+    };
 
     const handleCancel = () => {
         setAppVersion('');
@@ -217,16 +237,11 @@ const VersionInfo = () => {
             toast.error('Please enter a valid URL for the chinese download link');
             return;
         }
-        console.log({
-            chineseAppVersion,
-            chineseReleaseNotes,
-            chineseDownloadUrl,
-            chineseVersionMark
-        });
+
         setChineseLoading(true);
         try {
             // const response = await axios.put(`http://localhost:2000/tht/version/update/${androidId}`, {
-            const response = await axios.put(`https://grozziieget.zjweiting.com:8033/tht/version/update/${chineseAndroidId}`, {
+            const response = await axios.put(`https://jiapuv.com:8033/tht/version/update/${chineseAndroidId}`, {
                 appVersion: chineseAppVersion,
                 releaseNotes: chineseReleaseNotes,
                 downloadUrl: chineseDownloadUrl,
@@ -235,6 +250,8 @@ const VersionInfo = () => {
 
 
             if (response.status === 200) {
+                console.log(response);
+
                 toast.success('Data saved successfully!');
                 setChineseAppData({
                     id: 1,
@@ -275,7 +292,7 @@ const VersionInfo = () => {
         setChineseIosLoading(true);
         try {
             // const response = await axios.put(`http://localhost:2000/tht/version/update/${iosId}`, {
-            const response = await axios.put(`https://grozziieget.zjweiting.com:8033/tht/version/update/${chineseIosId}`, {
+            const response = await axios.put(`https://jiapuv.com:8033/tht/version/update/${chineseIosId}`, {
                 appVersion: chineseIosAppVersion,
                 releaseNotes: chineseIosReleaseNotes,
                 downloadUrl: chineseIosDownloadUrl,

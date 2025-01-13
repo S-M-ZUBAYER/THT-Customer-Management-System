@@ -8,6 +8,7 @@ const CropPaymentInfo = () => {
     const [CNY, setCNY] = useState('');
     const [SGD, setSGD] = useState('');
     const [EUR, setEUR] = useState('');
+    const [allowMark, setAllowMark] = useState('');
     const [loading, setLoading] = useState(false);
     const [currentData, setCurrentData] = useState(null);
 
@@ -24,6 +25,7 @@ const CropPaymentInfo = () => {
                     setCNY(data[0].CNY);
                     setSGD(data[0].SGD);
                     setEUR(data[0].EUR);
+                    setAllowMark(data[0].allowMark);
                     setCurrentData(data[0]);
                 } else {
                     console.error('Failed to load PDF payment data');
@@ -40,6 +42,7 @@ const CropPaymentInfo = () => {
         setCNY(currentData?.CNY || 0);
         setSGD(currentData?.SGD || 0);
         setEUR(currentData?.EUR || 0);
+        setAllowMark(currentData?.allowMark || 0);
         toast.info('Input cleared');
     };
 
@@ -49,7 +52,8 @@ const CropPaymentInfo = () => {
             !USD || isNaN(USD) ||
             !CNY || isNaN(CNY) ||
             !SGD || isNaN(SGD) ||
-            !EUR || isNaN(EUR)
+            !EUR || isNaN(EUR) ||
+            !allowMark || isNaN(allowMark)
         ) {
             toast.error('Please enter valid amounts');
             return;
@@ -65,6 +69,7 @@ const CropPaymentInfo = () => {
                     CNY: parseInt(CNY, 10),
                     SGD: parseInt(SGD, 10),
                     EUR: parseInt(EUR, 10),
+                    allowMark: parseInt(allowMark, 10),
                 }
             );
 
@@ -76,6 +81,7 @@ const CropPaymentInfo = () => {
                     CNY: parseInt(CNY, 10),
                     SGD: parseInt(SGD, 10),
                     EUR: parseInt(EUR, 10),
+                    allowMark: parseInt(allowMark, 10),
                 });
                 setLoading(false);
             } else {
@@ -142,6 +148,16 @@ const CropPaymentInfo = () => {
                             placeholder="Enter EUR amount"
                         />
                     </section>
+                    <section className="mb-8">
+                        <label className="block font-medium text-gray-700 text-lg mb-2">Allow Mark</label>
+                        <input
+                            type="number"
+                            value={allowMark}
+                            onChange={(e) => setAllowMark(e.target.value)}
+                            className="p-3 bg-white text-black border border-gray-300 rounded w-full"
+                            placeholder="Enter EUR amount"
+                        />
+                    </section>
 
                     <div className="flex justify-between mt-8">
                         <button
@@ -167,10 +183,11 @@ const CropPaymentInfo = () => {
                             <h3 className="text-2xl font-medium text-gray-800 mb-4">Current Payment Data</h3>
                             <div className="text-gray-700">
                                 <p><strong>ID:</strong> {currentData.id}</p>
-                                <p><strong>USD Amount:</strong> {currentData.USD}</p>
-                                <p><strong>CNY Amount:</strong> {currentData.CNY}</p>
-                                <p><strong>SGD Amount:</strong> {currentData.SGD}</p>
-                                <p><strong>EUR Amount:</strong> {currentData.EUR}</p>
+                                <p><strong>USD Amount:</strong> {currentData?.USD}</p>
+                                <p><strong>CNY Amount:</strong> {currentData?.CNY}</p>
+                                <p><strong>SGD Amount:</strong> {currentData?.SGD}</p>
+                                <p><strong>EUR Amount:</strong> {currentData?.EUR}</p>
+                                <p><strong>Allow Mark:</strong> {currentData?.allowMark}</p>
                             </div>
                         </section>
                     )}

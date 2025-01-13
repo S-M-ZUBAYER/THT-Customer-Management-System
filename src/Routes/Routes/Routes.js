@@ -11,7 +11,7 @@ import CustomerService_1 from "../../components/Pages/CustomerServicePage/Custom
 import CustomerService_2 from "../../components/Pages/CustomerServicePage/CustomerService_2";
 import AllUsers from "../../components/Pages/AdminPage/AdminDashboard/AllUsers";
 import QandA from "../../components/Pages/AdminPage/AdminDashboard/QandA";
-import AddMallProducts from "../../components/Pages/AdminPage/AdminDashboard/MallProducts";
+import MallProducts from "../../components/Pages/AdminPage/AdminDashboard/MallProducts";
 import EventProducts from "../../components/Pages/AdminPage/AdminDashboard/EventProducts";
 import PrivateRoute from "./PrivateRoute/PrivateRoute";
 import ProductDetails from "../../components/Pages/AdminPage/AdminDashboard/ProductDetails";
@@ -39,6 +39,7 @@ import ShopifyInfo from "../../components/Pages/AdminPage/AdminDashboard/Shopify
 import UserBaseBitmap from "../../components/Pages/AdminPage/UserBaseBitmap";
 import ShowBitmap from "../../components/Pages/AdminPage/ShowBitmap";
 import PDFPaymentInfo from "../../components/Pages/AdminPage/AdminDashboard/PDFPaymentInfo";
+import VoltagePercentage from "../../components/Pages/AdminPage/AdminDashboard/PowerBank/VoltagePercentage";
 
 
 
@@ -159,7 +160,11 @@ export const routes = createBrowserRouter([
             },
             {
                 path: "/admin/mallProduct",
-                element: <PrivateRoute><AddMallProducts></AddMallProducts></PrivateRoute>
+                element: <PrivateRoute><MallProducts></MallProducts></PrivateRoute>
+            },
+            {
+                path: "/admin/eventProduct",
+                element: <PrivateRoute><EventProducts></EventProducts></PrivateRoute>
             },
             {
                 path: "/admin/shopifyInfo",
@@ -170,12 +175,12 @@ export const routes = createBrowserRouter([
                 element: <PrivateRoute><UserBaseBitmap></UserBaseBitmap></PrivateRoute>
             },
             {
-                path: "/admin/userBaseBitmap/showBitmap/:userId",
-                element: <PrivateRoute><ShowBitmap></ShowBitmap></PrivateRoute>
+                path: "/admin/powerBank",
+                element: <PrivateRoute><VoltagePercentage></VoltagePercentage></PrivateRoute>
             },
             {
-                path: "/admin/eventProduct",
-                element: <PrivateRoute><EventProducts></EventProducts></PrivateRoute>
+                path: "/admin/userBaseBitmap/showBitmap/:userId",
+                element: <PrivateRoute><ShowBitmap></ShowBitmap></PrivateRoute>
             },
             {
                 path: "/admin/mallProduct/details/:model",

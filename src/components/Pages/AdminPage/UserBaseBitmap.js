@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import DisplaySpinner from '../../Shared/Loading/DisplaySpinner';
 
 const UserBaseBitmap = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -89,7 +90,7 @@ const UserBaseBitmap = () => {
 
     return (
         <div className="p-6 min-h-screen">
-            <h2 className="text-2xl font-bold mb-6 text-center">User Base Bitmap</h2>
+            <h2 className="text-2xl font-bold mb-6 text-center text-black">User Base Bitmap</h2>
             <div className="overflow-auto">
                 <table className="w-full text-left border-collapse rounded-lg shadow-md overflow-hidden">
                     <thead>
@@ -104,7 +105,7 @@ const UserBaseBitmap = () => {
                     </thead>
                     <tbody>
                         {loading ? (
-                            <tr><td colSpan="6" className="text-center p-3">Loading...</td></tr>
+                            <tr><td colSpan="6" className="text-center p-3"><DisplaySpinner></DisplaySpinner></td></tr>
                         ) : users.length > 0 ? (
                             users.map((user, index) => (
                                 <tr key={user.userId} className="hover:bg-blue-200 text-black">
@@ -137,23 +138,27 @@ const UserBaseBitmap = () => {
             </div>
 
             {/* Pagination Controls */}
-            <div className="flex justify-center mt-4 space-x-2">
-                <button
-                    onClick={() => handlePageChange(page - 1)}
-                    disabled={page === 0}
-                    className="bg-gray-300 hover:bg-gray-400 text-black py-1 px-3 rounded"
-                >
-                    Previous
-                </button>
-                <span className="p-2">Page {page + 1} of {totalPages}</span>
-                <button
-                    onClick={() => handlePageChange(page + 1)}
-                    disabled={page === totalPages - 1}
-                    className="bg-gray-300 hover:bg-gray-400 text-black py-1 px-3 rounded"
-                >
-                    Next
-                </button>
-            </div>
+            {
+                loading ? "" :
+                    <div className="flex justify-center mt-4 space-x-2">
+                        <button
+                            onClick={() => handlePageChange(page - 1)}
+                            disabled={page === 0}
+                            className="bg-gray-300 hover:bg-gray-400 text-black py-1 px-3 rounded"
+                        >
+                            Previous
+                        </button>
+                        <span className="p-2">Page {page + 1} of {totalPages}</span>
+                        <button
+                            onClick={() => handlePageChange(page + 1)}
+                            disabled={page === totalPages - 1}
+                            className="bg-gray-300 hover:bg-gray-400 text-black py-1 px-3 rounded"
+                        >
+                            Next
+                        </button>
+                    </div>
+            }
+
 
             {/* Modal for updating user */}
             {isModalOpen && selectedUser && (
