@@ -4,8 +4,8 @@ import { AiOutlineSend } from 'react-icons/ai';
 import { MdOndemandVideo } from 'react-icons/md';
 import { AiOutlineFileAdd } from 'react-icons/ai';
 import toast from 'react-hot-toast';
-import { AuthContext } from '../../../context/UserContext';
 import { Client } from '@stomp/stompjs';
+import { AuthContext } from '../../../context/UserContext';
 import { sendChatMessage } from './SendMessageFunction';
 import smsNotify from '../../../../src/Assets/MP3/IphoneMobCup.mp3';
 
@@ -30,6 +30,7 @@ const MessageInput = ({
       Notification.requestPermission();
     }
   }, []);
+
 
   //According to the coming new sms here update the chatting sms and list and show the toast in here.
   useEffect(() => {
@@ -62,8 +63,6 @@ const MessageInput = ({
   }, [newCome]);
 
 
-
-
   //here update the loading part depend of the response from the app (get sms or not)
   useEffect(() => {
     if (newResponseCome?.totalPart === newResponseCome?.partNo) {
@@ -80,13 +79,10 @@ const MessageInput = ({
   }, [newResponseCome]);
 
 
-
-
   // Here make empty the new response status
   useEffect(() => {
     setNewCome({});
   }, [selectedCustomerChat]);
-
 
 
   //Make the function to send the time according to the sending time
@@ -117,7 +113,6 @@ const MessageInput = ({
     stompClient.onConnect = (frame) => {
       setConnected(true);
       console.log('Connected: ' + frame);
-
       const response = new Promise((resolve) => {
         fetchUserByUserId();
         stompClient.publish(
@@ -134,15 +129,10 @@ const MessageInput = ({
           }
         );
       });
-
       response.then((resolvedValue) => {
         // You can now use the resolved value here
         console.log('Promise resolved:', resolvedValue);
       });
-
-
-
-
       stompClient.subscribe(`/topic/${chattingUser?.userId}`, (message) => {
         console.log(message?.body, "coming sms")
         const newSMS = JSON.parse(message.body);
@@ -156,37 +146,49 @@ const MessageInput = ({
 
     stompClient.onWebSocketError = (error) => {
       console.error('Error with websocket', error);
-      // Handle error here, you can update state or show an error message to the user.
     };
     stompClient.activate();
   };
 
+
+
   useEffect(() => {
+    let retryInterval;
+    let reconnectInterval;
 
-    if (connected) {
-      SocketDisconnect();
-    }
+    // if (connected) {
+    //   SocketDisconnect();
+    // }
 
-    // Try to connect
+    // Initial connection attempt
     connect();
 
     // Retry every 5 seconds if not connected
-    const retryInterval = setInterval(() => {
+    retryInterval = setInterval(() => {
       if (!connected) {
         console.log('Reconnecting to WebSocket...');
         fetchUserByUserId();
         connect();
       } else {
-        clearInterval(retryInterval);
+        clearInterval(retryInterval); // Stop retrying if connected
       }
     }, 5000);
+
+    // Force reconnection every 5 minutes only if chattingUser exists
+    if (chattingUser) {
+      reconnectInterval = setInterval(() => {
+        console.log('Forcing reconnection every 5 minutes...');
+        connect();
+      }, 5 * 60 * 1000); // 5 minutes in milliseconds
+    }
 
     // Cleanup on unmount
     return () => {
       clearInterval(retryInterval);
+      if (reconnectInterval) clearInterval(reconnectInterval);
       stompClient.deactivate();
     };
-  }, [connected, newAllMessage]);
+  }, [connected, newAllMessage, chattingUser]); // Include chattingUser as a dependency
 
 
 
@@ -241,24 +243,24 @@ const MessageInput = ({
       setNewCome(sms);
     }
 
-    setAllChat((prevChat) => [...(prevChat?.length ? prevChat : []), sms]);
+    // setAllChat((prevChat) => [...(prevChat?.length ? prevChat : []), sms]);
 
 
     const handleFetchUser = () => {
       fetchUserByUserId();
     };
 
-    const handleToastSuccess = () => {
-      const audio = new Audio(smsNotify); // Ensure this path is correct
-      audio.play().then(() => {
-        console.log('Audio played successfully');
-      }).catch((error) => {
-        console.error('Error playing audio:', error);
-      });
-      toast.success(`${sms?.msgType} come from  Id:${sms?.sentBy}`, {
-        position: "top-right"
-      });
-    };
+    // const handleToastSuccess = () => {
+    //   const audio = new Audio(smsNotify); // Ensure this path is correct
+    //   audio.play().then(() => {
+    //     console.log('Audio played successfully');
+    //   }).catch((error) => {
+    //     console.error('Error playing audio:', error);
+    //   });
+    //   toast.success(`${sms?.msgType} come from  Id:${sms?.sentBy}`, {
+    //     position: "top-right"
+    //   });
+    // };
 
     if (sms?.totalPart === 1 || (sms?.totalPart > 1 && sms?.partNo === sms?.totalPart)) {
 
@@ -275,7 +277,7 @@ const MessageInput = ({
         }
       });
 
-      handleToastSuccess();
+      // handleToastSuccess();
     }
 
 
@@ -283,10 +285,10 @@ const MessageInput = ({
 
     // Here make the functionalities to store the coming sms in the local storage
 
-    const liveChatKey = `${user?.email}LiveChat${sms?.sentBy}`;
-    const existingChat = JSON.parse(localStorage.getItem(liveChatKey)) || [];
-    const updatedChat = [...existingChat, sms];
-    localStorage.setItem(liveChatKey, JSON.stringify(updatedChat));
+    // const liveChatKey = `${user?.email}LiveChat${sms?.sentBy}`;
+    // const existingChat = JSON.parse(localStorage.getItem(liveChatKey)) || [];
+    // const updatedChat = [...existingChat, sms];
+    // localStorage.setItem(liveChatKey, JSON.stringify(updatedChat));
 
   };
 

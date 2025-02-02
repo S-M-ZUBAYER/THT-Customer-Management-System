@@ -8,19 +8,19 @@ import { Navigate } from 'react-router-dom';
 import ShowQuestionPagination from './ShowQuestionPagination';
 import ShowUnknownQuestionPagination from './ShowUnknownQuestionPagination';
 const Account = () => {
-  const [userInfo, setUserInfo] = useState([]);
+
   const QuestionPerPage = 25;
 
   //use useeContext to load data from  another components
-  const { logOut, loading, setLoading, user, setUser, totalQuestions, translationQuestions, setTotalQuestions, setTranslationQuestions, translateCalculatePercentage, unknownCalculatePercentage, unknownPercent, setUnknownPercent, translationPercent, setTranslationPercent, unknownQuestions, setUnknownQuestions } = useContext(AuthContext);
+  const { logOut, userInfo, SocketDisconnect, loading, setLoading, user, setUser, totalQuestions, translationQuestions, setTotalQuestions, setTranslationQuestions, translateCalculatePercentage, unknownCalculatePercentage, unknownPercent, setUnknownPercent, translationPercent, setTranslationPercent, unknownQuestions, setUnknownQuestions } = useContext(AuthContext);
 
 
+  console.log(userInfo);
 
 
   //got the current user data from database  and get the data after getting the information about the current user 
   useEffect(() => {
     if (user?.email) {
-      fetchUserByEmail();
       fetchQuestionsByEmail();
       fetchUnknownQuestionsByEmail();
       translationsQuestionsByEmail();
@@ -28,19 +28,7 @@ const Account = () => {
   }, [user?.email]);
 
 
-  //get a user full information and search by email
-  const fetchUserByEmail = async () => {
-    try {
-      const response = await axios.get('https://grozziieget.zjweiting.com:8033/tht/users', {
-        params: {
-          email: user?.email,
-        },
-      });
-      setUserInfo(response.data[0]);
-    } catch (error) {
-      console.error('Error fetching user data:', error);
-    }
-  };
+
 
 
   //fetch all searching question which questions are search by this specific users
@@ -107,7 +95,9 @@ const Account = () => {
   const handleToLogOut = () => {
     try {
       setLoading(true);
+      SocketDisconnect();
       setUser(null);
+      localStorage.removeItem('chattingUser');
       localStorage.removeItem('user');
       toast.success("Logout successfully");
       setLoading(false);
@@ -233,7 +223,6 @@ const Account = () => {
         {/* Here is the part to show all information about the current user */}
         <div className="text-start mt-20 md:mt-0 ">
           <div className="ml-20 md:ml-0 mx-auto md:mx-0">
-
             <div className="test-center">
               <h2 className="text-lg font-semibold mb-0 pb-0">
                 {userInfo?.name}

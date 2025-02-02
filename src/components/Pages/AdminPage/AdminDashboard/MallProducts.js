@@ -268,19 +268,19 @@ const MallProducts = () => {
                 </form>
 
                 <div className=" h-screen overflow-y-scroll">
-                    <div className="mx-2 my-3 grid grid-cols-7  text-start text-lg font-semibold bg-slate-300 px-2 py-2">
+                    <div className="mx-2 my-3 grid grid-cols-7  text-start text-lg font-semibold bg-slate-300 px-2 py-2  sticky top-0">
                         <div className=" col-span-6 grid grid-cols-6">
                             <p>
                                 Image
                             </p>
                             <p>
-                                product Name
+                                Product Name
                             </p>
                             <p className="">
                                 Model No
                             </p>
                             <p className="">
-                                country
+                                Country
                             </p>
                             <p className="">
                                 Id

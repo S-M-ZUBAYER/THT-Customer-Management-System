@@ -2,11 +2,12 @@
 
 import React, { createContext, useEffect, useState } from 'react';
 import { Client } from '@stomp/stompjs';
-import { FacebookAuthProvider, GoogleAuthProvider, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
 import app from '../Firebase/firebase.config';
 import toast from 'react-hot-toast';
-import { sendChatMessage } from '../components/Pages/CustomerServicePage/SendMessageFunction';
 import axios from 'axios';
+import { FacebookAuthProvider, GoogleAuthProvider, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
+import { sendChatMessage } from '../components/Pages/CustomerServicePage/SendMessageFunction';
+import smsNotify from '../../src/Assets/MP3/IphoneMobCup.mp3';
 
 export const AuthContext = createContext();
 
@@ -19,7 +20,11 @@ const UserContext = ({ children }) => {
   const [chattingUser, setChattingUser] = useState(null);
   const [DUser, setDUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [comingSMS, setComingSMS] = useState(null)
+  const [serviceCountry, setServiceCountry] = useState("EN");
+  const [showData, setShowData] = useState("");
+  const [userInfo, setUserInfo] = useState([]);
+
+
 
   // <----------------------------chatting---------------------->
 
@@ -32,25 +37,37 @@ const UserContext = ({ children }) => {
   const [localStoreSms, setLocalStoreSms] = useState([]);
   const [customerStatus, setCustomerStatus] = useState("RUNNING");
   const [currentCustomer, setCurrentCustomer] = useState([]);
-  const [serviceCountry, setServiceCountry] = useState("EN");
+  const [comingSMS, setComingSMS] = useState(null)
 
-  function getCurrentTime() {
-    const now = new Date();
-    const hours = now.getHours();
-    const minutes = now.getMinutes();
 
-    // Determine AM or PM
-    const ampm = hours >= 12 ? 'PM' : 'AM';
+  // <----------------------------Others State ---------------------->
+  const [unknownPercent, setUnknownPercent] = useState(0);
+  const [translationPercent, setTranslationPercent] = useState(0);
+  const [totalQuestionsLan, setTotalQuestionsLan] = useState(0);
+  const [unknownQuestionsLan, setUnknownQuestionsLan] = useState(0);
+  const [translationQuestionsLan, setTranslationQuestionsLan] = useState(0);
+  const [category, setCategory] = useState('');
+  const [categories, setCategories] = useState([]);
+  const [translationQuestions, setTranslationQuestions] = useState([]);
+  const [totalQuestions, setTotalQuestions] = useState([]);
+  const [unknownQuestions, setUnknownQuestions] = useState([]);
 
-    // Convert hours to 12-hour format
-    const formattedHours = hours % 12 || 12;
 
-    // Add leading zeros to minutes if needed
-    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+  //get a user full information and search by email
+  const fetchUserByEmail = async () => {
+    try {
+      const response = await axios.get('https://grozziieget.zjweiting.com:8033/tht/users', {
+        params: {
+          email: user?.email,
+        },
+      });
+      console.log(response.data[0], user?.email);
 
-    return `${formattedHours}:${formattedMinutes} ${ampm}`;
-  }
-
+      setUserInfo(response.data[0]);
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
 
   //chatting list refresh process
   const fetchUserByUserId = async () => {
@@ -62,8 +79,6 @@ const UserContext = ({ children }) => {
       } else {
         response = await axios.get(`https://jiapuv.com:3091/CustomerService-ChatCN/api/dev/chatlist/customer_service/${chattingUser?.userId}`);
       }
-
-
       if (response.status === 200) {
         // Request was successful
 
@@ -96,47 +111,170 @@ const UserContext = ({ children }) => {
     return (Array.from(uniqueCustomers.values()));
   }
 
-  function getCurrentTimestampInSeconds() {
-    const currentDate = new Date();
-    const timestampInSeconds = Math.floor(currentDate.getTime() / 1000);
-    return timestampInSeconds;
-  }
+  useEffect(() => {
+    if (user?.email) {
+      fetchUserByEmail();
+    }
+  }, [user?.email]);
 
-  const getAnswer = (sms) => {
 
-    if (sms && sms.totalPart === 1) {
-      //show your message/video/file/image
 
+
+  // <----------------------------chatting start---------------------->
+  useEffect(() => {
+    if (Notification.permission !== 'granted') {
+      Notification.requestPermission();
+    }
+  }, []);
+
+  //here update the loading part depend of the response from the app (get sms or not)
+  useEffect(() => {
+    if (newResponseCome?.totalPart === newResponseCome?.partNo) {
+      setAllChat((prevAllChat) => {
+        return prevAllChat?.map((chat, index) => {
+          if (chat?.sentId === newResponseCome?.sentId && newResponseCome?.totalPart === newResponseCome?.partNo) {
+            return { ...chat, smsLoading: false };
+          }
+          // For other objects, return them as they are
+          return chat;
+        });
+      });
+    }
+  }, [newResponseCome]);
+
+  // <---------------------------Final Web Socket------------------------------------>
+  const stompClient = new Client({
+    brokerURL: 'wss://grozziieget.zjweiting.com:3091/CustomerService-Chat/websocket',
+    // brokerURL: 'ws://127.0.0.1:5000',
+    //  brokerURL: 'ws://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/websocket',
+  });
+
+  const SocketDisconnect = () => {
+    if (connected) {
+      console.log("disconnected");
+
+      // Disconnect from the WebSocket
+      stompClient.deactivate();
+    }
+  };
+
+  const connect = () => {
+    console.log("connect");
+
+    stompClient.onConnect = (frame) => {
+      setConnected(true);
+      console.log('Connected: ' + frame);
+
+      const response = new Promise((resolve) => {
+        fetchUserByUserId();
+        stompClient.publish(
+          {
+            destination: '/app/connectStatus',
+            body: JSON.stringify({
+              userId: chattingUser?.userId,
+              deviceId: navigator.appName + navigator.platform + user?.email
+            }),
+          },
+          {},
+          (response) => {
+            resolve(response);
+          }
+        );
+      });
+
+      response.then((resolvedValue) => {
+        // You can now use the resolved value here
+        console.log('Promise resolved:', resolvedValue);
+      });
+
+      stompClient.subscribe(`/topic/${chattingUser?.userId}`, (message) => {
+        console.log(message?.body, "coming sms")
+        const newSMS = JSON.parse(message.body);
+        if (newSMS && newSMS.msgType === "ans") {
+          setNewResponseCome(newSMS);
+        }
+        showGreeting(newSMS)
+
+      });
+    };
+
+    stompClient.onWebSocketError = (error) => {
+      console.error('Error with websocket', error);
+      // Handle error here, you can update state or show an error message to the user.
+    };
+    stompClient.activate();
+  };
+
+  useEffect(() => {
+    let retryInterval;
+    let reconnectInterval;
+
+    // if (connected) {
+    //   SocketDisconnect();
+    // }
+
+    // Initial connection attempt
+    if (chattingUser) {
+      connect();
     }
     else {
-      if (sms && sms.partNo === sms.totalPart) {//get partNo
+      return;
+    }
 
-        // setNewAllMessage([]);
+    // Retry every 5 seconds if not connected
+    retryInterval = setInterval(() => {
+      if (!connected) {
+        console.log('Reconnecting to WebSocket...');
+        fetchUserByUserId();
+        connect();
+      } else {
+        clearInterval(retryInterval); // Stop retrying if connected
+      }
+    }, 5000);
+
+    // Force reconnection every 5 minutes only if chattingUser exists
+    if (chattingUser) {
+      console.log(chattingUser);
+
+      reconnectInterval = setInterval(() => {
+        console.log('Forcing reconnection every 5 minutes...');
+        connect();
+      }, 5 * 60 * 1000); // 5 minutes in milliseconds
+    }
+
+    // Cleanup on unmount
+    return () => {
+      clearInterval(retryInterval);
+      if (reconnectInterval) clearInterval(reconnectInterval);
+      stompClient.deactivate();
+    };
+  }, [connected, newAllMessage, chattingUser]); // Include chattingUser as a dependency
+
+
+  //Here make the functionalities to change the interface after sending the sms , image, file, and video 
+  const getAnswer = (sms) => {
+    if (sms && sms.totalPart === 1) {
+      setSelectedFiles([]);
+    }
+    else {
+      if (sms && sms.partNo === sms.totalPart) {
         setSelectedFiles([]);
-        //show your message/video/file/image
-
       }
       else {
-        //sent next part
         sendChatMessage((newAllMessage)[sms.partNo]);
-
       }
     }
   };
 
-
-
-
+  // Here make the functionalities to send the response and update the user interface after coming new sms 
   const showGreeting = async (sms) => {
-
     if (sms.msgType === "ans") {
       getAnswer(sms);
       return;
 
     }
 
-
-    //Add New response
+    //Add New response sms
     const textMessage = {
       chatId: sms?.chatId,
       sentBy: sms?.sentTo,
@@ -149,115 +287,103 @@ const UserContext = ({ children }) => {
       timestamp: getCurrentTime(),
     };
 
-
-
-    // sendChatMessage(textMessage);
+    sendChatMessage(textMessage);
     if (sms && sms.msgType !== "ans") {
       setNewCome(sms);
     }
+    setAllChat((prevChat) => [...(prevChat?.length ? prevChat : []), sms]);
 
-    if (sms?.totalPart === 1) {
+    const handleFetchUser = () => {
+      fetchUserByUserId();
+    };
+    const handleToastSuccess = () => {
+      const audio = new Audio(smsNotify); // Ensure this path is correct
+      audio.play().then(() => {
+        console.log('Audio played successfully');
+      }).catch((error) => {
+        console.error('Error playing audio:', error);
+      });
       toast.success(`${sms?.msgType} come from  Id:${sms?.sentBy}`, {
         position: "top-right"
-      })
+      });
+    };
+
+    if (sms?.totalPart === 1 || (sms?.totalPart > 1 && sms?.partNo === sms?.totalPart)) {
+      if (currentCustomer.length === 0) {
+        handleFetchUser();
+      }
+      handleToastSuccess();
     }
-    else if (sms?.totalPart > 1 && sms?.partNo === sms?.totalPart) {
-      toast.success(`${sms?.msgType} come from  Id:${sms?.sentBy}`, {
-        position: "top-right"
-      })
-    }
 
-
-
-
-
-    //==============================================
-
-    setAllChat((prevChat) => [...prevChat, sms]);
+    // Here make the functionalities to store the coming sms in the local storage
+    const liveChatKey = `${user?.email}LiveChat${sms?.sentBy}`;
+    const existingChat = JSON.parse(localStorage.getItem(liveChatKey)) || [];
+    const updatedChat = [...existingChat, sms];
+    localStorage.setItem(liveChatKey, JSON.stringify(updatedChat));
 
   };
 
-  const disconnectAndClearCache = () => {
-    if (connected) {
-      // Disconnect from the WebSocket
-      stompClient.deactivate();
+  //Here make the nice formate to send the time 
+  function getCurrentTime() {
+    const now = new Date();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
 
-      // Clear the cache or reset any relevant state
-      // You can add code here to clear specific caches or reset state
-      // For example, you can clear the chat history or reset the chatMessage state.
+    // Determine AM or PM
+    const ampm = hours >= 12 ? 'PM' : 'AM';
 
-      // Clear the disconnect timer if it's set
-      if (disconnectTimer) {
-        toast.success("Disconnected successfully")
-        clearTimeout(disconnectTimer);
+    // Convert hours to 12-hour format
+    const formattedHours = hours % 12 || 12;
+
+    // Add leading zeros to minutes if needed
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+
+    return `${formattedHours}:${formattedMinutes} ${ampm}`;
+  }
+
+
+  // Here delete the selected file from the interface
+  const handleRemoveFile = (fileIndex) => {
+    const updatedFiles = selectedFiles.filter((_, index) => index !== fileIndex);
+    setSelectedFiles(updatedFiles);
+  };
+
+  // Function to read a file as base64
+  const readAsBase64 = (file) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        resolve(reader.result.split(',')[1]); // Remove the "data:image/jpeg;base64," part
+      };
+    });
+  };
+
+
+  //Here make the function to split the base64 string into multiple part according to the size
+  function splitBase64String(base64Data, maxSizeInBytes) {
+    const base64Parts = [];
+    let currentPart = '';
+    for (let i = 0; i < base64Data.length; i++) {
+      currentPart += base64Data.charAt(i);
+
+      if (currentPart.length * 0.75 >= maxSizeInBytes) {
+        // If the current part exceeds the specified size, push it to the array
+        base64Parts.push(currentPart);
+        currentPart = '';
       }
     }
-  };
+
+    if (currentPart.length > 0) {
+      // Push any remaining data as a part
+      base64Parts.push(currentPart);
+    }
+    return base64Parts;
+  }
 
 
 
-
-  let disconnectTimer;
-  const stompClient = new Client({
-    brokerURL: serviceCountry === "EN"
-      ? 'wss://grozziieget.zjweiting.com:3091/CustomerService-Chat/websocket'
-      : 'wss://jiapuv.com:3091/CustomerService-ChatCN/websocket',
-
-  });
-
-
-  //After solve the chatting backend need to start 
-
-  // useEffect(() => {
-  //   const connect = () => {
-  //     stompClient.onConnect = (frame) => {
-  //       setConnected(true);
-  //       console.log('Connected: ' + frame);
-  //       console.log(`/topic/${chattingUser?.userId}`)
-  //       stompClient.subscribe(`/topic/${chattingUser?.userId}`, (message) => {
-  //         console.log(message?.body, "coming sms")
-  //         const newSMS = JSON.parse(message.body);
-  //         if (newSMS && newSMS.msgType === "ans") {
-  //           setNewResponseCome(newSMS);
-  //         }
-  //         showGreeting(newSMS)
-
-  //       });
-  //     };
-
-  //     stompClient.onWebSocketError = (error) => {
-  //       console.error('Error with websocket', error);
-  //       // Handle error here, you can update state or show an error message to the user.
-  //     };
-  //     stompClient.activate();
-  //   };
-
-  //   // Try to connect
-  //   connect();
-
-  //   // Retry every 5 seconds if not connected
-  //   const retryInterval = setInterval(() => {
-  //     if (!connected) {
-  //       console.log('Reconnecting to WebSocket...');
-  //       connect();
-  //     } else {
-  //       clearInterval(retryInterval);
-  //     }
-  //   }, 5000);
-
-  //   // Cleanup on unmount
-  //   return () => {
-  //     clearInterval(retryInterval);
-  //     stompClient.deactivate();
-  //   };
-  // }, [connected, newAllMessage]);
-
-
-
-  // <----------------------------chatting---------------------->
-
-
-
+  // <----------------------------chatting end---------------------->
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
@@ -285,21 +411,7 @@ const UserContext = ({ children }) => {
   }, []);
 
 
-
-  const [unknownPercent, setUnknownPercent] = useState(0);
-  const [translationPercent, setTranslationPercent] = useState(0);
-  const [totalQuestionsLan, setTotalQuestionsLan] = useState(0);
-  const [unknownQuestionsLan, setUnknownQuestionsLan] = useState(0);
-  const [translationQuestionsLan, setTranslationQuestionsLan] = useState(0);
-  const [category, setCategory] = useState('');
-  const [categories, setCategories] = useState([]);
-  const [translationQuestions, setTranslationQuestions] = useState([]);
-  const [totalQuestions, setTotalQuestions] = useState([]);
-  const [unknownQuestions, setUnknownQuestions] = useState([]);
-
-
-
-
+  // Calculation part for user based question answer showing
   function unknownCalculatePercentage(totalQuestions, currentQuestions) {
     let currentQuestionsLan;
     const totalQuestionsLan = totalQuestions.length;
@@ -322,6 +434,8 @@ const UserContext = ({ children }) => {
     return Math.round(percentage);
   }
 
+
+  // User Create and login function part
   const createUser = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
   }
@@ -356,6 +470,7 @@ const UserContext = ({ children }) => {
     createUser,
     signIn,
     logOut,
+    SocketDisconnect,
     signInWithGoogle,
     signInWithFacebook,
     resetPassword,
@@ -387,6 +502,7 @@ const UserContext = ({ children }) => {
     setChattingUser,
     comingSMS,
     setComingSMS,
+    connect,
     connected,
     setConnected,
     newResponseCome,
@@ -407,7 +523,10 @@ const UserContext = ({ children }) => {
     setCurrentCustomer,
     fetchUserByUserId,
     serviceCountry,
-    setServiceCountry
+    setServiceCountry,
+    showData,
+    setShowData,
+    userInfo
   };
 
   return (

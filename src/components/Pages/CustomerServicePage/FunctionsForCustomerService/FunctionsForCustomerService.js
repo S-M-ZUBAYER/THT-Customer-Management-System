@@ -28,14 +28,8 @@ export const handleToCopy = (e, element, index) => {
 
 const FunctionsForCustomerService = () => {
     const { user, totalQuestions, setTotalQuestions, setTotalQuestionLan, unknownQuestions, totalQuestionsLan, unknownQuestionsLan, setUnknownQuestions, setUnknownQuestionsLan, translationQuestions, setTranslationQuestions, setTranslationQuestionsLan, handleToStoreAllData, handleToDeleteAllData, setTranslationPercent, translateCalculatePercentage, unknownCalculatePercentage, setUnknownPercent } = useContext(AuthContext)
-
-
- 
-
-
     return (
         <div>
-            
         </div>
     );
 };

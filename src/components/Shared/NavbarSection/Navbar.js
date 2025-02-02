@@ -5,6 +5,7 @@ import { RiMenu3Line } from "react-icons/ri";
 import GrozzieeLogo from "../../../Assets/Images/Grozziie/Grozziie_logo.jpg"
 import UserContext, { AuthContext } from '../../../context/UserContext';
 import { AllProductContext } from '../../../context/ProductContext';
+import NetworkStatus from '../NetworkStatus';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,7 +14,7 @@ const Navbar = () => {
   const [isAdminOpen, setIsAdminOpen] = useState(false);
 
 
-  const { user, serviceCountry } = useContext(AuthContext);
+  const { user, serviceCountry, userInfo } = useContext(AuthContext);
   const { showData } = useContext(AllProductContext);
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -230,6 +231,9 @@ const Navbar = () => {
               </ul>
             </nav>
           </div>
+
+
+          <NetworkStatus></NetworkStatus>
 
           <div className="flex items-center gap-4">
             <div className="sm:flex sm:gap-4">

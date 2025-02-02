@@ -4,7 +4,7 @@ import { toast } from "react-hot-toast";
 
 import axios from "axios";
 import { CiEdit } from "react-icons/ci";
-import { MdDelete } from 'react-icons/md';
+import { MdDelete, MdEdit } from 'react-icons/md';
 import { AuthContext } from "../../../../../context/UserContext";
 import DisplaySpinner from "../../../../Shared/Loading/DisplaySpinner";
 
@@ -22,6 +22,7 @@ function AddWifiModelHightWidth() {
   const [maxWidth, setMaxWidth] = useState('');
   const [allModelInfo, setAllModelInfo] = useState([]);
   const [sliderImageMark, setSliderImageMark] = useState('');
+  const [editModalData, setEditModalData] = useState(null);
   const { loading, setLoading } = useContext(AuthContext)
 
   useEffect(() => {
@@ -187,6 +188,35 @@ function AddWifiModelHightWidth() {
   };
 
 
+  // Handle edit functionality
+  const handleToEdit = (data) => {
+    console.log(data);
+
+    setEditModalData(data);
+    setIsModalOpen(true);
+  };
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    console.log(editModalData, "data");
+
+    try {
+      await axios.put(
+        // `http://localhost:2000/tht/wifiModelHightWidth/update`, // Use dynamic id
+        `https://grozziieget.zjweiting.com:8033/tht/wifiModelHightWidth/update`, // Use dynamic id
+        editModalData
+      );
+
+      toast.success('Model Information updated successfully');
+      setAllModelInfo((prev) =>
+        prev.map((item) => (item.id === editModalData.id ? editModalData : item))
+      );
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error('Error updating data:', error);
+      toast.error('Failed to update data');
+    }
+  };
 
 
 
@@ -332,12 +362,15 @@ function AddWifiModelHightWidth() {
                             <td className="px-4 py-2 border">{element.maxWidth}</td>
                             <td className="px-4 py-2 border">{element.musicValue}</td>
                             <td className="px-4 py-2 border">{element.sliderImageMark}</td>
-                            <td className="px-4 py-2 border-r flex justify-center">
+                            <td className="px-4 py-2 border-r flex justify-evenly">
+                              <MdEdit
+                                onClick={() => handleToEdit(element)}
+                                className="text-blue-500 hover:cursor-pointer"
+                              />
                               <MdDelete
                                 onClick={() => handleToDelete(element.id)}
                                 className="text-red-500 hover:cursor-pointer"
-                              ></MdDelete>
-
+                              />
                             </td>
                           </tr>
                         ))
@@ -354,6 +387,139 @@ function AddWifiModelHightWidth() {
               </div>
         }
 
+        {/* Modal */}
+        {isModalOpen && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <form onSubmit={handleEditSubmit} className="space-y-4 bg-white p-6 rounded-lg shadow-lg w-1/2">
+              <h2 className="text-xl font-bold mb-4">{`Edit Model No ${editModalData?.modelNo} Information`}</h2>
+
+              {/* Row 1 */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-gray-700 font-medium mb-1">Model No</label>
+                  <input
+                    className="w-full border p-2 rounded bg-gray-100 text-slate-700 cursor-not-allowed"
+                    type="text"
+                    value={editModalData?.modelNo || ''}
+                    readOnly
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700 font-medium mb-1">PID</label>
+                  <input
+                    className="w-full border p-2 rounded bg-gray-100 text-slate-700 cursor-not-allowed"
+                    type="text"
+                    value={editModalData?.PID || ''}
+                    readOnly
+                  />
+                </div>
+              </div>
+
+              {/* Row 2 */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-gray-700 font-medium mb-1">Default Height</label>
+                  <input
+                    className="w-full border p-2 rounded bg-gray-50 text-slate-700 focus:ring focus:ring-blue-300"
+                    type="text"
+                    value={editModalData?.defaultHeight || ''}
+                    onChange={(e) => setEditModalData({ ...editModalData, defaultHeight: e.target.value })}
+                    placeholder="Enter Default Height"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700 font-medium mb-1">Default Width</label>
+                  <input
+                    className="w-full border p-2 rounded bg-gray-50 text-slate-700 focus:ring focus:ring-blue-300"
+                    type="number"
+                    value={editModalData?.defaultWidth || ''}
+                    onChange={(e) => setEditModalData({ ...editModalData, defaultWidth: e.target.value })}
+                    placeholder="Enter Default Width"
+                  />
+                </div>
+              </div>
+
+              {/* Row 3 */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-gray-700 font-medium mb-1">Max Height</label>
+                  <input
+                    className="w-full border p-2 rounded bg-gray-50 text-slate-700 focus:ring focus:ring-blue-300"
+                    type="number"
+                    value={editModalData?.maxHeight || ''}
+                    onChange={(e) => setEditModalData({ ...editModalData, maxHeight: e.target.value })}
+                    placeholder="Enter Max Height"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700 font-medium mb-1">Max Width</label>
+                  <input
+                    className="w-full border p-2 rounded bg-gray-50 text-slate-700 focus:ring focus:ring-blue-300"
+                    type="number"
+                    value={editModalData?.maxWidth || ''}
+                    onChange={(e) => setEditModalData({ ...editModalData, maxWidth: e.target.value })}
+                    placeholder="Enter Max Width"
+                  />
+                </div>
+              </div>
+
+              {/* Row 4 */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-gray-700 font-medium mb-1">Slider Image Mark</label>
+                  <input
+                    className="w-full border p-2 rounded bg-gray-50 text-slate-700 focus:ring focus:ring-blue-300"
+                    type="text"
+                    value={editModalData?.sliderImageMark || ''}
+                    onChange={(e) => setEditModalData({ ...editModalData, sliderImageMark: e.target.value })}
+                    placeholder="Enter Slider Image Mark"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700 font-medium mb-1">Command</label>
+                  <input
+                    className="w-full border p-2 rounded bg-gray-50 text-slate-700 focus:ring focus:ring-blue-300"
+                    type="text"
+                    value={editModalData?.type || ''}
+                    onChange={(e) => setEditModalData({ ...editModalData, type: e.target.value })}
+                    placeholder="Enter Command"
+                  />
+                </div>
+              </div>
+
+              {/* Row 5 */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-gray-700 font-medium mb-1">Music Value</label>
+                  <input
+                    className="w-full border p-2 rounded bg-gray-50 text-slate-700 focus:ring focus:ring-blue-300"
+                    type="text"
+                    value={editModalData?.musicValue || ''}
+                    onChange={(e) => setEditModalData({ ...editModalData, musicValue: e.target.value })}
+                    placeholder="Enter Music Value"
+                  />
+                </div>
+              </div>
+
+              {/* Buttons */}
+              <div className="flex justify-end space-x-4 mt-4">
+                <button
+                  type="submit"
+                  className="bg-[#004368] text-white px-4 py-2 rounded hover:bg-slate-800 transition"
+                >
+                  Save
+                </button>
+                <button
+                  type="button"
+                  className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition"
+                  onClick={() => setIsModalOpen(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
 
 
 

@@ -4,9 +4,11 @@ import { RouterProvider } from 'react-router-dom';
 import { routes } from './Routes/Routes/Routes';
 import { useContext, useEffect, useState } from 'react';
 import { AllProductContext } from './context/ProductContext';
+import toast from 'react-hot-toast';
+import { AuthContext } from './context/UserContext';
 
 function App() {
-  const { showData, setShowData } = useContext(AllProductContext)
+  const { showData, setShowData, SocketDisconnect } = useContext(AuthContext)
 
   useEffect(() => {
     const handleBeforeUnload = () => {
@@ -23,6 +25,9 @@ function App() {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, []);
+
+
+
 
   // const callAPI = () => {
   //   fetch('https://grozziieget.zjweiting.com:8033/tht/allModelInfo')
@@ -70,6 +75,25 @@ function App() {
 
   useEffect(() => {
     callAPI()
+  }, []);
+
+  // Closing the tab to disconnect the websocket
+
+
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = ""; // Some browsers require this for custom messages
+      SocketDisconnect();
+      console.log("Site is closing...");
+      toast.error("Site is closing...")
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
   }, []);
 
   return (

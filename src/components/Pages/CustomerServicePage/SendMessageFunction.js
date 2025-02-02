@@ -14,22 +14,22 @@ stompClient.activate();
 
 
 const sendChatMessage = async (message) => {
-console.log(message,"function send");
+    console.log(message, "function send");
 
-   
+
     if (stompClient.connected) {
-    console.log("stomp connected");
+        console.log("stomp connected");
     }
     if (!stompClient.connected) {
-    toast.error("stomp not connected")
+        toast.error("stomp not connected")
     }
     if (stompClient.connected) {
         const response = await new Promise((resolve) => {
             stompClient.publish({
                 destination: '/app/messages',
                 body: JSON.stringify(message),
-               
-                
+
+
             }, {}, (response) => {
                 resolve(response);
                 console.log(response);

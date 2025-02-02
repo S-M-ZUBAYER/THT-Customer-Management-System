@@ -237,12 +237,21 @@ const CustomerService_1 = () => {
                                     <div onClick={() => handleToSelectCustomer(element)} className="flex justify-between items-center mx-1 my-1 cursor-pointer">
                                         <div className={`text-start font-semibold`}>
                                             <p >User Id: {element?.userId}</p>
-                                            <p>Name:  {element?.customerServiceName ? element?.customerServiceName : `No Name(${element?.chatId})`}</p>
+                                            <p>Name:  {element?.userName ? element?.userName : `No Name(${element?.chatId})`}</p>
 
 
                                         </div>
                                         <div>
-                                            {(newMessagesList?.filter(sms => sms?.sentBy === element?.userId))?.length > 0 && <div className="bg-yellow-400 px-2 rounded-full border-2 text-black font-semibold"> {(newMessagesList?.filter(sms => sms?.sentBy === element?.userId))?.length}</div>}
+                                            {/* {(newMessagesList?.filter(sms => sms?.sentBy === element?.userId))?.length > 0 && <div className="bg-yellow-400 px-2 rounded-full border-2 text-black font-semibold"> {(newMessagesList?.filter(sms => sms?.sentBy === element?.userId))?.length}</div>} */}
+                                            {(newMessagesList?.filter(sms => sms?.sentBy === element?.userId))?.length > 0 && <div className="bg-yellow-400 px-2 rounded-full border-2 text-black font-semibold"> {
+                                                newMessagesList
+                                                    ?.filter(
+                                                        (sms, index, self) =>
+                                                            sms?.sentBy === element?.userId &&
+                                                            self.findIndex(msg => msg.message === sms.message) === index
+                                                    )?.length
+                                            }
+                                            </div>}
                                         </div>
                                         <div className="">
                                             {/* {element.status === "running" ?

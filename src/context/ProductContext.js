@@ -10,11 +10,11 @@ const ProductContextProvider = ({ children }) => {
     const [language, setLanguage] = useState();
     const [allMallProduct, setAllMallProduct] = useState();
     const [allEventProduct, setAllEventProduct] = useState();
-    const [showData, setShowData] = useState("");
+
     // setVideos([Product?.allVideos])
     // setImages([Product?.allImages])
 
-    const productInfo = { Product, setProduct, allMallProduct, setAllMallProduct, allEventProduct, setAllEventProduct, language, setLanguage, showData, setShowData }
+    const productInfo = { Product, setProduct, allMallProduct, setAllMallProduct, allEventProduct, setAllEventProduct, language, setLanguage }
     return (
         <AllProductContext.Provider value={productInfo}>
             {children}

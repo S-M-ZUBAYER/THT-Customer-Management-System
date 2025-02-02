@@ -1,5 +1,5 @@
 
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import addImg from "../../../../Assets/Images/Admin/Vector.jpg"
 import { toast } from 'react-hot-toast';
@@ -36,7 +36,7 @@ function AddProduct({ product }) {
   const [productImg, setProductImg] = useState([]);
   const [invoiceFile, setInvoiceFile] = useState([]);
   const [invoiceFiles, setInvoiceFiles] = useState([]);
-
+  const [allModelInfo, setAllModelInfo] = useState([]);
   const [selectedDescriptionImages, setSelectedDescriptionImages] = useState([]);
   const [selectedImages, setSelectedImages] = useState([]);
   const [selectedVideos, setSelectedVideos] = useState([]);
@@ -53,7 +53,21 @@ function AddProduct({ product }) {
   const productCategory = url.split('/')[4] + "s";
   // const mallProduct = path.split('/');
 
+  useEffect(() => {
+    const fetchModels = async () => {
+      try {
+        // const response = await axios.get('http://localhost:2000/tht/allModelInfo');
+        const response = await axios.get('https://grozziieget.zjweiting.com:8033/tht/allModelInfo');
+        setAllModelInfo(response?.data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching models:', error);
+        setLoading(false);
+      }
+    };
 
+    fetchModels();
+  }, []);
 
 
 
@@ -108,6 +122,9 @@ function AddProduct({ product }) {
 
   const handleModelNumberChange = (e) => {
     setModelNumber(e.target.value);
+    const filteredModel = allModelInfo?.find(model => model.modelNo.includes(e.target.value));
+    setSlideImageMark(filteredModel ? filteredModel.sliderImageMark : '');
+
   };
 
   const handlePrinterColorChange = (e) => {
