@@ -1430,8 +1430,9 @@ const MessageInput_CN = ({
                     <button
                         onClick={() => handleFileIconClick('image')}
                         className={` ${fileType === 'image' ? 'selected' : ''}`}
+                        title="Click to select an image file"
                     >
-                        <FaFileImage className="mr-2 text-gray-400 cursor-pointer"></FaFileImage>
+                        <FaFileImage className="mr-2 text-gray-400 cursor-pointer" />
                     </button>
                     <button
                         onClick={() => handleFileIconClick('video')}

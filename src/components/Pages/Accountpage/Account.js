@@ -89,16 +89,31 @@ const Account = () => {
     }
   };
 
+  const deleteCustomerServiceChatData = () => {
+    console.log("call Delete function");
+    // Iterate through all keys in localStorage
+    Object.keys(localStorage).forEach((key) => {
+      // Check if the key includes 'customerService@gmail.comLiveChat'
+      if (key.includes('customerService@gmail.comLiveChat')) {
+        // Remove the item from localStorage
+        localStorage.removeItem(key);
+      }
+    });
+  };
 
 
   //create a function to LogOut user from this site
   const handleToLogOut = () => {
+
     try {
+      console.log("call Logout");
+
       setLoading(true);
       SocketDisconnect();
       setUser(null);
       localStorage.removeItem('chattingUser');
       localStorage.removeItem('user');
+      deleteCustomerServiceChatData();
       toast.success("Logout successfully");
       setLoading(false);
     }

@@ -12,6 +12,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.4.0",
     "daisyui": "^2.51.5",
+    "date-fns": "^4.1.0",
     "dotenv": "^16.4.5",
     "emailjs-com": "^3.2.0",
     "firebase": "^9.19.1",

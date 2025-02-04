@@ -89,8 +89,8 @@ const Message = ({ selectedCustomerChat, showHistory, SetShowHistory, Loading })
           // const response = await axios.get(`https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/messages/userMessages/${selectedCustomerChat?.userId}/mergeFetch`);
           const response = await axios.get(`https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/messages/userMessages/${selectedCustomerChat?.userId}`);
           if (response.status === 200) {
-            SetUserIdAllChat(response.data?.filter(data => data?.chatId !== selectedCustomerChat?.chatId));
-            const allHistory = response.data?.filter(data => data?.chatId !== selectedCustomerChat?.chatId)
+            // SetUserIdAllChat(response.data?.filter(data => data?.chatId !== selectedCustomerChat?.chatId));
+            SetUserIdAllChat(response.data);
             setHistoryLoading(false);
             toast.success("Click to show the chat history");
           } else {
@@ -108,6 +108,7 @@ const Message = ({ selectedCustomerChat, showHistory, SetShowHistory, Loading })
   }, [selectedCustomerChat?.userId, showHistory]);
 
 
+  console.log(allChat);
 
 
 
@@ -148,7 +149,7 @@ const Message = ({ selectedCustomerChat, showHistory, SetShowHistory, Loading })
 
                     {/* Show the customer sending picture display in here in small or onclick full size */}
                     <img
-                      className="w-6 h-6 rounded-full"
+                      className="w-5 h-5 rounded-full border-2 border-green-400 animate-heartbeat"
                       src="https://cdn.pixabay.com/photo/2016/06/03/15/35/customer-service-1433639__340.png"
                       alt="User Avatar"
                     />
@@ -165,7 +166,12 @@ const Message = ({ selectedCustomerChat, showHistory, SetShowHistory, Loading })
                           alt={`Image ${index}`}
                           onClick={() => openImageModal(`data:image/png;base64,${chat?.message}`)}
                         />
-                        <div className="flex justify-end pt-3"><small className=" text-right text-xs">{chat?.timestamp}</small> </div>
+                        <div className="flex justify-end pt-3">
+                          <small className="text-end text-slate-500 text-xs mr-4">
+                            {chat?.timestamp} {chat?.server_timestamp ? chat.server_timestamp.split(" ")[0] : ""}
+                          </small>
+
+                        </div>
 
                       </div>)
 
@@ -183,7 +189,12 @@ const Message = ({ selectedCustomerChat, showHistory, SetShowHistory, Loading })
                             controls
                             src={`data:video/mp4;base64,${chat?.message}`}
                           />
-                          <div className="flex justify-end pt-3"><small className=" text-right text-xs">{chat?.timestamp}</small> </div>
+                          <div className="flex justify-end pt-3">
+                            <small className="text-end text-slate-500 text-xs mr-4">
+                              {chat?.timestamp} {chat?.server_timestamp ? chat.server_timestamp.split(" ")[0] : ""}
+                            </small>
+
+                          </div>
                         </div>)
 
                         :
@@ -309,7 +320,12 @@ const Message = ({ selectedCustomerChat, showHistory, SetShowHistory, Loading })
                               return <div>{fileViewer}</div>;
 
                             })()}
-                            <div className="flex justify-end pt-3"><small className=" text-right text-xs">{chat?.timestamp}</small> </div>
+                            <div className="flex justify-end pt-3">
+                              <small className="text-end text-slate-500 text-xs mr-4">
+                                {chat?.timestamp} {chat?.server_timestamp ? chat.server_timestamp.split(" ")[0] : ""}
+                              </small>
+
+                            </div>
                           </div>
 
 
@@ -528,7 +544,7 @@ const Message = ({ selectedCustomerChat, showHistory, SetShowHistory, Loading })
 
                   <div className="w-6">
                     <img
-                      className="w-6 h-6 rounded-full"
+                      className="w-5 h-5 rounded-full border-2 border-yellow-400 animate-heartbeat"
                       src={user?.image ? user?.image : "https://img.freepik.com/premium-vector/anonymous-user-circle-icon-vector-illustration-flat-style-with-long-shadow_520826-1931.jpg"}
                       alt="User Avatar"
                     />

@@ -224,24 +224,24 @@ const MessageInput = ({
 
 
     //Add New response sms
-    const textMessage = {
-      chatId: sms?.chatId,
-      sentBy: sms?.sentTo,
-      sentTo: sms?.sentBy,
-      sentId: sms?.sentId,
-      message: sms?.msgType,
-      msgType: "ans",
-      totalPart: sms?.totalPart,
-      partNo: sms?.partNo,
-      timestamp: getCurrentTime(),
-    };
+    // const textMessage = {
+    //   chatId: sms?.chatId,
+    //   sentBy: sms?.sentTo,
+    //   sentTo: sms?.sentBy,
+    //   sentId: sms?.sentId,
+    //   message: sms?.msgType,
+    //   msgType: "ans",
+    //   totalPart: sms?.totalPart,
+    //   partNo: sms?.partNo,
+    //   timestamp: getCurrentTime(),
+    // };
 
 
 
-    sendChatMessage(textMessage);
-    if (sms && sms.msgType !== "ans") {
-      setNewCome(sms);
-    }
+    // sendChatMessage(textMessage);
+    // if (sms && sms.msgType !== "ans") {
+    //   setNewCome(sms);
+    // }
 
     // setAllChat((prevChat) => [...(prevChat?.length ? prevChat : []), sms]);
 
@@ -640,12 +640,14 @@ const MessageInput = ({
           <button
             onClick={() => handleFileIconClick('image')}
             className={` ${fileType === 'image' ? 'selected' : ''}`}
+            title="Click to select an image file"
           >
-            <FaFileImage className="mr-2 text-gray-400 cursor-pointer"></FaFileImage>
+            <FaFileImage className="mr-2 text-gray-400 cursor-pointer" />
           </button>
           <button
             onClick={() => handleFileIconClick('video')}
             className={` ${fileType === 'video' ? 'selected' : 'image'}`}
+            title="Click to select a video file"
           >
             <MdOndemandVideo className="mr-2 text-gray-400 text-xl cursor-pointer"></MdOndemandVideo>
           </button>
@@ -664,6 +666,7 @@ const MessageInput = ({
             <button
               onClick={() => handleFileIconClick('file')}
               className={` ${fileType === 'file'}`}
+              title="Click to select a pdf, doc or other file "
             >
               <AiOutlineFileAdd className="mr-2 text-gray-400 text-xl cursor-pointer"></AiOutlineFileAdd>
             </button>

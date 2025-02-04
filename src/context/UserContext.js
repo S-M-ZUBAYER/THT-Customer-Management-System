@@ -8,7 +8,7 @@ import axios from 'axios';
 import { FacebookAuthProvider, GoogleAuthProvider, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
 import { sendChatMessage } from '../components/Pages/CustomerServicePage/SendMessageFunction';
 import smsNotify from '../../src/Assets/MP3/IphoneMobCup.mp3';
-
+import notifyLogo from '../../src/Assets/Images/Icons/wechatLogo.png'
 export const AuthContext = createContext();
 
 const auth = getAuth(app);
@@ -266,6 +266,40 @@ const UserContext = ({ children }) => {
     }
   };
 
+
+  // system notification
+
+
+  const requestNotificationPermission = () => {
+    if ('Notification' in window) {
+      Notification.requestPermission().then((permission) => {
+        if (permission === 'granted') {
+          console.log('Notification permission granted.');
+        } else {
+          console.log('Notification permission denied.');
+        }
+      });
+    } else {
+      console.log('This browser does not support notifications.');
+    }
+  };
+  useEffect(() => {
+    requestNotificationPermission();
+  }, []);
+
+  const showSystemNotification = (title, message) => {
+    if ('Notification' in window && Notification.permission === 'granted') {
+      new Notification('New Message', {
+        body: `${message} ${title}`,
+        icon: notifyLogo, // Custom icon
+        vibrate: [200, 100, 200], // Vibration pattern (on supported devices)
+      });
+    } else {
+      console.log('Notifications are not supported or permission is not granted.');
+    }
+  };
+
+
   // Here make the functionalities to send the response and update the user interface after coming new sms 
   const showGreeting = async (sms) => {
     if (sms.msgType === "ans") {
@@ -306,6 +340,11 @@ const UserContext = ({ children }) => {
       toast.success(`${sms?.msgType} come from  Id:${sms?.sentBy}`, {
         position: "top-right"
       });
+      // Show system notification
+      showSystemNotification(
+        `${sms?.msgType} from Id:${sms?.sentBy}`,
+        'You have a new message!'
+      );
     };
 
     if (sms?.totalPart === 1 || (sms?.totalPart > 1 && sms?.partNo === sms?.totalPart)) {

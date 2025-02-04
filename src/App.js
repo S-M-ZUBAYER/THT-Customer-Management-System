@@ -78,7 +78,16 @@ function App() {
   }, []);
 
   // Closing the tab to disconnect the websocket
-
+  const deleteCustomerServiceChatData = () => {
+    // Iterate through all keys in localStorage
+    Object.keys(localStorage).forEach((key) => {
+      // Check if the key includes 'customerService@gmail.comLiveChat'
+      if (key.includes('customerService@gmail.comLiveChat')) {
+        // Remove the item from localStorage
+        localStorage.removeItem(key);
+      }
+    });
+  };
 
   useEffect(() => {
     const handleBeforeUnload = (event) => {
@@ -86,7 +95,7 @@ function App() {
       event.returnValue = ""; // Some browsers require this for custom messages
       SocketDisconnect();
       console.log("Site is closing...");
-      toast.error("Site is closing...")
+      deleteCustomerServiceChatData();
     };
 
     window.addEventListener("beforeunload", handleBeforeUnload);

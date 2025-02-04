@@ -121,11 +121,16 @@ function AddProduct({ product }) {
   };
 
   const handleModelNumberChange = (e) => {
+    const inputValue = e.target.value.toLowerCase(); // Convert input to lowercase
     setModelNumber(e.target.value);
-    const filteredModel = allModelInfo?.find(model => model.modelNo.includes(e.target.value));
-    setSlideImageMark(filteredModel ? filteredModel.sliderImageMark : '');
 
+    const filteredModel = allModelInfo?.find(model =>
+      model.modelNo.toLowerCase().includes(inputValue) // Convert modelNo to lowercase for comparison
+    );
+
+    setSlideImageMark(filteredModel ? filteredModel.sliderImageMark : '');
   };
+
 
   const handlePrinterColorChange = (e) => {
     setPrinterColor(e.target.value);
