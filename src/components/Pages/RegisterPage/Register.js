@@ -410,9 +410,9 @@ const Register = () => {
                         <input className=" w-full pl-2 bg-white text-gray-800" placeholder="Designation" type="text" id="designation" value={designation} onChange={handleDesignationChange} />
                         <hr className=" border-slate-400 mb-6 my-1" ></hr>
 
-                        <div className="flex justify-start mb-10 pl-2">
+                        <div className="flex justify-start mb-10 pl-2 bg-white">
                             <label>Language:</label>
-                            <select
+                            <select className="bg-white"
                                 value={serviceCountry}
                                 onChange={(e) => setServiceCountry(e.target.value)}
                             >

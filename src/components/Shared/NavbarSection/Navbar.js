@@ -195,14 +195,25 @@ const Navbar = () => {
                   </li>
                 }
 
-                <li>
+                {/* <li>
                   <Link
                     className="text-gray-500 transition hover:font-semibold hover:text-zinc-900"
                     to="/translator"
                   >
                     Translator
                   </Link>
+                </li> */}
+                <li>
+                  <a
+                    className="text-gray-500 transition hover:font-semibold hover:text-zinc-900"
+                    href="https://grozziieget.zjweiting.com:8032/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Translator
+                  </a>
                 </li>
+
                 <li>
                   <Link
                     className="text-gray-500 transition hover:font-semibold hover:text-zinc-900"
@@ -343,13 +354,24 @@ const Navbar = () => {
                       </Link>
                     }
 
-                    <Link
+                    {/* <Link
                       to="/translator"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                       role="menuitem"
                     >
                       Translator
-                    </Link>
+                    </Link> */}
+                    <li>
+                      <a
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                        href="https://grozziieget.zjweiting.com:8032/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Translator
+                      </a>
+                    </li>
+
                     <Link
                       to="/detect"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"

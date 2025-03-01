@@ -7,12 +7,13 @@ import BtnSpinner from '../../Shared/Loading/BtnSpinner';
 import { Navigate } from 'react-router-dom';
 import ShowQuestionPagination from './ShowQuestionPagination';
 import ShowUnknownQuestionPagination from './ShowUnknownQuestionPagination';
+import { deleteAllChatsFromDB, manageDeleteChatsInDB } from '../CustomerServicePage/indexedDB';
 const Account = () => {
 
   const QuestionPerPage = 25;
 
   //use useeContext to load data from  another components
-  const { logOut, userInfo, SocketDisconnect, loading, setLoading, user, setUser, totalQuestions, translationQuestions, setTotalQuestions, setTranslationQuestions, translateCalculatePercentage, unknownCalculatePercentage, unknownPercent, setUnknownPercent, translationPercent, setTranslationPercent, unknownQuestions, setUnknownQuestions } = useContext(AuthContext);
+  const { logOut, userInfo, SocketDisconnect, loading, setLoading, user, setUser, totalQuestions, translationQuestions, setTotalQuestions, setTranslationQuestions, translateCalculatePercentage, unknownCalculatePercentage, unknownPercent, setUnknownPercent, translationPercent, setTranslationPercent, unknownQuestions, setUnknownQuestions, setChattingUser } = useContext(AuthContext);
 
 
   console.log(userInfo);
@@ -94,7 +95,7 @@ const Account = () => {
     // Iterate through all keys in localStorage
     Object.keys(localStorage).forEach((key) => {
       // Check if the key includes 'customerService@gmail.comLiveChat'
-      if (key.includes('customerService@gmail.comLiveChat')) {
+      if (key.includes('@gmail.comLiveChat')) {
         // Remove the item from localStorage
         localStorage.removeItem(key);
       }
@@ -103,7 +104,7 @@ const Account = () => {
 
 
   //create a function to LogOut user from this site
-  const handleToLogOut = () => {
+  const handleToLogOut = async () => {
 
     try {
       console.log("call Logout");
@@ -111,7 +112,10 @@ const Account = () => {
       setLoading(true);
       SocketDisconnect();
       setUser(null);
+      setChattingUser(null);
       localStorage.removeItem('chattingUser');
+      await manageDeleteChatsInDB();
+      await deleteAllChatsFromDB();
       localStorage.removeItem('user');
       deleteCustomerServiceChatData();
       toast.success("Logout successfully");

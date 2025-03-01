@@ -5,9 +5,8 @@
 // import { AiOutlineFileAdd } from 'react-icons/ai';
 // import toast from 'react-hot-toast';
 // import { AuthContext } from '../../../context/UserContext';
-// // import { AuthContext } from '../../../context/UserContext_CN';
 // import { Client } from '@stomp/stompjs';
-// import { sendChatMessage } from './SendMessageFunction_CN';
+// import { sendChatMessage } from './SendMessageFunction';
 // import smsNotify from '../../../../src/Assets/MP3/IphoneMobCup.mp3';
 
 
@@ -31,6 +30,7 @@
 //             Notification.requestPermission();
 //         }
 //     }, []);
+//     console.log(newMessagesList);
 
 //     //According to the coming new sms here update the chatting sms and list and show the toast in here.
 //     useEffect(() => {
@@ -163,45 +163,42 @@
 //         stompClient.activate();
 //     };
 
-
 //     // previous
-
 //     // useEffect(() => {
 
-//     //     if (connected) {
-//     //         SocketDisconnect();
+//     //   if (connected) {
+//     //     SocketDisconnect();
+//     //   }
+
+//     //   // Try to connect
+//     //   connect();
+
+//     //   // Retry every 5 seconds if not connected
+//     //   const retryInterval = setInterval(() => {
+//     //     if (!connected) {
+//     //       console.log('Reconnecting to WebSocket...');
+//     //       fetchUserByUserId();
+//     //       connect();
+//     //     } else {
+//     //       clearInterval(retryInterval);
 //     //     }
+//     //   }, 5000);
 
-//     //     // Try to connect
-//     //     connect();
-
-//     //     // Retry every 5 seconds if not connected
-//     //     const retryInterval = setInterval(() => {
-//     //         if (!connected) {
-//     //             console.log('Reconnecting to WebSocket...');
-//     //             fetchUserByUserId();
-//     //             connect();
-//     //         } else {
-//     //             clearInterval(retryInterval);
-//     //         }
-//     //     }, 5000);
-
-//     //     // Cleanup on unmount
-//     //     return () => {
-//     //         clearInterval(retryInterval);
-//     //         stompClient.deactivate();
-//     //     };
+//     //   // Cleanup on unmount
+//     //   return () => {
+//     //     clearInterval(retryInterval);
+//     //     stompClient.deactivate();
+//     //   };
 //     // }, [connected, newAllMessage]);
-
 
 //     // testing
 //     useEffect(() => {
 //         let retryInterval;
 //         let reconnectInterval;
 
-//         if (connected) {
-//             SocketDisconnect();
-//         }
+//         // if (connected) {
+//         //   SocketDisconnect();
+//         // }
 
 //         // Initial connection attempt
 //         connect();
@@ -217,19 +214,23 @@
 //             }
 //         }, 5000);
 
-//         // Force reconnection every 5 minutes
-//         reconnectInterval = setInterval(() => {
-//             console.log('Forcing reconnection every 5 minutes...');
-//             connect();
-//         }, 5 * 60 * 1000); // 5 minutes in milliseconds
+//         // Force reconnection every 5 minutes only if chattingUser exists
+//         if (chattingUser) {
+//             reconnectInterval = setInterval(() => {
+//                 console.log('Forcing reconnection every 5 minutes...');
+//                 connect();
+//             }, 5 * 60 * 1000); // 5 minutes in milliseconds
+//         }
 
 //         // Cleanup on unmount
 //         return () => {
 //             clearInterval(retryInterval);
-//             clearInterval(reconnectInterval);
+//             if (reconnectInterval) clearInterval(reconnectInterval);
 //             stompClient.deactivate();
 //         };
-//     }, [connected, newAllMessage]);
+//     }, [connected, newAllMessage, chattingUser]); // Include chattingUser as a dependency
+
+
 
 
 
@@ -282,24 +283,24 @@
 //             setNewCome(sms);
 //         }
 
-//         setAllChat((prevChat) => [...(prevChat?.length ? prevChat : []), sms]);
+//         // setAllChat((prevChat) => [...(prevChat?.length ? prevChat : []), sms]);
 
 
 //         const handleFetchUser = () => {
 //             fetchUserByUserId();
 //         };
 
-//         const handleToastSuccess = () => {
-//             const audio = new Audio(smsNotify); // Ensure this path is correct
-//             audio.play().then(() => {
-//                 console.log('Audio played successfully');
-//             }).catch((error) => {
-//                 console.error('Error playing audio:', error);
-//             });
-//             toast.success(`${sms?.msgType} come from  Id:${sms?.sentBy}`, {
-//                 position: "top-right"
-//             });
-//         };
+//         // const handleToastSuccess = () => {
+//         //   const audio = new Audio(smsNotify); // Ensure this path is correct
+//         //   audio.play().then(() => {
+//         //     console.log('Audio played successfully');
+//         //   }).catch((error) => {
+//         //     console.error('Error playing audio:', error);
+//         //   });
+//         //   toast.success(`${sms?.msgType} come from  Id:${sms?.sentBy}`, {
+//         //     position: "top-right"
+//         //   });
+//         // };
 
 //         if (sms?.totalPart === 1 || (sms?.totalPart > 1 && sms?.partNo === sms?.totalPart)) {
 
@@ -316,7 +317,7 @@
 //                 }
 //             });
 
-//             handleToastSuccess();
+//             // handleToastSuccess();
 //         }
 
 
@@ -324,10 +325,10 @@
 
 //         // Here make the functionalities to store the coming sms in the local storage
 
-//         const liveChatKey = `${user?.email}LiveChat${sms?.sentBy}`;
-//         const existingChat = JSON.parse(localStorage.getItem(liveChatKey)) || [];
-//         const updatedChat = [...existingChat, sms];
-//         localStorage.setItem(liveChatKey, JSON.stringify(updatedChat));
+//         // const liveChatKey = `${user?.email}LiveChat${sms?.sentBy}`;
+//         // const existingChat = JSON.parse(localStorage.getItem(liveChatKey)) || [];
+//         // const updatedChat = [...existingChat, sms];
+//         // localStorage.setItem(liveChatKey, JSON.stringify(updatedChat));
 
 //     };
 
@@ -679,8 +680,9 @@
 //                     <button
 //                         onClick={() => handleFileIconClick('image')}
 //                         className={` ${fileType === 'image' ? 'selected' : ''}`}
+//                         title="Click to select an image file"
 //                     >
-//                         <FaFileImage className="mr-2 text-gray-400 cursor-pointer"></FaFileImage>
+//                         <FaFileImage className="mr-2 text-gray-400 cursor-pointer" />
 //                     </button>
 //                     <button
 //                         onClick={() => handleFileIconClick('video')}
@@ -754,10 +756,11 @@ import { AiOutlineSend } from 'react-icons/ai';
 import { MdOndemandVideo } from 'react-icons/md';
 import { AiOutlineFileAdd } from 'react-icons/ai';
 import toast from 'react-hot-toast';
-import { AuthContext } from '../../../context/UserContext';
 import { Client } from '@stomp/stompjs';
+import { AuthContext } from '../../../context/UserContext';
 import { sendChatMessage } from './SendMessageFunction';
 import smsNotify from '../../../../src/Assets/MP3/IphoneMobCup.mp3';
+import { saveMessagesToDB, saveMessageToDB } from './indexedDB';
 
 
 const MessageInput_CN = ({
@@ -773,14 +776,13 @@ const MessageInput_CN = ({
 
 
     //collect the value from useContext
-    const { chattingUser, user, connected, setConnected, selectedFiles, setSelectedFiles, allChat, setAllChat, newCome, setNewCome, newAllMessage, setNewAllMessage, newResponseCome, setNewResponseCome, localStoreSms, setLocalStoreSms, customerStatus, setCustomerStatus, fetchUserByUserId, currentCustomer } = useContext(AuthContext);
+    const { chattingUser, user, connected, setConnected, selectedFiles, setSelectedFiles, allChat, setAllChat, newCome, setNewCome, newAllMessage, setNewAllMessage, newResponseCome, setNewResponseCome, localStoreSms, setLocalStoreSms, customerStatus, setCustomerStatus, fetchUserByUserId, currentCustomer, fileSms, setFileSms } = useContext(AuthContext);
 
     useEffect(() => {
         if (Notification.permission !== 'granted') {
             Notification.requestPermission();
         }
     }, []);
-    console.log(newMessagesList);
 
     //According to the coming new sms here update the chatting sms and list and show the toast in here.
     useEffect(() => {
@@ -813,8 +815,6 @@ const MessageInput_CN = ({
     }, [newCome]);
 
 
-
-
     //here update the loading part depend of the response from the app (get sms or not)
     useEffect(() => {
         if (newResponseCome?.totalPart === newResponseCome?.partNo) {
@@ -831,13 +831,10 @@ const MessageInput_CN = ({
     }, [newResponseCome]);
 
 
-
-
     // Here make empty the new response status
     useEffect(() => {
         setNewCome({});
     }, [selectedCustomerChat]);
-
 
 
     //Make the function to send the time according to the sending time
@@ -851,7 +848,6 @@ const MessageInput_CN = ({
     // <---------------------------Final Web Socket------------------------------------>
     const stompClient = new Client({
         brokerURL: 'wss://jiapuv.com:3091/CustomerService-ChatCN/websocket',
-        // brokerURL: 'wss://grozziieget.zjweiting.com:3091/CustomerService-Chat/websocket',
         // brokerURL: 'ws://127.0.0.1:5000',
         //  brokerURL: 'ws://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/websocket',
     });
@@ -869,7 +865,6 @@ const MessageInput_CN = ({
         stompClient.onConnect = (frame) => {
             setConnected(true);
             console.log('Connected: ' + frame);
-
             const response = new Promise((resolve) => {
                 fetchUserByUserId();
                 stompClient.publish(
@@ -886,62 +881,29 @@ const MessageInput_CN = ({
                     }
                 );
             });
-
             response.then((resolvedValue) => {
                 // You can now use the resolved value here
                 console.log('Promise resolved:', resolvedValue);
             });
+            // stompClient.subscribe(`/topic/${chattingUser?.userId}`, (message) => {
+            //   console.log(message?.body, "coming sms")
+            //   const newSMS = JSON.parse(message.body);
+            //   if (newSMS && newSMS.msgType === "ans") {
+            //     setNewResponseCome(newSMS);
+            //   }
+            //   showGreeting(newSMS)
 
-
-
-
-            stompClient.subscribe(`/topic/${chattingUser?.userId}`, (message) => {
-                console.log(message?.body, "coming sms")
-                const newSMS = JSON.parse(message.body);
-                if (newSMS && newSMS.msgType === "ans") {
-                    setNewResponseCome(newSMS);
-                }
-                showGreeting(newSMS)
-
-            });
+            // });
         };
 
         stompClient.onWebSocketError = (error) => {
             console.error('Error with websocket', error);
-            // Handle error here, you can update state or show an error message to the user.
         };
         stompClient.activate();
     };
 
-    // previous
-    // useEffect(() => {
 
-    //   if (connected) {
-    //     SocketDisconnect();
-    //   }
 
-    //   // Try to connect
-    //   connect();
-
-    //   // Retry every 5 seconds if not connected
-    //   const retryInterval = setInterval(() => {
-    //     if (!connected) {
-    //       console.log('Reconnecting to WebSocket...');
-    //       fetchUserByUserId();
-    //       connect();
-    //     } else {
-    //       clearInterval(retryInterval);
-    //     }
-    //   }, 5000);
-
-    //   // Cleanup on unmount
-    //   return () => {
-    //     clearInterval(retryInterval);
-    //     stompClient.deactivate();
-    //   };
-    // }, [connected, newAllMessage]);
-
-    // testing
     useEffect(() => {
         let retryInterval;
         let reconnectInterval;
@@ -1014,24 +976,24 @@ const MessageInput_CN = ({
 
 
         //Add New response sms
-        const textMessage = {
-            chatId: sms?.chatId,
-            sentBy: sms?.sentTo,
-            sentTo: sms?.sentBy,
-            sentId: sms?.sentId,
-            message: sms?.msgType,
-            msgType: "ans",
-            totalPart: sms?.totalPart,
-            partNo: sms?.partNo,
-            timestamp: getCurrentTime(),
-        };
+        // const textMessage = {
+        //   chatId: sms?.chatId,
+        //   sentBy: sms?.sentTo,
+        //   sentTo: sms?.sentBy,
+        //   sentId: sms?.sentId,
+        //   message: sms?.msgType,
+        //   msgType: "ans",
+        //   totalPart: sms?.totalPart,
+        //   partNo: sms?.partNo,
+        //   timestamp: getCurrentTime(),
+        // };
 
 
 
-        sendChatMessage(textMessage);
-        if (sms && sms.msgType !== "ans") {
-            setNewCome(sms);
-        }
+        // sendChatMessage(textMessage);
+        // if (sms && sms.msgType !== "ans") {
+        //   setNewCome(sms);
+        // }
 
         // setAllChat((prevChat) => [...(prevChat?.length ? prevChat : []), sms]);
 
@@ -1087,13 +1049,19 @@ const MessageInput_CN = ({
     const handleFileChange = async (e) => {
         const files = e.target.files;
         const fileArray = Array.from(files);
+        const maxSize = 20 * 1024 * 1024; // 20MB in bytes
+        const oversizedFile = fileArray.find(file => file.size > maxSize);
+
+        if (oversizedFile) {
+            toast.error("More than 20MB cannot be sent");
+            return;
+        }
         setSelectedFiles(fileArray);
 
 
         // To convert the file in base64Data and make part by part according to the size
         const base64Data = await readAsBase64(fileArray[0]);
         const stringParts = splitBase64String(base64Data, 45000);
-
 
 
         //Make the structure and specific the part number to send one by one
@@ -1128,6 +1096,12 @@ const MessageInput_CN = ({
 
         // update the state to send the update sms 
         setNewAllMessage(newMessages);
+        setFileSms({
+            ...newMessages[0], // Spread existing properties
+            message: base64Data, // Modify message
+            partNo: 1,  // Modify partNo
+            totalPart: 1
+        })
 
     };
 
@@ -1216,6 +1190,8 @@ const MessageInput_CN = ({
 
 
     // function to send the sms part by part
+
+    // latest
     const handleSubmit = async (e) => {
         if (customerStatus === "STOPPED") {
             toast.error("You Can't Reply.May be customer connect with other Customer service");
@@ -1304,9 +1280,21 @@ const MessageInput_CN = ({
                     partNo: 1,
                     timestamp: getCurrentTime(),
                 }];
-
+                const newText = {
+                    chatId: selectedCustomerChat?.chatId,
+                    sentBy: selectedCustomerChat?.customerServiceId,
+                    sentTo: selectedCustomerChat?.userId,
+                    sentId: newSentId,
+                    message: message,
+                    msgType: "text",
+                    totalPart: 1,
+                    partNo: 1,
+                    timestamp: getCurrentTime(),
+                }
                 // store the sending sms to the local storage
-                localStorage.setItem(liveChatKey, JSON.stringify(updatedChat));
+                // localStorage.setItem(liveChatKey, JSON.stringify(updatedChat));
+                // store the sending sms to the indexDB storage
+                await saveMessagesToDB(liveChatKey, [newText]);
 
             }
 
@@ -1390,8 +1378,26 @@ const MessageInput_CN = ({
                 const existingChat = JSON.parse(localStorage.getItem(liveChatKey)) || [];
 
                 // Update local storage with the new SMS
-                const updatedChat = [...existingChat, newMessages[0]];
-                localStorage.setItem(liveChatKey, JSON.stringify(updatedChat));
+                const updatedChat = [
+                    ...existingChat,
+                    {
+                        ...newMessages[0], // Spread existing properties
+                        message: base64Data, // Modify message
+                        partNo: 1,  // Modify partNo
+                        totalPart: 1
+                    }
+                ];
+                const newText = {
+                    ...newMessages[0], // Spread existing properties
+                    message: base64Data, // Modify message
+                    partNo: 1,  // Modify partNo
+                    totalPart: 1
+                }
+                // await saveMessagesToDB(liveChatKey, [newText]);
+                // localStorage.setItem(liveChatKey, JSON.stringify(updatedChat));
+
+                // const updatedChat = [...existingChat, newMessages[0]];
+                // localStorage.setItem(liveChatKey, JSON.stringify(updatedChat));
             }
 
 
@@ -1404,6 +1410,82 @@ const MessageInput_CN = ({
             }
         }
     };
+
+    // const handleSubmit = async (e) => {
+    //   if (customerStatus === "STOPPED") {
+    //     toast.error("You Can't Reply. Maybe the customer is connected with another service.");
+    //     return;
+    //   }
+    //   setNewSentId(getCurrentTimestampInSeconds());
+    //   e.preventDefault();
+
+    //   if (message.trim() !== '' || selectedFiles.length > 0) {
+    //     const allMessages = [];
+
+    //     const liveChatKey = `${user?.email}LiveChat${selectedCustomerChat?.userId}`;
+
+    //     if (message.trim() !== '') {
+    //       const textMessage = {
+    //         chatId: selectedCustomerChat?.chatId,
+    //         sentBy: selectedCustomerChat?.customerServiceId,
+    //         sentTo: selectedCustomerChat?.userId,
+    //         sentId: newSentId,
+    //         message: message,
+    //         msgType: "text",
+    //         totalPart: 1,
+    //         partNo: 1,
+    //         timestamp: getCurrentTime(),
+    //       };
+    //       allMessages.push(textMessage);
+
+    //       setAllChat((prevAllChat) => [...prevAllChat, textMessage]);
+    //       setResponse({});
+    //       sendChatMessage(textMessage);
+
+    //       // Store messages in IndexedDB
+    //       await saveMessagesToDB(liveChatKey, [textMessage]);
+    //     }
+
+    //     if (selectedFiles.length > 0) {
+    //       const file = selectedFiles[0];
+    //       const base64Data = await readAsBase64(file);
+    //       const stringParts = splitBase64String(base64Data, 45000);
+
+    //       const fileMessage = {
+    //         chatId: selectedCustomerChat?.chatId,
+    //         sentBy: selectedCustomerChat?.customerServiceId,
+    //         sentTo: selectedCustomerChat?.userId,
+    //         sentId: newSentId,
+    //         smsLoading: true,
+    //         initialShow: true,
+    //         message: base64Data,
+    //         msgType: fileType,
+    //         fileName: file?.name,
+    //         totalPart: stringParts.length,
+    //         partNo: 1,
+    //         timestamp: getCurrentTime(),
+    //       };
+
+    //       setAllChat((prevChat) => [...prevChat, fileMessage]);
+    //       sendChatMessage(fileMessage);
+
+    //       // Store in IndexedDB
+    //       await saveMessagesToDB(liveChatKey, [fileMessage]);
+    //     } else {
+    //       setMessage('');
+    //       setAllChat([...allChat, ...allMessages]);
+    //     }
+    //   }
+    // };
+
+
+
+
+
+
+
+
+
 
 
     return (
@@ -1437,6 +1519,7 @@ const MessageInput_CN = ({
                     <button
                         onClick={() => handleFileIconClick('video')}
                         className={` ${fileType === 'video' ? 'selected' : 'image'}`}
+                        title="Click to select a video file"
                     >
                         <MdOndemandVideo className="mr-2 text-gray-400 text-xl cursor-pointer"></MdOndemandVideo>
                     </button>
@@ -1455,6 +1538,7 @@ const MessageInput_CN = ({
                         <button
                             onClick={() => handleFileIconClick('file')}
                             className={` ${fileType === 'file'}`}
+                            title="Click to select a pdf, doc or other file "
                         >
                             <AiOutlineFileAdd className="mr-2 text-gray-400 text-xl cursor-pointer"></AiOutlineFileAdd>
                         </button>

@@ -32,7 +32,7 @@ const sendChatMessage = async (message) => {
 
             }, {}, (response) => {
                 resolve(response);
-                console.log(response);
+                console.log("sms sent", response);
             });
         });
 

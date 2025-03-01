@@ -8,7 +8,8 @@ import axios from 'axios';
 import { FacebookAuthProvider, GoogleAuthProvider, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
 import { sendChatMessage } from '../components/Pages/CustomerServicePage/SendMessageFunction';
 import smsNotify from '../../src/Assets/MP3/IphoneMobCup.mp3';
-import notifyLogo from '../../src/Assets/Images/Icons/wechatLogo.png'
+import notifyLogo from '../../src/Assets/Images/Icons/webSiteLogo.jpg'
+import { saveMessagesToDB } from '../components/Pages/CustomerServicePage/indexedDB';
 export const AuthContext = createContext();
 
 const auth = getAuth(app);
@@ -38,6 +39,9 @@ const UserContext = ({ children }) => {
   const [customerStatus, setCustomerStatus] = useState("RUNNING");
   const [currentCustomer, setCurrentCustomer] = useState([]);
   const [comingSMS, setComingSMS] = useState(null)
+  const [selectedCustomerChat, setSelectedCustomerChat] = useState()
+  const [newMessagesList, setNewMessagesList] = useState([]);
+  const [fileSms, setFileSms] = useState({});
 
 
   // <----------------------------Others State ---------------------->
@@ -61,8 +65,6 @@ const UserContext = ({ children }) => {
           email: user?.email,
         },
       });
-      console.log(response.data[0], user?.email);
-
       setUserInfo(response.data[0]);
     } catch (error) {
       console.error('Error fetching user data:', error);
@@ -71,7 +73,6 @@ const UserContext = ({ children }) => {
 
   //chatting list refresh process
   const fetchUserByUserId = async () => {
-    console.log("check the list")
     try {
       let response;
       if (serviceCountry === "EN") {
@@ -142,12 +143,48 @@ const UserContext = ({ children }) => {
     }
   }, [newResponseCome]);
 
+  //According to the coming new sms here update the chatting sms and list and show the toast in here.
+  useEffect(() => {
+    if (newCome.totalPart === 1) {
+      if (newCome && newMessagesList && newMessagesList.length > 0) {
+        const updatedData = newMessagesList.filter((data) => data.sentBy !== selectedCustomerChat?.userId);
+        if (newCome.sentBy !== selectedCustomerChat?.userId) {
+          setNewMessagesList([...updatedData, newCome]);
+        } else {
+          setNewMessagesList(updatedData);
+        }
+      } else if (newCome && newCome.sentBy !== selectedCustomerChat?.userId) {
+        setNewMessagesList([newCome]);
+      }
+      // showList();
+    }
+    else if (newCome.totalPart > 1 && newCome.partNo === 1) {
+      if (newCome && newMessagesList && newMessagesList.length > 0) {
+        const updatedData = newMessagesList.filter((data) => data.sentBy !== selectedCustomerChat?.userId);
+        if (newCome.sentBy !== selectedCustomerChat?.userId) {
+          setNewMessagesList([...updatedData, newCome]);
+        } else {
+          setNewMessagesList(updatedData);
+        }
+      } else if (newCome && newCome.sentBy !== selectedCustomerChat?.userId) {
+        setNewMessagesList([newCome]);
+      }
+    }
+
+  }, [newCome]);
+
   // <---------------------------Final Web Socket------------------------------------>
-  const stompClient = new Client({
-    brokerURL: 'wss://grozziieget.zjweiting.com:3091/CustomerService-Chat/websocket',
-    // brokerURL: 'ws://127.0.0.1:5000',
-    //  brokerURL: 'ws://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/websocket',
-  });
+  // const stompClient = new Client({
+  //   brokerURL: serviceCountry === "EN" ? 'wss://grozziieget.zjweiting.com:3091/CustomerService-Chat/websocket' : 'wss://jiapuv.com:3091/CustomerService-ChatCN/websocket',
+  //   // brokerURL: 'ws://127.0.0.1:5000',
+  //   //  brokerURL: 'ws://web-api-tht-env.eba-kcaa52ff.us-east-1.elasticbeanstalk.com/websocket',
+  // });
+
+  const brokerURL = serviceCountry === "EN"
+    ? 'wss://grozziieget.zjweiting.com:3091/CustomerService-Chat/websocket'
+    : 'wss://jiapuv.com:3091/CustomerService-ChatCN/websocket';
+
+  const stompClient = new Client({ brokerURL });
 
   const SocketDisconnect = () => {
     if (connected) {
@@ -234,8 +271,6 @@ const UserContext = ({ children }) => {
 
     // Force reconnection every 5 minutes only if chattingUser exists
     if (chattingUser) {
-      console.log(chattingUser);
-
       reconnectInterval = setInterval(() => {
         console.log('Forcing reconnection every 5 minutes...');
         connect();
@@ -252,19 +287,39 @@ const UserContext = ({ children }) => {
 
 
   //Here make the functionalities to change the interface after sending the sms , image, file, and video 
-  const getAnswer = (sms) => {
-    if (sms && sms.totalPart === 1) {
-      setSelectedFiles([]);
-    }
-    else {
-      if (sms && sms.partNo === sms.totalPart) {
-        setSelectedFiles([]);
+  const getAnswer = async (sms) => {
+    if (!sms) return;
+
+    const liveChatKey = `${user?.email}LiveChat${selectedCustomerChat?.userId}`;
+
+    // Check if it's a non-text message with only one part
+    if (sms.totalPart === 1 && sms.partNo === 1 && sms.msgType !== "text") {
+      if (fileSms && sms.sentId === fileSms.sentId) {
+        await saveMessagesToDB(liveChatKey, [fileSms]);
+        resetFileData();
       }
-      else {
-        sendChatMessage((newAllMessage)[sms.partNo]);
-      }
+      return;
     }
+
+    // Check if it's the last part of a multi-part non-text message
+    if (sms.partNo > 0 && sms.partNo === sms.totalPart && sms.msgType !== "text") {
+      if (fileSms && sms.sentId === fileSms.sentId) {
+        await saveMessagesToDB(liveChatKey, [fileSms]);
+        resetFileData();
+      }
+      return;
+    }
+
+    // Otherwise, process the message normally
+    sendChatMessage(newAllMessage[sms.partNo]);
   };
+
+  // Helper function to reset file-related state
+  const resetFileData = () => {
+    setSelectedFiles([]);
+    setFileSms({});
+  };
+
 
 
   // system notification
@@ -331,20 +386,23 @@ const UserContext = ({ children }) => {
       fetchUserByUserId();
     };
     const handleToastSuccess = () => {
-      const audio = new Audio(smsNotify); // Ensure this path is correct
-      audio.play().then(() => {
-        console.log('Audio played successfully');
-      }).catch((error) => {
-        console.error('Error playing audio:', error);
-      });
-      toast.success(`${sms?.msgType} come from  Id:${sms?.sentBy}`, {
-        position: "top-right"
-      });
       // Show system notification
-      showSystemNotification(
-        `${sms?.msgType} from Id:${sms?.sentBy}`,
-        'You have a new message!'
-      );
+      if (sms?.sentBy !== 0) {
+        const audio = new Audio(smsNotify); // Ensure this path is correct
+        audio.play().then(() => {
+          console.log('Audio played successfully');
+        }).catch((error) => {
+          console.error('Error playing audio:', error);
+        });
+        toast.success(`${sms?.msgType} come from  Id:${sms?.sentBy}`, {
+          position: "top-right"
+        });
+        showSystemNotification(
+          `${sms?.msgType} from Id:${sms?.sentBy}`,
+          'You have a new message!'
+        );
+      }
+
     };
 
     if (sms?.totalPart === 1 || (sms?.totalPart > 1 && sms?.partNo === sms?.totalPart)) {
@@ -352,13 +410,16 @@ const UserContext = ({ children }) => {
         handleFetchUser();
       }
       handleToastSuccess();
-    }
 
-    // Here make the functionalities to store the coming sms in the local storage
+    }
     const liveChatKey = `${user?.email}LiveChat${sms?.sentBy}`;
-    const existingChat = JSON.parse(localStorage.getItem(liveChatKey)) || [];
-    const updatedChat = [...existingChat, sms];
-    localStorage.setItem(liveChatKey, JSON.stringify(updatedChat));
+    await saveMessagesToDB(liveChatKey, [sms]);
+    // Here make the functionalities to store the coming sms in the local storage
+
+    // const existingChat = JSON.parse(localStorage.getItem(liveChatKey)) || [];
+    // const updatedChat = [...existingChat, sms];
+    // localStorage.setItem(liveChatKey, JSON.stringify(updatedChat));
+
 
   };
 
@@ -554,6 +615,10 @@ const UserContext = ({ children }) => {
     setNewCome,
     allChat,
     setAllChat,
+    selectedCustomerChat,
+    setSelectedCustomerChat,
+    newMessagesList,
+    setNewMessagesList,
     localStoreSms,
     setLocalStoreSms,
     customerStatus,
@@ -565,7 +630,9 @@ const UserContext = ({ children }) => {
     setServiceCountry,
     showData,
     setShowData,
-    userInfo
+    userInfo,
+    fileSms,
+    setFileSms
   };
 
   return (

@@ -6,6 +6,7 @@ import { useContext, useEffect, useState } from 'react';
 import { AllProductContext } from './context/ProductContext';
 import toast from 'react-hot-toast';
 import { AuthContext } from './context/UserContext';
+import { deleteAllChatsFromDB, manageDeleteChatsInDB } from './components/Pages/CustomerServicePage/indexedDB';
 
 function App() {
   const { showData, setShowData, SocketDisconnect } = useContext(AuthContext)
@@ -82,7 +83,7 @@ function App() {
     // Iterate through all keys in localStorage
     Object.keys(localStorage).forEach((key) => {
       // Check if the key includes 'customerService@gmail.comLiveChat'
-      if (key.includes('customerService@gmail.comLiveChat')) {
+      if (key.includes('LiveChat')) {
         // Remove the item from localStorage
         localStorage.removeItem(key);
       }
@@ -90,12 +91,14 @@ function App() {
   };
 
   useEffect(() => {
-    const handleBeforeUnload = (event) => {
+    const handleBeforeUnload = async (event) => {
       event.preventDefault();
       event.returnValue = ""; // Some browsers require this for custom messages
       SocketDisconnect();
       console.log("Site is closing...");
       deleteCustomerServiceChatData();
+      await manageDeleteChatsInDB();
+      await deleteAllChatsFromDB();
     };
 
     window.addEventListener("beforeunload", handleBeforeUnload);

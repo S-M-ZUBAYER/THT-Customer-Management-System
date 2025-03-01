@@ -10,6 +10,7 @@ import MessageInput from './MessegeInput';
 import toast from 'react-hot-toast';
 import { SiSocketdotio } from 'react-icons/si';
 import BtnSpinner from '../../Shared/Loading/BtnSpinner';
+import { getMessagesFromDB } from './indexedDB';
 
 
 
@@ -18,14 +19,14 @@ import BtnSpinner from '../../Shared/Loading/BtnSpinner';
 
 const CustomerService_1 = () => {
 
-    const { user, chattingUser, connected, setConnected, allChat, setAllChat, localStoreSms, setLocalStoreSms, customerStatus, setCustomerStatus, currentCustomer, setCurrentCustomer, fetchUserByUserId } = useContext(AuthContext);
+    const { user, chattingUser, connected, setConnected, allChat, setAllChat, localStoreSms, setLocalStoreSms, customerStatus, setCustomerStatus, currentCustomer, setCurrentCustomer, fetchUserByUserId, selectedCustomerChat, setSelectedCustomerChat, newMessagesList, setNewMessagesList } = useContext(AuthContext);
     const [currentUser, setCurrentUser] = useState(null)
-    const [selectedCustomerChat, setSelectedCustomerChat] = useState()
+
     // const [allChat, setAllChat] = useState([])
     const [showHistory, SetShowHistory] = useState(false);
     const scrollableDivRef = useRef(null);
     const [Loading, setLoading] = useState(false);
-    const [newMessagesList, setNewMessagesList] = useState([]);
+
     const [activeStatus, setActiveStatus] = useState("OFFLINE");
 
 
@@ -152,7 +153,7 @@ const CustomerService_1 = () => {
 
 
 
-    const handleToSelectCustomer = (customer) => {
+    const handleToSelectCustomer = async (customer) => {
 
 
 
@@ -160,7 +161,10 @@ const CustomerService_1 = () => {
         fetchUserStatus(customer?.userId)
 
         const liveChatKey = `${user?.email}LiveChat${customer?.userId}`;
-        const liveChatArray = JSON.parse(localStorage.getItem(liveChatKey));
+        // const liveChatArray = JSON.parse(localStorage.getItem(liveChatKey));
+        const liveChatArray = await getMessagesFromDB(liveChatKey);
+        console.log(liveChatArray, "indexDB");
+
         setAllChat(liveChatArray);
 
         if (customer?.status === "STOPPED") {
@@ -254,14 +258,14 @@ const CustomerService_1 = () => {
                                             </div>}
                                         </div>
                                         <div className="">
-                                            {/* {element.status === "running" ?
+                                            {element.status === "running" ?
                                                 <p className=" flex ml-auto bg-green-400 w-2 h-2 mb-1 rounded-full"></p>
                                                 :
                                                 // <p className=" flex ml-auto bg-slate-400 w-2 h-2 mb-1 rounded-full"></p> 
                                                 ""
 
-                                            } */}
-                                            {/* <p>{(element?.timestamp).split(" ")[1].split(".")[0]}</p> */}
+                                            }
+                                            <p>{(element?.timestamp).split(" ")[1].split(".")[0]}</p>
                                         </div>
 
                                     </div>

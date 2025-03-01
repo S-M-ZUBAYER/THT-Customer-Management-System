@@ -8,6 +8,7 @@ import { Client } from '@stomp/stompjs';
 import { AuthContext } from '../../../context/UserContext';
 import { sendChatMessage } from './SendMessageFunction';
 import smsNotify from '../../../../src/Assets/MP3/IphoneMobCup.mp3';
+import { saveMessagesToDB, saveMessageToDB } from './indexedDB';
 
 
 const MessageInput = ({
@@ -23,14 +24,13 @@ const MessageInput = ({
 
 
   //collect the value from useContext
-  const { chattingUser, user, connected, setConnected, selectedFiles, setSelectedFiles, allChat, setAllChat, newCome, setNewCome, newAllMessage, setNewAllMessage, newResponseCome, setNewResponseCome, localStoreSms, setLocalStoreSms, customerStatus, setCustomerStatus, fetchUserByUserId, currentCustomer } = useContext(AuthContext);
+  const { chattingUser, user, connected, setConnected, selectedFiles, setSelectedFiles, allChat, setAllChat, newCome, setNewCome, newAllMessage, setNewAllMessage, newResponseCome, setNewResponseCome, localStoreSms, setLocalStoreSms, customerStatus, setCustomerStatus, fetchUserByUserId, currentCustomer, fileSms, setFileSms } = useContext(AuthContext);
 
   useEffect(() => {
     if (Notification.permission !== 'granted') {
       Notification.requestPermission();
     }
   }, []);
-
 
   //According to the coming new sms here update the chatting sms and list and show the toast in here.
   useEffect(() => {
@@ -133,15 +133,15 @@ const MessageInput = ({
         // You can now use the resolved value here
         console.log('Promise resolved:', resolvedValue);
       });
-      stompClient.subscribe(`/topic/${chattingUser?.userId}`, (message) => {
-        console.log(message?.body, "coming sms")
-        const newSMS = JSON.parse(message.body);
-        if (newSMS && newSMS.msgType === "ans") {
-          setNewResponseCome(newSMS);
-        }
-        showGreeting(newSMS)
+      // stompClient.subscribe(`/topic/${chattingUser?.userId}`, (message) => {
+      //   console.log(message?.body, "coming sms")
+      //   const newSMS = JSON.parse(message.body);
+      //   if (newSMS && newSMS.msgType === "ans") {
+      //     setNewResponseCome(newSMS);
+      //   }
+      //   showGreeting(newSMS)
 
-      });
+      // });
     };
 
     stompClient.onWebSocketError = (error) => {
@@ -297,13 +297,19 @@ const MessageInput = ({
   const handleFileChange = async (e) => {
     const files = e.target.files;
     const fileArray = Array.from(files);
+    const maxSize = 20 * 1024 * 1024; // 20MB in bytes
+    const oversizedFile = fileArray.find(file => file.size > maxSize);
+
+    if (oversizedFile) {
+      toast.error("More than 20MB cannot be sent");
+      return;
+    }
     setSelectedFiles(fileArray);
 
 
     // To convert the file in base64Data and make part by part according to the size
     const base64Data = await readAsBase64(fileArray[0]);
     const stringParts = splitBase64String(base64Data, 45000);
-
 
 
     //Make the structure and specific the part number to send one by one
@@ -338,6 +344,12 @@ const MessageInput = ({
 
     // update the state to send the update sms 
     setNewAllMessage(newMessages);
+    setFileSms({
+      ...newMessages[0], // Spread existing properties
+      message: base64Data, // Modify message
+      partNo: 1,  // Modify partNo
+      totalPart: 1
+    })
 
   };
 
@@ -426,6 +438,8 @@ const MessageInput = ({
 
 
   // function to send the sms part by part
+
+  // latest
   const handleSubmit = async (e) => {
     if (customerStatus === "STOPPED") {
       toast.error("You Can't Reply.May be customer connect with other Customer service");
@@ -514,9 +528,21 @@ const MessageInput = ({
           partNo: 1,
           timestamp: getCurrentTime(),
         }];
-
+        const newText = {
+          chatId: selectedCustomerChat?.chatId,
+          sentBy: selectedCustomerChat?.customerServiceId,
+          sentTo: selectedCustomerChat?.userId,
+          sentId: newSentId,
+          message: message,
+          msgType: "text",
+          totalPart: 1,
+          partNo: 1,
+          timestamp: getCurrentTime(),
+        }
         // store the sending sms to the local storage
-        localStorage.setItem(liveChatKey, JSON.stringify(updatedChat));
+        // localStorage.setItem(liveChatKey, JSON.stringify(updatedChat));
+        // store the sending sms to the indexDB storage
+        await saveMessagesToDB(liveChatKey, [newText]);
 
       }
 
@@ -600,8 +626,26 @@ const MessageInput = ({
         const existingChat = JSON.parse(localStorage.getItem(liveChatKey)) || [];
 
         // Update local storage with the new SMS
-        const updatedChat = [...existingChat, newMessages[0]];
-        localStorage.setItem(liveChatKey, JSON.stringify(updatedChat));
+        const updatedChat = [
+          ...existingChat,
+          {
+            ...newMessages[0], // Spread existing properties
+            message: base64Data, // Modify message
+            partNo: 1,  // Modify partNo
+            totalPart: 1
+          }
+        ];
+        const newText = {
+          ...newMessages[0], // Spread existing properties
+          message: base64Data, // Modify message
+          partNo: 1,  // Modify partNo
+          totalPart: 1
+        }
+        // await saveMessagesToDB(liveChatKey, [newText]);
+        // localStorage.setItem(liveChatKey, JSON.stringify(updatedChat));
+
+        // const updatedChat = [...existingChat, newMessages[0]];
+        // localStorage.setItem(liveChatKey, JSON.stringify(updatedChat));
       }
 
 
@@ -614,6 +658,82 @@ const MessageInput = ({
       }
     }
   };
+
+  // const handleSubmit = async (e) => {
+  //   if (customerStatus === "STOPPED") {
+  //     toast.error("You Can't Reply. Maybe the customer is connected with another service.");
+  //     return;
+  //   }
+  //   setNewSentId(getCurrentTimestampInSeconds());
+  //   e.preventDefault();
+
+  //   if (message.trim() !== '' || selectedFiles.length > 0) {
+  //     const allMessages = [];
+
+  //     const liveChatKey = `${user?.email}LiveChat${selectedCustomerChat?.userId}`;
+
+  //     if (message.trim() !== '') {
+  //       const textMessage = {
+  //         chatId: selectedCustomerChat?.chatId,
+  //         sentBy: selectedCustomerChat?.customerServiceId,
+  //         sentTo: selectedCustomerChat?.userId,
+  //         sentId: newSentId,
+  //         message: message,
+  //         msgType: "text",
+  //         totalPart: 1,
+  //         partNo: 1,
+  //         timestamp: getCurrentTime(),
+  //       };
+  //       allMessages.push(textMessage);
+
+  //       setAllChat((prevAllChat) => [...prevAllChat, textMessage]);
+  //       setResponse({});
+  //       sendChatMessage(textMessage);
+
+  //       // Store messages in IndexedDB
+  //       await saveMessagesToDB(liveChatKey, [textMessage]);
+  //     }
+
+  //     if (selectedFiles.length > 0) {
+  //       const file = selectedFiles[0];
+  //       const base64Data = await readAsBase64(file);
+  //       const stringParts = splitBase64String(base64Data, 45000);
+
+  //       const fileMessage = {
+  //         chatId: selectedCustomerChat?.chatId,
+  //         sentBy: selectedCustomerChat?.customerServiceId,
+  //         sentTo: selectedCustomerChat?.userId,
+  //         sentId: newSentId,
+  //         smsLoading: true,
+  //         initialShow: true,
+  //         message: base64Data,
+  //         msgType: fileType,
+  //         fileName: file?.name,
+  //         totalPart: stringParts.length,
+  //         partNo: 1,
+  //         timestamp: getCurrentTime(),
+  //       };
+
+  //       setAllChat((prevChat) => [...prevChat, fileMessage]);
+  //       sendChatMessage(fileMessage);
+
+  //       // Store in IndexedDB
+  //       await saveMessagesToDB(liveChatKey, [fileMessage]);
+  //     } else {
+  //       setMessage('');
+  //       setAllChat([...allChat, ...allMessages]);
+  //     }
+  //   }
+  // };
+
+
+
+
+
+
+
+
+
 
 
   return (
