@@ -15,16 +15,28 @@ import DisplaySpinner from '../../Shared/Loading/DisplaySpinner';
 import ShowChatHistory from './ShowChatHistory';
 import ImageModal from './ImageModal';
 import ReactEmoji from 'react-emoji-render';
+import { MdUnfoldMoreDouble } from "react-icons/md";
 
-const Message = ({ selectedCustomerChat, showHistory, SetShowHistory, Loading }) => {
+const Message = ({ selectedCustomerChat, showHistory, SetShowHistory, showModal, setShowModal, Loading }) => {
   const [userIdAllChat, SetUserIdAllChat] = useState([]);
   const [historyLoading, setHistoryLoading] = useState(false);
   const [newAllChat, setNewAllChat] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
 
+
   // collect data from useContext
-  const { user, chattingUser, allChat } = useContext(AuthContext);
+  const { user, chattingUser, allChat, count, setCount } = useContext(AuthContext);
+  const [selectedCount, setSelectedCount] = useState("5"); // Default selection
+
+  const handleToShowHistory = () => {
+    setShowModal(!showModal); // Open the modal first
+  };
+
+  const handleConfirmSelection = () => {
+    setShowModal(!showModal); // Close modal
+    SetShowHistory(!showHistory); // Toggle history after selection
+  };
 
 
   // 2 function to display full image in modal
@@ -75,50 +87,121 @@ const Message = ({ selectedCustomerChat, showHistory, SetShowHistory, Loading })
 
 
 
-  //update the show history status state
-  const handleToShowHistory = () => {
-    SetShowHistory(!showHistory);
-  };
 
   //get the update user to show the previous all sms of a customer 
+  // useEffect(() => {
+  //   if (showHistory) {
+  //     console.log(selectedCount, "count");
+
+  //     const fetchUserByUserId = async () => {
+  //       setHistoryLoading(true);
+  //       try {
+  //         // const response = await axios.get(`https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/messages/userMessages/${selectedCustomerChat?.userId}/mergeFetch`);
+  //         if (selectedCount===5){
+  //           const response = await axios.get(`https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/messages/userMessages/${selectedCustomerChat?.userId}/SizeableMergeFetech/desc?page=0&size=5`);
+  //         }
+  //         elseIf(selectedCount ===10){
+  //           const response = await axios.get(`https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/messages/userMessages/${selectedCustomerChat?.userId}/SizeableMergeFetech/desc?page=0&size=10`);
+  //         }
+  //         else{
+  //     const response = await axios.get(`https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/messages/userMessages/${selectedCustomerChat?.userId}`);
+  //         }
+  //         if (response.status === 200) {
+  //           // SetUserIdAllChat(response.data?.filter(data => data?.chatId !== selectedCustomerChat?.chatId));
+  //           SetUserIdAllChat(response.data);
+  //           setHistoryLoading(false);
+  //           toast.success("Click to show the chat history");
+  //         } else {
+  //           console.error('Unexpected status code:', response.status);
+  //           setHistoryLoading(false);
+  //         }
+  //       } catch (error) {
+  //         console.error('Error fetching user data:', error);
+  //         setHistoryLoading(false);
+  //       }
+  //     };
+
+  //     fetchUserByUserId();
+  //   }
+  // }, [selectedCustomerChat?.userId, showHistory]);
   useEffect(() => {
     if (showHistory) {
+      console.log(selectedCount, "count");
+
       const fetchUserByUserId = async () => {
         setHistoryLoading(true);
         try {
-          // const response = await axios.get(`https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/messages/userMessages/${selectedCustomerChat?.userId}/mergeFetch`);
-          const response = await axios.get(`https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/messages/userMessages/${selectedCustomerChat?.userId}`);
+          let url = `https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/messages/userMessages/${selectedCustomerChat?.userId}`;
+
+          if (selectedCount === "5") {
+            url += `/SizeableMergeFetech/desc?page=0&size=5`;
+            setCount(count + 1);
+          } else if (selectedCount === "10") {
+            url += `/SizeableMergeFetech/desc?page=0&size=10`;
+            setCount(count + 1);
+          }
+
+          const response = await axios.get(url);
+
           if (response.status === 200) {
-            // SetUserIdAllChat(response.data?.filter(data => data?.chatId !== selectedCustomerChat?.chatId));
-            SetUserIdAllChat(response.data);
-            setHistoryLoading(false);
-            toast.success("Click to show the chat history");
+            SetUserIdAllChat(response.data.reverse());
           } else {
-            console.error('Unexpected status code:', response.status);
-            setHistoryLoading(false);
+            console.error("Unexpected status code:", response.status);
           }
         } catch (error) {
-          console.error('Error fetching user data:', error);
+          console.error("Error fetching user data:", error);
+        } finally {
           setHistoryLoading(false);
+          setShowModal(false)
         }
       };
 
       fetchUserByUserId();
     }
-  }, [selectedCustomerChat?.userId, showHistory]);
+  }, [selectedCustomerChat?.userId, showHistory, selectedCount]);
 
 
   console.log(allChat);
 
+  const handleToShowMoreHistory = async () => {
+    setHistoryLoading(true);
+    try {
+      let url = `https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/messages/userMessages/${selectedCustomerChat?.userId}`;
+      setCount(0);
+      if (selectedCount === "5") {
+        url += `/SizeableMergeFetech/desc?page=${count}&size=5`;
+        setCount(count + 1);
+      } else if (selectedCount === "10") {
+        url += `/SizeableMergeFetech/desc?page=${count}&size=10`;
+        setCount(count + 1);
+      }
 
+      const response = await axios.get(url);
 
+      if (response.status === 200) {
+        const lastSms = response.data.reverse();
+        SetUserIdAllChat([...lastSms, ...userIdAllChat]);
+      } else {
+        console.error("Unexpected status code:", response.status);
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    } finally {
+      setHistoryLoading(false);
+      setShowModal(false)
+    }
+  }
+
+  console.log(count, "count");
 
 
   return (
     <div className="mb-20">
 
       {/* Here make the component to show the history of a customer previous chat with another customer */}
-
+      {
+        count >= 1 && !historyLoading && <button className="w-full flex justify-center text-3xl text-blue-500" onClick={handleToShowMoreHistory}><MdUnfoldMoreDouble /></button>
+      }
       {showHistory ? (historyLoading ? <BtnSpinner /> : userIdAllChat && userIdAllChat?.length > 0 ? (
         <ShowChatHistory userIdAllChat={userIdAllChat} customerUserId={selectedCustomerChat?.userId} SetUserIdAllChat={SetUserIdAllChat} />
       ) : (
@@ -133,6 +216,32 @@ const Message = ({ selectedCustomerChat, showHistory, SetShowHistory, Loading })
       {selectedCustomerChat && (
         <div onClick={handleToShowHistory} className="flex justify-center cursor-pointer">
           <HiChevronDoubleUp className="text-green-400 font-bold text-3xl" />
+        </div>
+      )}
+      {showModal && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h2 className="text-xl font-bold mb-4">Select History Count</h2>
+
+            <select
+              value={selectedCount}
+              onChange={(e) => setSelectedCount(e.target.value)}
+              className="border rounded p-2 w-full bg-white"
+            >
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="all">All</option>
+            </select>
+
+            <div className="flex justify-end mt-4">
+              <button onClick={() => setShowModal(false)} className="px-4 py-2 bg-gray-400 text-white rounded mr-2">
+                Cancel
+              </button>
+              <button onClick={handleConfirmSelection} className="px-4 py-2 bg-green-500 text-white rounded">
+                Confirm
+              </button>
+            </div>
+          </div>
         </div>
       )}
 

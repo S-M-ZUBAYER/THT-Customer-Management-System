@@ -16,7 +16,7 @@ const ShowChatHistory = ({ userIdAllChat, customerUserId, SetUserIdAllChat }) =>
   const [selectedImage, setSelectedImage] = useState(null);
 
   //collect data from useContext
-  const { user, chattingUser } = useContext(AuthContext);
+  const { user, chattingUser, count } = useContext(AuthContext);
 
 
   //Open & close the modal to show the image in full display
@@ -36,10 +36,14 @@ const ShowChatHistory = ({ userIdAllChat, customerUserId, SetUserIdAllChat }) =>
   // Here make the functionalities to update and show the history according to the user 
   useEffect(() => {
     if (!userIdAllChat) return;
+    if (count > 0) {
+      console.log("merge");
 
+      return
+    }
     const mergedMessages = [];
     let currentMerging = null;
-
+    console.log("general");
     for (let i = 0; i < userIdAllChat.length; i++) {
       const sms = userIdAllChat[i];
 

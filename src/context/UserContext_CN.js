@@ -649,6 +649,7 @@ const UserContext_CN = ({ children }) => {
         stompClient.onWebSocketError = (error) => {
             console.error('Error with websocket', error);
             // Handle error here, you can update state or show an error message to the user.
+            connect();
         };
         stompClient.activate();
     };

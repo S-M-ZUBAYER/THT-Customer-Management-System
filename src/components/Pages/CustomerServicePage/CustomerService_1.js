@@ -19,11 +19,12 @@ import { getMessagesFromDB } from './indexedDB';
 
 const CustomerService_1 = () => {
 
-    const { user, chattingUser, connected, setConnected, allChat, setAllChat, localStoreSms, setLocalStoreSms, customerStatus, setCustomerStatus, currentCustomer, setCurrentCustomer, fetchUserByUserId, selectedCustomerChat, setSelectedCustomerChat, newMessagesList, setNewMessagesList } = useContext(AuthContext);
+    const { user, chattingUser, setCount, connected, setConnected, allChat, setAllChat, localStoreSms, setLocalStoreSms, customerStatus, setCustomerStatus, currentCustomer, setCurrentCustomer, fetchUserByUserId, selectedCustomerChat, setSelectedCustomerChat, newMessagesList, setNewMessagesList } = useContext(AuthContext);
     const [currentUser, setCurrentUser] = useState(null)
 
     // const [allChat, setAllChat] = useState([])
     const [showHistory, SetShowHistory] = useState(false);
+    const [showModal, setShowModal] = useState(false);
     const scrollableDivRef = useRef(null);
     const [Loading, setLoading] = useState(false);
 
@@ -160,13 +161,6 @@ const CustomerService_1 = () => {
         //call function to show the status
         fetchUserStatus(customer?.userId)
 
-        const liveChatKey = `${user?.email}LiveChat${customer?.userId}`;
-        // const liveChatArray = JSON.parse(localStorage.getItem(liveChatKey));
-        const liveChatArray = await getMessagesFromDB(liveChatKey);
-        console.log(liveChatArray, "indexDB");
-
-        setAllChat(liveChatArray);
-
         if (customer?.status === "STOPPED") {
             setCustomerStatus("STOPPED");
         }
@@ -191,9 +185,16 @@ const CustomerService_1 = () => {
         // setNewMessagesList((prevChat) => [...prevChat, {}]);
         SetShowHistory(false)
         setCurrentUser(customer);
+        setCount(0);
         // connectWebSocket();
         // setSelectedCustomerChat((chatSms.filter(eachChat => eachChat.myId === customer?.id))[0])
         setSelectedCustomerChat(customer)
+        const liveChatKey = `${user?.email}LiveChat${customer?.userId}`;
+        // const liveChatArray = JSON.parse(localStorage.getItem(liveChatKey));
+        const liveChatArray = await getMessagesFromDB(liveChatKey);
+        console.log(liveChatArray, "indexDB");
+
+        setAllChat(liveChatArray);
     };
 
 
@@ -308,6 +309,8 @@ const CustomerService_1 = () => {
                             setAllChat={setAllChat}
                             selectedCustomerChat={selectedCustomerChat}
                             showHistory={showHistory}
+                            showModal={showModal}
+                            setShowModal={setShowModal}
                             SetShowHistory={SetShowHistory}
                         ></Message>
 

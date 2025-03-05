@@ -104,8 +104,31 @@ const Account = () => {
 
 
   //create a function to LogOut user from this site
-  const handleToLogOut = async () => {
+  // const handleToLogOut = async () => {
 
+  //   try {
+  //     console.log("call Logout");
+
+  //     setLoading(true);
+  //     SocketDisconnect();
+  //     setUser(null);
+  //     setChattingUser(null);
+  //     localStorage.removeItem('chattingUser');
+  //     await manageDeleteChatsInDB();
+  //     await deleteAllChatsFromDB();
+  //     localStorage.removeItem('user');
+  //     deleteCustomerServiceChatData();
+  //     toast.success("Logout successfully");
+  //     setLoading(false);
+  //   }
+  //   catch (err) {
+  //     toast.error(err)
+  //   }
+
+
+  // }
+
+  const handleToLogOut = async () => {
     try {
       console.log("call Logout");
 
@@ -114,20 +137,20 @@ const Account = () => {
       setUser(null);
       setChattingUser(null);
       localStorage.removeItem('chattingUser');
-      await manageDeleteChatsInDB();
-      await deleteAllChatsFromDB();
+
+      await manageDeleteChatsInDB(); // This might throw an error
+      await deleteAllChatsFromDB();  // This might throw an error
+
       localStorage.removeItem('user');
       deleteCustomerServiceChatData();
       toast.success("Logout successfully");
+    } catch (err) {
+      console.error("Logout error:", err); // Log the full error in the console
+      // toast.error(err.message || "An unexpected error occurred"); // Ensure only a string is passed
+    } finally {
       setLoading(false);
     }
-    catch (err) {
-      toast.error(err)
-    }
-
-
-  }
-
+  };
 
 
 

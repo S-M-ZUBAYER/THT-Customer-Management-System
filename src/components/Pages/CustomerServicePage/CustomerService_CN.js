@@ -21,7 +21,7 @@ import MessageInput_CN from './MessegeInput_CN';
 
 const CustomerService_CN = () => {
 
-    const { user, chattingUser, connected, setConnected, allChat, setAllChat, localStoreSms, setLocalStoreSms, customerStatus, setCustomerStatus, currentCustomer, setCurrentCustomer, fetchUserByUserId } = useContext(AuthContext);
+    const { user, chattingUser, setCount, connected, setConnected, allChat, setAllChat, localStoreSms, setLocalStoreSms, customerStatus, setCustomerStatus, currentCustomer, setCurrentCustomer, fetchUserByUserId } = useContext(AuthContext);
     const [currentUser, setCurrentUser] = useState(null)
     const [selectedCustomerChat, setSelectedCustomerChat] = useState()
     // const [allChat, setAllChat] = useState([])
@@ -189,6 +189,7 @@ const CustomerService_CN = () => {
         setNewMessagesList(newMessagesList && newMessagesList?.filter((list, index) => list.sentBy !== customer?.userId));
 
         // setNewMessagesList((prevChat) => [...prevChat, {}]);
+        setCount(0);
         SetShowHistory(false)
         setCurrentUser(customer);
         // connectWebSocket();

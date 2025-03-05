@@ -212,17 +212,24 @@ function AddProduct({ product }) {
 
   }
 
+  //With reduce Image resolution
+  // const handleProductImgUpload = (event) => {
+  //   // extract the current date and time components
+  //   const preFile = event.target.files[0];
+  //   const file = reduceImageResolution(preFile, 1000);
+  //   file.then((fileObject) => {
+  //     setProductImg(fileObject);
+  //   });
+  // };
 
+  //Without reduce Image resolution
   const handleProductImgUpload = (event) => {
-    // extract the current date and time components
-    const preFile = event.target.files[0];
-    const file = reduceImageResolution(preFile, 1000);
-    file.then((fileObject) => {
-      setProductImg(fileObject);
-    });
-
-
+    const file = event.target.files[0];
+    if (file) {
+      setProductImg(file);
+    }
   };
+
 
   // const handleInvoiceFileUpload = (event) => {
   //   const file = event.target.files[0];

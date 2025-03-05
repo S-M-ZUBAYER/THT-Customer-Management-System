@@ -380,13 +380,21 @@ function ProductDetails() {
 
 
     // here are all of the function to selected product image , related images and descriptions images
+    //With reduce Image resolution
+    // const handleProductImgUpload = (event) => {
+    //     const preFile = event.target.files[0];
+    //     const file = reduceImageResolution(preFile, 1000);
+    //     file.then((fileObject) => {
+    //         setNewProductImg(fileObject);
+    //     });
+    // };
 
+    //Without reduce Image resolution
     const handleProductImgUpload = (event) => {
-        const preFile = event.target.files[0];
-        const file = reduceImageResolution(preFile, 1000);
-        file.then((fileObject) => {
-            setNewProductImg(fileObject);
-        });
+        const file = event.target.files[0];
+        if (file) {
+            setNewProductImg(file);
+        }
     };
 
 

@@ -24,7 +24,7 @@ const UserContext = ({ children }) => {
   const [serviceCountry, setServiceCountry] = useState("EN");
   const [showData, setShowData] = useState("");
   const [userInfo, setUserInfo] = useState([]);
-
+  const [count, setCount] = useState(0);
 
 
   // <----------------------------chatting---------------------->
@@ -238,6 +238,7 @@ const UserContext = ({ children }) => {
     stompClient.onWebSocketError = (error) => {
       console.error('Error with websocket', error);
       // Handle error here, you can update state or show an error message to the user.
+      connect();
     };
     stompClient.activate();
   };
@@ -387,7 +388,15 @@ const UserContext = ({ children }) => {
     };
     const handleToastSuccess = () => {
       // Show system notification
-      if (sms?.sentBy !== 0) {
+      console.log(sms, "toast check");
+
+      if (sms?.sentBy === 0) {
+        return;
+      }
+      else if (sms?.msgType === "System") {
+        return;
+      }
+      else {
         const audio = new Audio(smsNotify); // Ensure this path is correct
         audio.play().then(() => {
           console.log('Audio played successfully');
@@ -632,7 +641,9 @@ const UserContext = ({ children }) => {
     setShowData,
     userInfo,
     fileSms,
-    setFileSms
+    setFileSms,
+    count,
+    setCount
   };
 
   return (
