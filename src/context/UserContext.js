@@ -25,6 +25,7 @@ const UserContext = ({ children }) => {
   const [showData, setShowData] = useState("");
   const [userInfo, setUserInfo] = useState([]);
   const [count, setCount] = useState(0);
+  const [serverSmsCheck, setServerSmsCheck] = useState({});
 
 
   // <----------------------------chatting---------------------->
@@ -42,7 +43,7 @@ const UserContext = ({ children }) => {
   const [selectedCustomerChat, setSelectedCustomerChat] = useState()
   const [newMessagesList, setNewMessagesList] = useState([]);
   const [fileSms, setFileSms] = useState({});
-
+  const [newAllChat, setNewAllChat] = useState([]);
 
   // <----------------------------Others State ---------------------->
   const [unknownPercent, setUnknownPercent] = useState(0);
@@ -70,6 +71,7 @@ const UserContext = ({ children }) => {
       console.error('Error fetching user data:', error);
     }
   };
+
 
   //chatting list refresh process
   const fetchUserByUserId = async () => {
@@ -111,6 +113,30 @@ const UserContext = ({ children }) => {
 
     return (Array.from(uniqueCustomers.values()));
   }
+
+
+  useEffect(() => {
+    if (serverSmsCheck?.partNo === serverSmsCheck?.totalPart) {
+      if (serverSmsCheck?.sentId) {
+        setAllChat((prevChats) =>
+          prevChats.map(chat =>
+            chat.sentId === serverSmsCheck.sentId
+              ? { ...chat, smsServerStatus: "server" }
+              : chat
+          )
+        );
+        setNewAllChat((prevChats) =>
+          prevChats.map(chat =>
+            chat.sentId === serverSmsCheck.sentId
+              ? { ...chat, smsServerStatus: "server" }
+              : chat
+          )
+        );
+      }
+    }
+
+  }, [serverSmsCheck]);
+
 
   useEffect(() => {
     if (user?.email) {
@@ -233,12 +259,47 @@ const UserContext = ({ children }) => {
         showGreeting(newSMS)
 
       });
+
+      stompClient.subscribe(`/topic/chat`, (message) => {
+        const parsedMessage = JSON.parse(message?.body);
+        // Extract the actual message content from the `body` field
+        const newServerSms = parsedMessage?.body;
+        if (newServerSms?.sentBy === chattingUser?.userId) {
+          setServerSmsCheck(newServerSms);
+        }
+      });
     };
 
     stompClient.onWebSocketError = (error) => {
       console.error('Error with websocket', error);
       // Handle error here, you can update state or show an error message to the user.
-      connect();
+      stompClient.onConnect = (frame) => {
+        setConnected(true);
+        console.log('Connected: ' + frame);
+        console.log("error after try to conner");
+
+        const response = new Promise((resolve) => {
+          fetchUserByUserId();
+          stompClient.publish(
+            {
+              destination: '/app/connectStatus',
+              body: JSON.stringify({
+                userId: chattingUser?.userId,
+                deviceId: navigator.appName + navigator.platform + user?.email
+              }),
+            },
+            {},
+            (response) => {
+              resolve(response);
+            }
+          );
+        });
+
+        response.then((resolvedValue) => {
+          // You can now use the resolved value here
+          console.log('Promise resolved:', resolvedValue);
+        });
+      };
     };
     stompClient.activate();
   };
@@ -388,8 +449,6 @@ const UserContext = ({ children }) => {
     };
     const handleToastSuccess = () => {
       // Show system notification
-      console.log(sms, "toast check");
-
       if (sms?.sentBy === 0) {
         return;
       }
@@ -643,7 +702,9 @@ const UserContext = ({ children }) => {
     fileSms,
     setFileSms,
     count,
-    setCount
+    setCount,
+    newAllChat,
+    setNewAllChat
   };
 
   return (

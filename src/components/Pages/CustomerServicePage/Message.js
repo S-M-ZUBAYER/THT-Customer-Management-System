@@ -16,18 +16,21 @@ import ShowChatHistory from './ShowChatHistory';
 import ImageModal from './ImageModal';
 import ReactEmoji from 'react-emoji-render';
 import { MdUnfoldMoreDouble } from "react-icons/md";
+import { IoMdCheckmark } from "react-icons/io";
+import { IoCheckmarkDoneSharp } from "react-icons/io5";
+
 
 const Message = ({ selectedCustomerChat, showHistory, SetShowHistory, showModal, setShowModal, Loading }) => {
   const [userIdAllChat, SetUserIdAllChat] = useState([]);
   const [historyLoading, setHistoryLoading] = useState(false);
-  const [newAllChat, setNewAllChat] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
 
 
   // collect data from useContext
-  const { user, chattingUser, allChat, count, setCount } = useContext(AuthContext);
+  const { user, chattingUser, allChat, count, setCount, newAllChat, setNewAllChat } = useContext(AuthContext);
   const [selectedCount, setSelectedCount] = useState("5"); // Default selection
+
 
   const handleToShowHistory = () => {
     setShowModal(!showModal); // Open the modal first
@@ -52,6 +55,7 @@ const Message = ({ selectedCustomerChat, showHistory, SetShowHistory, showModal,
 
   //here make the functionalities to update the sms according to the current user and merge the multiple part to show the big size file
   useEffect(() => {
+
     if (!allChat) return;
 
     const mergedMessages = [];
@@ -126,8 +130,6 @@ const Message = ({ selectedCustomerChat, showHistory, SetShowHistory, showModal,
   // }, [selectedCustomerChat?.userId, showHistory]);
   useEffect(() => {
     if (showHistory) {
-      console.log(selectedCount, "count");
-
       const fetchUserByUserId = async () => {
         setHistoryLoading(true);
         try {
@@ -161,8 +163,6 @@ const Message = ({ selectedCustomerChat, showHistory, SetShowHistory, showModal,
   }, [selectedCustomerChat?.userId, showHistory, selectedCount]);
 
 
-  console.log(allChat);
-
   const handleToShowMoreHistory = async () => {
     setHistoryLoading(true);
     try {
@@ -192,7 +192,6 @@ const Message = ({ selectedCustomerChat, showHistory, SetShowHistory, showModal,
     }
   }
 
-  console.log(count, "count");
 
 
   return (
@@ -471,10 +470,21 @@ const Message = ({ selectedCustomerChat, showHistory, SetShowHistory, showModal,
                         />
                         <div className="flex justify-start mt-2">
                           <small className="text-end  text-slate-500 text-xs mr-4">{chat?.timestamp}</small>
-                          {
-                            chat?.smsLoading &&
-                            <Spinner></Spinner>
-                          }
+                          {chat?.smsLoading ? (
+                            chat?.smsServerStatus === "server" ? (
+                              <p className="flex justify-end text-green-800">
+                                <IoMdCheckmark />
+                              </p>
+                            ) : (
+                              <Spinner />
+                            )
+                          ) : (
+                            chat?.smsServerStatus === "server" && (
+                              <p className="flex justify-end text-green-800">
+                                <IoCheckmarkDoneSharp />
+                              </p>
+                            )
+                          )}
                         </div>
 
                       </div>)
@@ -492,10 +502,21 @@ const Message = ({ selectedCustomerChat, showHistory, SetShowHistory, showModal,
                           />
                           <div className="flex justify-start mt-2">
                             <small className="text-end  text-slate-500 text-xs mr-4">{chat?.timestamp}</small>
-                            {
-                              chat?.smsLoading &&
-                              <Spinner></Spinner>
-                            }
+                            {chat?.smsLoading ? (
+                              chat?.smsServerStatus === "server" ? (
+                                <p className="flex justify-end text-green-800">
+                                  <IoMdCheckmark />
+                                </p>
+                              ) : (
+                                <Spinner />
+                              )
+                            ) : (
+                              chat?.smsServerStatus === "server" && (
+                                <p className="flex justify-end text-green-800">
+                                  <IoCheckmarkDoneSharp />
+                                </p>
+                              )
+                            )}
                           </div>
 
                         </div>)
@@ -626,10 +647,21 @@ const Message = ({ selectedCustomerChat, showHistory, SetShowHistory, showModal,
                             })()}
                             <div className="flex justify-start mt-2">
                               <small className="text-end  text-slate-500 text-xs mr-4">{chat?.timestamp}</small>
-                              {
-                                chat?.smsLoading &&
-                                <Spinner></Spinner>
-                              }
+                              {chat?.smsLoading ? (
+                                chat?.smsServerStatus === "server" ? (
+                                  <p className="flex justify-end text-green-800">
+                                    <IoMdCheckmark />
+                                  </p>
+                                ) : (
+                                  <Spinner />
+                                )
+                              ) : (
+                                chat?.smsServerStatus === "server" && (
+                                  <p className="flex justify-end text-green-800">
+                                    <IoCheckmarkDoneSharp />
+                                  </p>
+                                )
+                              )}
                             </div>
                           </div>
 
@@ -638,14 +670,32 @@ const Message = ({ selectedCustomerChat, showHistory, SetShowHistory, showModal,
 
                           //show the customer service sending sms and icon show in here
                           (<div className="bg-lime-200 px-2 py-1 rounded-b-lg rounded-tl-lg text-black">
-                            <p className="px-2 py-1 font-normal text-black"><ReactEmoji text={chat?.message} /></p>
-                            <div className="flex justify-start">
-                              <small className="text-end  text-slate-500 text-xs mr-4">{chat?.timestamp}</small>
-                              {
-                                chat?.smsLoading &&
-                                <Spinner></Spinner>
-                              }
+                            <div className="">
+                              <p className=" col-span-9 px-2 py-1 font-normal text-black"><ReactEmoji text={chat?.message} /></p>
+
                             </div>
+
+
+                            <div className="flex justify-between items-center">
+                              <small className="text-slate-500 text-xs mr-4">{chat?.timestamp}</small>
+
+                              {chat?.smsLoading ? (
+                                chat?.smsServerStatus === "server" ? (
+                                  <p className="flex justify-end text-green-800">
+                                    <IoMdCheckmark />
+                                  </p>
+                                ) : (
+                                  <Spinner />
+                                )
+                              ) : (
+                                chat?.smsServerStatus === "server" && (
+                                  <p className="flex justify-end text-green-800">
+                                    <IoCheckmarkDoneSharp />
+                                  </p>
+                                )
+                              )}
+                            </div>
+
                           </div>
                           )}
                   </div>

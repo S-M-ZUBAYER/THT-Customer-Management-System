@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 
 import CustomerServicePart from './CustomerServicePart';
 import { AuthContext } from '../../../context/UserContext';
-// import { AuthContext } from '../../../context/UserContext_CN';
 import axios from 'axios';
 // import { Client } from '@stomp/stompjs';
 

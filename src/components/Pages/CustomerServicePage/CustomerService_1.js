@@ -192,8 +192,6 @@ const CustomerService_1 = () => {
         const liveChatKey = `${user?.email}LiveChat${customer?.userId}`;
         // const liveChatArray = JSON.parse(localStorage.getItem(liveChatKey));
         const liveChatArray = await getMessagesFromDB(liveChatKey);
-        console.log(liveChatArray, "indexDB");
-
         setAllChat(liveChatArray);
     };
 
