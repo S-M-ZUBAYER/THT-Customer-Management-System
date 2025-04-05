@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-function VoltageDetails() {
+function VoltageDetails({ baseUrl }) {
     const [voltageDetails, setVoltageDetails] = useState([]);
     const [models, setModels] = useState([]);
     const [selectedModel, setSelectedModel] = useState({});
@@ -14,11 +14,11 @@ function VoltageDetails() {
     useEffect(() => {
         fetchModels();
         fetchVoltages();
-    }, []);
+    }, [baseUrl]);
 
     const fetchModels = async () => {
         try {
-            const response = await axios.get('https://grozziieget.zjweiting.com:8033/tht/powerBankModels');
+            const response = await axios.get(`${baseUrl}/tht/powerBankModels`);
             // const response = await axios.get('http://localhost:2000/tht/powerBankModels');
             setModels(response.data.data);
             setLoading(false);
@@ -29,7 +29,7 @@ function VoltageDetails() {
     };
     const fetchVoltages = async () => {
         try {
-            const response = await axios.get('https://grozziieget.zjweiting.com:8033/tht/voltageDetails');
+            const response = await axios.get(`${baseUrl}/tht/voltageDetails`);
             // const response = await axios.get('http://localhost:2000/tht/voltageDetails');
             setVoltageDetails(response.data.data);
             setLoading(false);
@@ -66,9 +66,7 @@ function VoltageDetails() {
                 batteryPercentage: Number(formData.batteryPercentage),
                 voltage: Number(formData.voltage),
             };
-            console.log(payload, "payload");
-
-            const response = await axios.post('https://grozziieget.zjweiting.com:8033/tht/voltageDetails', payload);
+            const response = await axios.post(`${baseUrl}/tht/voltageDetails`, payload);
             setMessage(response.data.message);
             toast.success(response.data.message);
 
@@ -99,7 +97,7 @@ function VoltageDetails() {
 
         try {
             // Call API to delete the item
-            const response = await axios.delete(`https://grozziieget.zjweiting.com:8033/tht/voltageDetails/${id}`);
+            const response = await axios.delete(`${baseUrl}/tht/voltageDetails/${id}`);
             // const response = await axios.delete(`http://localhost:2000/tht/voltageDetails/${id}`);
 
             // Update the state to remove the deleted item
@@ -116,7 +114,7 @@ function VoltageDetails() {
 
 
     return (
-        <div className="bg-gray-100 min-h-screen flex justify-center items-center">
+        <div className="bg-gray-100 pb-10 flex justify-center items-center">
             <div className="bg-white text-black rounded-lg shadow-lg p-6 w-full max-w-3xl">
                 <h2 className="text-2xl font-bold mb-4 text-center">Voltage Details</h2>
 

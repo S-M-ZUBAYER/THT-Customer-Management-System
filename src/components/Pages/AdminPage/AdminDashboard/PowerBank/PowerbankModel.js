@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function PowerBankModels() {
+function PowerBankModels({ baseUrl, currentServer }) {
     const [modelNumber, setModelNumber] = useState('');
     const [message, setMessage] = useState('');
     const [models, setModels] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // Fetch all power bank models on component mount
+
+
     useEffect(() => {
         const fetchModels = async () => {
             try {
                 // const response = await axios.get('http://localhost:2000/tht/powerBankModels');
-                const response = await axios.get('https://grozziieget.zjweiting.com:8033/tht/powerBankModels');
+                const response = await axios.get(`${baseUrl}/tht/powerBankModels`);
                 setModels(response.data.data);
                 setLoading(false);
             } catch (error) {
@@ -23,7 +24,11 @@ function PowerBankModels() {
         };
 
         fetchModels();
-    }, []);
+    }, [currentServer]);
+
+
+
+
 
     // Add a new power bank model
     const handleAddModel = async () => {
@@ -34,7 +39,7 @@ function PowerBankModels() {
 
         try {
             // const response = await axios.post('http://localhost:2000/tht/powerBankModels', { modelNumber });
-            const response = await axios.post('https://grozziieget.zjweiting.com:8033/tht/powerBankModels', { modelNumber });
+            const response = await axios.post(`${baseUrl}/tht/powerBankModels`, { modelNumber });
             setMessage(response.data.message);
 
             // Update the list with the newly added model
@@ -47,7 +52,7 @@ function PowerBankModels() {
     };
 
     return (
-        <div className="bg-gray-100 min-h-screen flex justify-center items-center">
+        <div className="bg-gray-100 mt-16 mb-20 flex justify-center items-center">
             <div className="bg-white text-black rounded-lg shadow-lg p-6 w-full max-w-2xl">
                 <h2 className="text-2xl font-bold mb-4 text-center">Power Bank Models</h2>
 

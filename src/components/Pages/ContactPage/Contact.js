@@ -3,6 +3,7 @@ import emailjs from 'emailjs-com';
 import { Link } from 'react-router-dom';
 import img from "../../../Assets/Images/THT-Pic.jpg"
 import customerServiceImg from "../../../Assets/Images/customer service/Customer service.jpg"
+import axios from 'axios';
 
 const Contact = () => {
 
@@ -30,6 +31,50 @@ const Contact = () => {
             });
     };
 
+    const EMAILJS_PUBLIC_KEY = "2rgeXzL7FMbdWdWdR"
+    const EMAILJS_PRIVATE_KEY = "yYsIzhaDA8jpFLDkRgKIv"
+    const EMAILJS_SERVICE_ID = "service_x46regr"
+    const EMAILJS_TEMPLATE_ID = "template_4b8fp8k"
+
+    const handleToEmail = async () => {
+        console.log("Click to send email");
+
+        const templateParams = {
+            to_email: "smzubayer9004@gmail.com",
+            subject: "MultiVendor Subscription",
+            message: "Your account has been created. Email: thtspace6@gmail.com, Password: 123456",
+        };
+
+        try {
+            const response = await emailjs.send(
+                EMAILJS_SERVICE_ID,   // Replace with your EmailJS Service ID
+                EMAILJS_TEMPLATE_ID,  // Replace with your EmailJS Template ID
+                templateParams,
+                EMAILJS_PUBLIC_KEY    // Replace with your EmailJS Public Key
+            );
+
+            console.log("Email sent successfully:", response);
+            alert("Email sent successfully!");
+        } catch (error) {
+            console.error("Error sending email:", error);
+            alert("Failed to send email. Please try again.");
+        }
+    };
+
+    // const handleToEmail = async () => {
+    //     console.log("Click to fetch email API");
+
+    //     try {
+    //         const response = await axios.get("http://localhost:2000/tht/version"); // Updated to GET request
+
+    //         console.log("API Response:", response.data);
+    //         alert("Email data fetched successfully!");
+    //     } catch (error) {
+    //         console.error("Error fetching email data:", error.response?.data || error.message);
+    //         alert("Failed to fetch email data. Please try again.");
+    //     }
+    // };
+
 
     return (
         <div>
@@ -39,6 +84,7 @@ const Contact = () => {
                 <div
                     className="absolute inset-0 bg-white/75 sm:bg-transparent sm:bg-gradient-to-r sm:from-white/95 sm:to-white/25"
                 ></div>
+
 
                 <div
                     className="relative mx-auto  px-4 py-32 sm:px-6 lg:flex lg:h-screen lg:items-center lg:px-8"
@@ -60,6 +106,8 @@ const Contact = () => {
                     </div>
                 </div>
             </section>
+
+
 
             <div className="mt-20">
                 <h1 className="text-black text-xl lg:text-3xl font-semibold mb-5">
@@ -116,7 +164,9 @@ const Contact = () => {
                 </div>
 
             </div>
-
+            <div>
+                <button className="cursor-pointer text-black bg-slate-400 p-2" onClick={handleToEmail} >Send Email</button>
+            </div>
 
             <div>
                 <div className="w-5/6 md:w-4/6 lg:w-full mx-auto">

@@ -1100,7 +1100,7 @@ const Message_CN = ({ selectedCustomerChat, showHistory, SetShowHistory, Loading
                                     </div>
 
 
-                                    <div className="w-6">
+                                    <div className="w-6 mt-2">
                                         <img
                                             className="w-5 h-5 rounded-full border-2 border-yellow-400 animate-heartbeat"
                                             src={user?.image ? user?.image : "https://img.freepik.com/premium-vector/anonymous-user-circle-icon-vector-illustration-flat-style-with-long-shadow_520826-1931.jpg"}

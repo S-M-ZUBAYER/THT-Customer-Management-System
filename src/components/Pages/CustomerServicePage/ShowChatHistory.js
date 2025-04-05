@@ -123,9 +123,10 @@ const ShowChatHistory = ({ userIdAllChat, customerUserId, SetUserIdAllChat }) =>
                     (<div>
                       <img
                         className="w-48 h-auto"
-                        src={`data:image/png;base64,${chat?.message}`}
+                        // src={`data:image/png;base64,${chat?.message}`}
+                        src={chat?.message}
                         alt={`Image ${index}`}
-                        onClick={() => openImageModal(`data:image/png;base64,${chat?.message}`)}
+                        onClick={() => openImageModal(chat?.message)}
                       />
                       <div className="flex justify-start pt-3">
                         <small className="text-right text-slate-500">
@@ -143,7 +144,8 @@ const ShowChatHistory = ({ userIdAllChat, customerUserId, SetUserIdAllChat }) =>
                         <video
                           className="w-48 h-auto"
                           controls
-                          src={`data:video/mp4;base64,${chat?.message}`}
+                          // src={`data:video/mp4;base64,${chat?.message}`}
+                          src={chat?.message}
                         />
                         <div className="flex justify-start pt-3">
                           <small className="text-right text-slate-500">
@@ -184,7 +186,7 @@ const ShowChatHistory = ({ userIdAllChat, customerUserId, SetUserIdAllChat }) =>
                             };
 
                             // Determine the file type
-                            const fileType = getFileType(chat?.fileName);
+                            const fileType = getFileType(chat?.message);
 
                             // Render the file based on its type
                             const getFileViewer = (fileType, message) => {
@@ -192,11 +194,7 @@ const ShowChatHistory = ({ userIdAllChat, customerUserId, SetUserIdAllChat }) =>
                                 case 'pdf':
                                   return (
                                     // Use a PDF viewer library or iframe to display the PDF
-                                    <a
-                                      href={`data:application/zip;base64,${message}`}
-                                      download={`${chat?.fileName}`}
-                                    >
-
+                                    <a href={message} target="_blank" rel="noopener noreferrer">
                                       <ImFilePdf className="text-red-500 font-bold text-7xl"></ImFilePdf>
                                     </a>
                                   );
@@ -204,10 +202,7 @@ const ShowChatHistory = ({ userIdAllChat, customerUserId, SetUserIdAllChat }) =>
                                   return (
                                     // Use an Excel viewer library or iframe to display the Excel file
                                     // Be sure to choose a library that can handle XLSX files
-                                    <a
-                                      href={`data:application/zip;base64,${message}`}
-                                      download={`${chat?.fileName}`}
-                                    >
+                                    <a href={message} target="_blank" rel="noopener noreferrer">
 
                                       <BsFiletypeXlsx className="text-green-700 font-bold text-7xl"></BsFiletypeXlsx>
                                     </a>
@@ -215,10 +210,7 @@ const ShowChatHistory = ({ userIdAllChat, customerUserId, SetUserIdAllChat }) =>
                                 case 'docx':
                                   return (
 
-                                    <a
-                                      href={`data:application/zip;base64,${message}`}
-                                      download={`${chat?.fileName}`}
-                                    >
+                                    <a href={message} target="_blank" rel="noopener noreferrer">
 
                                       <BsFiletypeDocx className="text-blue-700 font-bold text-7xl"></BsFiletypeDocx>
                                     </a>
@@ -226,40 +218,32 @@ const ShowChatHistory = ({ userIdAllChat, customerUserId, SetUserIdAllChat }) =>
                                 case 'csv':
                                   return (
                                     // Render CSV content or use a CSV viewer if available
-                                    <a
-                                      href={`data:application/zip;base64,${message}`}
-                                      download={`${chat?.fileName}`}
-                                    >
+                                    <a href={message} target="_blank" rel="noopener noreferrer">
                                       <FaFileCsv className="text-green-700 font-bold text-7xl"></FaFileCsv>
                                     </a>
                                   );
                                 case 'txt':
                                   return (
                                     // Render CSV content or use a CSV viewer if available
-                                    <a
-                                      href={`data:application/txt;base64,${message}`}
-                                      download={`${chat?.fileName}`}
-                                    >
+                                    <a href={message} target="_blank" rel="noopener noreferrer">
                                       <FiFileText className="text-black font-bold text-7xl"></FiFileText>
                                     </a>
                                   );
                                 case 'zip':
                                   return (
                                     // Render a link to download the ZIP file
-                                    <a
-                                      href={`data:application/zip;base64,${message}`}
-                                      download={`${chat?.fileName}`}
-                                    >
+                                    // <a
+                                    //   href={`data:application/zip;base64,${message}`}
+                                    //   download={`${chat?.fileName}`}
+                                    // >
+                                    <a href={message} target="_blank" rel="noopener noreferrer">
                                       <AiFillFileZip className="text-yellow-700 font-bold text-7xl"></AiFillFileZip>
                                     </a>
                                   );
                                 case 'rar':
                                   return (
                                     // Render a link to download the rar file
-                                    <a
-                                      href={`data:application/rar;base64,${message}`}
-                                      download={`${chat?.fileName}`}
-                                    >
+                                    <a href={message} target="_blank" rel="noopener noreferrer">
                                       <AiFillFileZip className="text-yellow-700 font-bold text-7xl"></AiFillFileZip>
                                     </a>
                                   );
@@ -316,9 +300,10 @@ const ShowChatHistory = ({ userIdAllChat, customerUserId, SetUserIdAllChat }) =>
                       {/* Here show the image and onclick to show full display this image */}
                       <img
                         className=" w-48 h-auto"
-                        src={`data:image/png;base64,${chat?.message}`}
+                        // src={`data:image/png;base64,${chat?.message}`}
+                        src={chat?.message}
                         alt={`Image ${index}`}
-                        onClick={() => openImageModal(`data:image/png;base64,${chat?.message}`)}
+                        onClick={() => openImageModal(chat?.message)}
                       />
                       <div className="flex justify-end mt-2">
                         <small className="text-end text-slate-500 text-xs mr-4">
@@ -341,7 +326,8 @@ const ShowChatHistory = ({ userIdAllChat, customerUserId, SetUserIdAllChat }) =>
                         <video
                           className="w-48 h-auto"
                           controls
-                          src={`data:video/mp4;base64,${chat?.message}`}
+                          // src={`data:video/mp4;base64,${chat?.message}`}
+                          src={chat?.message}
                         />
                         <div className="flex justify-end mt-2">
                           <small className="text-end  text-slate-500 text-xs mr-1">{chat?.timestamp} {chat?.server_timestamp ? formatTimestamp(chat.server_timestamp.split(" ")[0]) : ""}</small>
@@ -385,7 +371,7 @@ const ShowChatHistory = ({ userIdAllChat, customerUserId, SetUserIdAllChat }) =>
                             };
 
                             // Determine the file type
-                            const fileType = getFileType(chat?.fileName);
+                            const fileType = getFileType(chat?.message);
 
                             // Render the file based on its type
                             const getFileViewer = (fileType, message) => {
@@ -393,11 +379,7 @@ const ShowChatHistory = ({ userIdAllChat, customerUserId, SetUserIdAllChat }) =>
                                 case 'pdf':
                                   return (
                                     // Use a PDF viewer library or iframe to display the PDF
-                                    <a
-                                      href={`data:application/zip;base64,${message}`}
-                                      download={`${chat?.fileName}`}
-                                    >
-
+                                    <a href={message} target="_blank" rel="noopener noreferrer">
                                       <ImFilePdf className="text-red-500 font-bold text-7xl"></ImFilePdf>
                                     </a>
                                   );
@@ -405,10 +387,7 @@ const ShowChatHistory = ({ userIdAllChat, customerUserId, SetUserIdAllChat }) =>
                                   return (
                                     // Use an Excel viewer library or iframe to display the Excel file
                                     // Be sure to choose a library that can handle XLSX files
-                                    <a
-                                      href={`data:application/zip;base64,${message}`}
-                                      download={`${chat?.fileName}`}
-                                    >
+                                    <a href={message} target="_blank" rel="noopener noreferrer">
 
                                       <BsFiletypeXlsx className="text-green-700 font-bold text-7xl"></BsFiletypeXlsx>
                                     </a>
@@ -417,10 +396,7 @@ const ShowChatHistory = ({ userIdAllChat, customerUserId, SetUserIdAllChat }) =>
                                   return (
                                     // Use a document viewer library or iframe to display the document
                                     // You'll need a library that can handle DOCX files
-                                    <a
-                                      href={`data:application/zip;base64,${message}`}
-                                      download={`${chat?.fileName}`}
-                                    >
+                                    <a href={message} target="_blank" rel="noopener noreferrer">
 
                                       <BsFiletypeDocx className="text-blue-700 font-bold text-7xl"></BsFiletypeDocx>
                                     </a>
@@ -428,10 +404,7 @@ const ShowChatHistory = ({ userIdAllChat, customerUserId, SetUserIdAllChat }) =>
                                 case 'csv':
                                   return (
                                     // Render CSV content or use a CSV viewer if available
-                                    <a
-                                      href={`data:application/zip;base64,${message}`}
-                                      download={`${chat?.fileName}`}
-                                    >
+                                    <a href={message} target="_blank" rel="noopener noreferrer">
                                       <FaFileCsv className="text-green-700 font-bold text-7xl"></FaFileCsv>
                                     </a>
                                   );
@@ -448,20 +421,14 @@ const ShowChatHistory = ({ userIdAllChat, customerUserId, SetUserIdAllChat }) =>
                                 case 'zip':
                                   return (
                                     // Render a link to download the ZIP file
-                                    <a
-                                      href={`data:application/zip;base64,${message}`}
-                                      download={`${chat?.fileName}`}
-                                    >
+                                    <a href={message} target="_blank" rel="noopener noreferrer">
                                       <AiFillFileZip className="text-yellow-700 font-bold text-7xl"></AiFillFileZip>
                                     </a>
                                   );
                                 case 'rar':
                                   return (
                                     // Render a link to download the rar file
-                                    <a
-                                      href={`data:application/rar;base64,${message}`}
-                                      download={`${chat?.fileName}`}
-                                    >
+                                    <a href={message} target="_blank" rel="noopener noreferrer">
                                       <AiFillFileZip className="text-yellow-700 font-bold text-7xl"></AiFillFileZip>
                                     </a>
                                   );

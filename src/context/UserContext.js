@@ -221,6 +221,90 @@ const UserContext = ({ children }) => {
     }
   };
 
+  // const connect = () => {
+  //   console.log("connect");
+
+  //   stompClient.onConnect = (frame) => {
+  //     setConnected(true);
+  //     console.log('Connected: ' + frame);
+
+  //     const response = new Promise((resolve) => {
+  //       fetchUserByUserId();
+  //       stompClient.publish(
+  //         {
+  //           destination: '/app/connectStatus',
+  //           body: JSON.stringify({
+  //             userId: chattingUser?.userId,
+  //             deviceId: navigator.appName + navigator.platform + user?.email
+  //           }),
+  //         },
+  //         {},
+  //         (response) => {
+  //           resolve(response);
+  //         }
+  //       );
+  //     });
+
+  //     response.then((resolvedValue) => {
+  //       // You can now use the resolved value here
+  //       console.log('Promise resolved:', resolvedValue);
+  //     });
+
+  //     stompClient.subscribe(`/topic/${chattingUser?.userId}`, (message) => {
+  //       console.log(message?.body, "coming sms")
+  //       const newSMS = JSON.parse(message.body);
+  //       if (newSMS && newSMS.msgType === "ans") {
+  //         setNewResponseCome(newSMS);
+  //       }
+  //       showGreeting(newSMS)
+
+  //     });
+
+  //     stompClient.subscribe(`/topic/chat`, (message) => {
+  //       const parsedMessage = JSON.parse(message?.body);
+  //       // Extract the actual message content from the `body` field
+  //       const newServerSms = parsedMessage?.body;
+  //       if (newServerSms?.sentBy === chattingUser?.userId) {
+  //         setServerSmsCheck(newServerSms);
+  //       }
+  //     });
+  //   };
+
+  //   stompClient.onWebSocketError = (error) => {
+  //     console.error('Error with websocket', error);
+  //     // Handle error here, you can update state or show an error message to the user.
+  //     stompClient.onConnect = (frame) => {
+  //       setConnected(true);
+  //       console.log('Connected: ' + frame);
+  //       console.log("error after try to conner");
+
+  //       const response = new Promise((resolve) => {
+  //         fetchUserByUserId();
+  //         stompClient.publish(
+  //           {
+  //             destination: '/app/connectStatus',
+  //             body: JSON.stringify({
+  //               userId: chattingUser?.userId,
+  //               deviceId: navigator.appName + navigator.platform + user?.email
+  //             }),
+  //           },
+  //           {},
+  //           (response) => {
+  //             resolve(response);
+  //           }
+  //         );
+  //       });
+
+  //       response.then((resolvedValue) => {
+  //         // You can now use the resolved value here
+  //         console.log('Promise resolved:', resolvedValue);
+  //       });
+  //     };
+  //   };
+  //   stompClient.activate();
+  // };
+
+
   const connect = () => {
     console.log("connect");
 
@@ -228,41 +312,41 @@ const UserContext = ({ children }) => {
       setConnected(true);
       console.log('Connected: ' + frame);
 
-      const response = new Promise((resolve) => {
-        fetchUserByUserId();
-        stompClient.publish(
-          {
-            destination: '/app/connectStatus',
-            body: JSON.stringify({
-              userId: chattingUser?.userId,
-              deviceId: navigator.appName + navigator.platform + user?.email
-            }),
-          },
-          {},
-          (response) => {
-            resolve(response);
-          }
-        );
-      });
+      fetchUserByUserId();
 
-      response.then((resolvedValue) => {
-        // You can now use the resolved value here
-        console.log('Promise resolved:', resolvedValue);
-      });
+      // Function to send connectStatus
+      const sendConnectStatus = () => {
+        stompClient.publish({
+          destination: '/app/connectStatus',
+          body: JSON.stringify({
+            userId: chattingUser?.userId,
+            deviceId: navigator.appName + navigator.platform + user?.email
+          })
+        });
+        console.log("Sent connectStatus update");
+      };
 
+      // Send first connect status immediately
+      sendConnectStatus();
+
+      // Set interval to send every 20 seconds
+      const intervalId = setInterval(sendConnectStatus, 20000);
+
+      // Store intervalId so it can be cleared later if needed
+      window.connectStatusInterval = intervalId;
+
+      // Subscribe to messages
       stompClient.subscribe(`/topic/${chattingUser?.userId}`, (message) => {
-        console.log(message?.body, "coming sms")
+        console.log(message?.body, "incoming message");
         const newSMS = JSON.parse(message.body);
         if (newSMS && newSMS.msgType === "ans") {
           setNewResponseCome(newSMS);
         }
-        showGreeting(newSMS)
-
+        showGreeting(newSMS);
       });
 
       stompClient.subscribe(`/topic/chat`, (message) => {
         const parsedMessage = JSON.parse(message?.body);
-        // Extract the actual message content from the `body` field
         const newServerSms = parsedMessage?.body;
         if (newServerSms?.sentBy === chattingUser?.userId) {
           setServerSmsCheck(newServerSms);
@@ -272,37 +356,18 @@ const UserContext = ({ children }) => {
 
     stompClient.onWebSocketError = (error) => {
       console.error('Error with websocket', error);
-      // Handle error here, you can update state or show an error message to the user.
-      stompClient.onConnect = (frame) => {
-        setConnected(true);
-        console.log('Connected: ' + frame);
-        console.log("error after try to conner");
-
-        const response = new Promise((resolve) => {
-          fetchUserByUserId();
-          stompClient.publish(
-            {
-              destination: '/app/connectStatus',
-              body: JSON.stringify({
-                userId: chattingUser?.userId,
-                deviceId: navigator.appName + navigator.platform + user?.email
-              }),
-            },
-            {},
-            (response) => {
-              resolve(response);
-            }
-          );
-        });
-
-        response.then((resolvedValue) => {
-          // You can now use the resolved value here
-          console.log('Promise resolved:', resolvedValue);
-        });
-      };
     };
+
     stompClient.activate();
   };
+
+
+
+
+
+  // Stop the interval when disconnecting or leaving the chat
+  // stopSendingConnectStatus();
+
 
   useEffect(() => {
     let retryInterval;
