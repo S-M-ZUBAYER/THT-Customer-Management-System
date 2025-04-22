@@ -12,6 +12,7 @@ import { SiSocketdotio } from 'react-icons/si';
 import BtnSpinner from '../../Shared/Loading/BtnSpinner';
 import Message_CN from './Message_CN';
 import MessageInput_CN from './MessegeInput_CN';
+import { getMessagesFromDB, saveMessagesToDB } from './indexedDB';
 
 
 
@@ -33,8 +34,23 @@ const CustomerService_CN = () => {
 
 
 
+    //get all not view sms 
+    useEffect(() => {
+        const storedMessages = localStorage.getItem("newMessagesList");
 
 
+        if (storedMessages) {
+            try {
+                const parsedMessages = JSON.parse(storedMessages);
+                if (Array.isArray(parsedMessages)) {
+                    console.log(parsedMessages, "store");
+                    setNewMessagesList(parsedMessages);
+                }
+            } catch (err) {
+                console.error("Failed to parse messages from localStorage:", err);
+            }
+        }
+    }, []);
 
     // make the request to get the running time status 
     const fetchUserStatus = async (userId) => {
@@ -155,16 +171,12 @@ const CustomerService_CN = () => {
 
 
 
-    const handleToSelectCustomer = (customer) => {
+    const handleToSelectCustomer = async (customer) => {
 
 
 
         //call function to show the status
         fetchUserStatus(customer?.userId)
-
-        const liveChatKey = `${user?.email}LiveChat${customer?.userId}`;
-        const liveChatArray = JSON.parse(localStorage.getItem(liveChatKey));
-        setAllChat(liveChatArray);
 
         if (customer?.status === "STOPPED") {
             setCustomerStatus("STOPPED");
@@ -185,15 +197,37 @@ const CustomerService_CN = () => {
 
 
 
-        setNewMessagesList(newMessagesList && newMessagesList?.filter((list, index) => list.sentBy !== customer?.userId));
+        const filteredMessages = newMessagesList?.filter(
+            (list) => list.sentBy !== customer?.userId
+        );
+        const filteredInitialUserMessages = newMessagesList?.filter(
+            (list) => list.sentBy === customer?.userId
+        );
+        // 👉 Update state
+        setNewMessagesList(filteredMessages);
+
+        // 👉 Also update localStorage
+        localStorage.setItem("newMessagesList", JSON.stringify(filteredMessages));
 
         // setNewMessagesList((prevChat) => [...prevChat, {}]);
-        setCount(0);
         SetShowHistory(false)
         setCurrentUser(customer);
+        setCount(0);
         // connectWebSocket();
         // setSelectedCustomerChat((chatSms.filter(eachChat => eachChat.myId === customer?.id))[0])
         setSelectedCustomerChat(customer)
+        const liveChatKey = `${user?.email}LiveChat${customer?.userId}`;
+        // const liveChatArray = JSON.parse(localStorage.getItem(liveChatKey));
+        const liveChatArray = await getMessagesFromDB(liveChatKey);
+        if (Array.isArray(liveChatArray) && liveChatArray.length === 0) {
+            console.log(filteredInitialUserMessages);
+            setAllChat(filteredInitialUserMessages)
+            await saveMessagesToDB(liveChatKey, filteredInitialUserMessages)
+        }
+        else {
+
+            setAllChat(liveChatArray);
+        }
     };
 
 

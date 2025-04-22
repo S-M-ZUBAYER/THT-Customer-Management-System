@@ -10,7 +10,7 @@ import MessageInput from './MessegeInput';
 import toast from 'react-hot-toast';
 import { SiSocketdotio } from 'react-icons/si';
 import BtnSpinner from '../../Shared/Loading/BtnSpinner';
-import { getMessagesFromDB } from './indexedDB';
+import { getMessagesFromDB, saveMessagesToDB } from './indexedDB';
 
 
 
@@ -33,7 +33,22 @@ const CustomerService_1 = () => {
 
 
 
+    //get all not view sms 
+    useEffect(() => {
+        const storedMessages = localStorage.getItem("newMessagesList");
+        if (storedMessages) {
+            try {
+                const parsedMessages = JSON.parse(storedMessages);
+                if (Array.isArray(parsedMessages)) {
+                    setNewMessagesList(parsedMessages);
+                }
+            } catch (err) {
+                console.error("Failed to parse messages from localStorage:", err);
+            }
+        }
+    }, []);
 
+    console.log(allChat, "all chatSD");
 
 
     // make the request to get the running time status 
@@ -180,7 +195,17 @@ const CustomerService_1 = () => {
 
 
 
-        setNewMessagesList(newMessagesList && newMessagesList?.filter((list, index) => list.sentBy !== customer?.userId));
+        const filteredMessages = newMessagesList?.filter(
+            (list) => list.sentBy !== customer?.userId
+        );
+        const filteredInitialUserMessages = newMessagesList?.filter(
+            (list) => list.sentBy === customer?.userId
+        );
+        // 👉 Update state
+        setNewMessagesList(filteredMessages);
+
+        // 👉 Also update localStorage
+        localStorage.setItem("newMessagesList", JSON.stringify(filteredMessages));
 
         // setNewMessagesList((prevChat) => [...prevChat, {}]);
         SetShowHistory(false)
@@ -192,7 +217,15 @@ const CustomerService_1 = () => {
         const liveChatKey = `${user?.email}LiveChat${customer?.userId}`;
         // const liveChatArray = JSON.parse(localStorage.getItem(liveChatKey));
         const liveChatArray = await getMessagesFromDB(liveChatKey);
-        setAllChat(liveChatArray);
+        if (Array.isArray(liveChatArray) && liveChatArray.length === 0) {
+            console.log(filteredInitialUserMessages);
+            setAllChat(filteredInitialUserMessages)
+            await saveMessagesToDB(liveChatKey, filteredInitialUserMessages)
+        }
+        else {
+
+            setAllChat(liveChatArray);
+        }
     };
 
 

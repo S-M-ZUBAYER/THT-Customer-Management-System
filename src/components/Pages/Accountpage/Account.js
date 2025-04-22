@@ -142,7 +142,7 @@ const Account = () => {
       await deleteAllChatsFromDB();  // This might throw an error
 
       localStorage.removeItem('user');
-      deleteCustomerServiceChatData();
+      // deleteCustomerServiceChatData();
       toast.success("Logout successfully");
     } catch (err) {
       console.error("Logout error:", err); // Log the full error in the console

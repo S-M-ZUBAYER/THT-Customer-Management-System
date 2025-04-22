@@ -96,7 +96,7 @@ function App() {
       event.returnValue = ""; // Some browsers require this for custom messages
       SocketDisconnect();
       console.log("Site is closing...");
-      deleteCustomerServiceChatData();
+      // deleteCustomerServiceChatData();
       await manageDeleteChatsInDB();
       await deleteAllChatsFromDB();
     };

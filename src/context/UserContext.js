@@ -38,7 +38,11 @@ const UserContext = ({ children }) => {
   const [allChat, setAllChat] = useState([]);
   const [localStoreSms, setLocalStoreSms] = useState([]);
   const [customerStatus, setCustomerStatus] = useState("RUNNING");
-  const [currentCustomer, setCurrentCustomer] = useState([]);
+  const [currentCustomer, setCurrentCustomer] = useState(() => {
+    const stored = localStorage.getItem("CustomerChatList");
+    return stored ? JSON.parse(stored) : [];
+  });
+
   const [comingSMS, setComingSMS] = useState(null)
   const [selectedCustomerChat, setSelectedCustomerChat] = useState()
   const [newMessagesList, setNewMessagesList] = useState([]);
@@ -57,6 +61,7 @@ const UserContext = ({ children }) => {
   const [totalQuestions, setTotalQuestions] = useState([]);
   const [unknownQuestions, setUnknownQuestions] = useState([]);
 
+  console.log(currentCustomer, "frist");
 
   //get a user full information and search by email
   const fetchUserByEmail = async () => {
@@ -72,9 +77,58 @@ const UserContext = ({ children }) => {
     }
   };
 
+  useEffect(() => {
+    const storedCustomers = localStorage.getItem("CustomerChatList");
+    if (storedCustomers) {
+      const parsedCustomers = JSON.parse(storedCustomers);
+      if (Array.isArray(parsedCustomers) && parsedCustomers.length > 0) {
+        setCurrentCustomer(parsedCustomers);
+      }
+    }
+  }, []);
+
 
   //chatting list refresh process
   const fetchUserByUserId = async () => {
+    const storedCustomers = localStorage.getItem("CustomerChatList") || "[]";
+    if (storedCustomers) {
+      const parsedCustomers = JSON.parse(storedCustomers);
+      if (Array.isArray(parsedCustomers) && parsedCustomers.length > 0) {
+        setCurrentCustomer(parsedCustomers);
+        console.log("Loaded from localStorage");
+        return;
+      }
+      else {
+        // Fallback to API fetch
+        try {
+          if (!chattingUser?.userId) return;
+
+          let response;
+          if (serviceCountry === "EN") {
+            response = await axios.get(`https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/chatlist/customer_service/${chattingUser.userId}`);
+          } else {
+            response = await axios.get(`https://jiapuv.com:3091/CustomerService-ChatCN/api/dev/chatlist/customer_service/${chattingUser.userId}`);
+          }
+
+          if (response.status === 200) {
+            const userData = response.data;
+            const updateCustomerData = userData.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            const uniqueData = getUniqueCustomers(updateCustomerData);
+            setCurrentCustomer(uniqueData);
+            localStorage.setItem("CustomerChatList", JSON.stringify(uniqueData));
+          } else {
+            console.error('Unexpected status code:', response.status);
+          }
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      }
+    }
+
+
+  };
+
+  const fetchInitialUserByUserId = async () => {
     try {
       let response;
       if (serviceCountry === "EN") {
@@ -92,6 +146,7 @@ const UserContext = ({ children }) => {
           return timestampB - timestampA;
         }));
         setCurrentCustomer(getUniqueCustomers(updateCustomerData))
+        localStorage.setItem("CustomerChatList", JSON.stringify(getUniqueCustomers(updateCustomerData)));
       } else {
         // Handle unexpected status codes
         console.error('Unexpected status code:', response.status);
@@ -169,34 +224,68 @@ const UserContext = ({ children }) => {
     }
   }, [newResponseCome]);
 
-  //According to the coming new sms here update the chatting sms and list and show the toast in here.
+
   useEffect(() => {
+    const updateAndStoreMessages = (messages) => {
+      setNewMessagesList(messages);
+      localStorage.setItem("newMessagesList", JSON.stringify(messages));
+    };
+
+    // Update status if matched
+    let isMatched = false;
+    const updatedCustomers = currentCustomer.map((customer) => {
+      if (customer.userId === newCome.sentBy) {
+        isMatched = true;
+        return { ...customer, status: "RUNNING" };
+      }
+      return customer;
+    });
+
+    // If no match found, log it
+    if (!isMatched) {
+      fetchInitialUserByUserId();
+    }
+    else {
+      isMatched = false;
+      // Sort with matched one (if any) on top
+      const sortedCustomers = updatedCustomers.sort((a, b) =>
+        a.userId === newCome.sentBy ? -1 : b.userId === newCome.sentBy ? 1 : 0
+      );
+
+      // Set state
+      setCurrentCustomer(sortedCustomers);
+
+      // Store in localStorage
+      localStorage.setItem("CustomerChatList", JSON.stringify(sortedCustomers));
+    }
+
+
     if (newCome.totalPart === 1) {
+      console.log(currentCustomer, "customer");
+
       if (newCome && newMessagesList && newMessagesList.length > 0) {
         const updatedData = newMessagesList.filter((data) => data.sentBy !== selectedCustomerChat?.userId);
         if (newCome.sentBy !== selectedCustomerChat?.userId) {
-          setNewMessagesList([...updatedData, newCome]);
+          updateAndStoreMessages([...updatedData, newCome]);
         } else {
-          setNewMessagesList(updatedData);
+          updateAndStoreMessages(updatedData);
         }
       } else if (newCome && newCome.sentBy !== selectedCustomerChat?.userId) {
-        setNewMessagesList([newCome]);
+        updateAndStoreMessages([newCome]);
       }
-      // showList();
     }
     else if (newCome.totalPart > 1 && newCome.partNo === 1) {
       if (newCome && newMessagesList && newMessagesList.length > 0) {
         const updatedData = newMessagesList.filter((data) => data.sentBy !== selectedCustomerChat?.userId);
         if (newCome.sentBy !== selectedCustomerChat?.userId) {
-          setNewMessagesList([...updatedData, newCome]);
+          updateAndStoreMessages([...updatedData, newCome]);
         } else {
-          setNewMessagesList(updatedData);
+          updateAndStoreMessages(updatedData);
         }
       } else if (newCome && newCome.sentBy !== selectedCustomerChat?.userId) {
-        setNewMessagesList([newCome]);
+        updateAndStoreMessages([newCome]);
       }
     }
-
   }, [newCome]);
 
   // <---------------------------Final Web Socket------------------------------------>
@@ -316,15 +405,20 @@ const UserContext = ({ children }) => {
 
       // Function to send connectStatus
       const sendConnectStatus = () => {
-        stompClient.publish({
-          destination: '/app/connectStatus',
-          body: JSON.stringify({
-            userId: chattingUser?.userId,
-            deviceId: navigator.appName + navigator.platform + user?.email
-          })
-        });
-        console.log("Sent connectStatus update");
+        if (stompClient && stompClient.connected) {
+          stompClient.publish({
+            destination: '/app/connectStatus',
+            body: JSON.stringify({
+              userId: chattingUser?.userId,
+              deviceId: navigator.appName + navigator.platform + user?.email
+            })
+          });
+          console.log("Sent connectStatus update");
+        } else {
+          console.warn("STOMP client is not connected. Skipping connectStatus update.");
+        }
       };
+
 
       // Send first connect status immediately
       sendConnectStatus();

@@ -31,16 +31,20 @@ const Contact = () => {
             });
     };
 
-    const EMAILJS_PUBLIC_KEY = "2rgeXzL7FMbdWdWdR"
-    const EMAILJS_PRIVATE_KEY = "yYsIzhaDA8jpFLDkRgKIv"
-    const EMAILJS_SERVICE_ID = "service_x46regr"
-    const EMAILJS_TEMPLATE_ID = "template_4b8fp8k"
+    // const EMAILJS_PUBLIC_KEY = "2rgeXzL7FMbdWdWdR"
+    // const EMAILJS_PRIVATE_KEY = "yYsIzhaDA8jpFLDkRgKIv"
+    // const EMAILJS_SERVICE_ID = "service_x46regr"
+    // const EMAILJS_TEMPLATE_ID = "template_4b8fp8k"
+    const EMAILJS_PUBLIC_KEY = "BdhgJg9oyaR8HBBNx"
+    const EMAILJS_SERVICE_ID = "service_7rnps2c"
+    const EMAILJS_TEMPLATE_ID = "template_wt3urfs"
 
     const handleToEmail = async () => {
         console.log("Click to send email");
 
         const templateParams = {
-            to_email: "smzubayer9004@gmail.com",
+            to_email: "obaidulhoqejoy@gmail.com",
+            from_email: "smzubayer9004@gmail.com",
             subject: "MultiVendor Subscription",
             message: "Your account has been created. Email: thtspace6@gmail.com, Password: 123456",
         };
