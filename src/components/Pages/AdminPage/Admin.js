@@ -37,6 +37,7 @@ const Admin = () => {
                                 <li><Link to='/admin/wifiModelHightWidth' className="sm:text-xs md:text-base text-gray-700">Add Wifi Model H&W</Link></li>
                                 <li><Link to='/admin/icon' className="sm:text-xs md:text-base text-gray-700">Add Icons</Link></li>
                                 <li><Link to='/admin/backgroundImg' className="sm:text-xs md:text-base text-gray-700">Add Background Image & Video</Link></li>
+                                <li><Link to='/admin/adminBackgroundImg' className="sm:text-xs md:text-base text-gray-700">Add Admin Background Image</Link></li>
                                 <li><Link to='/admin/mallProduct' className="sm:text-xs md:text-base text-gray-700">Add Mall Products</Link></li>
                                 <li><Link to='/admin/eventProduct' className="sm:text-xs md:text-base text-gray-700">Add Event Products</Link></li>
                                 <li><Link to='/admin/shopifyInfo' className="sm:text-xs md:text-base text-gray-700">Add Shopify & Others Info</Link></li>

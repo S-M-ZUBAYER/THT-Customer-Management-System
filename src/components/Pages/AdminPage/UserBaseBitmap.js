@@ -19,6 +19,7 @@ const UserBaseBitmap = () => {
             setLoading(true);
             try {
                 const response = await fetch(`https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/user/page?page=${page}&size=10`);
+                // const response = await fetch(`https://jiapuv.com:3091/CustomerService-ChatCN/api/dev/user/page?page=${page}&size=10`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch user details');
                 }
@@ -52,6 +53,7 @@ const UserBaseBitmap = () => {
         if (selectedUser) {
             try {
                 const response = await fetch(`https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/user/device/bitmap/flag/${selectedUser.userId}/${bitmapState}`, {
+                    // const response = await fetch(`https://jiapuv.com:3091/CustomerService-ChatCN/api/dev/user/device/bitmap/flag/${selectedUser.userId}/${bitmapState}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' }
                 });

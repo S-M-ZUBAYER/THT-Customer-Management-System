@@ -11,6 +11,7 @@ const ShowBitmap = () => {
     const fetchUserDetails = async () => {
         try {
             const response = await fetch(`https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/user/${userId}`);
+            // const response = await fetch(`https://jiapuv.com:3091/CustomerService-ChatCN/api/dev/user/${userId}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch user details');
             }
@@ -25,6 +26,7 @@ const ShowBitmap = () => {
     const fetchUserBitmap = async () => {
         try {
             const response = await fetch(`https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/user/device/bitmap/${userId}`);
+            // const response = await fetch(`https://jiapuv.com:3091/CustomerService-ChatCN/api/dev/user/device/bitmap/${userId}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch user details');
             }

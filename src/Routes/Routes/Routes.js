@@ -40,6 +40,8 @@ import UserBaseBitmap from "../../components/Pages/AdminPage/UserBaseBitmap";
 import ShowBitmap from "../../components/Pages/AdminPage/ShowBitmap";
 import PDFPaymentInfo from "../../components/Pages/AdminPage/AdminDashboard/PDFPaymentInfo";
 import VoltagePercentage from "../../components/Pages/AdminPage/AdminDashboard/PowerBank/VoltagePercentage";
+import AddAdminBackgroundImg from "../../components/Pages/AdminPage/AdminDashboard/BackgroundImgPage/AddAdminBackgroundImg";
+import ShowAdminBackgroundImg from "../../components/Pages/AdminPage/AdminDashboard/BackgroundImgPage/ShowAdminBackgroundImg";
 
 
 
@@ -155,8 +157,16 @@ export const routes = createBrowserRouter([
                 element: <PrivateRoute><AddBackgroundImg></AddBackgroundImg></PrivateRoute>
             },
             {
+                path: "/admin/adminBackgroundImg",
+                element: <PrivateRoute><AddAdminBackgroundImg></AddAdminBackgroundImg></PrivateRoute>
+            },
+            {
                 path: "/admin/backgroundImg/:name",
                 element: <PrivateRoute><ShowBackgroundImg></ShowBackgroundImg></PrivateRoute>
+            },
+            {
+                path: "/admin/adminBackgroundImg/:name",
+                element: <PrivateRoute><ShowAdminBackgroundImg></ShowAdminBackgroundImg></PrivateRoute>
             },
             {
                 path: "/admin/mallProduct",

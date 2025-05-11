@@ -11,7 +11,6 @@ import ShowingVideoCN from "../ShowingVideoPage.js/ShowingVideoCN";
 
 function AddBackgroundImg() {
   const [selectedImages, setSelectedImages] = useState([]);
-  const [BackgroundImgs, setBackgroundImgs] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [categories, setCategories] = useState([]);
   const [height, setHeight] = useState('');
@@ -20,15 +19,6 @@ function AddBackgroundImg() {
   //get current user information form useContext
   const { user } = useContext(AuthContext);
 
-
-  // get the all Background images according to the category
-  useEffect(() => {
-    axios.get("https://grozziieget.zjweiting.com:8033/tht/icons")
-      .then(res => {
-        setBackgroundImgs(res.data)
-      })
-      .catch(err => console.log(err))
-  }, []);
 
 
 
