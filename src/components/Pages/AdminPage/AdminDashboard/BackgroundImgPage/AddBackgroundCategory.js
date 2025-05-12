@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useContext, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
-const AddBackgroundCategory = ({ categories, setCategories }) => {
+const AddBackgroundCategory = ({ categories, setCategories, baseUrl }) => {
   const [categoryName, setCategoryName] = useState("");
 
 
@@ -16,7 +16,7 @@ const AddBackgroundCategory = ({ categories, setCategories }) => {
   const handleAddCategory = () => {
     if (categoryName.trim() !== '') {
       setCategories([...categories, categoryName]);
-      axios.post('https://grozziieget.zjweiting.com:8033/tht/backgroundCategories/add', {
+      axios.post(`${baseUrl}/tht/backgroundCategories/add`, {
         categoryName: categoryName,
       })
         .then((response) => {

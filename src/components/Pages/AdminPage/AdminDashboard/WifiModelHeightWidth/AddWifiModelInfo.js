@@ -24,22 +24,38 @@ function AddWifiModelHightWidth() {
   const [sliderImageMark, setSliderImageMark] = useState('');
   const [editModalData, setEditModalData] = useState(null);
   const { loading, setLoading } = useContext(AuthContext)
+  const [baseUrl, setBaseUrl] = useState("https://grozziieget.zjweiting.com:8033");
+  const allUrls = [
+    {
+      id: 1,
+      serverName: "Global",
+      url: "https://grozziieget.zjweiting.com:8033"
+    },
+    {
+      id: 2,
+      serverName: "China",
+      url: "https://jiapuv.com:8033"
+    }
+  ]
+
 
   useEffect(() => {
-    fetch('https://grozziieget.zjweiting.com:8033/tht/modelNoList')
+    fetch(`${baseUrl}/tht/modelNoList`)
       .then(response => response.json())
       .then(data => {
-
+        console.log(data);
         setAllModelNoList(data.map(modelNo => modelNo.modelNo))
 
       });
-  }, []);
+  }, [baseUrl]);
 
   // Make a GET request to fetch all model number for the specified category
   useEffect(() => {
-    const apiUrl = ` https://grozziieget.zjweiting.com:8033/tht/allWifiModelInfo`;
+    const apiUrl = `${baseUrl}/tht/allWifiModelInfo`;
     axios.get(apiUrl)
       .then((response) => {
+        console.log(response.data);
+
         setAllModelInfo(response.data);
         setLoading(false);
       })
@@ -47,7 +63,7 @@ function AddWifiModelHightWidth() {
         console.error('Error fetching data:', error);
         setLoading(false);
       });
-  }, []);
+  }, [baseUrl]);
 
 
   //create a function to delete icon from the frontend and database both side 
@@ -57,7 +73,7 @@ function AddWifiModelHightWidth() {
       return;
     }
     try {
-      await axios.delete(`https://grozziieget.zjweiting.com:8033/tht/wifiModelList/delete/${id}`);
+      await axios.delete(`${baseUrl}/tht/wifiModelList/delete/${id}`);
       toast.success('Model information deleted successfully');
       setAllModelInfo(allModelInfo.filter((model) => model.id !== id));
     } catch (error) {
@@ -104,7 +120,7 @@ function AddWifiModelHightWidth() {
 
     axios
       // .post('http://localhost:2000/tht/wifiModelHightWidth/add', { PID: selectedPID, modelNo: selectedModelNo, maxHeight, maxWidth, defaultHeight, defaultWidth, type: selectedType, musicValue: selectedMusicStatus, sliderImageMark: sliderImageMark })
-      .post('https://grozziieget.zjweiting.com:8033/tht/wifiModelHightWidth/add', { PID: selectedPID, modelNo: selectedModelNo, maxHeight, maxWidth, defaultHeight, defaultWidth, type: selectedType, musicValue: selectedMusicStatus, sliderImageMark: sliderImageMark })
+      .post(`${baseUrl}/tht/wifiModelHightWidth/add`, { PID: selectedPID, modelNo: selectedModelNo, maxHeight, maxWidth, defaultHeight, defaultWidth, type: selectedType, musicValue: selectedMusicStatus, sliderImageMark: sliderImageMark })
       .then((res) => {
         if (res.data.status === "success") {
           setAllModelInfo([...allModelInfo, { PID: selectedPID, modelNo: selectedModelNo, maxHeight, maxWidth, defaultHeight, defaultWidth, type: selectedType, musicValue: selectedMusicStatus, sliderImageMark }])
@@ -161,7 +177,7 @@ function AddWifiModelHightWidth() {
     try {
       // Send the PUT request to update the data in the backend
       // const response = await fetch('http://localhost:2000/tht/wifiModelHightWidth/update', {
-      const response = await fetch('https://grozziieget.zjweiting.com:8033/tht/wifiModelHightWidth/update', {
+      const response = await fetch(`${baseUrl}/tht/wifiModelHightWidth/update`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -203,7 +219,7 @@ function AddWifiModelHightWidth() {
     try {
       await axios.put(
         // `http://localhost:2000/tht/wifiModelHightWidth/update`, // Use dynamic id
-        `https://grozziieget.zjweiting.com:8033/tht/wifiModelHightWidth/update`, // Use dynamic id
+        `${baseUrl}/tht/wifiModelHightWidth/update`, // Use dynamic id
         editModalData
       );
 
@@ -223,104 +239,147 @@ function AddWifiModelHightWidth() {
   return (
 
     <div>
-      <h2 className=" font-bold text-3xl text-lime-600 mt-5">Please Input new printer model info:</h2>
+      {/* Server Selected Tabs */}
+      <div className="flex justify-center items-center mb-6 mt-3">
+        <div className="p-1 bg-slate-300 rounded-full">
+          {allUrls.map((server, index) => (
+            <button
+              key={index}
+              onClick={() => setBaseUrl(server.url)}
+              className={`px-16 py-1 rounded-full text-xl ${server.url === baseUrl
+                ? "bg-[#004368] text-white font-bold"
+                : "text-gray-500 font-semibold"
+                }`}
+            >
+              {server.serverName}
+            </button>
+          ))}
+        </div>
+      </div>
 
-      <div className="my-32 mt-20 flex items-center justify-center">
 
-        <form className="flex flex-col items-center justify-center">
-          <p className="mb-3">PID</p>
-          <input
-            type="text"
-            className="bg-white text-gray-800 mb-5 px-4 py-2 border rounded-md w-48 mr-2"
-            value={selectedPID}
-            onChange={handleInputPIDChange}
-            placeholder="Enter PID"
-          />
+      <h2 className="text-3xl font-bold text-[#004368] mt-10">Available WiFi Printer Model Information</h2>
 
-          <p className="mb-3">Model Name</p>
-          <input
-            type="text"
-            className="bg-white text-gray-800 mb-5 px-4 py-2 border rounded-md w-48 mr-2"
-            value={selectedModelNo}
-            onChange={handleInputChange}
-            placeholder="Enter model No"
-          />
+      <div className="my-24 flex items-center justify-center px-4">
+        <form className="w-full max-w-4xl bg-white shadow rounded-xl p-10 space-y-8 border border-gray-200">
+          <h2 className="text-2xl font-bold text-center text-[#004368]">Add WiFi Model Info</h2>
 
-          <p className="mb-3">Type Name</p>
-          <input
-            type="text"
-            className="bg-white text-gray-800 mb-5 px-4 py-2 border rounded-md w-48 mr-2"
-            value={selectedType}
-            onChange={handleInputTypeChange}
-            placeholder="Thermal or Dot"
-          />
-          <p className="mb-3">Music Status</p>
-          <input
-            type="text"
-            className="bg-white text-gray-800 mb-5 px-4 py-2 border rounded-md w-48 mr-2"
-            value={selectedMusicStatus}
-            onChange={handleInputMusicChange}
-            placeholder="Input Music Status"
-          />
+          {/* PID Input */}
           <div>
-            <p className="mb-3  mt-5">Slider Image Mark</p>
+            <label className="block mb-2 text-gray-700 font-medium">PID</label>
             <input
               type="text"
-              className="bg-white text-gray-800 mb-5 px-4 py-2 border rounded-md w-48 mr-2"
+              className="w-full bg-white px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#004368]"
+              value={selectedPID}
+              onChange={handleInputPIDChange}
+              placeholder="Enter PID"
+            />
+          </div>
+
+          {/* Model Name */}
+          <div>
+            <label className="block mb-2 text-gray-700 font-medium">Model Name</label>
+            <input
+              type="text"
+              className="w-full bg-white px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#004368]"
+              value={selectedModelNo}
+              onChange={handleInputChange}
+              placeholder="Enter Model No"
+            />
+          </div>
+
+          {/* Type Name */}
+          <div>
+            <label className="block mb-2 text-gray-700 font-medium">Type Name</label>
+            <input
+              type="text"
+              className="w-full bg-white px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#004368]"
+              value={selectedType}
+              onChange={handleInputTypeChange}
+              placeholder="Thermal or Dot"
+            />
+          </div>
+
+          {/* Music Status */}
+          <div>
+            <label className="block mb-2 text-gray-700 font-medium">Music Status</label>
+            <input
+              type="text"
+              className="w-full bg-white px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#004368]"
+              value={selectedMusicStatus}
+              onChange={handleInputMusicChange}
+              placeholder="Input Music Status"
+            />
+          </div>
+
+          {/* Slider Image Mark */}
+          <div>
+            <label className="block mb-2 text-gray-700 font-medium">Slider Image Mark</label>
+            <input
+              type="text"
+              className="w-full bg-white px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#004368]"
               value={sliderImageMark}
               onChange={handleSliderImageMarkChange}
               placeholder="Enter Slider Image Mark"
             />
           </div>
 
-          <p className="mb-3">Default H&W</p>
-          <label className="mb-4 flex justify-center">
-            <input
-              type="text" // Changed type to "text" for city names
-              className="px-4 py-2 border rounded-md w-48 bg-white mr-2"
-              placeholder="Enter Default Hight" // Placeholder text for city names
-              onChange={handleDefaultHightChange} // Handle the input change event
-            />
-            <input
-              type="text" // Changed type to "text" for city names
-              className="px-4 py-2 border rounded-md w-48 bg-white"
-              placeholder="Enter Default Width" // Placeholder text for city names
-              onChange={handleDefaultWidthChange} // Handle the input change event
-            />
-          </label>
-          <p className="mb-3">Max H&W</p>
-          <label className="mb-4 flex justify-center">
-            <input
-              type="text" // Changed type to "text" for city names
-              className="px-4 py-2 border rounded-md w-48 bg-white mr-2"
-              placeholder="Enter Max Hight" // Placeholder text for city names
-              onChange={handleMaxHightChange} // Handle the input change event
-            />
-            <input
-              type="text" // Changed type to "text" for city names
-              className="px-4 py-2 border rounded-md w-48 bg-white"
-              placeholder="Enter Max Width" // Placeholder text for city names
-              onChange={handleMaxWidthChange} // Handle the input change event
-            />
-          </label>
+          {/* Default Height & Width */}
+          <div>
+            <label className="block mb-2 text-gray-700 font-medium">Default Height & Width</label>
+            <div className="flex gap-4">
+              <input
+                type="text"
+                className="w-1/2 bg-white px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#004368]"
+                placeholder="Enter Default Height"
+                onChange={handleDefaultHightChange}
+              />
+              <input
+                type="text"
+                className="w-1/2 bg-white px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#004368]"
+                placeholder="Enter Default Width"
+                onChange={handleDefaultWidthChange}
+              />
+            </div>
+          </div>
 
+          {/* Max Height & Width */}
+          <div>
+            <label className="block mb-2 text-gray-700 font-medium">Max Height & Width</label>
+            <div className="flex gap-4">
+              <input
+                type="text"
+                className="w-1/2 bg-white px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#004368]"
+                placeholder="Enter Max Height"
+                onChange={handleMaxHightChange}
+              />
+              <input
+                type="text"
+                className="w-1/2 bg-white px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#004368]"
+                placeholder="Enter Max Width"
+                onChange={handleMaxWidthChange}
+              />
+            </div>
+          </div>
 
-          <button
-            className="bg-[#004368] hover:bg-blue-700 text-white font-bold py-2 my-10 px-20 ml-5 rounded-lg"
-            onClick={handleUpload}
-          >
-            Add WifiModelInfo
-          </button>
-
-
+          {/* Submit Button */}
+          <div className="flex justify-center">
+            <button
+              className="bg-[#004368] hover:bg-blue-800 text-white font-semibold py-2 px-10 rounded-lg transition duration-300"
+              onClick={handleUpload}
+            >
+              Add WiFi Model Info
+            </button>
+          </div>
         </form>
       </div>
 
 
 
+
       <div className=" min-h-screen">
-        <h1 className="text-3xl font-bold text-yellow-400 my-10">
-          Available Model Full Information
+        <h1 className="text-3xl font-bold text-[#004368] my-5">
+          Available Printer Model Full Information
         </h1>
         {
           loading ?
@@ -520,18 +579,8 @@ function AddWifiModelHightWidth() {
             </form>
           </div>
         )}
-
-
-
       </div>
-
-
-
-
     </div>
-
-
-
   );
 }
 

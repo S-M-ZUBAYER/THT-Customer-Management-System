@@ -13,29 +13,35 @@ import ShowWarehouseList from "./ShowWarehouseList";
 
 function WarehouseAndCities() {
   const [selectedImages, setSelectedImages] = useState([]);
-  const [iconImgs, setIconImgs] = useState([]);
   const [selectedWarehouse, setSelectedWarehouse] = useState('');
   const [allWarehouseNameList, setAllWarehouseNameList] = useState([]);
   const [cityName, setCityName] = useState('');
-  useEffect(() => {
-    axios.get("https://grozziieget.zjweiting.com:8033/tht/icons")
-      .then(res => {
-        setIconImgs(res.data)
-      })
-      .catch(err => console.error(err))
-  }, []);
+  const [baseUrl, setBaseUrl] = useState("https://grozziieget.zjweiting.com:8033");
+
+  const allUrls = [
+    {
+      id: 1,
+      serverName: "Global",
+      url: "https://grozziieget.zjweiting.com:8033"
+    },
+    {
+      id: 2,
+      serverName: "China",
+      url: "https://jiapuv.com:8033"
+    }
+  ]
 
 
   useEffect(() => {
-    fetch('https://grozziieget.zjweiting.com:8033/tht/warehouseNameList')
+    fetch(`${baseUrl}/tht/warehouseNameList`)
       .then(response => response.json())
       .then(data => {
 
         setAllWarehouseNameList(data.map(warehouseNames => warehouseNames.warehouseName))
 
       });
-  }, []);
-  
+  }, [baseUrl]);
+
 
 
   // Function to handle changes in the city name input field
@@ -45,25 +51,42 @@ function WarehouseAndCities() {
   };
 
 
-
   const handleUpload = (event) => {
     event.preventDefault();
 
+    // Basic validation
+    if (!cityName || !selectedWarehouse) {
+      toast.error("City name and warehouse must be provided.");
+      return;
+    }
+
+    const payload = { cityName, warehouseName: selectedWarehouse };
+
     axios
-      .post('https://grozziieget.zjweiting.com:8033/tht/cities/add', { cityName, warehouseName: selectedWarehouse })
+      .post(`${baseUrl}/tht/cities/add`, payload)
       .then((res) => {
-        if (res.data.status === "success") {
-          toast.success("City Name uploaded successfully");
-          setCityName('')
+        if (res.status === 201) {
+          toast.success("City name uploaded successfully.");
+          setCityName('');
         } else {
-          toast.error("City Name uploaded failed");
+          toast.error(res.data?.error || "City name upload failed.");
         }
       })
       .catch((error) => {
-        console.error(error); // Log the error to the console
-        toast.error("An error occurred while uploading cityName"); // Show a toast for the error
+        console.error("Upload error:", error);
+
+        if (error.response) {
+          // Server responded with a status other than 2xx
+          toast.error(error.response.data?.error || "Server error occurred.");
+        } else if (error.request) {
+          // Request was made but no response received
+          toast.error("No response from server. Please try again later.");
+        } else {
+          // Something else happened
+          toast.error("An unexpected error occurred.");
+        }
       });
-  }
+  };
 
 
   const handleSelectChange = (e) => {
@@ -71,10 +94,29 @@ function WarehouseAndCities() {
   };
 
 
+
   return (
 
     <div>
+      {/* Server Selected Tabs */}
+      <div className="flex justify-center items-center mb-6 mt-3">
+        <div className="p-1 bg-slate-300 rounded-full">
+          {allUrls.map((server, index) => (
+            <button
+              key={index}
+              onClick={() => setBaseUrl(server.url)}
+              className={`px-16 py-1 rounded-full text-xl ${server.url === baseUrl
+                ? "bg-[#004368] text-white font-bold"
+                : "text-gray-500 font-semibold"
+                }`}
+            >
+              {server.serverName}
+            </button>
+          ))}
+        </div>
+      </div>
       <AddWarehouseName
+        baseUrl={baseUrl}
         setAllWarehouseNameList={setAllWarehouseNameList}
         allWarehouseNameList={allWarehouseNameList}
       ></AddWarehouseName>
@@ -92,7 +134,7 @@ function WarehouseAndCities() {
             />
           </label>
 
-          <select className="bg-white text-gray-800" value={selectedWarehouse} onChange={handleSelectChange}>
+          <select className="bg-white text-gray-400 border p-2 rounded" value={selectedWarehouse} onChange={handleSelectChange}>
             <option value="">Select warehouseName</option>
             {allWarehouseNameList.map((warehouse, index) => (
               <option key={index} value={warehouse}>{warehouse}</option>
@@ -112,6 +154,7 @@ function WarehouseAndCities() {
         </form>
       </div>
       <ShowWarehouseList
+        baseUrl={baseUrl}
         allWarehouseNameList={allWarehouseNameList}
       ></ShowWarehouseList>
 

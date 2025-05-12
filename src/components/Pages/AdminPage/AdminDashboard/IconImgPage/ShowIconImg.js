@@ -13,14 +13,15 @@ const ShowIconImg = () => {
   //  get the category name from the pathname
   const location = useLocation();
   const categoryName = location.pathname.split('/').pop().replace(/%20/g, ' ');
-
+  const params = new URLSearchParams(location.search);
+  const baseUrl = params.get('baseUrl');
   // get the data from useContext
   const { loading, setLoading } = useContext(AuthContext)
 
 
   // Here got all icons according to the icons category name
   useEffect(() => {
-    const apiUrl = `https://grozziieget.zjweiting.com:8033/tht/icons/${categoryName}`;
+    const apiUrl = `${baseUrl}/tht/icons/${categoryName}`;
 
     // Make a GET request to fetch data for the specified category
     axios.get(apiUrl)
@@ -32,13 +33,13 @@ const ShowIconImg = () => {
         console.error('Error fetching data:', error);
         setLoading(false);
       });
-  }, [categoryName]);
+  }, [categoryName, baseUrl]);
 
 
   //create a function to delete icon from the frontend and database both side 
   const handleToDelete = async (id) => {
     try {
-      await axios.delete(`https://grozziieget.zjweiting.com:8033/tht/icons/delete/${id}`);
+      await axios.delete(`${baseUrl}/tht/icons/delete/${id}`);
       toast.success('Icon deleted successfully');
       setAllIcons(allIcons.filter((icon) => icon.id !== id));
     } catch (error) {
@@ -50,7 +51,7 @@ const ShowIconImg = () => {
 
   // create function to download icon image
   const handleToDownload = (icon) => {
-    const imageURL = `https://grozziieget.zjweiting.com:8033/tht/images/${icon}`; // Replace with your image URL
+    const imageURL = `${baseUrl}/tht/images/${icon}`; // Replace with your image URL
 
     fetch(imageURL)
       .then((response) => response.blob())
@@ -65,7 +66,7 @@ const ShowIconImg = () => {
       .catch((error) => {
         console.error('Error downloading image:', error);
       });
-      
+
   }
 
 
@@ -86,7 +87,7 @@ const ShowIconImg = () => {
                   return <div className=" relative border-2">
                     <AiOutlineDownload onClick={() => handleToDownload(element?.image)} className=" absolute top-0 hover:cursor-pointer text-green-500"></AiOutlineDownload>
                     <MdDelete onClick={() => handleToDelete(element?.id)} className=" absolute right-0 hover:cursor-pointer text-red-500"></MdDelete>
-                    <img key={index} id="myDiv" className=" inline-block w-28 h-28" src={`https://grozziieget.zjweiting.com:8033/tht/images/${element.icon}`} alt="Icon"></img>
+                    <img key={index} id="myDiv" className=" inline-block w-28 h-28" src={`${baseUrl}/tht/images/${element.icon}`} alt="Icon"></img>
                   </div>
                 })
               }

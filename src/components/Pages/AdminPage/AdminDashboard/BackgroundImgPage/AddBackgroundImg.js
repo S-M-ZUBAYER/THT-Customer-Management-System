@@ -16,22 +16,36 @@ function AddBackgroundImg() {
   const [height, setHeight] = useState('');
   const [width, setWidth] = useState('');
 
+  const [baseUrl, setBaseUrl] = useState("https://grozziieget.zjweiting.com:8033");
+
   //get current user information form useContext
   const { user } = useContext(AuthContext);
 
+  const allUrls = [
+    {
+      id: 1,
+      serverName: "Global",
+      url: "https://grozziieget.zjweiting.com:8033"
+    },
+    {
+      id: 2,
+      serverName: "China",
+      url: "https://jiapuv.com:8033"
+    }
+  ]
 
 
 
   // fetch to get all kinds of background categories name
   useEffect(() => {
-    fetch('https://grozziieget.zjweiting.com:8033/tht/BackgroundCategories')
+    fetch(`${baseUrl}/tht/BackgroundCategories`)
       .then(response => response.json())
       .then(data => {
 
         setCategories(data.map(category => category.allBackgroundCategoris))
 
       });
-  }, []);
+  }, [baseUrl]);
 
 
   // Create function to select images to store database as background images
@@ -77,7 +91,7 @@ function AddBackgroundImg() {
 
 
     // axios.post('https://grozziieget.zjweiting.com:8033/tht/backgroundImgs/add', formData)
-    axios.post('https://grozziieget.zjweiting.com:8033/tht/backgroundImgs/add', formData)
+    axios.post(`${baseUrl}/tht/backgroundImgs/add`, formData)
       .then(res => {
         if (res.data.status === "success") {
           toast.success("Images uploaded successfully");
@@ -98,8 +112,28 @@ function AddBackgroundImg() {
   return (
     <div>
 
+      {/* Server Selected Tabs */}
+      <div className="flex justify-center items-center mb-6 mt-3">
+        <div className="p-1 bg-slate-300 rounded-full">
+          {allUrls.map((server, index) => (
+            <button
+              key={index}
+              onClick={() => setBaseUrl(server.url)}
+              className={`px-16 py-1 rounded-full text-xl ${server.url === baseUrl
+                ? "bg-[#004368] text-white font-bold"
+                : "text-gray-500 font-semibold"
+                }`}
+            >
+              {server.serverName}
+            </button>
+          ))}
+        </div>
+      </div>
+
+
       {/* Here is the component to add new background image category */}
       <AddBackgroundCategory
+        baseUrl={baseUrl}
         categories={categories}
         setCategories={setCategories}
       ></AddBackgroundCategory>
@@ -166,6 +200,7 @@ function AddBackgroundImg() {
 
       {/* THis is the component to show all the folder of background images according to the category name */}
       <BackgroundCategoryList
+        baseUrl={baseUrl}
         categories={categories}
       ></BackgroundCategoryList>
 
