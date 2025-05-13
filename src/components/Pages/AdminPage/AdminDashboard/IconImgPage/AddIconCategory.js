@@ -105,10 +105,8 @@ const AddIconCategory = ({ categories, setCategories, baseUrl }) => {
             Add Icon Category
           </button>
         </div>
-
       </form>
     </div>
-
   );
 };
 

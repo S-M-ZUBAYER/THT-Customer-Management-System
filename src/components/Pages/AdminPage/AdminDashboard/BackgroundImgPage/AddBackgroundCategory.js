@@ -5,12 +5,10 @@ import { toast } from 'react-hot-toast';
 const AddBackgroundCategory = ({ categories, setCategories, baseUrl }) => {
   const [categoryName, setCategoryName] = useState("");
 
-
   //Get the category name from input field
   const handleCategoryChange = (e) => {
     setCategoryName(e.target.value);
   };
-
 
   //Make function to store the category name to store background images
   const handleAddCategory = () => {
@@ -28,11 +26,7 @@ const AddBackgroundCategory = ({ categories, setCategories, baseUrl }) => {
           toast.error(error)
         });
     }
-
   };
-
-
-
 
   return (
     <div>

@@ -39,7 +39,6 @@ function VoltageDetails({ baseUrl }) {
         }
     };
 
-
     // Add new voltage details
     const handleVoltageDetailsAdd = async () => {
         if (!selectedModel?.id || !formData.batteryPercentage || !formData.voltage) {
@@ -84,7 +83,6 @@ function VoltageDetails({ baseUrl }) {
             setMessage('Error adding voltage detail.');
         }
     };
-
 
     const handleDelete = async (id) => {
         const isConfirmed = window.confirm(
@@ -137,7 +135,6 @@ function VoltageDetails({ baseUrl }) {
                         ))}
                     </select>
                 </div>
-
 
                 {/* Add New Voltage Details */}
                 <div className="mb-4">

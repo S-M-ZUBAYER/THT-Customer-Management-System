@@ -9,15 +9,12 @@ import DisplaySpinner from '../../../../Shared/Loading/DisplaySpinner';
 
 const ShowIconImg = () => {
   const [allIcons, setAllIcons] = useState([]);
-
-  //  get the category name from the pathname
   const location = useLocation();
   const categoryName = location.pathname.split('/').pop().replace(/%20/g, ' ');
   const params = new URLSearchParams(location.search);
   const baseUrl = params.get('baseUrl');
   // get the data from useContext
   const { loading, setLoading } = useContext(AuthContext)
-
 
   // Here got all icons according to the icons category name
   useEffect(() => {
@@ -48,7 +45,6 @@ const ShowIconImg = () => {
     }
   };
 
-
   // create function to download icon image
   const handleToDownload = (icon) => {
     const imageURL = `${baseUrl}/tht/images/${icon}`; // Replace with your image URL
@@ -66,7 +62,6 @@ const ShowIconImg = () => {
       .catch((error) => {
         console.error('Error downloading image:', error);
       });
-
   }
 
 

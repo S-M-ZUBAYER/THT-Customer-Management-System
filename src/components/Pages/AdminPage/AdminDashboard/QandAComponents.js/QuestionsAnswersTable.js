@@ -8,7 +8,6 @@ const QuestionAnswerTable = ({ questionAnswers, onDelete, onEdit }) => {
   const [editedDate, setEditedDate] = useState('');
   const [editedTime, setEditedTime] = useState('');
 
-
   const handleDelete = (id) => {
     onDelete(id);
   };
@@ -54,42 +53,42 @@ const QuestionAnswerTable = ({ questionAnswers, onDelete, onEdit }) => {
       </thead>
       <tbody>
         {
-        questionAnswers
-        ?
-        questionAnswers.map((questionAnswer,index) => (
-          <tr key={questionAnswer.id}>
-            <td className="border md:px-4 py-2">{index+1}</td>
-            <td className="border md:px-4 py-2">{questionAnswer.question}</td>
-            <td className="border md:px-4 py-2">{questionAnswer.answer}</td>
-            <td className="border md:px-4 py-2">
-            {
-              questionAnswer.date?(questionAnswer?.date?.split("T"))[0] :"Date"    
-            }
-            </td>
-            <td className="border md:px-4 py-2">
-            {
-              questionAnswer.time?questionAnswer.time :"Time"    
-            }
-            </td>
-            <td className="border md:px-4 py-2">
-              <button
-                className="bg-green-500 hover:bg-blue-700 text-white font-semibold md:font-bold py-1 mb-1 md:mb:0 px-2 md:px-4 mr-2 rounded-tl-lg rounded-br-lg"
-                onClick={() => handleEdit(questionAnswer)}
-              >
-                Edit
-              </button>
-              <button
-                className="bg-yellow-500 hover:bg-red-700 text-white font-semibold md:font-bold py-1 px-2 md:px-4 rounded-tl-lg rounded-br-lg"
-                onClick={() => handleDelete(questionAnswer.id)}
-              >
-                Delete
-              </button>
-            </td>
-          </tr>
-          
-        ))
-        :
-        <DisplaySpinner></DisplaySpinner>}
+          questionAnswers
+            ?
+            questionAnswers.map((questionAnswer, index) => (
+              <tr key={questionAnswer.id}>
+                <td className="border md:px-4 py-2">{index + 1}</td>
+                <td className="border md:px-4 py-2">{questionAnswer.question}</td>
+                <td className="border md:px-4 py-2">{questionAnswer.answer}</td>
+                <td className="border md:px-4 py-2">
+                  {
+                    questionAnswer.date ? (questionAnswer?.date?.split("T"))[0] : "Date"
+                  }
+                </td>
+                <td className="border md:px-4 py-2">
+                  {
+                    questionAnswer.time ? questionAnswer.time : "Time"
+                  }
+                </td>
+                <td className="border md:px-4 py-2">
+                  <button
+                    className="bg-green-500 hover:bg-blue-700 text-white font-semibold md:font-bold py-1 mb-1 md:mb:0 px-2 md:px-4 mr-2 rounded-tl-lg rounded-br-lg"
+                    onClick={() => handleEdit(questionAnswer)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="bg-yellow-500 hover:bg-red-700 text-white font-semibold md:font-bold py-1 px-2 md:px-4 rounded-tl-lg rounded-br-lg"
+                    onClick={() => handleDelete(questionAnswer.id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+
+            ))
+            :
+            <DisplaySpinner></DisplaySpinner>}
       </tbody>
       {editQuestionAnswer && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-75">

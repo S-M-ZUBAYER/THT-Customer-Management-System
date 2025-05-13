@@ -201,7 +201,7 @@ function QandA() {
   };
 
 
-  const handleToUpdateAbout=async(event)=>{
+  const handleToUpdateAbout = async (event) => {
     event.preventDefault();
     try {
       const response = await axios.put(`https://grozziieget.zjweiting.com:8033/tht/about/update`, {
@@ -214,7 +214,7 @@ function QandA() {
   }
 
 
-  const handleToUpdateHelpCenter=async(event)=>{
+  const handleToUpdateHelpCenter = async (event) => {
     event.preventDefault();
     try {
       const response = await axios.put(`https://grozziieget.zjweiting.com:8033/tht/helpCenter/update`, {
@@ -227,7 +227,7 @@ function QandA() {
   }
 
 
-  const handleToUpdateBusinessCooperation=async(event)=>{
+  const handleToUpdateBusinessCooperation = async (event) => {
     event.preventDefault();
     try {
       const response = await axios.put(`https://grozziieget.zjweiting.com:8033/tht/businessCooperation/update`, {
@@ -242,67 +242,67 @@ function QandA() {
 
   return (
     <div className="mx-2 md:mx-20 my-5 md:my-32 text-gray-800">
-    <div>
-
-    <h1 className="mt-32 mb-10 text-sky-500 text-3xl font-bold ">
-       Add Questions & Answer Part
-      </h1>
-      <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
-        <div className="mb-4 X">
-          <label className="block  mb-2 pl-2 text-start text-gray-600" htmlFor="name">
-            Question:
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 bg-white text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="question"
-            type="text"
-            placeholder="Please input question"
-            value={question}
-            onChange={(e) => setQuestion(e.target.value)}
-          />
-        </div>
-        <div className="mb-6">
-          <label className="block  mb-2 pl-2 text-start text-gray-600" htmlFor="email">
-            Answer
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-600 leading-tight focus:outline-none focus:shadow-outline bg-white"
-            id="answer"
-            type="text"
-            placeholder="Please input answer"
-            value={answer}
-            onChange={(e) => setAnswer(e.target.value)}
-          />
-        </div>
-        <div className="flex items-center justify-center">
-          <button
-            className="bg-[#004368]  hover:bg-blue-700 text-white font-bold py-2 px-20 rounded focus:outline-none focus:shadow-outline"
-            type="submit"
-          >
-            Add
-          </button>
-        </div>
-      </form>
       <div>
-        <h1 className="mt-32 mb-10 text-sky-500 text-3xl font-bold ">
-          Questions And Answer list
+
+        <h1 className="mb-10 text-3xl font-bold text-[#004368] my-5 mt-10 ">
+          Add Questions & Answer Part
         </h1>
+        <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
+          <div className="mb-4 X">
+            <label className="block  mb-2 pl-2 text-start text-gray-600" htmlFor="name">
+              Question:
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 bg-white text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="question"
+              type="text"
+              placeholder="Please input question"
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+            />
+          </div>
+          <div className="mb-6">
+            <label className="block  mb-2 pl-2 text-start text-gray-600" htmlFor="email">
+              Answer
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-600 leading-tight focus:outline-none focus:shadow-outline bg-white"
+              id="answer"
+              type="text"
+              placeholder="Please input answer"
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+            />
+          </div>
+          <div className="flex items-center justify-center">
+            <button
+              className="bg-[#004368]  hover:bg-blue-700 text-white font-bold py-2 px-20 rounded focus:outline-none focus:shadow-outline"
+              type="submit"
+            >
+              Add
+            </button>
+          </div>
+        </form>
+        <div>
+          <h1 className="mt-32 mb-10 text-3xl font-bold text-[#004368] my-5">
+            Questions And Answer list
+          </h1>
 
 
-        <QuestionAnswerTable
-          onDelete={handleDelete}
-          onEdit={handleEdit}
-          questionAnswers={questionAnswer}
-        ></QuestionAnswerTable>
+          <QuestionAnswerTable
+            onDelete={handleDelete}
+            onEdit={handleEdit}
+            questionAnswers={questionAnswer}
+          ></QuestionAnswerTable>
+        </div>
+
       </div>
 
-    </div>
-     
 
       {/* Add about part start from here */}
 
-      <h1 className="mt-32 mb-10 text-lime-600 text-3xl font-bold ">
-       Add About Section
+      <h1 className="mt-32 mb-10 text-3xl font-bold text-[#004368] my-5 ">
+        Add About Section
       </h1>
       <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" >
         <div className="mb-4 X">
@@ -321,14 +321,14 @@ function QandA() {
         <div className="flex items-center justify-center">
           <button
             className="bg-[#004368]  hover:bg-blue-700 text-white font-bold py-2 px-20 rounded focus:outline-none focus:shadow-outline"
-           onClick={handleToUpdateAbout}
+            onClick={handleToUpdateAbout}
           >
-           Update About
+            Update About
           </button>
         </div>
       </form>
       <div>
-        <h1 className="mt-32 mb-10 text-lime-600 text-3xl font-bold ">
+        <h1 className="mt-32 mb-10 text-3xl font-bold text-[#004368] my-5">
           Show about description
         </h1>
         <p className="text-start p-4 border-gray-500 border-4">
@@ -337,8 +337,8 @@ function QandA() {
       </div>
       {/* Add Help Center part start from here */}
 
-      <h1 className="mt-32 mb-10 text-lime-600 text-3xl font-bold ">
-       Add Help Center Section
+      <h1 className="mt-32 mb-10 text-3xl font-bold text-[#004368] my-5 ">
+        Add Help Center Section
       </h1>
       <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <div className="mb-4 X">
@@ -357,14 +357,14 @@ function QandA() {
         <div className="flex items-center justify-center">
           <button
             className="bg-[#004368]  hover:bg-blue-700 text-white font-bold py-2 px-20 rounded focus:outline-none focus:shadow-outline"
-           onClick={handleToUpdateHelpCenter}
+            onClick={handleToUpdateHelpCenter}
           >
             Update Help Center
           </button>
         </div>
       </form>
       <div>
-        <h1 className="mt-32 mb-10 text-lime-600 text-3xl font-bold ">
+        <h1 className="mt-32 mb-10 text-3xl font-bold text-[#004368] my-5 ">
           Show Help Center description
         </h1>
         <p className="text-start p-4 border-gray-500 border-4">
@@ -375,13 +375,13 @@ function QandA() {
 
       {/* Add Business Cooperation part start from here */}
 
-      <h1 className="mt-32 mb-10 text-lime-600 text-3xl font-bold ">
-       Update Business Cooperation Section
+      <h1 className="mt-32 mb-10 text-3xl font-bold text-[#004368] my-5 ">
+        Update Business Cooperation Section
       </h1>
       <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" >
         <div className="mb-4 X">
           <label className="block  mb-2 pl-2 text-start text-gray-600" htmlFor="name">
-          Business Cooperation:
+            Business Cooperation:
           </label>
           <textarea
             className="shadow appearance-none border rounded w-full py-2 px-3 bg-white text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -395,14 +395,14 @@ function QandA() {
         <div className="flex items-center justify-center">
           <button
             className="bg-[#004368]  hover:bg-blue-700 text-white font-bold py-2 px-20 rounded focus:outline-none focus:shadow-outline"
-           onClick={handleToUpdateBusinessCooperation}
+            onClick={handleToUpdateBusinessCooperation}
           >
             Update Business Cooperation
           </button>
         </div>
       </form>
       <div>
-        <h1 className="mt-32 mb-10 text-lime-600 text-3xl font-bold ">
+        <h1 className="mt-32 mb-10 text-3xl font-bold text-[#004368] my-5">
           Show Business Cooperation description
         </h1>
         <p className="text-start p-4 border-gray-500 border-4">

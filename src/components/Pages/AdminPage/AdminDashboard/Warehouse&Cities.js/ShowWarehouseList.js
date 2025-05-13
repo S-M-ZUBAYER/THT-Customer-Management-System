@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 
 const ShowWarehouseList = ({ allWarehouseNameList, baseUrl }) => {
 
-
   return (
     <div>
       <h1 className="text-3xl font-bold text-[#004368] my-5">All Available Warehouse here</h1>
@@ -18,7 +17,6 @@ const ShowWarehouseList = ({ allWarehouseNameList, baseUrl }) => {
               {warehouse}
             </p>
           </Link>
-
         ))}
       </div>
     </div>

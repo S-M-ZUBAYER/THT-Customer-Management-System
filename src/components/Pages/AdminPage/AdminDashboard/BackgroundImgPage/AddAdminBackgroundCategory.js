@@ -1,16 +1,14 @@
 import axios from 'axios';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
 
 const AddAdminBackgroundCategory = ({ categories, setCategories, baseUrl }) => {
     const [categoryName, setCategoryName] = useState("");
 
-
     //Get the category name from input field
     const handleCategoryChange = (e) => {
         setCategoryName(e.target.value);
     };
-
 
     //Make function to store the category name to store background images
     const handleAddCategory = () => {
@@ -30,9 +28,6 @@ const AddAdminBackgroundCategory = ({ categories, setCategories, baseUrl }) => {
         }
 
     };
-
-
-
 
     return (
         <div>

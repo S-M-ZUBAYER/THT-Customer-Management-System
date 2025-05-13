@@ -3,11 +3,13 @@ import { AllProductContext } from '../../../../../context/ProductContext';
 import { toast } from 'react-hot-toast';
 
 const AfterSales = () => {
-    const {Product}=useContext(AllProductContext);
-    if(!Product){
+
+    const { Product } = useContext(AllProductContext);
+    if (!Product) {
         toast.error("Don't get the product information");
         return;
     }
+
     return (
         <div className="mx-20 text-start mt-10 mb-20">
             <div>
@@ -15,10 +17,8 @@ const AfterSales = () => {
                     After Sales
                 </h2>
                 <p>
-                    
-                
-            {Product?.afterSalesText
-}
+                    {Product?.afterSalesText
+                    }
                 </p>
             </div>
 

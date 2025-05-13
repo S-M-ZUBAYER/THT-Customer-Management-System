@@ -125,7 +125,7 @@ const UserBaseBitmap = () => {
                                         </button>
                                         <button
                                             onClick={() => handleShowBitmap(user.userId)}
-                                            className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded"
+                                            className="bg-[#004368] hover:bg-blue-600 text-white py-1 px-3 rounded"
                                         >
                                             Show Bitmap
                                         </button>

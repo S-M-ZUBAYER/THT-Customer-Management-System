@@ -9,8 +9,6 @@ import DisplaySpinner from '../../../../Shared/Loading/DisplaySpinner';
 
 const ShowAdminBackgroundImg = () => {
     const [allIcons, setAllIcons] = useState([]);
-
-    // get the category name from the pathname
     const location = useLocation();
     const categoryName = location.pathname.split('/').pop().replace(/%20/g, ' ');
     const params = new URLSearchParams(location.search);
@@ -18,8 +16,6 @@ const ShowAdminBackgroundImg = () => {
 
     // get the value from useContext
     const { loading, setLoading } = useContext(AuthContext)
-
-
 
     // Make a GET request to fetch all background images for the specific category
     useEffect(() => {
@@ -34,7 +30,6 @@ const ShowAdminBackgroundImg = () => {
                 setLoading(false);
             });
     }, [categoryName]);
-
 
     //create a function to delete background images from the frontend and database both side 
     const handleToDelete = async (id) => {
@@ -65,8 +60,6 @@ const ShowAdminBackgroundImg = () => {
                 console.error('Error downloading image:', error);
             });
     }
-
-
 
     return (
         <div className=" min-h-screen">

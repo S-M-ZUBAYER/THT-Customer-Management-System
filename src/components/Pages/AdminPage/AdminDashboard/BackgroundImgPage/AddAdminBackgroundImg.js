@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import addIcon from "../../../../../Assets/Images/Admin/AddIcon.jpg"
 import { toast } from "react-hot-toast";
-
 import axios from "axios";
 import { AuthContext } from "../../../../../context/UserContext";
 import AddAdminBackgroundCategory from "./AddAdminBackgroundCategory";
 import AdminBackgroundCategoryList from "./AdminBackgroundCategoryList";
+
 
 function AddAdminBackgroundImg() {
     const [selectedImages, setSelectedImages] = useState([]);
@@ -13,7 +13,6 @@ function AddAdminBackgroundImg() {
     const [categories, setCategories] = useState([]);
     const [height, setHeight] = useState('');
     const [width, setWidth] = useState('');
-
     const [baseUrl, setBaseUrl] = useState("https://grozziieget.zjweiting.com:8033");
 
     //get current user information form useContext
@@ -37,12 +36,9 @@ function AddAdminBackgroundImg() {
         fetch(`${baseUrl}/tht/adminBackgroundCategories`)
             .then(response => response.json())
             .then(data => {
-
                 setCategories(data.map(category => category.allBackgroundCategoris))
-
             });
     }, [baseUrl]);
-
 
     // Create function to select images to store database as background images
     const handleImageChange = (e) => {
@@ -51,41 +47,33 @@ function AddAdminBackgroundImg() {
         toast.success("Icon has already prepare to store")
     }
 
-
     // update the state to store image with these height weight data
     const handleHeightChange = (event) => {
         setHeight(event.target.value);
     };
+
     const handleWidthChange = (event) => {
         setWidth(event.target.value);
     };
-
-
 
     // Create function to select category name to store images in database as under this category
     const handleSelectChange = (e) => {
         setSelectedCategory(e.target.value);
     };
 
-
-
     // create function to store images in database
     const handleUpload = (event) => {
         event.preventDefault();
-
         // Create a new FormData object
         const formData = new FormData();
         // Append each selected image to the formData
         for (let i = 0; i < selectedImages.length; i++) {
             formData.append("images", selectedImages[i]);
         }
-
         formData.append('email', user?.email);
         formData.append('categoryName', selectedCategory);
         formData.append('height', height);
         formData.append('width', width);
-
-
         // axios.post('https://grozziieget.zjweiting.com:8033/tht/backgroundImgs/add', formData)
         axios.post(`${baseUrl}/tht/adminBackgroundImgs/add`, formData)
             .then(res => {
@@ -101,11 +89,8 @@ function AddAdminBackgroundImg() {
             });
     }
 
-
-
     return (
         <div>
-
             {/* Server Selected Tabs */}
             <div className="flex justify-center items-center mb-6 mt-3">
                 <div className="p-1 bg-slate-300 rounded-full">
@@ -130,7 +115,6 @@ function AddAdminBackgroundImg() {
                 categories={categories}
                 setCategories={setCategories}
             ></AddAdminBackgroundCategory>
-
 
             {/* Background image storing section */}
             <div className="my-32 flex items-center justify-center">
@@ -196,10 +180,8 @@ function AddAdminBackgroundImg() {
                 categories={categories}
                 baseUrl={baseUrl}
             ></AdminBackgroundCategoryList>
-
         </div>
     );
 }
-
 
 export default AddAdminBackgroundImg;

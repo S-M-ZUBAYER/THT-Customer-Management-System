@@ -7,7 +7,6 @@ import { AiOutlineDownload } from 'react-icons/ai';
 import { AuthContext } from '../../../../../context/UserContext';
 import DisplaySpinner from '../../../../Shared/Loading/DisplaySpinner';
 
-
 const ShowCityList = () => {
   const [allCities, setAllCities] = useState([]);
   const location = useLocation();
@@ -15,8 +14,6 @@ const ShowCityList = () => {
   const params = new URLSearchParams(location.search);
   const baseUrl = params.get('baseUrl');
   const { loading, setLoading } = useContext(AuthContext)
-
-
 
   useEffect(() => {
     // Define the URL for your backend route with the categoryName parameter
@@ -48,9 +45,6 @@ const ShowCityList = () => {
       toast.error('Failed to delete city');
     }
   };
-
-
-
 
   return (
     <div className=" min-h-screen">
@@ -97,16 +91,9 @@ const ShowCityList = () => {
                     )}
                   </tbody>
                 </table>
-
-
-
-
               }
             </div>
       }
-
-
-
     </div>
   );
 };

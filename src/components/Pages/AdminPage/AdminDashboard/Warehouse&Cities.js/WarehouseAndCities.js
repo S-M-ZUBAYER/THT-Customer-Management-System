@@ -1,15 +1,9 @@
-import { useContext, useEffect, useState } from "react";
-import addIcon from "../../../../../Assets/Images/Admin/AddIcon.jpg"
+import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 
 import axios from "axios";
-import html2canvas from 'html2canvas';
-import { AuthContext } from "../../../../../context/UserContext";
 import AddWarehouseName from "./AddWarehouse";
 import ShowWarehouseList from "./ShowWarehouseList";
-
-
-
 
 function WarehouseAndCities() {
   const [selectedImages, setSelectedImages] = useState([]);
@@ -31,7 +25,6 @@ function WarehouseAndCities() {
     }
   ]
 
-
   useEffect(() => {
     fetch(`${baseUrl}/tht/warehouseNameList`)
       .then(response => response.json())
@@ -42,14 +35,11 @@ function WarehouseAndCities() {
       });
   }, [baseUrl]);
 
-
-
   // Function to handle changes in the city name input field
   const handleCityNameChange = (event) => {
     const { value } = event.target;
     setCityName(value);
   };
-
 
   const handleUpload = (event) => {
     event.preventDefault();
@@ -93,10 +83,7 @@ function WarehouseAndCities() {
     setSelectedWarehouse(e.target.value);
   };
 
-
-
   return (
-
     <div>
       {/* Server Selected Tabs */}
       <div className="flex justify-center items-center mb-6 mt-3">

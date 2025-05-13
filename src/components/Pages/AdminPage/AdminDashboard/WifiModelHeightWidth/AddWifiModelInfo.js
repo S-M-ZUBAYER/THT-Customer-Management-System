@@ -1,14 +1,10 @@
 import { useContext, useEffect, useState } from "react";
-import addIcon from "../../../../../Assets/Images/Admin/AddIcon.jpg"
 import { toast } from "react-hot-toast";
 
 import axios from "axios";
-import { CiEdit } from "react-icons/ci";
 import { MdDelete, MdEdit } from 'react-icons/md';
 import { AuthContext } from "../../../../../context/UserContext";
 import DisplaySpinner from "../../../../Shared/Loading/DisplaySpinner";
-
-
 
 function AddWifiModelHightWidth() {
   const [selectedModelNo, setSelectedModelNo] = useState('');
@@ -38,7 +34,6 @@ function AddWifiModelHightWidth() {
     }
   ]
 
-
   useEffect(() => {
     fetch(`${baseUrl}/tht/modelNoList`)
       .then(response => response.json())
@@ -55,7 +50,6 @@ function AddWifiModelHightWidth() {
     axios.get(apiUrl)
       .then((response) => {
         console.log(response.data);
-
         setAllModelInfo(response.data);
         setLoading(false);
       })
@@ -82,9 +76,6 @@ function AddWifiModelHightWidth() {
     }
   };
 
-
-
-
   // Function to handle changes in the city name input field
   const handleDefaultHightChange = (event) => {
     const { value } = event.target;
@@ -110,14 +101,12 @@ function AddWifiModelHightWidth() {
     setSliderImageMark(e.target.value);
   };
 
-
   const handleUpload = (event) => {
     event.preventDefault();
     if (!selectedModelNo) {
       toast.error("Please Write minimum model No");
       return;
     }
-
     axios
       // .post('http://localhost:2000/tht/wifiModelHightWidth/add', { PID: selectedPID, modelNo: selectedModelNo, maxHeight, maxWidth, defaultHeight, defaultWidth, type: selectedType, musicValue: selectedMusicStatus, sliderImageMark: sliderImageMark })
       .post(`${baseUrl}/tht/wifiModelHightWidth/add`, { PID: selectedPID, modelNo: selectedModelNo, maxHeight, maxWidth, defaultHeight, defaultWidth, type: selectedType, musicValue: selectedMusicStatus, sliderImageMark: sliderImageMark })
@@ -144,16 +133,18 @@ function AddWifiModelHightWidth() {
       });
   }
 
-
   const handleInputChange = (e) => {
     setSelectedModelNo(e.target.value);
   };
+
   const handleInputTypeChange = (e) => {
     setSelectedType(e.target.value);
   };
+
   const handleInputMusicChange = (e) => {
     setSelectedMusicStatus(e.target.value);
   };
+
   const handleInputPIDChange = (e) => {
     setSelectedPID(e.target.value);
   };

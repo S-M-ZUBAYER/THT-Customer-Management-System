@@ -5,13 +5,12 @@ import BtnSpinner from '../../../../Shared/Loading/BtnSpinner';
 import toast from 'react-hot-toast';
 
 function ShowingVideo() {
-  // State to store the selected video and title
+
   const [video, setVideo] = useState(null);
   const [title, setTitle] = useState('');
   const [allVideo, setAllVideo] = useState([]);
   const [loading, setLoading] = useState(false);
   const [productCountryName, setProductCountryName] = useState('');
-
   const [selectedCountry, setSelectedCountry] = useState("en-US");
 
   // Extract unique country names
@@ -28,14 +27,9 @@ function ShowingVideo() {
     // Make a GET request to retrieve showing videos
     axios.get('https://grozziieget.zjweiting.com:8033/tht/showingVideo')
       .then(response => {
-        // Handle the successful response here
-        console.log((response?.data)?.data);
-
         setAllVideo((response?.data)?.data.filter(item => item.imgPath !== 'https://jiapuv.com:8033/tht/showingVideos/'));
-
       })
       .catch(error => {
-        // Handle any errors here
         console.error('Error retrieving showing videos:', error);
       });
   }, []);
@@ -51,12 +45,9 @@ function ShowingVideo() {
     setTitle(e.target.value);
   };
 
-  // Function to handle the form submission
-  // Frontend code
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    // Create a FormData object to send the video and title
     const formData = new FormData();
     formData.append('showingVideo', video); // Use 'showingVideo' instead of 'video'
     formData.append('title', title);
@@ -64,7 +55,6 @@ function ShowingVideo() {
     formData.append('imgPath', `https://grozziieget.zjweiting.com:8033/tht/showingVideos/`);
 
     try {
-      // Make a POST request to your backend API to handle the video upload
       const response = await axios.post('https://grozziieget.zjweiting.com:8033/tht/showingVideo/add', formData, {
         // const response = await axios.post('http://localhost:2000/tht/showingVideo/add', formData, {
         headers: {
@@ -187,7 +177,6 @@ function ShowingVideo() {
               </button>
             ))}
           </div>
-
         </div>
 
         {/* Video Grid */}
@@ -214,7 +203,6 @@ function ShowingVideo() {
           ))}
         </div>
       </div>
-
     </div>
   );
 }

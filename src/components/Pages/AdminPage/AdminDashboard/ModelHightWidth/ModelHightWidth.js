@@ -1,11 +1,6 @@
-import { useContext, useEffect, useState } from "react";
-import addIcon from "../../../../../Assets/Images/Admin/AddIcon.jpg"
+import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
-
 import axios from "axios";
-import html2canvas from 'html2canvas';
-import { AuthContext } from "../../../../../context/UserContext";
-
 import ShowModelNo from "./ShowModelNo";
 import AddModelNo from "./AddModelNo";
 
@@ -23,6 +18,8 @@ function ModelHightWidth() {
   const [selectedCommands, setSelectedCommands] = useState([]);
   const [selectedPID, setSelectedPID] = useState('');
   const [sliderImageMark, setSliderImageMark] = useState('');
+  // Define the list of elements to choose from
+  const elements = ['CPCL', 'ESC'];
   const [baseUrl, setBaseUrl] = useState("https://grozziieget.zjweiting.com:8033");
   const allUrls = [
     {
@@ -47,35 +44,34 @@ function ModelHightWidth() {
       });
   }, [baseUrl]);
 
-
-
   // Function to handle changes in the city name input field
   const handleDefaultHightChange = (event) => {
     const { value } = event.target;
     setDefaultHight(value);
   };
+
   const handleDefaultWidthChange = (event) => {
     const { value } = event.target;
     setDefaultWidth(value);
   };
+
   const handleMaxHightChange = (event) => {
     const { value } = event.target;
     setMaxHight(value);
   };
+
   const handleMaxWidthChange = (event) => {
     const { value } = event.target;
     setMaxWidth(value);
   };
+
   const handleInputPIDChange = (e) => {
     setSelectedPID(e.target.value);
   };
+
   const handleSliderImageMarkChange = (e) => {
     setSliderImageMark(e.target.value);
   };
-
-
-
-
 
   const handleUpload = (event) => {
     event.preventDefault();
@@ -102,17 +98,9 @@ function ModelHightWidth() {
       });
   }
 
-
   const handleSelectChange = (e) => {
     setSelectedModelNo(e.target.value);
   };
-
-
-  //check box 
-
-
-  // Define the list of elements to choose from
-  const elements = ['CPCL', 'ESC'];
 
   // Function to handle checkbox changes
   const handleCheckboxChange = (event) => {
@@ -127,9 +115,7 @@ function ModelHightWidth() {
   };
 
 
-
   return (
-
     <div>
       {/* Server Selected Tabs */}
       <div className="flex justify-center items-center mb-6 mt-3">
@@ -149,13 +135,11 @@ function ModelHightWidth() {
         </div>
       </div>
 
-
       <AddModelNo
         baseUrl={baseUrl}
         setAllWarehouseNameList={setAllModelNoList}
         allWarehouseNameList={allModelNoList}
       ></AddModelNo>
-
 
       <div className="my-24 flex items-center justify-center px-4">
         <form className="w-full max-w-4xl bg-white shadow rounded-xl p-10 space-y-8 border border-gray-200">
@@ -290,9 +274,6 @@ function ModelHightWidth() {
       ></ShowModelNo>
 
     </div>
-
-
-
   );
 }
 

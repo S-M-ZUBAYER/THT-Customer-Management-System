@@ -16,7 +16,6 @@ function ShowingVideoCN() {
         setProductCountryName(e.target.value);
     };
 
-
     useEffect(() => {
         // Make a GET request to retrieve showing videos
         axios.get('https://jiapuv.com:8033/tht/showingVideo/zh-cn')

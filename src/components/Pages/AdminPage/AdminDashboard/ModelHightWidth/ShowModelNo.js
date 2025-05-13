@@ -17,7 +17,6 @@ const ShowModelNo = ({ allModelNoList, baseUrl }) => {
               {modelNo}
             </p>
           </Link>
-
         ))}
       </div>
     </div>

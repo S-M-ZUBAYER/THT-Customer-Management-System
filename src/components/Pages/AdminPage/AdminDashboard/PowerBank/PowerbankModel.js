@@ -7,8 +7,6 @@ function PowerBankModels({ baseUrl, currentServer }) {
     const [models, setModels] = useState([]);
     const [loading, setLoading] = useState(true);
 
-
-
     useEffect(() => {
         const fetchModels = async () => {
             try {
@@ -22,13 +20,8 @@ function PowerBankModels({ baseUrl, currentServer }) {
                 setLoading(false);
             }
         };
-
         fetchModels();
-    }, [currentServer]);
-
-
-
-
+    }, [baseUrl]);
 
     // Add a new power bank model
     const handleAddModel = async () => {
@@ -36,12 +29,10 @@ function PowerBankModels({ baseUrl, currentServer }) {
             setMessage('Model number cannot be empty.');
             return;
         }
-
         try {
             // const response = await axios.post('http://localhost:2000/tht/powerBankModels', { modelNumber });
             const response = await axios.post(`${baseUrl}/tht/powerBankModels`, { modelNumber });
             setMessage(response.data.message);
-
             // Update the list with the newly added model
             setModels((prevModels) => [...prevModels, { id: response.data.id, model_number: modelNumber }]);
             setModelNumber('');
@@ -51,9 +42,10 @@ function PowerBankModels({ baseUrl, currentServer }) {
         }
     };
 
+
     return (
         <div className="bg-gray-100 mt-16 mb-20 flex justify-center items-center">
-            <div className="bg-white text-black rounded-lg shadow-lg p-6 w-full max-w-2xl">
+            <div className="bg-white text-black rounded-lg shadow-lg p-6 w-full max-w-3xl">
                 <h2 className="text-2xl font-bold mb-4 text-center">Power Bank Models</h2>
 
                 {/* Add New Model Section */}

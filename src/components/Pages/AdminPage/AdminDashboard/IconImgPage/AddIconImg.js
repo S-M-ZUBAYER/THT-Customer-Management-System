@@ -29,22 +29,11 @@ function AddIconImg() {
     }
   ]
 
-
-
-
   // here the function to select multiple images as icons to store in database
   const handleSelectChange = (e) => {
     setSelectedCategory(e.target.value);
   };
 
-  // fetch data to get all the category name from backend
-  // useEffect(() => {
-  //   fetch('https://grozziieget.zjweiting.com:8033/tht/iconCategories')
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       setCategories(data.map(category => category.allIconsCategoris))
-  //     });
-  // }, []);
   // fetch data to get all the category name from backend
   useEffect(() => {
     fetch(`${baseUrl}/tht/iconCategoriesList`)
@@ -59,11 +48,9 @@ function AddIconImg() {
     toast.success("Icon has already prepare to store")
   }
 
-
   // Here create function to store multiple icons store in database
   const handleUpload = (event) => {
     event.preventDefault();
-    // Create a new FormData object
     const formData = new FormData();
     // Append each selected image to the formData
     for (let i = 0; i < selectedImages.length; i++) {
@@ -85,7 +72,6 @@ function AddIconImg() {
         toast.error("An error occurred while uploading images"); // Show a toast for the error
       });
   }
-
 
 
   return (
@@ -144,13 +130,11 @@ function AddIconImg() {
         </div>
       </div>
 
-
       {/* Here show all of the icons category list  */}
       <ShowIconCategoryList
         baseUrl={baseUrl}
         categories={categories}
       ></ShowIconCategoryList>
-
     </div>
   );
 }

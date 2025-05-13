@@ -11,8 +11,6 @@ const ShowHightWidth = () => {
   const [allModelInfo, setAllModelInfo] = useState([]);
   const [editModalData, setEditModalData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // get model number from path name
   const location = useLocation();
   const modelNo = location.pathname.split('/').pop().replace(/%20/g, ' ');
 
@@ -79,8 +77,6 @@ const ShowHightWidth = () => {
       toast.error('Failed to update data');
     }
   };
-
-
 
   return (
     <div className="min-h-screen">
@@ -247,8 +243,6 @@ const ShowHightWidth = () => {
               </button>
             </div>
           </form>
-
-
         </div>
       )}
     </div>

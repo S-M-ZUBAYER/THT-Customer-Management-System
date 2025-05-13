@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import addIcon from "../../../../../Assets/Images/Admin/AddIcon.jpg"
 import { toast } from "react-hot-toast";
-
 import axios from "axios";
 import { AuthContext } from "../../../../../context/UserContext";
 import AddBackgroundCategory from "./AddBackgroundCategory";
@@ -15,7 +14,6 @@ function AddBackgroundImg() {
   const [categories, setCategories] = useState([]);
   const [height, setHeight] = useState('');
   const [width, setWidth] = useState('');
-
   const [baseUrl, setBaseUrl] = useState("https://grozziieget.zjweiting.com:8033");
 
   //get current user information form useContext
@@ -34,19 +32,14 @@ function AddBackgroundImg() {
     }
   ]
 
-
-
   // fetch to get all kinds of background categories name
   useEffect(() => {
     fetch(`${baseUrl}/tht/BackgroundCategories`)
       .then(response => response.json())
       .then(data => {
-
         setCategories(data.map(category => category.allBackgroundCategoris))
-
       });
   }, [baseUrl]);
-
 
   // Create function to select images to store database as background images
   const handleImageChange = (e) => {
@@ -55,40 +48,33 @@ function AddBackgroundImg() {
     toast.success("Icon has already prepare to store")
   }
 
-
   // update the state to store image with these height weight data
   const handleHeightChange = (event) => {
     setHeight(event.target.value);
   };
+
   const handleWidthChange = (event) => {
     setWidth(event.target.value);
   };
-
-
 
   // Create function to select category name to store images in database as under this category
   const handleSelectChange = (e) => {
     setSelectedCategory(e.target.value);
   };
 
-
-
   // create function to store images in database
   const handleUpload = (event) => {
     event.preventDefault();
-
     // Create a new FormData object
     const formData = new FormData();
     // Append each selected image to the formData
     for (let i = 0; i < selectedImages.length; i++) {
       formData.append("images", selectedImages[i]);
     }
-
     formData.append('email', user?.email);
     formData.append('categoryName', selectedCategory);
     formData.append('height', height);
     formData.append('width', width);
-
 
     // axios.post('https://grozziieget.zjweiting.com:8033/tht/backgroundImgs/add', formData)
     axios.post(`${baseUrl}/tht/backgroundImgs/add`, formData)
@@ -105,13 +91,8 @@ function AddBackgroundImg() {
       });
   }
 
-
-
-
-
   return (
     <div>
-
       {/* Server Selected Tabs */}
       <div className="flex justify-center items-center mb-6 mt-3">
         <div className="p-1 bg-slate-300 rounded-full">
@@ -130,14 +111,12 @@ function AddBackgroundImg() {
         </div>
       </div>
 
-
       {/* Here is the component to add new background image category */}
       <AddBackgroundCategory
         baseUrl={baseUrl}
         categories={categories}
         setCategories={setCategories}
       ></AddBackgroundCategory>
-
 
       {/* Background image storing section */}
       <div className="my-32 flex items-center justify-center">
@@ -207,7 +186,6 @@ function AddBackgroundImg() {
       {/* This is the component to store and showing the showing video */}
       <ShowingVideo></ShowingVideo>
       <ShowingVideoCN></ShowingVideoCN>
-
     </div>
   );
 }
