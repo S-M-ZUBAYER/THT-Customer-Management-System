@@ -50,7 +50,7 @@ const Navbar = () => {
                     {
                       user?.isAdmin === "true" && <>
                         <li><Link to='/admin/users' className="sm:text-xs md:text-base text-gray-700">All Users</Link></li>
-                        <li><Link to='/admin/questionAnswer' className="sm:text-xs md:text-base text-gray-700">Add Q & A</Link></li>
+                        <li><Link to='/admin/questionAnswer' className="sm:text-xs md:text-base text-gray-700">Add Q&A, Profile, Support Link</Link></li>
                         <li><Link to='/admin/warehouse&cities' className="sm:text-xs md:text-base text-gray-700">Add Warehouse&Cities</Link></li>
                         <li><Link to='/admin/modelHightWidth' className="sm:text-xs md:text-base text-gray-700">Add Bluetooth Model H&W</Link></li>
                         <li><Link to='/admin/wifiModelHightWidth' className="sm:text-xs md:text-base text-gray-700">Add Wifi Model H&W</Link></li>

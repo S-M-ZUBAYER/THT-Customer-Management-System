@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../../context/UserContext";
 import { toast } from "react-hot-toast";
 import QuestionAnswerTable from "./QandAComponents.js/QuestionsAnswersTable";
+import SupportLinkManagement from "./SupportLinkManagement";
 
 function QandA() {
   const [questionAnswer, setQuestionsAnswer] = useState([]);
@@ -242,7 +243,7 @@ function QandA() {
 
   return (
     <div className="mx-2 md:mx-20 my-5 md:my-32 text-gray-800">
-      <div>
+      <div className="mb-32">
 
         <h1 className="mb-10 text-3xl font-bold text-[#004368] my-5 mt-10 ">
           Add Questions & Answer Part
@@ -297,6 +298,9 @@ function QandA() {
         </div>
 
       </div>
+
+      {/* Add Support Link part start from here */}
+      <SupportLinkManagement></SupportLinkManagement>
 
 
       {/* Add about part start from here */}

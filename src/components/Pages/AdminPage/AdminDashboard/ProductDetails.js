@@ -694,6 +694,7 @@ function ProductDetails() {
                                                     <option value="vi-VN">Tiếng Việt</option>
                                                     <option value="ms-MY">Malaysia</option>
                                                     <option value="id-ID">Indonesia</option>
+                                                    <option value="ja-JP">日本語</option>
                                                 </select>
                                                 <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
                                                     <svg
@@ -1123,6 +1124,7 @@ function ProductDetails() {
                                                 <option value="vi-VN">Tiếng Việt</option>
                                                 <option value="ms-MY">Malaysia</option>
                                                 <option value="id-ID">Indonesia</option>
+                                                <option value="ja-JP">日本語</option>
                                             </select>
                                             <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
                                                 <svg
