@@ -17,8 +17,6 @@ const BitmapGallery = ({ imagesArray }) => {
 
     return (
         <div className="p-6 min-h-screen flex flex-wrap justify-center items-center gap-6">
-            <h2 className="text-2xl font-bold text-slate-600 text-center w-full mb-6">Bitmap Gallery</h2>
-
             {imagesArray.map((image) => (
                 <div key={image.id} className="relative group w-48 h-48 rounded-lg overflow-hidden shadow-lg bg-white">
                     <img
