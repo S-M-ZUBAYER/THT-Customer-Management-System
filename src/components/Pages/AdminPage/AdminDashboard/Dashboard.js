@@ -50,7 +50,7 @@ const Dashboard = ({
         { link: '/admin/mallProduct', logo: mallLogo, label: 'Mall Product', count: mallLoading ? <BtnSpinner /> : mallProduct?.length || 0 },
         { link: '/admin/eventProduct', logo: eventLogo, label: 'Event Product', count: eventLoading ? <BtnSpinner /> : eventProduct?.length || 0 },
         { logo: androidLogo, label: 'Android User', count: deviceTypeTotalCountLoading ? <BtnSpinner /> : deviceTypeTotalCount.Android || 0 },
-        { logo: iosLogo, label: 'IOS User', count: deviceTypeTotalCountLoading ? <BtnSpinner /> : deviceTypeTotalCount.IOS || 0 }
+        { logo: iosLogo, label: 'IOS User', count: deviceTypeTotalCountLoading ? <BtnSpinner /> : deviceTypeTotalCount.iOS || 0 }
     ];
 
     const secondRowCard = [

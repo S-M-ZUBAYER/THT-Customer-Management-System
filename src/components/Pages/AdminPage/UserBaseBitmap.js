@@ -11,55 +11,67 @@ const UserBaseBitmap = () => {
     const [eventProducts, setEventProducts] = useState([]);
     const [users, setUsers] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
-    const [page, setPage] = useState(() => parseInt(localStorage.getItem("userTablePage"), 10) || 0);
+    const [viewedUserIds, setViewedUserIds] = useState(() => {
+        const stored = localStorage.getItem("viewedBitmapUserIds");
+        return stored ? JSON.parse(stored) : [];
+    });
+    const [page, setPage] = useState(() =>
+        parseInt(localStorage.getItem("userTablePage"), 10) || 0
+    );
     const [totalPages, setTotalPages] = useState(0);
-    const [bitMapBaseUrl, setBitMapBaseUrl] = useState(`https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/user/page/lastSignIn/desc?page=${page}&size=10`);
-    const [selectedTabId, setSelectedTabId] = useState(1);
+    const [selectedTabId, setSelectedTabId] = useState(() =>
+        parseInt(localStorage.getItem("userTableSelectedTabId"), 10) || 1
+    );
+    const [bitMapBaseUrl, setBitMapBaseUrl] = useState("");
+
     const navigate = useNavigate();
 
     const allBitMapUrls = [
         {
             id: 1,
             serverName: "All Users",
-            url: `https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/user/page/lastSignIn/desc?page=${page}&size=10`
+            baseUrl: "https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/user/page/lastSignIn/desc"
         },
         {
             id: 2,
             serverName: "Bitmap Users",
-            url: `https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/user/flag/user?page=${page}&size=10`
+            baseUrl: "https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/user/flag/user"
         }
-    ]
+    ];
 
-    const handleServerTabClick = (id) => {
-        setSelectedTabId(id);
-        localStorage.setItem("userTablePage", 0);
-        setPage(0);
-    };
-
+    // Update base URL when tab or page changes
     useEffect(() => {
         const selectedTab = allBitMapUrls.find(tab => tab.id === selectedTabId);
         if (selectedTab) {
-            const dynamicUrl = `${selectedTab.url.split('?')[0]}?page=${page}&size=10`;
-            setBitMapBaseUrl(dynamicUrl);
+            const newUrl = `${selectedTab.baseUrl}?page=${page}&size=10`;
+            setBitMapBaseUrl(newUrl);
         }
     }, [page, selectedTabId]);
 
+    const handleServerTabClick = (id) => {
+        setSelectedTabId(id);
+        setPage(0);
+        localStorage.setItem("userTableSelectedTabId", id);
+        localStorage.setItem("userTablePage", "0");
+    };
 
     useEffect(() => {
         const fetchEventProducts = async () => {
             try {
                 const response = await fetch(`https://grozziieget.zjweiting.com:8033/tht/eventProducts`);
-                if (!response.ok) throw new Error('Failed to fetch Event Product');
                 const data = await response.json();
                 const uniqueModels = new Set();
-                const filtered = data.filter(item => item.slideImageMark && item.slideImageMark !== "A9999" && !uniqueModels.has(item.modelNumber) && uniqueModels.add(item.modelNumber));
+                const filtered = data.filter(item =>
+                    item.slideImageMark && item.slideImageMark !== "A9999" &&
+                    !uniqueModels.has(item.modelNumber) &&
+                    uniqueModels.add(item.modelNumber)
+                );
                 filtered.sort((a, b) => a.modelNumber.localeCompare(b.modelNumber));
                 setEventProducts(filtered);
             } catch (err) {
-                console.log(err.message);
+                console.error("Fetch event products failed:", err.message);
             }
         };
-
         fetchEventProducts();
     }, []);
 
@@ -67,18 +79,27 @@ const UserBaseBitmap = () => {
         const fetchUsers = async () => {
             setLoading(true);
             try {
+                const baseUrl = allBitMapUrls.find(tab => tab.id === selectedTabId)?.baseUrl;
                 const url = searchTerm
                     ? `https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/user/search/${searchTerm}`
-                    : bitMapBaseUrl;
-                const response = await fetch(url);
-                if (!response.ok) throw new Error('Failed to fetch user details');
-                const data = await response.json();
-                console.log(data);
+                    : `${baseUrl}?page=${page}&size=10`;
 
-                setUsers(searchTerm ? data : data?.content);
-                setTotalPages(searchTerm ? 1 : data.totalPages);
+                const res = await fetch(url);
+                const contentType = res.headers.get("Content-Type");
+
+                if (!res.ok || !contentType?.includes("application/json")) {
+                    const text = await res.text();
+                    throw new Error(`Unexpected response: ${text}`);
+                }
+
+                const data = await res.json();
+
+                setUsers(searchTerm ? data : data?.content || []);
+                setTotalPages(searchTerm ? 1 : data?.totalPages || 0);
+
             } catch (err) {
-                console.log(err.message);
+                console.error("Fetch users failed:", err.message);
+                setUsers([]); // fallback to empty array
             } finally {
                 setLoading(false);
             }
@@ -86,10 +107,12 @@ const UserBaseBitmap = () => {
 
         localStorage.setItem("userTablePage", page.toString());
         fetchUsers();
-    }, [page, searchTerm, bitMapBaseUrl]);
+    }, [page, searchTerm, selectedTabId]);
+
 
     const openModal = (user) => {
         setSelectedUser(user);
+        setBitmapState(user?.addressType || false);
         setIsModalOpen(true);
     };
 
@@ -99,16 +122,19 @@ const UserBaseBitmap = () => {
     };
 
     const handleUpdate = async () => {
-        console.log(bitmapState, users);
         if (!selectedUser) return;
         try {
-            const response = await fetch(`https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/user/device/bitmap/flag/${selectedUser.userId}/${bitmapState}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-            });
-            if (!response.ok) throw new Error('Failed to update user');
+            const res = await fetch(
+                `https://grozziieget.zjweiting.com:3091/CustomerService-Chat/api/dev/user/device/bitmap/flag/${selectedUser.userId}/${bitmapState}`,
+                { method: 'PUT', headers: { 'Content-Type': 'application/json' } }
+            );
+            if (!res.ok) throw new Error('Failed to update user');
             toast.success('User updated successfully');
-            setUsers(users?.map(user => user.userId === selectedUser.userId ? { ...user, addressType: bitmapState } : user));
+            setUsers(prev =>
+                prev.map(user =>
+                    user.userId === selectedUser.userId ? { ...user, addressType: bitmapState } : user
+                )
+            );
         } catch (err) {
             toast.error(err.message);
         } finally {
@@ -116,9 +142,16 @@ const UserBaseBitmap = () => {
         }
     };
 
-    const handleShowBitmap = (userId) => navigate(`showBitmap/${userId}`);
-
-    const handleSearch = (e) => setSearchTerm(e.target.value.trim());
+    const handleShowBitmap = (userId) => {
+        const viewed = [...viewedUserIds];
+        if (!viewed.includes(userId)) {
+            viewed.push(userId);
+            localStorage.setItem("viewedBitmapUserIds", JSON.stringify(viewed));
+            setViewedUserIds(viewed);
+        }
+        navigate(`/admin/userBaseBitmap/showBitmap/${userId}`);
+    };
+    console.log(loading);
 
     return (
         <div className="p-6 min-h-screen">
@@ -148,7 +181,8 @@ const UserBaseBitmap = () => {
                 <input
                     type="text"
                     placeholder="Search by name or country"
-                    onChange={handleSearch}
+                    // onChange={handleSearch}
+                    onChange={(e) => setSearchTerm(e.target.value.trim())}
                     className="ml-auto border px-3 py-1 rounded text-black bg-white"
                 />
             </div>
@@ -190,7 +224,16 @@ const UserBaseBitmap = () => {
                                         <td className="p-3 border">{user.lastSignIn?.split("T")[0]}</td>
                                         <td className="p-3 border space-x-2 text-center">
                                             <button onClick={() => openModal(user)} className="bg-green-500 hover:bg-green-600 text-white py-1 px-3 rounded">Update</button>
-                                            <button onClick={() => handleShowBitmap(user.userId)} className="bg-[#004368] hover:bg-blue-600 text-white py-1 px-3 rounded">Show Bitmap</button>
+                                            <button
+                                                onClick={() => handleShowBitmap(user.userId)}
+                                                className={`py-1 px-3 rounded text-white ${viewedUserIds.includes(user.userId)
+                                                    ? "bg-gray-400 hover:bg-gray-500" // Already viewed
+                                                    : "bg-[#004368] hover:bg-blue-600" // Not yet viewed
+                                                    }`}
+                                            >
+                                                Show Bitmap
+                                            </button>
+
                                         </td>
                                     </tr>
                                 );
@@ -214,13 +257,21 @@ const UserBaseBitmap = () => {
                         Previous
                     </button>
                     <span className="p-2">Page {page + 1} of {totalPages}</span>
+                    {/* <button
+                            onClick={() => setPage(prev => Math.min(totalPages - 1, prev + 1))}
+                            disabled={page === totalPages - 1}
+                            className="bg-gray-300 hover:bg-gray-400 text-black py-1 px-3 rounded"
+                        >
+                            Next
+                        </button> */}
                     <button
                         onClick={() => setPage(prev => Math.min(totalPages - 1, prev + 1))}
-                        disabled={page === totalPages - 1}
+                        disabled={page >= totalPages - 1}
                         className="bg-gray-300 hover:bg-gray-400 text-black py-1 px-3 rounded"
                     >
                         Next
                     </button>
+
                 </div>
             )}
 
