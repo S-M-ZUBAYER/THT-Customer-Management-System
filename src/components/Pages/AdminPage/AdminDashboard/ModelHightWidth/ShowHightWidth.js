@@ -62,8 +62,8 @@ const ShowHightWidth = () => {
 
     try {
       await axios.put(
-        `http://localhost:2000/tht/bluetoothModelHightWidth/update/${editModalData.id}`, // Use dynamic id
-        // `${baseUrl}/tht/bluetoothModelHightWidth/update/${editModalData.id}`, // Use dynamic id
+        // `http://localhost:2000/tht/bluetoothModelHightWidth/update/${editModalData.id}`, // Use dynamic id
+        `${baseUrl}/tht/bluetoothModelHightWidth/update/${editModalData.id}`, // Use dynamic id
         editModalData
       );
 
@@ -106,7 +106,7 @@ const ShowHightWidth = () => {
               </tr>
             </thead>
             <tbody>
-              {allModelInfo.map((element) => (
+              {allModelInfo?.map((element) => (
                 <tr
                   className="border hover:bg-gradient-to-r hover:from-blue-100 hover:to-purple-100"
                   key={element.id}
