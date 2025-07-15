@@ -96,7 +96,7 @@ const SupportLinkManagement = () => {
                             name="countryCode"
                             value={formData.countryCode}
                             onChange={handleChange}
-                            className="w-full border p-2 rounded"
+                            className="w-full border p-2 rounded bg-white"
                         >
                             <option value="">Select Country</option>
                             {countryOptions.map(opt => (
@@ -112,7 +112,7 @@ const SupportLinkManagement = () => {
                             name="getStartedLink"
                             value={formData.getStartedLink}
                             onChange={handleChange}
-                            className="w-full border p-2 rounded"
+                            className="w-full border p-2 rounded bg-white"
                         />
                     </div>
 
@@ -123,7 +123,7 @@ const SupportLinkManagement = () => {
                             name="businessCooperationLink"
                             value={formData.businessCooperationLink}
                             onChange={handleChange}
-                            className="w-full border p-2 rounded"
+                            className="w-full border p-2 rounded bg-white"
                         />
                     </div>
 
@@ -134,7 +134,7 @@ const SupportLinkManagement = () => {
                             name="helpCenterLink"
                             value={formData.helpCenterLink}
                             onChange={handleChange}
-                            className="w-full border p-2 rounded"
+                            className="w-full border p-2 rounded bg-white"
                         />
                     </div>
 
@@ -145,7 +145,7 @@ const SupportLinkManagement = () => {
                             name="feedbackLink"
                             value={formData.feedbackLink}
                             onChange={handleChange}
-                            className="w-full border p-2 rounded"
+                            className="w-full border p-2 rounded bg-white"
                         />
                     </div>
                 </div>

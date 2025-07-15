@@ -1020,6 +1020,8 @@ function ProductDetails() {
                                                         <option value="3">Device Slider</option>
                                                         <option value="4">Label Slider</option>
                                                         <option value="9">Home Slider</option>
+                                                        <option value="6">Attendance Slider</option>
+                                                        <option value="5">Dot Slider</option>
                                                     </select>
                                                     <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
                                                         <svg

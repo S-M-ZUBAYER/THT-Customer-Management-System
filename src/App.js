@@ -7,7 +7,7 @@ import { AuthContext } from './context/UserContext';
 import { deleteAllChatsFromDB, manageDeleteChatsInDB } from './components/Pages/CustomerServicePage/indexedDB';
 
 function App() {
-  const { SocketDisconnect } = useContext(AuthContext)
+  const { SocketDisconnect, setUser } = useContext(AuthContext)
 
   useEffect(() => {
     const handleBeforeUnload = () => {
@@ -18,6 +18,19 @@ function App() {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, []);
+
+  window.addEventListener("message", (event) => {
+    console.log(event.origin, "origin");
+    if (event.origin !== "https://grozziie.zjweiting.com:57609") {
+      console.warn("Blocked message from unauthorized origin:", event.origin);
+      return;
+    }
+    const { user } = event.data;
+    if (user) {
+      localStorage.setItem("user", JSON.stringify(user));
+      setUser(user);
+    }
+  });
 
 
   useEffect(() => {
