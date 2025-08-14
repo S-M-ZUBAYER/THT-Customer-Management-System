@@ -5,12 +5,18 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const VersionInfo = () => {
     const [appVersion, setAppVersion] = useState('');
+    const [appTestVersion, setTestAppVersion] = useState('');
     const [androidId, setAndroidId] = useState('');
+    const [testAndroidId, setTestAndroidId] = useState('');
     const [releaseNotes, setReleaseNotes] = useState('');
+    const [testReleaseNotes, setTestReleaseNotes] = useState('');
     const [downloadUrl, setDownloadUrl] = useState('');
+    const [testDownloadUrl, setTestDownloadUrl] = useState('');
     const [loading, setLoading] = useState(false);
     const [appData, setAppData] = useState(null);
+    const [appTestData, setAppTestData] = useState(null);
     const [versionMark, setVersionMark] = useState(null);
+    const [testVersionMark, setTestVersionMark] = useState(null);
     const [iosAppVersion, setIosAppVersion] = useState('');
     const [iosId, setIosId] = useState('');
     const [iosReleaseNotes, setIosReleaseNotes] = useState('');
@@ -36,6 +42,7 @@ const VersionInfo = () => {
 
     useEffect(() => {
 
+        fetchTestGlobalData();
         fetchGlobalData();
         fetchChineseData();
     }, []);
@@ -68,6 +75,82 @@ const VersionInfo = () => {
         } catch (error) {
             toast.error('An error occurred while fetching data');
             console.error(error);
+        }
+    };
+
+    const fetchTestGlobalData = async () => {
+        try {
+            // const response = await axios.get('http://localhost:2000/tht/testVersion');
+            const response = await axios.get('https://grozziieget.zjweiting.com:8033/tht/testVersion');
+
+
+            if (response.status === 200) {
+                const data = response.data[0];
+                setTestAppVersion(data?.appVersion);
+                setTestReleaseNotes(data?.releaseNotes);
+                setTestDownloadUrl(data?.downloadUrl);
+                setTestVersionMark(data?.versionMark)
+                setTestAndroidId(data?.id)
+                setAppTestData(data);
+            } else {
+                toast.error('Failed to load data');
+            }
+        } catch (error) {
+            toast.error('An error occurred while fetching data');
+            console.error(error);
+        }
+    };
+    const handleTestCancel = () => {
+        setTestAppVersion('');
+        setTestReleaseNotes('');
+        setTestDownloadUrl('');
+        setTestVersionMark('');
+        toast.info('Inputs cleared');
+    };
+    const handleTestAppSave = async () => {
+        console.log("Android");
+
+        // Validate inputs
+        if (!appTestVersion) {
+            toast.error('Please enter the app version');
+            return;
+        }
+        if (!testReleaseNotes) {
+            toast.error('Please enter release notes');
+            return;
+        }
+        if (!testDownloadUrl || !/^https?:\/\/[^\s$.?#].[^\s]*$/.test(testDownloadUrl)) {
+            toast.error('Please enter a valid URL for the download link');
+            return;
+        }
+        setLoading(true);
+        try {
+            // const response = await axios.put(`http://localhost:2000/tht/testVersion/update/${testAndroidId}`, {
+            const response = await axios.put(`https://grozziieget.zjweiting.com:8033/tht/testVersion/update/${testAndroidId}`, {
+                appVersion: appTestVersion,
+                releaseNotes: testReleaseNotes,
+                downloadUrl: testDownloadUrl,
+                versionMark: testVersionMark
+            });
+
+
+            if (response.status === 200) {
+                toast.success('Data saved successfully!');
+                setAppTestData({
+                    id: 1, appVersion: appTestVersion,
+                    releaseNotes: testReleaseNotes,
+                    downloadUrl: testDownloadUrl,
+                    versionMark: testVersionMark
+                });
+                handleTestCancel(); // Clear inputs after successful save
+            } else {
+                toast.error('Failed to save data');
+            }
+        } catch (error) {
+            toast.error('An error occurred while saving data');
+            console.error(error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -397,7 +480,6 @@ const VersionInfo = () => {
                         </section>
                     )}
                 </div>
-
             </div>
             <div className="flex justify-center items-center min-h-screen bg-gray-100 pt-32">
                 <div className="p-8 max-w-2xl w-full mx-auto bg-gray-50">
@@ -643,6 +725,87 @@ const VersionInfo = () => {
                     )}
                 </div>
 
+            </div>
+
+            <div className="flex justify-center items-center min-h-screen bg-gray-100 pt-32">
+                <div className="p-8 max-w-2xl w-full mx-auto bg-gray-50">
+                    <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
+                        <strong className="text-red-600">Test</strong> Global Android Application Information
+                    </h2>
+
+                    <section className="mb-8">
+                        <label className="block font-medium text-gray-700 text-lg mb-2">Test Android App Version</label>
+                        <input
+                            type="text"
+                            value={appTestVersion}
+                            onChange={(e) => setTestAppVersion(e.target.value)}
+                            className="p-3 bg-white text-black border border-gray-300 rounded w-full"
+                            placeholder="Enter app version"
+                        />
+                    </section>
+
+                    <section className="mb-8">
+                        <label className="block font-medium text-gray-700 text-lg mb-2">Test Android Release Notes</label>
+                        <textarea
+                            value={testReleaseNotes}
+                            onChange={(e) => setTestReleaseNotes(e.target.value)}
+                            className="p-3 bg-white text-black border border-gray-300 rounded w-full"
+                            placeholder="Enter release notes"
+                            rows="4"
+                        />
+                    </section>
+
+                    <section className="mb-8">
+                        <label className="block font-medium text-gray-700 text-lg mb-2">Test Android Download URL</label>
+                        <input
+                            type="url"
+                            value={testDownloadUrl}
+                            onChange={(e) => setTestDownloadUrl(e.target.value)}
+                            className="p-3 bg-white text-black border border-gray-300 rounded w-full"
+                            placeholder="Enter download URL"
+                        />
+                    </section>
+                    <section className="mb-8">
+                        <label className="block font-medium text-gray-700 text-lg mb-2">Test Android Version Mark</label>
+                        <input
+                            type="url"
+                            value={testVersionMark}
+                            onChange={(e) => setTestVersionMark(e.target.value)}
+                            className="p-3 bg-white text-black border border-gray-300 rounded w-full"
+                            placeholder="Enter download URL"
+                        />
+                    </section>
+
+                    <div className="flex justify-between mt-8">
+                        <button
+                            onClick={handleTestCancel}
+                            className="px-6 py-3 font-medium bg-gray-800 text-white rounded hover:bg-gray-600 transition-colors"
+                            disabled={loading}
+                        >
+                            Test Cancel
+                        </button>
+                        <button
+                            onClick={handleTestAppSave}
+                            className={`px-6 py-3 font-medium text-white rounded transition-colors ${loading ? 'bg-gray-400' : 'bg-[#004368]  hover:bg-blue-700'}`}
+                            disabled={loading}
+                        >
+                            {loading ? 'Saving...' : 'Save'}
+                        </button>
+                    </div>
+
+                    <ToastContainer />
+
+                    {appTestData && (
+                        <section className="mt-12 bg-gray-100 p-6">
+                            <h3 className="text-2xl font-medium text-gray-800 mb-4">Current Test Android Application Data</h3>
+                            <div className="text-gray-700">
+                                <p><strong>Test Android App Version:</strong> {appTestData?.appVersion}</p>
+                                <p><strong>Test Android Release Notes:</strong> {appTestData?.releaseNotes}</p>
+                                <p><strong>Test Android Download URL:</strong> <a href={appTestData?.downloadUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">{appTestData?.downloadUrl}</a></p>
+                            </div>
+                        </section>
+                    )}
+                </div>
             </div>
         </div>
     );

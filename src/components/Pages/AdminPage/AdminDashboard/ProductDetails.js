@@ -688,7 +688,8 @@ function ProductDetails() {
                                                 >
                                                     <option value="">Select Country Category</option>
                                                     <option value="zh-CN">中文</option>
-                                                    <option value="en-US">English</option>
+                                                    <option value="en-US">USA(En)</option>
+                                                    <option value="en-SG">Singapore(En)</option>
                                                     <option value="th-TH">ไทย</option>
                                                     <option value="fil-PH">Philippines</option>
                                                     <option value="vi-VN">Tiếng Việt</option>
@@ -1120,7 +1121,8 @@ function ProductDetails() {
                                             >
                                                 <option value="">Select Country Category</option>
                                                 <option value="zh-CN">中文</option>
-                                                <option value="en-US">English</option>
+                                                <option value="en-US">USA(En)</option>
+                                                <option value="en-SG">Singapore(En)</option>
                                                 <option value="th-TH">ไทย</option>
                                                 <option value="fil-PH">Philippines</option>
                                                 <option value="vi-VN">Tiếng Việt</option>
